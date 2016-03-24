@@ -120,74 +120,6 @@ var createCfdChart = function(subObject,multiline,graphJSONData){
       .style("text-anchor", "end")
       .text(function(d) { return d; });
     }
-
-
-//   var x = d3.time.scale()
-//   .range([0, winWidth]);
-//
-//   var y = d3.scale.linear()
-//   .range([winHeight, 0]);
-//
-//   var color = d3.scale.category20();
-//
-//   var xAxis = d3.svg.axis()
-//   .scale(x)
-//   .tickSize(-winHeight)
-//   .tickSubdivide(true)
-//   .orient("bottom")
-//   .tickFormat(d3.format("y"));
-//
-//   var yAxis = d3.svg.axis()
-//   .scale(y)
-//   .orient("left")
-//   .tickFormat(d3.format(".2s"));
-//
-//   var line = d3.svg.line()
-//   .interpolate("basis")
-//   .x(function(d) { console.log(d,x(d.xAxs)); return isNaN(x(d.xAxs))?  0 :  x(d.xAxs); })
-//   .y(function(d) { return y(d.yAxs); });
-//
-//   d3.select("#modalStatusGraph").html("");
-//
-//   var svg = d3.select("#modalStatusGraph").append("svg")
-//   .attr("width", winWidth + margin.left + margin.right)
-//   .attr("height", winHeight + margin.top + margin.bottom)
-//   .append("g")
-//   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-//
-//
-//     var  data=graphJSONData[subObject];
-//     color.domain(d3.keys(data[0]).filter(function(key) { return key !== "xAxs"; }));
-//
-//     data.forEach(function(d) {
-//       var y0 = 0;
-//       d.state = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
-//       d.total = d.state[d.state.length - 1].y1;
-//     });
-//
-//     x.domain(data.map(function(d) { return d.xAxs; }));
-//     y.domain([0,   Math.ceil(d3.max(data, function(d) { return (d.total); }))]);
-//
-//
-//     svg.append("g")
-//     .attr("class", "x axis")
-//     .attr("transform", "translate(0," + winHeight + ")")
-//     .call(xAxis);
-//
-// svg.append("g")
-//     .attr("class", "y axis")
-//     .call(yAxis)
-//   .append("text")
-//     .attr("transform", "rotate(-90)")
-//     .attr("y", 6)
-//     .attr("dy", ".71em")
-//     .style("text-anchor", "end")
-//     .text("Price ($)");
-//
-// svg.append("path")
-//     .data(data)
-//     .attr("class", "line")
-//     .attr("d", line);
 }
 
 var createVelocityChart=function(subObject,stackedChart,graphJSONData){
@@ -334,7 +266,6 @@ function drawReleaseGraph(){
           buckets = 9,
           colors = ["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"], // alternatively colorbrewer.YlGnBu[9]
           days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-          // days = ["S1", "S2", "S3", "S4", "S5", "S6", "S7"],
           times = ["1a", "2a", "3a", "4a", "5a", "6a", "7a", "8a", "9a", "10a", "11a", "12a", "1p", "2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12p"];
           datasets = ["json/data.tsv", "json/data2.tsv"];
 
