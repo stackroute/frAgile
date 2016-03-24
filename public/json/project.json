@@ -1,0 +1,110 @@
+[
+  {
+    "id" : "project_1",
+    "name" : "Project 1",
+    "description" : "project 1 is a project. What else it can be!",
+    "date" : "23102006",
+    "release" : [
+      {
+        "id" : "Release0",
+        "name" : "release_1_p1 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p1",
+        "name" : "release_2_p1 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p1",
+        "name" : "release_2_p1 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p1",
+        "name" : "release_2_p1 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p1",
+        "name" : "release_2_p1 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p1",
+        "name" : "release_2_p1 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p1",
+        "name" : "release_2_p1 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p1",
+        "name" : "release_2_p1 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p1",
+        "name" : "release_2_p1 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p1",
+        "name" : "release_2_p1 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      }
+    ]
+  },
+  {
+    "id" : "project_2",
+    "name" : "Project 2",
+    "description" : "project 2 is a project. What else it can be!",
+    "date" : "23102006",
+    "release" : [
+      {
+        "id" : "Release0",
+        "name" : "release_1_p2 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p2",
+        "name" : "release_2_p2 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      }
+    ]
+  },
+  {
+    "id" : "project_3",
+    "name" : "Project 3",
+    "description" : "project 3 is a project. What else it can be!",
+    "date" : "23102006",
+    "release" : [
+      {
+        "id" : "Release0",
+        "name" : "release_1_p3 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      },
+      {
+        "id" : "release_1_p3",
+        "name" : "release_2_p3 1",
+        "description" : "Release is something bla bla bla",
+        "date" : "23102006"
+      }
+    ]
+  }
+]

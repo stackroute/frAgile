@@ -1,0 +1,48 @@
+.loadingScreen{
+      position: fixed;
+      background-color: #EEEEEE;
+      height: 100%;
+      margin: -10px;
+      width: 100%;
+      z-index: 10;
+    }
+    .loadingScreen span{
+      position: fixed;
+      top: 50%;
+      left: 50%;
+    }
+    #invisible {
+      display: none;
+    }
+    .box {
+      cursor: pointer;
+      margin: 5px;
+      width: 270px;
+      height: 85px;
+      border-radius: 5px;
+      background-color: #52B3D9;
+      padding: 5px 5px 5px 10px;
+      line-height: 25px;
+      float: left;
+      color: #34495E;
+    }
+    .boxHeading {
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: bold;
+    }
+    .addMore{
+      background-color: #EEEEEE;
+      color: #888888;
+      font-size: 18px;
+      top: 50%;
+      font-weight: bold;
+    }
+    h3 small {
+        color: grey;
+        margin-left: 5px;
+        font-weight: lighter;
+    }
+    .container{
+      overflow: hidden;
+    }

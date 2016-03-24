@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="description" content="">
+  <title>FrAgile</title>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+  <!-- Mobile viewport optimized -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+
+  <!-- Bootstrap CSS -->
+  <link href="stylesheets/lib/bootstrap.min.css" rel="stylesheet">
+  <link href="stylesheets/lib/bootstrap-glyphicons.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="stylesheets/style.css" media="screen" title="no title" charset="utf-8">
+
+  <meta charset="utf-8">
+</head>
+<body>
+  <script id ="activity-template" type="text/x-handlebars-template">
+  <div class="activity-items">
+    <img class="activity-bar-avatar" src="images/letters/{{firstLetter}}.png">
+    <span class="activity-item-content">
+    <span class="activity-username" data-username="{{userid}}">{{username}}</span> {{action}}
+    {{#if object}}<a class="{{objectClass}}" href="#"> {{object}} </a>{{/if}}
+     {{preposition}}
+    <a class="{{targetClass}}" href="#"> {{target}} </a>
+    {{#if read}}<span class="label label-success activity-label">New</span>{{/if}}
+    {{#if comment}}<div class="activity-comment-content">{{comment}}</div>{{/if}}
+    </span>
+  </div>
+</script>
+
+  <div class="navbar navbar-fixed-top">
+    <button class="navbar-toggle" data-target=".navbar-responsive-collapse" data-toggle="collapse" type="button">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand pull-left" href="#">
+      <img id = "home" src="images/logo.png" class="logo" height=50px;>
+    </a>
+    <div class="nav-collapse collapse navbar-responsive-collapse  pull-right">
+      <ul class="nav navbar-nav">
+
+        <li>
+          <a href="#" id = "showMenu"><i class="fa fa-bars"></i></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="container" id="main">
+    <div class="row" id="moreInfo">
+      <div class="col-sm-6">
+        <div class="modal fade" id="graphModal" role="dialog">
+            <div class="modal-content" style="width: 600px;margin:auto; height:400px;">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Sprint Status</h4>
+              </div>
+              <div class="modal-body" id="modalStatusGraph" >
+
+              </div>
+            </div>
+        </div>
+        <div class=" modal fade" id="myModal" >
+          <div class="modal-dialog cssmodal-dialog">
+            <div class="modal-content">
+              <div class="modal-body cssmodal-body">
+                <div class="col-sm-12 csscol-sm-12">
+                  <div class="panel panel-default css_panel">
+                    <div class="panel-heading div_header_red" id="div_header">
+                      <h4 id="story_label"class="col-sm-8"></h4>
+                      <a href="" class="pull-right" data-dismiss="modal"><span class="fa fa-close fa_text"> </span></a>
+                      <a href="" class="pull-right dropdown-toggle" data-toggle="dropdown"><span class="fa fa-sort-desc  fa_text"> </span></a>
+                      <a href="" class="pull-right"><span class="fa fa-trash  fa_text"> </span></a>
+                      <a href="" class="pull-right"><span data-toggle="modal" data-target="#copyModal"  class="fa fa-files-o  fa_text"> </span></a>
+                      <a href="" class="pull-right"><span data-toggle="modal" data-target="#moveModal"  class=" fa fa-arrows fa_text"> </span></a>
+                    </div>
+                    <div class="panel-body col-sm-8 csspanel_body">
+                      <h4>Updated 31 min ago</h4>
+                      <a href="#" id="edit_desc"><div class="edit fa fa-pencil-square-o fa-1x div_padding"> </div>Edit description</a>
+                      <div id="description_div" class="div_padding"></div>
+                      <div id="member_list" class="div_padding"></div>
+                      <div id="label_list" class="div_padding"></div>
+                      <div id="attachment_list" class="div_padding"></div>
+                      <div id="check_list" class="div_padding"></div>
+                      <div id="comments_div" class="div_padding" width="100%">
+                        <h4>	Add Comments</h4>
+                        <textarea name="name" rows="5" cols="100" width="100%"></textarea>
+                        <button type="button " class="div_margin pull-right" name="button">Canel</button>
+                        <button class="pull-right div_margin" type="button" name="button">Save</button>
+                      </div>
+                    </div>
+                    <div class="panel-body  col-sm-4 div_activity_body pull-right csspanel_body" >
+
+                      <div id="activity_list"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div><!--end of modal-content-->
+          </div><!--end of modal-dialog-->
+        </div><!--end of modal-->
+      </div>
+    </div>
+
+
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="moveModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Move</h4>
+        </div>
+        <div class="modal-body">
+
+          <div id="sprintdropdown" class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              Sprint  <span class="sprintdropdownselected">Sprint One</span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li><a href="#">Sprint One</a></li>
+              <li><a href="#">Sprint Two</a></li>
+              <li><a href="#">Sprint Three</a></li>
+              <li><a href="#">Sprint Four</a></li>
+            </ul>
+          </div>
+          <div class="dropdown" id="listdropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              List  <span class="listdropdownselected"></span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <li><a href="#">Backlog</a></li>
+              <li><a href="#">Inprogress</a></li>
+              <li><a href="#">Review</a></li>
+              <li><a href="#">Submitted</a></li>
+            </ul>
+          </div>
+          <div class="dropdown" id="positiondropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              Position  <span class="positiondropdownselected"></span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
+              <li><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Move</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--End of modal window-->
+  <div class="modal fade" id="copyModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Copy Story</h4>
+        </div>
+        <div class="modal-body">
+          <!---->
+          <label for="titleId">Title:</label><br>
+          <textarea name="title" id="titleId" rows="2"></textarea>
+          <hr>
+          <h4>Copy To:</h4>
+          <div id="sprintdropdown2" class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              Sprint  <span class="sprintdropdownselected2"></span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              <li><a href="#">Sprint One</a></li>
+              <li><a href="#">Sprint Two</a></li>
+              <li><a href="#">Sprint Three</a></li>
+              <li><a href="#">Sprint Four</a></li>
+            </ul>
+          </div>
+          <div class="dropdown" id="listdropdown2">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              List  <span class="listdropdownselected2"></span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+              <li><a href="#">Backlog</a></li>
+              <li><a href="#">Inprogress</a></li>
+              <li><a href="#">Review</a></li>
+              <li><a href="#">Submitted</a></li>
+            </ul>
+          </div>
+          <div class="dropdown" id="positiondropdown2">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu6" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              Position  <span class="positiondropdownselected2"></span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
+              <li><a href="#">1</a></li>
+              <li><a href="#">2</a></li>
+              <li><a href="#">3</a></li>
+              <li><a href="#">4</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Copy</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--End of moodal-->
+  <div class="container header-content">
+
+    <div class="activity-bar pull-right panel panel-default">
+      <div class="panel-heading activity-panel-heading">Activity
+        <button type="button" id="sideBarClose" class="close"><span aria-hidden="true">&times;</span></button>
+      </div>
+
+      <div class="activities-wrap">
+        <div class="panel-body" id="activities">
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="release">
+
+  </div>
+  <div class="sprintDiv">
+
+  </div>
+  <!-- All Javascript at the bottom of the page for faster page loading -->
+
+  <!-- Bootstrap JS -->
+  <!-- All Javascript at the bottom of the page for faster page loading -->
+
+  <!-- Bootstrap JS -->
+  <script src="javascripts/lib/bootstrap.min.js"></script>
+
+  <script src="javascripts/drawGraph.js"></script>
+  <script src="javascripts/script1.js"></script>
+</body>

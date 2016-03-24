@@ -1,0 +1,29 @@
+{
+  "storyStatus": [
+    {
+      "xAxs": "Backlog",
+      "yAxs": 15
+    },
+    {
+      "xAxs": "InProgress",
+      "yAxs": 12
+    },
+    {
+      "xAxs": "Completed",
+      "yAxs": 3
+    },
+    {
+      "xAxs": "For review",
+      "yAxs": 15
+    },
+    {
+      "xAxs": "releasable",
+      "yAxs": 12
+    },
+    {
+      "xAxs": "archive",
+      "yAxs": 3
+    }
+
+  ]
+}

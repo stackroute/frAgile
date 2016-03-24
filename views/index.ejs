@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html ng-app = 'app1'><!-- add ng-cloak within this tag-->
+  <head>
+    <meta charset="utf-8">
+    <title>Angular Test</title>
+    <link rel="stylesheet" href="stylesheets/style.css" media="screen" title="no title" charset="utf-8">
+  </head>
+  <body>
+
+  <div class="" ng-controller = "ctrl1">
+    <div class="loadingScreen" id = "{{vis}}">
+      <span>Loading...</span>
+    </div>
+    {{release}}
+    <div ng-repeat="proj in JsonData" class="main" ng-mouseenter = setProject($index)>
+      <div id="{{proj._id}}" class = "container">
+        <h3>{{proj.name}}<small>{{proj.description}}</small></h3>
+        <div class="box" ng-repeat= "rel in proj.release"  id="{{rel._id}}" ng-click = loadRelease($index)>
+          <div class="boxHeading">
+            {{rel.name}}
+          </div>
+          <div class="desc">
+            {{rel.description}}
+          </div>
+          <div class="date" >
+            From {{rel.creationDate | date:'dd-MM-yyyy'}} to {{rel.releaseDate | date:'dd-MM-yyyy'}}
+          </div>
+        </div>
+        <div class="box addMore">
+            Add Release...
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src = "http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+  <script src = "javascripts/script.js"></script>
+  </body>
+</html>
