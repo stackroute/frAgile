@@ -1,6 +1,6 @@
 var fragileApp = angular.module('fragileApp');
 
-fragileApp.controller('activityController', function($scope, $http, socket, activityService) {
+fragileApp.controller('activityController', function($rootScope, $scope, $http, socket, activityService) {
 
   // Based on the project clicked, send its projectID to display its corresponding activity
   activityService.getProjectData($scope.projectID).success(function(response) {
@@ -27,7 +27,7 @@ fragileApp.controller('activityController', function($scope, $http, socket, acti
   $scope.moreActivity = function() {
     // Add +1 to page everytime moreActivity is clicked
     // Added before passing to service coz 1st time on page load it will show 1st page results
-    $scope.page = parseInt($scope.page) + 1;
+    $scope.page = ($scope.page ? parseInt($scope.page) : 1 ) + 1;
     activityService.moreActivity($scope.projectID, $scope.page).success(function(response) {
       // For each activity, go to activityService and add the preposition, etc
       if (response.length > 0) {
@@ -45,13 +45,14 @@ fragileApp.controller('activityController', function($scope, $http, socket, acti
   }
 
   //For members list
-
   activityService.getMembers($scope.projectID).success(function(response) {
     response[0].memberList.forEach(function(data) {
       data.fullName = data.firstName + " " + data.lastName;
     })
     $scope.memberList = response[0].memberList;
   });
+
+  // $rootScope.isMenu = false;
 
   socket.on('new activity', function(data) {
     activityService.parseData(data);

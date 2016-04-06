@@ -4,8 +4,14 @@ fragileApp.controller('releaseController',['$scope','$rootScope','$stateParams',
     $scope.release = $stateParams.releaseID;
 
     releaseService.getSprints($stateParams.releaseID).success(function(response){
-      $scope.sprints = response[0].release[0].sprints
+      $scope.sprints = response[0].release[0].sprints;
     });
+
+    // Menu Click Event
+    $scope.isMenu = true;
+    $scope.SlideMenu = function(){
+      $scope.isMenu = !$scope.isMenu;
+    }
 
   };
 
