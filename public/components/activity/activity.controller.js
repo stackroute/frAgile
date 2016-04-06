@@ -10,6 +10,7 @@ fragileApp.controller('activityController', function($rootScope, $scope, $http, 
     });
     // Save the above parsed data into 'activities' model
     $scope.activities = response;
+    console.log(response);
   });
 
   // Refresh the activity time every 45 sec

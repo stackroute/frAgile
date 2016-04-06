@@ -3,7 +3,7 @@
       <div id="{{project._id}}" class = "container">
         <h3>{{project.name}}<small>{{project.description}}</small></h3>
           <div class="boxContainer" ng-repeat= "release in project.release" >
-            <div class="box" id="{{release._id}}" ui-sref="release({releaseID:release._id})">
+            <div class="box" id="{{release._id}}" ng-click='setProjectID(project._id)' ui-sref="release({releaseID:release._id})">
               <div class="boxHeading">
                 {{release.name}}
               </div>

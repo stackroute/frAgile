@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
 
 var activitySchema = new mongoose.Schema({
   action: String,
-  projectID: String, //TODO: change to ObjectId
+  projectID: Schema.Types.ObjectId,
   date: {
     type: Date,
     default: Date.now
