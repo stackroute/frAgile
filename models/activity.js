@@ -5,7 +5,10 @@ var mongoose = require('mongoose'),
 var activitySchema = new mongoose.Schema({
   action: String,
   projectID: String, //TODO: change to ObjectId
-  date: Date,
+  date: {
+    type: Date,
+    default: Date.now
+  },
   userCreator: {
     fullName: String,
     _id: {
@@ -51,8 +54,10 @@ activitySchema.statics.addEvent = function(event, callback) {
       kind: event.object.type,
       _id: event.object._id
     },
-    date: Date.now()
-  },callback(err,data));
+  }, function(err, data) {
+    if (err) callback(err)
+    else callback(data);
+  });
 }
 
 activitySchema.statics.findEventsbyStory = function(storyID, callback) {
@@ -62,19 +67,26 @@ activitySchema.statics.findEventsbyStory = function(storyID, callback) {
     }, {
       'object._id': storyID
     }]
-  }).sort({'date': -1}).exec(function(err, data) {
-    if(err) callback(err)
+  }).sort({
+    'date': -1
+  }).exec(function(err, data) {
+    if (err) callback(err)
     else callback(data);
   });
 }
 
-activitySchema.statics.findEventsbyProject = function(projectID, callback) {
-  return this.find({'projectID':projectID}).sort({'date': -1}).exec(function(err, data) {
-    if(err) callback(err)
-    else callback(data);
-  });
+activitySchema.statics.findEventsbyProject = function(projectID, page, callback) {
+  var perPage = 10;
+  return this.find({
+      'projectID': projectID
+    }).sort({
+      'date': -1
+    }).limit(perPage).skip(perPage * (page-1)).exec(function(err, data) {
+      if (err) callback(err)
+      else callback(data);
+    });
 }
 
 
 
-module.exports = mongoose.model('Activity', activitySchema, 'activity');
+module.exports = mongoose.model('Activity', activitySchema, 'Activity');

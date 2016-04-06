@@ -37,7 +37,6 @@ sprintSchema.statics.deleteList = function(sprintId, listId, callback) {
 }
 
 sprintSchema.statics.updateSprint = function(sprintId, newSprint, callback) {
-  console.log("------------------------ in side updateSprint " + sprintId);
   this.update(
       { "_id" : sprintId },
       { $set: {
@@ -53,12 +52,9 @@ sprintSchema.statics.updateSprint = function(sprintId, newSprint, callback) {
    )
    .exec(function(err , doc) {
      if (err) {
-       console.log("><><><><><><><><><><><><>><><><><><><><><><><><> ERR");
-       console.log(err);
        callback(err, null);
      }
      else {
-       console.log("><><><><><><><><><><><><>><><><><><><><><><><><> DOC");
        callback(null, doc);
      }
    });
