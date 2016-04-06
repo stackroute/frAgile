@@ -1,0 +1,265 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+}
+h4 {
+  font-size: 17px;
+  font-weight: bold;
+}
+.loadingScreen {
+  position: fixed;
+  background-color: #EEEEEE;
+  height: 100%;
+  margin: -10px;
+  width: 100%;
+  z-index: 10;
+}
+.loadingScreen span {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+}
+#invisible {
+  display: none;
+}
+.box {
+  cursor: pointer;
+  margin: 5px 10px 5px 0px;
+  width: 270px;
+  height: 85px;
+  border-radius: 5px;
+  background-color: #52B3D9;
+  padding: 5px 5px 5px 10px;
+  line-height: 25px;
+  float: left;
+  color: #34495E;
+}
+.box:hover {
+  box-shadow: inset 0px 0px 20px #446CB3;
+  border-radius: 5px;
+}
+.boxHeading {
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.slideMenuBox .fa:hover {
+  color: #C5EFF7;
+}
+.projectPage .btn-success {
+  margin: 15px 0px;
+  font-size: 16px;
+  margin-left: 15px;
+}
+.warningModal {
+  color: #D64541;
+  margin-left: 100px;
+  padding: 0px;
+  margin-top: -16px;
+  font-size: 11px;
+  margin-bottom: 3px;
+}
+.heading {
+  position: fixed;
+  top: 30px;
+  width: 100%;
+}
+.sprintDiv {
+  width: 1670px;
+  margin-top: 50px;
+  overflow: hidden;
+}
+.listHead {
+  color: white;
+  margin: 4px 0px 0px 11px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.child {
+  background-color: rgba(255, 255, 255, 0.93);
+  border-radius: 3px;
+  margin-top: 20px;
+  width: 259px;
+  overflow: hidden;
+  margin: auto;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  cursor: pointer;
+  padding-bottom: 7px;
+}
+.story_Name {
+  width: 100%;
+  padding-left: 6px;
+  float: left;
+  padding-top: 2px;
+}
+.parent {
+  overflow: auto;
+  overflow-x: hidden;
+  float: left;
+  max-height: 520px;
+  min-height: 60px;
+  background-color: #F0AD4E;
+  border-radius: 4px;
+  width: 272px;
+  margin: 3px;
+}
+.addMore {
+  background-color: #EEEEEE;
+  color: #888888;
+  font-size: 18px;
+  top: 50%;
+  font-weight: bold;
+}
+
+.addMore:hover {
+  box-shadow: inset 0px 0px 20px #BBBBBB;
+}
+h4 {
+  margin-top: 25px;
+  margin-bottom: 3px;
+}
+h4 small {
+  color: grey;
+  margin-left: 10px;
+  font-weight: lighter;
+}
+
+.container {
+  overflow: hidden;
+}
+.addNewProject .fa {
+  font-size: 20px;
+}
+
+/*Activity Bar CSS*/
+
+.menu-bar {
+  width: 339px;
+  position: absolute;
+  right: 5px;
+  overflow: hidden;
+  box-shadow: 0 5px 9px rgba(0, 0, 0, .5);
+  display: none;
+  margin-top: 17px;
+  margin-bottom: 0px;
+  bottom: 0;
+  top: 0px;
+}
+#activities {
+  padding: 0px 0px;
+}
+
+/*CSS for scrollbar*/
+
+.menu-wrap::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 9px;
+  background-color: #F5F5F5;
+}
+.menu-wrap::-webkit-scrollbar {
+  width: 10px;
+  background-color: #F5F5F5;
+}
+.menu-wrap::-webkit-scrollbar-thumb {
+  border-radius: 9px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+  background-color: #555;
+}
+.activity-bar.panel {
+  border-radius: 8px;
+}
+.menu-wrap {
+  position: absolute;
+  top: 40px;
+  right: 0px;
+  bottom: 0px;
+  left: 0;
+  overflow: auto;
+}
+.menu-wrap h3 {
+  color: #8c8c8c;
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 0px;
+}
+.settings-members {
+  padding: 10px;
+}
+.activity-wrap {
+  clear: both;
+  border-top: 1px solid #eee;
+}
+.activity-items {
+  padding: 5px 10px;
+  min-height: 55px;
+  /*border-bottom: 1px solid #e2e4e6;*/
+  color: #4d4d4d;
+  font: 14px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  line-height: 18px;
+}
+.activity-items:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.activity-comment-content {
+  padding: 5px 5px;
+  background-color: lightgrey;
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .23);
+  overflow: hidden;
+  cursor: pointer;
+  margin-top: 5px;
+  word-break: break-all;
+}
+.activity-item-content {
+  width: 80%;
+  float: left;
+}
+.menu-panel-heading {
+  line-height: 20px;
+  font: 16px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  text-align: center;
+  background-color: #246EB9 !important;
+  color: white !important;
+}
+.activity-label {
+  position: relative;
+  left: 10px;
+}
+.menu-bar-avatar {
+  width: 30px;
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.activity-username, .messages-username {
+  font-weight: bold;
+  cursor: pointer;
+}
+.activity-more {
+  text-align: center;
+}
+.activity-time {
+  color: #8c8c8c;
+  font-size: 9pt;
+  line-height: 18px;
+  white-space: nowrap;
+  margin-left: 7px;
+}
+.activity-items a {
+  color: #4d4d4d;
+  text-decoration: none;
+}
+.activity-object-link, .activity-object-link:hover {
+  text-decoration: underline !important;
+}
+.activity-object-link-disabled, .activity-object-link-disabled:hover {
+  cursor: text;
+}
+.btn-section {
+  width: 99px;
+}

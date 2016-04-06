@@ -1,0 +1,42 @@
+<div ng-init="getSprints()">
+  <h4 class = "heading">{{sprint.name}}<small>{{sprint.description}}</small></h3>
+  <div class="heading">
+    From {{sprint.startDate}} to {{sprint.endDate}}
+  </div>
+  <div class="sprintDiv" ng-style="{width: sprintWidth}">
+    <div class = 'parent backbug'>
+      <div class="listHead">
+        {{backBug.buglist.listName}}
+      </div>
+      <div ng-repeat="story in backBug.buglist.stories" class="child" >
+        <div class="story_Name">
+          {{story.heading}}
+        </div>
+
+      </div>
+    </div>
+    <div ng-repeat="list in sprint.list" class = 'parent' ng-class = 'list.group'>
+      <i class="crossBtn fa fa-times-circle"></i>
+      <div class="listHead">
+        {{list.listName}}
+      </div>
+      <div ng-repeat="story in list.stories" class="child" >
+        <div class="story_Name">
+          {{story.heading}}
+        </div>
+
+      </div>
+    </div>
+    <div class = 'parent backbug'>
+      <div class="listHead">
+        {{backBug.backlogs.listName}}
+      </div>
+      <div ng-repeat="story in backBug.backlogs.stories" class="child" >
+        <div class="story_Name">
+          {{story.heading}}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

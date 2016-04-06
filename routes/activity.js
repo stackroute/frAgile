@@ -17,9 +17,12 @@ router.get('/', function(req, res, next) {
         res.send(data);
       });
     else if (req.query.project)
-      Activity.findEventsbyProject(req.query.project, function(data) {
+    {
+      var page = req.query.page || '1';
+      Activity.findEventsbyProject(req.query.project, page, function(data) {
         res.send(data);
       });
+    }
     else
       res.end();
 

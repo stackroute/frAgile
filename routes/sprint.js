@@ -1,15 +1,18 @@
 var express = require('express');
 var router = express.Router();
-var sprint = require('../models/sprint.js');
-var project = require('../models/project.js');
-var fs = require('fs'),
-    list;
+var mongoose = require('mongoose');
 
-/* GET home page. */
+var Activity = require('../models/activity.js');
+var User = require('../models/user.js');
+var Project = require('../models/project.js');
+var Sprint = require('../models/sprint.js');
 
-router.get('/', function(req, res, next) {
+
+module.exports = function(io){
+
+  router.get('/', function(req, res, next) {
   sprintId = req.query.id.replace("/","");
-  sprint.findSprint(sprintId, function(err, doc) {
+  Sprint.findSprint(sprintId, function(err, doc) {
     if(err){
       res.send(err);
     }
@@ -20,7 +23,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/updateSprint', function(req, res, next) {
-  console.log("-----------------------inside updateSprint");
   sprintId = "56ea89de1d4b0a2572f25b9c"; // TODO: get dynamic data
   newSprint = {};
   newSprint.name = "Deadpool";
@@ -38,7 +40,6 @@ router.post('/updateSprint', function(req, res, next) {
 });
 
 router.post('/deleteList', function(req, res, next) {
-  console.log("-----------------------inside deleteList");
   sprintId = "56ea89de1d4b0a2572f25b9c"; // TODO: get dynamic data
   listId = "56ea89de1d4b0a2572f25ba1";
   sprint.deleteList(sprintId, newSprint, function(err, doc) {
@@ -52,8 +53,7 @@ router.post('/deleteList', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  console.log("------------------------------1---------------------------");
-  var newSprint = new sprint(
+  var newSprint = new Sprint(
     {
       name: "new Sprint 2",
       endDate: Date.now(),
@@ -103,17 +103,10 @@ router.post('/', function(req, res, next) {
           res.send(doc);
         }
       });
-    //  console.log(project);
-      // project.updateRel(projectId, doc, function(err, doc) {
-      //   if(err){
-      //     res.send(err);
-      //   }
-      //   else {
-      //     res.send(doc);
-      //   }
-      // });
+
     }
   });
 });
 
-module.exports = router;
+  return router
+}

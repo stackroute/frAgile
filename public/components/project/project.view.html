@@ -1,0 +1,34 @@
+<div ng-init="loadProjects()" class = "projectPage">
+  <div ng-repeat="project in projects" class="main">
+      <div id="{{project._id}}" class = "container">
+        <h3>{{project.name}}<small>{{project.description}}</small></h3>
+          <div class="boxContainer" ng-repeat= "release in project.release" >
+            <div class="box" id="{{release._id}}" ui-sref="release({releaseID:release._id})">
+              <div class="boxHeading">
+                {{release.name}}
+              </div>
+              <div class="desc">
+                {{release.description | limitTo:longDescLimit }}<span ng-hide="release.description.length < 40 ">
+                  ...
+                </span>
+              </div>
+              <div class="date">
+                From {{release.creationDate | date:'dd-MM-yyyy'}} to {{release.releaseDate | date:'dd-MM-yyyy'}}
+              </div>
+
+              <div>
+                <i class="fa fa-archive" ng-click = "archiveFun(release._id)"></i>
+                <i class="fa fa-pencil" ng-click = "editFun(release._id)"></i>
+                <i class="fa fa-star" ng-click = "starFun(release._id)"></i>
+              </div>
+            </div>
+          </div>
+        <div class="box addMore" ng-click = "setDefaultForRelease(project._id)" data-toggle="modal" data-target="#myModal">
+            Add Release...
+        </div>
+      </div>
+    </div>
+    <div class="btn btn-success" ng-click = "setDefaultForProject(project._id)" data-toggle="modal" data-target="#myModal">
+      <i class="fa fa-plus"></i>  Add New Project
+    </div>
+</div>

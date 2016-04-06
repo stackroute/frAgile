@@ -1,53 +1,93 @@
 var express = require('express');
 var router = express.Router();
-var project = require('../models/project.js');
-var user = require('../models/user.js');
+var mongoose = require('mongoose');
+
+var Activity = require('../models/activity.js');
+var User = require('../models/user.js');
+var Project = require('../models/project.js');
+var Sprint = require('../models/sprint.js');
 var backLogsBugList = require('../models/backlogBuglist.js');
-var fs = require('fs'),
-    list;
 
-/* GET home page. */
 
-router.get('/', function(req, res, next) {
-  //releaseId = req.query.id.replace("/","");
-  projectId = req.query.id.replace("/","");
-  project.findProj(projectId, function(err, doc) {
+
+module.exports = function(io){
+
+
+  router.get('/backLogsBugList', function(req, res, next) {
+  projectId = req.query.projId;
+  backLogsBugList.findList(projectId, function(err, doc) {
     if(err){
       res.send(err);
     }
     else {
-      // console.log(doc);
-      // console.log("--------------------------");
-      console.log(doc);
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      console.log("Got Backlog and Buglist");
       res.send(doc);
     }
   });
-  // fs.readFile("./public/json/"+req.query.id.replace("/","")+".json", "utf-8", function(error, data) {
-  //    list = data;
-  //    list =  JSON.parse(list);
-  //    res.send(list);
-  //    console.log("Reading Project.json");
-  // });
+});
+
+//Get members in a projectID
+
+router.get("/memberList", function(req, res, next) {
+
+  if (req.query.id) {
+
+    Project.find({
+        '_id': req.query.id
+      })
+      .populate("memberList")
+      .exec(function(err, doc) {
+        if (err) {
+          res.end();
+        } else {
+          res.send(doc);
+        }
+      });
+  } else {
+    res.end();
+  }
+
+});
+
+
+
+router.get('/', function(req, res, next) {
+  //releaseId = req.query.id.replace("/","");
+  if (!req.query.id) {
+    project.find().exec(function(err, projectsList) {
+      if (err) {
+        return res.status(500).json(err);
+      }
+      res.status(200).json(projectsList)
+    });
+  } else {
+    projectId = req.query.id.replace("/", "");
+    project.findProj(projectId, function(err, doc) {
+      if (err) {
+        res.send(err);
+      } else {
+        // console.log(doc);
+        // console.log("--------------------------");
+        res.send(doc);
+      }
+    });
+  }
+
 });
 
 router.post('/', function(req, res, next) {
-  var newProject = new project(
-    {
-      name : "Project 2",
-      description : "project 1 is a project. What else it can be!",
-      date : Date.now()
-    }
-  );
-  newProject.save(function(err, doc) {
-    if(err){
+  Project.create({
+    name: req.body.name,
+    description: req.body.desc,
+    date: Date.now()
+  }, function(err, data) {
+    if(err)
       res.send(err);
-    }
-    else {
-      console.log("----------------Ready to creay backLogsBugList");
-      var backBug = new backLogsBugList(
+      else{
+
+        var backBug = new backLogsBugList(
         {
-          projectId : doc._id,
+          projectId : data._id,
           backlogs: {
             listName: "Backlogs"
           },
@@ -61,61 +101,66 @@ router.post('/', function(req, res, next) {
           res.send(err);
         }
         else {
-          console.log("------------ Done addong backBug");
-          res.send(doc);
+          res.send(data);
         }
       });
-    }
+
+  }
   });
+
 });
 
+router.get('/sprints', function(req, res, next) {
+  if (req.query.releaseID) {
+    Project.getSprints(req.query.releaseID, function(data) {
+      res.send(data);
+    })
+  } else {
+    res.end();
+  }
+});
+
+
 router.post('/release', function(req, res, next) {
-  projectId = "56ea78ea15eac2a96fedb5ee"; // TODO: get dynamic data
-//  console.log(project);
+  projectId = req.body.projectID;
   release = {
-    name : "Release Name 2",
-    description : "Bla bla bla Description 2",
-    creationDate : Date.now(),
-    releaseDate : Date.now()
+    name: req.body.name,
+    description: req.body.desc,
+    creationDate: Date.now(),
+    releaseDate: req.body.dt
   };
-  project.addRelease(projectId, release, function(err, doc) {
-    if(err){
+  Project.addRelease(projectId, release, function(err, doc) {
+    if (err) {
       res.send(err);
-    }
-    else {
+    } else {
       res.send(doc);
     }
   });
 });
 
 router.post('/updateProject', function(req, res, next) {
-  projectId = "56ea78ea15eac2a96fedb5ee"; // TODO: get dynamic data
   newProject = {};
   newProject.name = "Batman";
   newProject.description = "I am awesome";
   newProject.date = Date.now();
   project.updateProject(projectId, newProject, function(err, doc) {
-    if(err){
+    if (err) {
       res.send(err);
-    }
-    else {
+    } else {
       res.send(doc);
     }
   });
 });
 
 router.post('/addMember', function(req, res, next) {
-  console.log("-------------------  Adding member started");
   projectId = "56ea78dd15eac2a96fedb5ec"; // TODO: get dynamic data
-  memberId = ["56efe4afb0d86f2b174916fe","56efe48c52719111179e6de1"];
+  memberId = ["56efe4afb0d86f2b174916fe", "56efe48c52719111179e6de1"];
   project.addMember(projectId, memberId, function(err, doc) {
-    if(err){
+    if (err) {
       res.send(err);
-    }
-    else {
+    } else {
 
       user.addProjectToUser(memberId, projectId, function(data) {
-        console.log("-----------------------------------------Done Adding");
         res.send(data);
       });
     }
@@ -123,17 +168,14 @@ router.post('/addMember', function(req, res, next) {
 });
 
 router.post('/removeMember', function(req, res, next) {
-  console.log("-------------------  Removing member started");
   projectId = "56ea78dd15eac2a96fedb5ec"; // TODO: get dynamic data
   memberId = "56efe48c52719111179e6de1";
   project.removeMember(projectId, memberId, function(err, doc) {
-    if(err){
+    if (err) {
       res.send(err);
-    }
-    else {
+    } else {
 
       user.removeProjectfromUser(memberId, projectId, function(data) {
-        console.log("-----------------------------------------Done Removing");
         res.send(data);
       });
     }
@@ -152,16 +194,15 @@ router.post('/updateRelease', function(req, res, next) {
   newRelease.description = "I am awesome";
   newRelease.creationDate = Date.now();
   newRelease.releaseDate = Date.now();
-  console.log("--------------------- newRelease > " + newRelease.name);
   project.updateRelease(projectId, releaseId, newRelease, function(err, doc) {
-    if(err){
+    if (err) {
       res.send(err);
-    }
-    else {
+    } else {
       res.send(doc);
     }
   });
 });
 
+return router
 
-module.exports = router;
+}
