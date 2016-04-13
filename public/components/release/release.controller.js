@@ -1,4 +1,4 @@
-fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', 'releaseService', '$uibModal','socket', function($scope, $rootScope, $stateParams, releaseService, $uibModal,socket) {
+fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', 'releaseService', '$uibModal','socket','$state', function($scope, $rootScope, $stateParams, releaseService, $uibModal,socket,$state) {
   // miscService.leaveRoom('projectRoom', 'project');
   $scope.roomName = "release:" + $scope.release.id;
   socket.emit('join:room', { 'room': $scope.roomName});
