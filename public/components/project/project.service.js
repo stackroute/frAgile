@@ -1,4 +1,4 @@
-angular.module('fragileApp').factory('projectService', ['$http', function($http) {
+angular.module('fragileApp').factory('projectService', ['$http', 'socket',function($http,socket) {
 
   return {
     getUserProjects: function(userID) {
@@ -6,18 +6,25 @@ angular.module('fragileApp').factory('projectService', ['$http', function($http)
       return $http.get(url);
     },
     addRelease: function(projectID, name, desc, dt) {
-      var req = {
-        method: 'POST',
-        url: '/project/release',
-        data: {
-          projectID: projectID,
-          name: name,
-          desc: desc,
-          dt: dt
-        }
+      data = {
+        room:'projectRoom',
+        projectID: projectID,
+        name: name,
+        desc: desc,
+        dt: dt
       }
-      console.log(req);
-      return $http(req);
+      socket.emit('project:add release', data);
+      // var req = {
+      //   method: 'POST',
+      //   url: '/project/release',
+      //   data: {
+      //     projectID: projectID,
+      //     name: name,
+      //     desc: desc,
+      //     dt: dt
+      //   }
+      // }
+      // return $http(req);
     },
     addProject: function(name, desc) {
       var req = {

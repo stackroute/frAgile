@@ -43,7 +43,26 @@ h4 {
   font-size: 17px;
   font-weight: bold;
 }
-
+.showSlide .slideMenuBox {
+  width: 85px;
+  background-color: #2C3E50;
+  position: absolute;
+  border-bottom-left-radius: 7px;
+  border-top-left-radius: 7px;
+  margin-left: 175px;
+  padding-left: 8px;
+  margin-top: -79px;
+  color: #52B3D9;
+  letter-spacing: 5px;
+  font-size: 13px;
+  opacity: 1;
+}
+.hideSlide .slideMenuBox {
+  width: 0px;
+  height: 0px;
+  font-size: 0px;
+  opacity: 1;
+}
 .slideMenuBox .fa:hover {
   color: #C5EFF7;
 }
@@ -66,8 +85,7 @@ h4 {
   width: 100%;
 }
 .sprintDiv {
-  width: 1670px;
-  margin-top: 50px;
+  margin-top: 100px;
   overflow: hidden;
 }
 .listHead {
@@ -112,7 +130,6 @@ h4 {
   top: 50%;
   font-weight: bold;
 }
-
 .addMore:hover {
   box-shadow: inset 0px 0px 20px #BBBBBB;
 }
@@ -125,12 +142,32 @@ h4 small {
   margin-left: 10px;
   font-weight: lighter;
 }
-
 .container {
   overflow: hidden;
 }
 .addNewProject .fa {
   font-size: 20px;
+}
+.Releasable {
+  background-color: #36D7B7;
+}
+.backbug {
+  background-color: #EF4836;
+}
+.crossBtn {
+  font-size: 17px;
+  position: absolute;
+  margin-left: 260px;
+  margin-top: -4px;
+}
+.crossBtn:hover {
+  margin-top: -5px;
+  margin-left: 259px;
+  font-size: 19px;
+}
+.Releasable .crossBtn {
+  z-index: -1;
+  font-size: 0px;
 }
 
 /*Activity Bar CSS*/
@@ -141,7 +178,7 @@ h4 small {
   right: 5px;
   overflow: hidden;
   box-shadow: 0 5px 9px rgba(0, 0, 0, .5);
-  /*display: none;*/
+  display: none;
   margin-top: 17px;
   margin-bottom: 0px;
   bottom: 0;

@@ -3,7 +3,7 @@
       <div id="{{project._id}}" class = "container">
         <h3>{{project.name}}<small>{{project.description}}</small></h3>
           <div class="boxContainer" ng-repeat= "release in project.release" >
-            <div class="box" id="{{release._id}}" ng-click='setProjectID(project._id)' ui-sref="release({releaseID:release._id})">
+            <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,release._id,release.name,release.description)" ui-sref="release">
               <div class="boxHeading">
                 {{release.name}}
               </div>
@@ -16,7 +16,7 @@
                 From {{release.creationDate | date:'dd-MM-yyyy'}} to {{release.releaseDate | date:'dd-MM-yyyy'}}
               </div>
 
-              <div>
+              <div class="slideMenuBox">
                 <i class="fa fa-archive" ng-click = "archiveFun(release._id)"></i>
                 <i class="fa fa-pencil" ng-click = "editFun(release._id)"></i>
                 <i class="fa fa-star" ng-click = "starFun(release._id)"></i>

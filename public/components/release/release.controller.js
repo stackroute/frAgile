@@ -1,17 +1,37 @@
-fragileApp.controller('releaseController',['$scope','$rootScope','$stateParams','releaseService',function($scope,$rootScope,$stateParams,releaseService){
+fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', 'releaseService', '$uibModal','socket', function($scope, $rootScope, $stateParams, releaseService, $uibModal,socket) {
+  // miscService.leaveRoom('projectRoom', 'project');
+  $scope.roomName = "release:" + $scope.release.id;
+  socket.emit('join:room', { 'room': $scope.roomName});
+
+  socket.on('sprintAdded', function(data) {
+    $scope.sprints.push(data);
+  });
+
+  $scope.backClick = function(){
+    $state.go('project', { userID : $scope.userID });
+  }
+
+  $scope.openModal = function(){
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: '/components/release/release.modal.html',
+      controller: 'modalReleaseController',
+      });
+  }
+
   $scope.getSprints = function() {
 
-    $scope.release = $stateParams.releaseID;
 
-    releaseService.getSprints($stateParams.releaseID).success(function(response){
+    releaseService.getSprints($scope.release.id).success(function(response) {
       $scope.sprints = response[0].release[0].sprints;
     });
 
     // Menu Click Event
-    $scope.isMenu = true;
-    $scope.SlideMenu = function(){
+    $rootScope.isMenu = true;
+    $rootScope.SlideMenu = function() {
       $scope.isMenu = !$scope.isMenu;
     }
+
 
   };
 

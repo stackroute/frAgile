@@ -129,9 +129,7 @@ projectSchema.statics.updateRelease = function(projectId, releaseId, newRelease,
 }
 
 projectSchema.statics.addRelease = function(projectId, release, callback) {
-  this.update({
-      "_id": projectId
-    }, {
+  this.findByIdAndUpdate(projectId, {
       $push: {
         release: {
           name: release["name"],
@@ -141,7 +139,8 @@ projectSchema.statics.addRelease = function(projectId, release, callback) {
         }
       }
     }, {
-      upsert: true
+      upsert: true,
+      new:true
     })
     .exec(function(err, doc) {
       if (err) {
@@ -150,10 +149,11 @@ projectSchema.statics.addRelease = function(projectId, release, callback) {
         callback(null, doc);
       }
     });
-}
+  }
 
 projectSchema.statics.addSprint = function(projectId, releaseId, sprint, callback) {
-  this.update({
+  console.log("Inside add sprint in project");
+  this.findOneAndUpdate({
       "_id": projectId,
       "release._id": releaseId
     }, {

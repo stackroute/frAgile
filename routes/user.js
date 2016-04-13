@@ -7,8 +7,6 @@ var Project = require('../models/project.js');
 var Sprint = require('../models/sprint.js');
 var Story = require('../models/story.js');
 
-module.exports = function(io){
-
 
 //to get projects of a userID
 router.get('/projects', function(req, res, next) {
@@ -28,8 +26,8 @@ router.post('/addProject', function(req, res, next) {
       if (err)
         res.send("false");
       else{
-        res.send("true");
-        io.emit('project added',data);
+        res.send(data);
+
       }
     })
   } else {
@@ -37,5 +35,4 @@ router.post('/addProject', function(req, res, next) {
   }
 });
 
-return router
-}
+module.exports = router;

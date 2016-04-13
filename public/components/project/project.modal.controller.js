@@ -24,7 +24,9 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
       $scope.newReleaseDesc != undefined && $scope.newReleaseDesc != ""
     ) {
       projectService.addProject($scope.newReleaseName, $scope.newReleaseDesc).success(function(response) {
-        projectService.addProjectToUser($scope.userID, response._id);
+        projectService.addProjectToUser($scope.userID, response._id).success(function(data){
+          $scope.projects.push(data[0]);
+        });
       });
       $scope.dismissThis = "modal";
       $scope.newReleaseName = "";
@@ -53,9 +55,10 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
       $scope.newReleaseDesc != undefined && $scope.newReleaseDesc != "" &&
       $scope.newReleaseDate != undefined && $scope.newReleaseDate != ""
     ) {
-      projectService.addRelease(modalContr.addId, $scope.newReleaseName, $scope.newReleaseDesc, $scope.newReleaseDate).success(function(response){
-        //console.log(response);
-      });
+      projectService.addRelease(modalContr.addId, $scope.newReleaseName, $scope.newReleaseDesc, $scope.newReleaseDate);
+      // projectService.addRelease(modalContr.addId, $scope.newReleaseName, $scope.newReleaseDesc, $scope.newReleaseDate).success(function(response){
+      //   //console.log(response);
+      // });
       $scope.dismissThis = "modal";
       $scope.newReleaseName = "";
       $scope.newReleaseDesc = "";
@@ -66,8 +69,6 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
   $scope.closeThis = function() {
     $uibModalInstance.dismiss('cancel');
   }
-
-
 
 
 }]);
