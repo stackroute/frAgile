@@ -1,4 +1,4 @@
-fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams', 'projectService', '$uibModal', '$uibModalInstance', '$location', function($scope, $rootScope, $stateParams, projectService, $uibModal, $uibModalInstance, $location) {
+fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams', 'projectService', '$uibModal', '$uibModalInstance', '$location','socket' ,function($scope, $rootScope, $stateParams, projectService, $uibModal, $uibModalInstance, $location,socket) {
   $scope.dismissThis = "none";
   $scope.warningModalDesc = true;
   $scope.warningModalName = true;
@@ -24,8 +24,29 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
       $scope.newReleaseDesc != undefined && $scope.newReleaseDesc != ""
     ) {
       projectService.addProject($scope.newReleaseName, $scope.newReleaseDesc).success(function(response) {
-        projectService.addProjectToUser($scope.userID, response._id).success(function(data){
+        projectService.addProjectToUser($scope.userID, response._id).success(function(data) {
+
+          //Pushing added object into the scope to display
           $scope.projects.push(data[0]);
+
+          //Emitting add activity event
+          var data = {
+            room: "projectRoom",
+            action: "created",
+            projectID: data[0]._id,
+            user: {
+              '_id': $scope.userID,
+              'fullName': $scope.fullName
+            },
+            target: {
+              name: data[0].name,
+              type: "Project",
+              _id: data[0]._id
+            }
+          }
+          socket.emit('addActivity', data);
+
+
         });
       });
       $scope.dismissThis = "modal";
@@ -55,10 +76,17 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
       $scope.newReleaseDesc != undefined && $scope.newReleaseDesc != "" &&
       $scope.newReleaseDate != undefined && $scope.newReleaseDate != ""
     ) {
-      projectService.addRelease(modalContr.addId, $scope.newReleaseName, $scope.newReleaseDesc, $scope.newReleaseDate);
-      // projectService.addRelease(modalContr.addId, $scope.newReleaseName, $scope.newReleaseDesc, $scope.newReleaseDate).success(function(response){
-      //   //console.log(response);
-      // });
+
+      //Emitting release data to be added
+      data = {
+        room:'projectRoom',
+        projectID: modalContr.addId,
+        name: $scope.newReleaseName,
+        desc: $scope.newReleaseDesc,
+        dt: $scope.newReleaseDate
+      }
+      socket.emit('project:addRelease', data);
+
       $scope.dismissThis = "modal";
       $scope.newReleaseName = "";
       $scope.newReleaseDesc = "";

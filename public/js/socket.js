@@ -19,6 +19,9 @@ fragileApp.factory('socket', function($rootScope) {
           }
         });
       })
+    },
+    removeListener : function(){
+      socket.removeListener();
     }
   }
 });

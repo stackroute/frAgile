@@ -5,6 +5,7 @@ fragileApp.controller('activityController', function($scope, $http, socket, acti
   // Based on the project clicked, send its projectID to display its corresponding activity
   activityService.getProjectData($scope.projectID).success(function(response) {
     // For each activity, go to activityService and add the preposition, etc
+    $scope.page = 1;
     response.forEach(function(data) {
       activityService.parseData(data);
     });
@@ -53,7 +54,7 @@ fragileApp.controller('activityController', function($scope, $http, socket, acti
     $scope.memberList = response[0].memberList;
   });
 
-  socket.on('new activity', function(data) {
+  socket.on('activityAdded',function(data){
     activityService.parseData(data);
     $scope.activities.unshift(data);
   });

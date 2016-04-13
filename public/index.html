@@ -26,7 +26,33 @@
 </head>
 
 <body>
-  <div class="container" ng-controller="loginController">
+
+  <div class="container-fluid top-header">
+      <nav class="navbar navbar-default navbar-xs" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#"><b>FrAgile Board</b></a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav pull-right">
+        <li><a ><i class="glyphicon glyphicon-cog"></i></a></li>
+        <li ng-click="SlideMenu()"><a><i class="glyphicon glyphicon-align-justify"></i></a></li>
+        <li><a><i class="glyphicon glyphicon-user"></i></a></li>
+
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </nav>
+  </div>
+
+  <div ng-controller="loginController">
     <div ui-view>
     </div>
   </div>
@@ -47,10 +73,12 @@
   <script type="text/javascript" src='components/release/release.service.js'></script>
   <script type="text/javascript" src="/components/release/release.modal.controller.js"></script>
 
-
   <script type="text/javascript" src='components/sprint/sprint.route.js'></script>
   <script type="text/javascript" src='components/sprint/sprint.controller.js'></script>
   <script type="text/javascript" src='components/sprint/sprint.service.js'></script>
+
+  <script type="text/javascript" src='components/activity/activity.controller.js'></script>
+  <script type="text/javascript" src='components/activity/activity.service.js'></script>
 
 
 </body>

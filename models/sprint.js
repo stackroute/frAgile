@@ -17,10 +17,7 @@ var sprintSchema = new Schema({
   list: [{
     group: String,
     listName: String,
-    stories: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Story'
-    }],
+    stories: [{type : Schema.Types.ObjectId, ref : 'Story'}]
   }]
 });
 
@@ -39,12 +36,14 @@ sprintSchema.statics.deleteList = function(sprintId, listId, callback) {
     });
 }
 
+// Adds a new sprint in the SprintsCollection
 sprintSchema.statics.addSprint = function(sprint, callback) {
    this.create({
       'name': sprint.name,
       'endDate': sprint.endDate,
       'startDate': sprint.startDate,
-      'description': sprint.desc
+      'description': sprint.desc,
+      'list': sprint.list
         // TODO MORE
     },
     function(err, doc) {

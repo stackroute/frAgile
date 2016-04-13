@@ -1,6 +1,6 @@
-<div class="menu-bar pull-right panel panel-default" ng-controller="activityController">
+<div class="menu-bar pull-right panel panel-default" ng-controller="activityController" ng-show="isMenu">
   <div class="panel-heading menu-panel-heading">Menu
-    <button type="button" id="sideBarClose" class="close" style="color:white"><span aria-hidden="true">&times;</span></button>
+    <button type="button" id="sideBarClose" class="close" ng-click="SlideMenu()" style="color:white"><span aria-hidden="true">&times;</span></button>
   </div>
   <div class="panel-body">
 
@@ -28,18 +28,10 @@
       <div class="activity-more" ng-hide='moreData'>
         <button class=" btn  btn-primary" ng-click='moreActivity()'>Read More ...</button>
       </div>
-      <div class='text-center' ng-show='moreData'>
+      <div class='text-center btn-primary' ng-show='moreData'>
         ... no more results to show.
       </div>
     </div>
 
   </div>
 </div>
-<script>
-  $('#showActivity').click(function() {
-    $(".menu-bar").fadeIn(300);
-  });
-  $('#sideBarClose').click(function() {
-    $(".menu-bar").fadeOut(100);
-  });
-</script>

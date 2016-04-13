@@ -1,10 +1,10 @@
 <div ng-init="getSprints()">
-  <div id="{{release._id}}" class="container">
+  <div id="{{release.id}}" class="container">
     <div class="row">
 
       <h4>{{release.name}}<small>{{release.description}}</small></h3>
         <div class="boxContainer" ng-repeat= "spr in sprints">
-          <div class="box"  id="{{spr._id}}" ui-sref="sprint({ prId : prId, sprintID: spr._id})">
+          <div class="box"  ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" id="{{spr._id}}" >
             <div class="boxHeading">
               {{spr.name}}
             </div>
@@ -14,12 +14,14 @@
             <div class="date" >
               From {{spr.startDate | date:'dd-MM-yyyy'}} to {{spr.endDate | date:'dd-MM-yyyy'}}
             </div>
+            <div class="dummy" ui-sref="sprint({ prId : projectID, sprintID: spr._id})">
+            </div>
+            <div class="slideMenuBox">
+              <i class="fa fa-archive" ng-click="archiveFun(release.id, spr._id)"></i>
+              <i class="fa fa-pencil" ng-click="editFun(release.id)"></i>
+              <i class="fa fa-star" ng-click="starFun(release.id)"></i>
+            </div>
           </div>
-          <!-- <div class="slideMenuBox" ng-mouseover = "showSlideFun($event)" ng-mouseleave ="hideSlideFun($event)">
-            <i class="fa fa-archive" ng-click = "archiveFun(rel._id)"></i>
-            <i class="fa fa-pencil" ng-click = "editFun(rel._id)"></i>
-            <i class="fa fa-star" ng-click = "starFun(rel._id)"></i>
-          </div> -->
         </div>
         <div class="box addMore" ng-click="openModal()">
             Add Sprint...
@@ -31,3 +33,5 @@
         </div>
       </div>
 </div>
+
+<div ng-include="'components/activity/activity.view.html'"></div>

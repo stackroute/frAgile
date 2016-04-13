@@ -1,9 +1,9 @@
-<div ng-init="loadProjects()" class = "projectPage">
+<div ng-init="loadProjects()" class = "projectPage container">
   <div ng-repeat="project in projects" class="main">
       <div id="{{project._id}}" class = "container">
-        <h3>{{project.name}}<small>{{project.description}}</small></h3>
+        <h4>{{project.name}}<small>{{project.description}}</small></h4>
           <div class="boxContainer" ng-repeat= "release in project.release" >
-            <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,release._id,release.name,release.description)" ui-sref="release">
+            <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,release._id,release.name,release.description)">
               <div class="boxHeading">
                 {{release.name}}
               </div>
@@ -15,9 +15,10 @@
               <div class="date">
                 From {{release.creationDate | date:'dd-MM-yyyy'}} to {{release.releaseDate | date:'dd-MM-yyyy'}}
               </div>
-
+              <div class="dummy" ui-sref="release({ prId : project._id, releaseID: release._id})">
+              </div>
               <div class="slideMenuBox">
-                <i class="fa fa-archive" ng-click = "archiveFun(release._id)"></i>
+                <i class="fa fa-archive" ng-click = "archiveFun(project._id, release._id)"></i>
                 <i class="fa fa-pencil" ng-click = "editFun(release._id)"></i>
                 <i class="fa fa-star" ng-click = "starFun(release._id)"></i>
               </div>

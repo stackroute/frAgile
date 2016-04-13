@@ -1,7 +1,12 @@
 <div ng-init="getSprints()">
-  <h4 class = "heading">{{sprint.name}}<small>{{sprint.description}}</small></h3>
-  <div class="heading">
-    From {{sprint.startDate}} to {{sprint.endDate}}
+  <div class="container">
+    <div class="row">
+      <button class="btn btn-success" ng-click="backClick()">Back</button>
+    </div>
+    <h4 class = "row">{{sprint.name}}<small>{{sprint.description}}</small></h4>
+      <div class="row">
+        From {{sprint.startDate}} to {{sprint.endDate}}
+      </div>
   </div>
   <div class="sprintDiv" ng-style="{width: sprintWidth}">
     <div class = 'parent backbug'>

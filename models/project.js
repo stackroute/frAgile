@@ -41,7 +41,6 @@ projectSchema.statics.getSprints = function(releaseID, callback) {
     });
 }
 
-
 projectSchema.statics.addMember = function(projectId, memberId, callback) {
   this.update({
       "_id": projectId
@@ -83,6 +82,7 @@ projectSchema.statics.removeMember = function(projectId, memberId, callback) {
       }
     });
 }
+
 projectSchema.statics.updateProject = function(projectId, newProject, callback) {
   this.update({
       "_id": projectId
@@ -128,6 +128,45 @@ projectSchema.statics.updateRelease = function(projectId, releaseId, newRelease,
     });
 }
 
+// Deletes/pulls the release from the Projects Collection
+projectSchema.statics.deleteRelease = function(projectId, releaseId, callback) {
+  this.update({
+      "_id": projectId
+    }, {
+      $pull: {
+        "release": {
+          _id: releaseId
+        }
+      }
+    })
+    .exec(function(err, doc) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+}
+
+// Deletes/pulls the sprintId from the Projects Collection
+// TODO - Delete sprint from sprints collection
+projectSchema.statics.deleteSprint = function(projectId, releaseId, sprintId, callback) {
+  this.update({
+      "_id": projectId,
+      "release._id": releaseId
+    }, {
+      $pull: {
+        "release.$.sprints": sprintId
+      }
+    })
+    .exec(function(err, doc) {
+      if (err)
+        callback(err, null);
+      else
+        callback(null, doc);
+    })
+}
+
 projectSchema.statics.addRelease = function(projectId, release, callback) {
   this.findByIdAndUpdate(projectId, {
       $push: {
@@ -140,7 +179,7 @@ projectSchema.statics.addRelease = function(projectId, release, callback) {
       }
     }, {
       upsert: true,
-      new:true
+      new: true
     })
     .exec(function(err, doc) {
       if (err) {
@@ -149,10 +188,10 @@ projectSchema.statics.addRelease = function(projectId, release, callback) {
         callback(null, doc);
       }
     });
-  }
+}
 
+// Adds sprintId in the sprint array of Projects Collection
 projectSchema.statics.addSprint = function(projectId, releaseId, sprint, callback) {
-  console.log("Inside add sprint in project");
   this.findOneAndUpdate({
       "_id": projectId,
       "release._id": releaseId
@@ -171,6 +210,7 @@ projectSchema.statics.addSprint = function(projectId, releaseId, sprint, callbac
       }
     });
 }
+
 projectSchema.statics.findProj = function(projectList, callback) {
   projectList = projectList.split(',');
   this.find({
@@ -187,6 +227,7 @@ projectSchema.statics.findProj = function(projectList, callback) {
       }
     });
 }
+
 var Project = mongoose.model('Project', projectSchema, "Projects");
 
 module.exports = Project;
