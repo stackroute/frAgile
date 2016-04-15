@@ -16,7 +16,6 @@ backLogsBugList.findList(projectId, function(err, doc) {
     res.send(err);
   }
   else {
-    console.log("Got Backlog and Buglist");
     res.send(doc);
   }
 });
@@ -34,6 +33,7 @@ if (req.query.id) {
       res.send(doc);
     }
   });
+}
 });
 
 

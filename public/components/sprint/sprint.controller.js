@@ -198,5 +198,4 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
 
       });
     }
->>>>>>> a8041d1a675605e598d11661d83f5013a6950620
 }]);

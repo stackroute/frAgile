@@ -4,7 +4,6 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       $rootScope.projects = response.projects
     });
 
-    $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
   }
 
   socket.emit('join:room', {
@@ -80,7 +79,6 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       'projectId': projectId,
       'releaseId': releaseId
     });
-    console.log('Project Controller: ', projectId, releaseId);
   };
   $scope.editFun = function(rel) {
 
