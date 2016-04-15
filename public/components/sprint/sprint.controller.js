@@ -149,7 +149,7 @@ $scope.test = function(listId, clicked) {
   resolve:Sprint, Story,ProjectMembers
   TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
 ***/
-  $scope.showModal = function(storyID)
+  $scope.showModal = function(storyID,storyGrp)
     {
       console.log(storyID);
       sprintService.getStory(storyID).then(function(story) {
@@ -167,7 +167,8 @@ $scope.test = function(listId, clicked) {
               return {
                 story:story,
                 sprint:$scope.sprint,
-                projMembers:$rootScope.memberList
+                projMembers:$rootScope.memberList,
+                storyGrp:storyGrp
               };
             }
           }

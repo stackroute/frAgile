@@ -22,7 +22,7 @@ var projectSchema = new Schema({
   }], //TODO : hardcoded to be fixed
   memberList: [{
     type: Schema.Types.ObjectId,
-    ref: 'Users'
+    ref: 'User'
   }],
   release: [releaseSchema]
 });

@@ -432,8 +432,8 @@ h4 small {
   width: 99px;
 }
 /*Story CSS Starts*/
-#Completed {
-   color:#fff;
+
+.storyHeader {
    padding:9px 15px;
    border-bottom:1px solid #eee;
    background-color: #5cb85c;

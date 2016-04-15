@@ -1,6 +1,6 @@
 var fragileApp = angular.module('fragileApp');
 
-fragileApp.controller('activityController', function($scope, $http, socket, activityService) {
+fragileApp.controller('activityController', function($scope, $http, socket, activityService, $rootScope) {
 
   // Based on the project clicked, send its projectID to display its corresponding activity
   activityService.getProjectData($scope.projectID).success(function(response) {
@@ -48,10 +48,11 @@ fragileApp.controller('activityController', function($scope, $http, socket, acti
   //For members list
 $scope.memberList = [];
   activityService.getMembers($scope.projectID).success(function(response) {
-    response[0].memberList.forEach(function(data) {
+   
+    response.memberList.forEach(function(data) {
       data.fullName = data.firstName + " " + data.lastName;
     })
-    $rootScope.memberList = response[0].memberList;
+    $rootScope.memberList = response.memberList;
   });
 
   socket.on('activityAdded', function(data) {
