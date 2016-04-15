@@ -431,3 +431,125 @@ h4 small {
 .btn-section {
   width: 99px;
 }
+/*Story CSS Starts*/
+#Completed {
+   color:#fff;
+   padding:9px 15px;
+   border-bottom:1px solid #eee;
+   background-color: #5cb85c;
+   -webkit-border-top-left-radius: 5px;
+   -webkit-border-top-right-radius: 5px;
+   -moz-border-radius-topleft: 5px;
+   -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.done-true {
+  text-decoration: line-through;
+  color: grey;
+}
+
+ .push-right {
+  float: right;
+}
+
+.story-label-yellow{
+  background-color: #F4D03F;
+}
+.story-label-green{
+  background-color: #26A65B;
+}
+.story-label-blue{
+  background-color: #446CB3;
+}
+.story-label-purple{
+  background-color: #663399;
+}
+.story-label-red{
+  background-color: #D91E18;
+}
+.story-label-orange{
+  background-color: #F89406;
+}
+
+/*CSS for sub Modals inside story*/
+#modal-members{
+  max-height: calc(50vh - 200px);
+  margin-top: 10px;
+ overflow: auto;
+}
+.modal-members-list{
+padding-left: 0;
+margin-bottom: 10px;
+padding-right: 5px;
+}
+
+/*Add below class during mouse pointing on label selection*/
+.story-label-select-active{
+  padding-right: 2pc;
+  box-shadow: -8px 0 #999966;
+}
+
+.story-label-select{
+  cursor: pointer;
+  min-height: 18px;
+  border-radius: 3px;
+  margin: 0 0 4px;
+}
+
+/*New*/
+.story-label-edit-button{
+  border-radius: 3px;
+  float: right;
+  padding: 8px;
+}
+
+.story-label-design{
+  border-radius: 4px;
+  color: white;
+  display: inline-block;
+  font-weight: 700;
+  font-size: 13px;
+  margin-right: 4px;
+  margin-bottom: 5px;
+  padding: 3px 8px;
+  max-width: 100%;
+  min-width: 8px;
+  overflow: ellipsis;
+  height: 18px;
+  vertical-align: bottom;
+}
+/*This class is used for labels display*/
+.story-label-selectable{
+  border-radius: 3px;
+  cursor: pointer;
+  margin: 0;
+  margin-bottom: 5px;
+  width: 212px;
+  min-height: 27px;
+  padding: 5px;
+}
+/*This class is used for labels template display*/
+.story-label-template-selectable{
+  border-radius: 13px;
+  cursor: pointer;
+  margin: 0;
+  margin-bottom: 5px;
+  width: 50px;
+  min-height: 42px;
+  padding: 5px;
+}
+
+.story-active{
+  padding-right: 32px
+}
+
+.story-label-selectable-icon{
+position: absolute;
+top: 8px;
+right: -20px;
+}
+
+
+/*Story CSS Ends*/

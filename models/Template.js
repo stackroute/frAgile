@@ -1,18 +1,20 @@
 var mongoose = require('mongoose'),
- labelTemplateSchema = new mongoose.Schema({
-   label: [
+ templateSchema = new mongoose.Schema({
+   labelTemplates: [
    {
      name: String,
      colorCode: String,
+     colorName:String
    }
    ],
-   list: [
+   listTemplate: [
    {
      group: String,
      listName: String
    }
-  ]
- }),
- LabelTemplate = mongoose.model('LabelTemplate', labelTemplateSchema, "labelTemplate_collection");
+ ]
 
-module.exports = LabelTemplate;
+ }),
+ Template = mongoose.model('Template', templateSchema, "Templates");
+
+module.exports = Template;

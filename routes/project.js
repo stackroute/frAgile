@@ -27,22 +27,13 @@ backLogsBugList.findList(projectId, function(err, doc) {
 router.get("/memberList", function(req, res, next) {
 
 if (req.query.id) {
-
-  Project.find({
-      '_id': req.query.id
-    })
-    .populate("memberList")
-    .exec(function(err, doc) {
-      if (err) {
-        res.end();
-      } else {
-        res.send(doc);
-      }
-    });
-} else {
-  res.end();
-}
-
+  Project.getProjectMembers(projectId, function(err, doc) {
+    if (err) {
+      res.send(err);
+    }else {
+      res.send(doc);
+    }
+  });
 });
 
 
@@ -179,6 +170,7 @@ project.removeMember(projectId, memberId, function(err, doc) {
   }
 });
 });
+
 
 router.post('/updateRelease', function(req, res, next) {
 projectId = "56ea78ea15eac2a96fedb5ee";

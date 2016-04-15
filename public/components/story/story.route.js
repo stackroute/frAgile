@@ -1,9 +1,7 @@
-var angularModule = angular.module('fragile');
-
-angularModule.config(function($stateProvider,$urlRouterProvider){
+fragileApp.config(function($stateProvider,$urlRouterProvider){
 
   $stateProvider
-  .state('project',{
+  .state('story',{
     templateUrl: 'components/story/story.view.html',
     controller: 'storyController'
   });

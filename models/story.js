@@ -76,11 +76,27 @@ var StorySchema = new Schema({
 });
 
 //Code merge by sharan Starts:
-
+/***this function is to fetch the story details from the collection
+based on the storyID passed***/
+StorySchema.statics.findStory = function(storyId, callback) {
+  //console.log("inside model find story");
+  this.findOne({"_id":storyId})
+  .populate('memberList','firstName')
+  .exec(function(err,doc){
+    if (err) {
+//console.log("err"+err);
+      callback(err, null);
+    }
+    else {
+//console.log("doc"+doc);
+      callback(null, doc);
+    }
+   });
+}
 /*** addMembers function is used to assign the members to
 the story from the project members list.**/
 StorySchema.statics.addMembers = function(storyId,membersId, callback) {
-  console.log("im inside model addMembers");
+  console.log("im inside story model addMembers");
 //Find was written only for reference
 //  this.findOne({"_id":storyId}).exec(function(err,doc){ console.log(doc);});
   this.update(
@@ -321,5 +337,16 @@ StorySchema.statics.deleteStory = function(storyId, callback) {
    });
 }
 
-var Story = mongoose.model('Story', StorySchema, 'Stories');
+StorySchema.statics.saveDescription = function(storyId,Desc,callback){
+//  console.log("inside save description");
+//  console.log(storyId);
+  this.findOne({"_id":storyId}).exec(function(err,doc){ console.log(doc);});
+  this.findByIdAndUpdate(storyId, { $set: { description: Desc }}, function (err, doc) {
+    if (err) return callback(err, null);
+  //  console.log("response in model"+ doc);
+    callback(null, doc);
+  });
+
+}
+var Story = mongoose.model('Story', StorySchema,'Stories');
 module.exports=Story;

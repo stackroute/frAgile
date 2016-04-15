@@ -1,0 +1,25 @@
+<!-- <script type="text/ng-template"  id="addMember.html"> -->
+<div class="modal-header">
+  <h4 class="modal-title">Add Member</h4>
+</div>
+<div class="modal-body">
+  <div class="form-group">
+    <input type="text" ng-model="memberName" name="memberSearch" placeholder="Search Member" class="form-control">
+    <div id="modal-members">
+      <ul class="modal-members-list">
+        <li ng-repeat="membersArray in memberDetails |filter: memberName" class="list-group-item">
+          <ng-letter-avatar data={{membersArray.fullName}} charCount=2  height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+
+            {{membersArray.fullName | limitTo:longDescLimit}}<span ng-hide="membersArray.fullName.length < longDescLimit ">
+              ...
+            </span>
+            <i class="fa fa-check pull-right"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="ok()">Done</button>
+</div>
+<!-- </script> -->

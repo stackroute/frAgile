@@ -49,8 +49,9 @@ fragileApp.controller('activityController', function($scope, $http, socket, acti
 $scope.memberList = [];
   activityService.getMembers($scope.projectID).success(function(response) {
     response[0].memberList.forEach(function(data) {
-      $scope.memberList.push(data.firstName + " " + data.lastName);
+      data.fullName = data.firstName + " " + data.lastName;
     })
+    $rootScope.memberList = response[0].memberList;
   });
 
   socket.on('activityAdded', function(data) {
