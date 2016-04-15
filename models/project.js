@@ -22,7 +22,7 @@ var projectSchema = new Schema({
   }], //TODO : hardcoded to be fixed
   memberList: [{
     type: Schema.Types.ObjectId,
-    ref: 'Users'
+    ref: 'User'
   }],
   release: [releaseSchema]
 });
@@ -227,7 +227,18 @@ projectSchema.statics.findProj = function(projectList, callback) {
       }
     });
 }
+projectSchema.statics.getProjectMembers = function(projectId, callback) {
 
+  this.findOne({"_id":projectId})
+  .populate('memberList','_id firstName lastName initials imageUrl' )
+    .exec(function(err, doc) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+}
 var Project = mongoose.model('Project', projectSchema, "Projects");
 
 module.exports = Project;

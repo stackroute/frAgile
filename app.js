@@ -16,6 +16,7 @@ var activity = require('./routes/activity');
 var sprint = require('./routes/sprint');
 var project = require('./routes/project');
 var user = require('./routes/user');
+var story = require('./routes/story');
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -34,5 +35,6 @@ app.use('/activity', activity);
 app.use('/sprint', sprint);
 app.use('/project', project);
 app.use('/user', user);
+app.use('/story', story);
 
 module.exports = app;

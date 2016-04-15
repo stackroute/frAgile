@@ -23,11 +23,14 @@ var fs = require('fs'),
 /* GET home page. */
 //Merged by Sharan Starts
 router.post('/addmember', function(req, res, next) {
-  var storyId= req.query.storyid.replace("/","");
-  var memberId=req.query.memberid.replace("/","");
+  var storyId= req.query.storyid;
+  var memberId=req.query.memberid;
 
 story.addMembers(storyId,memberId,function(err,data){
-res.send(data);
+  if(err){
+    res.send(err);
+  }
+  res.send(data);
 })
 });
 
@@ -85,27 +88,27 @@ res.send(data);
 router.get('/addchecklistgroup', function(req, res, next) {
   //TODO:Get the below obj dynamically from request. Update indicators dynamically
 
-  // var storyId= req.query.storyid.replace("/","");
-  //var checklistObj=req.query.checklistobj;
-  var storyId= "56ea47bd28c0f3dd0446b660";
-  var checklistObj={
-    checklistHeading:"This is Heading of Checklist",
-    checkedCount: 2,
-    items: [{
-      text: "First Check item",
-      checked: false,
-      createdBy:"56ebb688ee6b767262a7ed90",
-      creationDate:Date.now(),
-      creatorName:"Sharan"
-    },{
-      text: "Second Check item",
-      checked: false,
-      createdBy:"56ebb688ee6b767262a7ed90",
-      creationDate:Date.now(),
-      creatorName:"Sharan",
-    }]
-
-  }
+   var storyId= req.query.storyid;
+  var checklistObj=req.query.checklistobj;
+  //var storyId= "56ea47bd28c0f3dd0446b660";
+  // var checklistObj={
+  //   checklistHeading:"This is Heading of Checklist",
+  //   checkedCount: 2,
+  //   items: [{
+  //     text: "First Check item",
+  //     checked: false,
+  //     createdBy:"56ebb688ee6b767262a7ed90",
+  //     creationDate:Date.now(),
+  //     creatorName:"Sharan"
+  //   },{
+  //     text: "Second Check item",
+  //     checked: false,
+  //     createdBy:"56ebb688ee6b767262a7ed90",
+  //     creationDate:Date.now(),
+  //     creatorName:"Sharan",
+  //   }]
+  //
+  // }
 story.addChecklistGroup(storyId,checklistObj,function(err,data){
 res.send(data);
 });
@@ -113,7 +116,7 @@ res.send(data);
 
 router.post('/updatelabellist', function(req, res, next) {
   //TODO:Get the below obj dynamically from request. Update indicators dynamically
-  var storyId= req.query.storyid.replace("/","");
+  var storyId= req.query.storyid;
   var labelListId=req.query.labellistid;
   var operation=req.query.operation;
 
@@ -129,7 +132,34 @@ res.send(data);
 
 //ends
 router.get('/', function(req, res, next) {
+  console.log("route story get received");
+  var storyId= req.query.id;
+  //var storyId = "56ea47bd28c0f3dd0446b660";
 
+  console.log("inside story get");
+  story.findStory(storyId, function(err, doc) {
+    if(err){
+      return(err);
+    }
+    else {
+      res.send(doc);
+      return(doc);
+    }
+  });
+});
+router.post('/saveStoryDescription', function(req, res, next) {
+  var storyId= req.query.id;
+  var desc=req.query.desc;
+  story.saveDescription(storyId,desc, function(err,doc){
+    if(err){
+      return(err);
+    }
+    else {
+      res.send(doc);
+      return(doc);
+    }
+  });
+  //res.send("doc");
 });
 
 router.post('/delete', function(req, res, next){

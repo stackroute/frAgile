@@ -1,0 +1,49 @@
+<!-- <script type="text/ng-template"  id="addMember.html"> -->
+
+<div class="modal-header">
+  <div ng-show="checked">
+    <h4 class="modal-title">Add label</h4>
+  </div>
+  <div ng-hide="checked">
+    <h4 class="modal-title">Create label</h4>
+  </div>
+</div>
+<div class="modal-body">
+  <div class="form-group"  ng-show="checked">
+    <ul  class="list-group" >
+      <li ng-repeat="listArray in sprintDetails.labelsData">
+        <span class="story-label-design story-label-selectable story-label-{{listArray.colorName}}">
+          {{listArray.text}} {{listArray.colorCode}}
+          <i class="fa fa-check pull-right"></i>
+        </span>
+        <a class="fa fa-pencil pull-right"href="#"></a> <!--edit-label--->
+      </li>
+    </ul>
+    <a ng-click="toggleLabel()"> Create label...</a>
+  </div>
+
+  <div class="" ng-hide="checked">
+
+    <input type="text" ng-model="labelText" placeholder="Label Name" class="form-control">
+    <span ng-repeat="listArray in sprintDetails.labelTemplate">
+      <span class="story-label-design story-label-template-selectable story-label-{{listArray.colorName}}">
+        <i class="fa fa-check"></i>
+      </span>
+    </span>
+
+  </div>
+
+</div>
+<div class="modal-footer">
+  <div ng-show="checked">
+    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="cancel()">Done</button>
+
+  </div>
+<div ng-hide="checked">
+
+  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="toggleLabel();createLabel()">Create</button>
+  <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="toggleLabel()">Cancel</button>
+</div>
+</div>
+
+<!-- </script> -->

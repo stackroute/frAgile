@@ -99,4 +99,4 @@ userSchema.statics.getProjects = function(userID, callback) {
     else callback(data);
   });
 }
-module.exports = mongoose.model('Users', userSchema, 'Users');;
+module.exports = mongoose.model('User', userSchema, 'Users');;

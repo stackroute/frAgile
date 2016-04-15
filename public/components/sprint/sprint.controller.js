@@ -1,4 +1,4 @@
-fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'socket', function($scope, $rootScope, $stateParams, sprintService, $state, socket) {
+fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'socket','$uibModal', function($scope, $rootScope, $stateParams, sprintService, $state, socket,$uibModal) {
   $scope.getSprints = function() {
     $scope.addToBacklog = false;
     $scope.addToBuglist = false;
@@ -155,23 +155,48 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     });
 
   });
+  /***
+  author:Sharan
+  Function Name: showModal
+  Function Description: This method is called by stories in Sprint Lists.
+  This will create\opens a uib modal instance for the story
+  Parameters:storyId
+  resolve:Sprint, Story,ProjectMembers
+  TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
+***/
+  $scope.showModal = function(storyID,storyGrp)
+    {
+      console.log(storyID);
+      sprintService.getStory(storyID).then(function(story) {
+        console.log(story);
+        var modalInstance = $uibModal.open({
+          animation: $scope.animationsEnabled,
+          templateUrl: '/components/story/story.view.html',
+          controller:'storyController',
+          controllerAs:'storyContr',
+          size:'lg',
+          resolve: {
+            param: function() {
+              console.log("params in modal factory :::::  ");
+              console.log("passing data to story controller");
+              return {
+                story:story,
+                sprint:$scope.sprint,
+                projMembers:$rootScope.memberList,
+                storyGrp:storyGrp
+              };
+            }
+          }
+        });
 
-  // socket.on('sprint:storyMoveFailed',function(data){
-  //
-  //   //Going through all lists
-  //   $scope.sprint.list.forEach(function(listItem) {
-  //
-  //     //If the list is new list , removing story
-  //     if (listItem._id == data.newListId){
-  //       listItem.stories.splice($.inArray(data.storyId, listItem.stories), 1);
-  //     }
-  //
-  //     //If the list is old list, adding story
-  //     if (listItem._id == data.oldListId)
-  //       listItem.stories.push(data.story)
-  //
-  //   });
-  //
-  // });
+        modalInstance.result.then(function (selectedItem) {
+          $scope.selected = selectedItem;
+        }, function () {
+        ///This runs for close or save.... You can delete this
+        });
 
+
+      });
+    }
+>>>>>>> a8041d1a675605e598d11661d83f5013a6950620
 }]);

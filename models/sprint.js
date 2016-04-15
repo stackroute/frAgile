@@ -5,15 +5,22 @@ var Schema = mongoose.Schema;
 reference for sub document in sprint schema***/
 var labelSchema = new Schema({
   text: String,
-  colorCode: String
+  colorCode: String,
+  colorName:String
 });
 
+var labelTemplateSchema = new Schema({
+  text: String,
+  colorCode: String,
+  colorName:String
+});
 var sprintSchema = new Schema({
   name: String,
   endDate: Date,
   startDate: Date,
   description: String,
-  labelTemplate: [labelSchema],
+  labelsData: [labelSchema],//Renamed this from labelTemplate.. change it in corressponding codes
+  labelTemplate:[labelTemplateSchema], //This it to store the stagnant data of the label templates and show it in sub modal
   list: [{
     group: String,
     listName: String,
