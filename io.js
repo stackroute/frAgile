@@ -75,22 +75,44 @@ io.on('connection', function(socket) {
     })
   });
 
-  socket.on('sprint:moveStory',function(data){
-    Sprint.addStory(data.sprintId,data.newListId,data.storyId,function(err,addStoryData){
-      if(addStoryData)
-        Sprint.deleteStory(data.sprintId,data.oldListId,data.storyId,function(err,delStoryData){
-          if(delStoryData){
-            Story.findById(data.storyId,function(err,storyData){
+  socket.on('sprint:moveStory', function(data) {
+
+    //Adding story in new list, then deleting from old list
+
+
+    Sprint.addStory(data.sprintId, data.newListId, data.storyId, function(err, addStoryData) {
+      if (addStoryData.nModified == 1) { //If add is succesful
+        Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
+          if (delStoryData.nModified == 1) { //If delete is succesful
+            Story.findById(data.storyId, function(err, storyData) {
               data.story = storyData;
+              data.success = true;
               socket.broadcast.to(data.room).emit('sprint:storyMoved', data);
+            });
+          } else {
+            console.log("Couldn't delete story", socket.id);
+            //roll back changes
+            Sprint.deleteStory(data.sprintId, data.newListId, data.storyId, function(err, delStoryData) {
+              if (err) console.log("Duplicate story created");
+              else {
+                console.log("Deleted previously added story",socket.id);
+                Story.findById(data.storyId, function(err, storyData) {
+                  data.story = storyData
+                  data.success = false
+                  socket.emit('sprint:storyMoved', data);
+                });
+              }
+
             });
           }
         })
-    })
+      }
+    });
+
+
   });
 
-socket.on('sprint:addStory', function(data) {
-    console.log("Inside Socket");
+  socket.on('sprint:addStory', function(data) {
     var story = {
       heading: data.heading,
       addTo: data.addTo,
@@ -99,41 +121,35 @@ socket.on('sprint:addStory', function(data) {
       description: data.description,
       listId: data.listId
     }
-    console.log(story);
     Story.addStory(story, function(err, doc) {
-      console.log("*******************************************************");
-      console.log(doc);
-      console.log("*******************************************************");
       if (!err) {
-        if(data.addTo == "Backlogs"){
-          console.log("Now we will add to Backlog");
+        if (data.addTo == "Backlogs") {
           BackLogsBugList.addStoryBacklog(data.projectId, doc._id, function(err, subDoc) {
-          if (!err) {
-            io.to(data.room).emit('sprint:storyAdded', doc);
-          } else
-            console.log(err);
+            if (!err) {
+              io.to(data.room).emit('sprint:storyAdded', doc);
+            } else
+              console.log(err);
           })
-        }
-        else if (data.addTo == "BugLists") {
+        } else if (data.addTo == "BugLists") {
           BackLogsBugList.addStoryBuglist(data.projectId, doc._id, function(err, subDoc) {
-            console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-          if (!err) {
-            console.log("No Error");
-            console.log(data.room);
-            io.to(data.room).emit('sprint:storyAdded', doc);
-          } else
-            console.log(err);
+            if (!err) {
+              io.to(data.room).emit('sprint:storyAdded', doc);
+            } else
+              console.log(err);
           })
-        }
-        else {
+        } else {
           Sprint.addStory(data.sprintId, data.id, doc._id, function(err, subDoc) {
-            console.log("????????????????????????????????");
-          if (!err) {
-            console.log("No Error");
-            console.log(data.room);
-            io.to(data.room).emit('sprint:storyAdded', doc);
-          } else
-            console.log(err);
+            if (!err) {
+
+              //TODO: Fix this :(
+              // doc.idNew = data.id;
+              // console.log(doc.idNew);
+              // console.log(doc);
+
+              doc._id = data.id
+              io.to(data.room).emit('sprint:storyAdded', doc);
+            } else
+              console.log(err);
           })
         }
       } else
@@ -148,7 +164,6 @@ socket.on('sprint:addStory', function(data) {
   });
 
   socket.on('deleteRelease', function(data) {
-    console.log('Delete Release: Socket Request');
     Project.deleteRelease(data.projectId, data.releaseId, function(err, doc) {
       if (!err)
         io.to(data.room).emit('releaseDeleted', {
@@ -159,7 +174,6 @@ socket.on('sprint:addStory', function(data) {
   })
 
   socket.on('deleteSprint', function(data) {
-    console.log('Delete Sprint: Socket Request');
     Project.deleteSprint(data.projectId, data.releaseId, data.sprintId, function(err, doc) {
       if (!err)
         io.to(data.room).emit('sprintDeleted', {
@@ -172,7 +186,6 @@ socket.on('sprint:addStory', function(data) {
   })
 
   socket.on('activity:addMember', function(data) {
-    console.log('Add Member: Socket Request');
     Project.addMember(data.projectId, data.memberList, function(err, doc) {
       if (!err) {
         io.to(data.room).emit('activity:memberAdded', 1);

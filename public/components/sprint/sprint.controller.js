@@ -6,6 +6,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       $scope.sprint = sprint.data;
       $scope.sprintWidth = ($scope.sprint.list.length * 278 + 560) + "px";
       $scope.sprint = sprint.data;
+      console.log($scope.sprint.list);
+
     });
     sprintService.getBackBug($stateParams.prId).then(function(backBug) {
       $scope.backBug = backBug.data;
@@ -33,16 +35,15 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     });
   }
 
+
   socket.on('sprint:storyAdded', function(data) {
-    if(data.listId == "BugLists"){
+    if (data.listId == "BugLists") {
       $scope.backBug.buglist.stories.push(data);
-    }
-    else if (data.listId == "Backlogs") {
+    } else if (data.listId == "Backlogs") {
       $scope.backBug.backlogs.stories.push(data);
-    }
-    else {
+    } else {
       angular.forEach($scope.sprint.list, function(value, key) {
-        if (value._id == $scope.listIdAdded) {
+        if (value._id == data._id) {
           $scope.sprint.list[key].stories.push(data);
         }
       });
@@ -50,25 +51,25 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     // $scope.sprint.push(data);
   });
 
-$scope.test = function(listId, clicked) {
-    $scope.clicked=false;
+  $scope.test = function(listId, clicked) {
+    $scope.clicked = false;
   };
   $scope.show = function(listId, bool) {
-    return listId+bool;
+    return listId + bool;
   };
   $scope.addStory = function(listId, storyDetails, id) {
-    $scope.listIdAdded = id;
-    if(storyDetails != undefined && storyDetails != ""){
+    // $scope.listIdAdded = id;
+    if (storyDetails != undefined && storyDetails != "") {
       socket.emit('sprint:addStory', {
         'room': $scope.roomName,
         'addTo': listId,
         'projectId': $stateParams.prId,
-        'storyStatus':"",
+        'storyStatus': "",
         'sprintId': $stateParams.sprintID,
-        'heading':  storyDetails,
+        'heading': storyDetails,
         'description': "",
         'listId': listId,
-        'id':id
+        'id': id
       });
       $scope.storyDetails = "";
       $scope.addToBacklog = false;
@@ -96,13 +97,16 @@ $scope.test = function(listId, clicked) {
     //Called when story is dropped in list
     angular.element(event.target).removeClass("being-dropped")
 
-    socket.emit('sprint:moveStory', {
-      'room': $scope.roomName,
-      'sprintId': $stateParams.sprintID,
-      'oldListId': divBeingDragged[0].id,
-      'newListId': angular.element(event.target)[0].id,
-      'storyId': elemBeingDragged[0].id
-    });
+    if (divBeingDragged[0].id != angular.element(event.target)[0].id) { //Checking if card is dropped into a new list
+
+      socket.emit('sprint:moveStory', {
+        'room': $scope.roomName,
+        'sprintId': $stateParams.sprintID,
+        'oldListId': divBeingDragged[0].id,
+        'newListId': angular.element(event.target)[0].id,
+        'storyId': elemBeingDragged[0].id
+      });
+    }
 
   };
   $scope.startCallback = function(event, ui) {
@@ -125,20 +129,49 @@ $scope.test = function(listId, clicked) {
   };
 
   socket.on('sprint:storyMoved', function(data) {
+
+    if (data.success == false) {
+      //swapping new List and old list
+      var temp = data.newListId;
+      data.newListId = data.oldListId;
+      data.oldListId = temp;
+    }
+
     //Going through all lists
     $scope.sprint.list.forEach(function(listItem) {
 
       //If the list is Old list , removing story
-      if (listItem._id == data.oldListId){
-        listItem.stories.splice($.inArray(data.storyId, listItem.stories), 1);
+      if (listItem._id == data.oldListId) {
+        // FIXME: Index of 1st card is being read as -1 for some reason. Temporarily fixed.
+        listItem.stories.splice(listItem.stories.indexOf(data.storyId) ? -1 : 0, 1);
       }
 
       //If the list is new list, adding story
-      if (listItem._id == data.newListId)
+      if (listItem._id == data.newListId){
         listItem.stories.push(data.story)
+
+      }
 
     });
 
   });
+
+  // socket.on('sprint:storyMoveFailed',function(data){
+  //
+  //   //Going through all lists
+  //   $scope.sprint.list.forEach(function(listItem) {
+  //
+  //     //If the list is new list , removing story
+  //     if (listItem._id == data.newListId){
+  //       listItem.stories.splice($.inArray(data.storyId, listItem.stories), 1);
+  //     }
+  //
+  //     //If the list is old list, adding story
+  //     if (listItem._id == data.oldListId)
+  //       listItem.stories.push(data.story)
+  //
+  //   });
+  //
+  // });
 
 }]);
