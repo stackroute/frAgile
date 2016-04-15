@@ -23,7 +23,7 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
     if ($scope.newReleaseName != undefined && $scope.newReleaseName != "" &&
       $scope.newReleaseDesc != undefined && $scope.newReleaseDesc != ""
     ) {
-      projectService.addProject($scope.newReleaseName, $scope.newReleaseDesc).success(function(response) {
+      projectService.addProject($scope.newReleaseName, $scope.newReleaseDesc,$scope.userID).success(function(response) {
         projectService.addProjectToUser($scope.userID, response._id).success(function(data) {
 
           //Pushing added object into the scope to display

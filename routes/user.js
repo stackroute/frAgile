@@ -25,7 +25,7 @@ router.post('/addProject', function(req, res, next) {
     User.addProjectToUser(req.body.userID, req.body.projectID, function(err, data) {
       if (err)
         res.send("false");
-      else{
+      else {
         res.send(data);
 
       }
@@ -34,5 +34,19 @@ router.post('/addProject', function(req, res, next) {
     res.send("false")
   }
 });
+
+router.get('/getUserId', function(req, res, next) {
+  if (req.query.email) {
+    User.getUserId(req.query.email, function(err, data) {
+      if (err)
+        res.send("false");
+      else
+        res.send(data);
+    })
+  }
+  else {
+    res.end();
+  }
+})
 
 module.exports = router;

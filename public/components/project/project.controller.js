@@ -1,16 +1,44 @@
-fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'socket', function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, socket) {
+fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'socket','$filter', function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, socket,$filter) {
   $scope.loadProjects = function() {
     projectService.getUserProjects($stateParams.userID).success(function(response) {
       $rootScope.projects = response.projects
     });
+
+    $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
   }
 
-  socket.on('releaseDeleted', function(data) {
+  socket.emit('join:room', {
+    'room': 'projectRoom'
+  });
+
+  socket.on('releaseDeleted', function(releaseData) {
     $scope.projects.forEach(function(project) {
-      if (project._id == data.projectId) {
+      if (project._id == releaseData.projectId) {
         project.release.forEach(function(release) {
-          if (release._id == data.releaseId) {
+          if (release._id == releaseData.releaseId) {
+            var releaseName = release.name; //For activity
             project.release.pop();
+            //Emitting activity data to be added
+            var data = {
+              room: "projectRoom",
+              action: "deleted",
+              projectID: project._id,
+              user: {
+                '_id': $scope.userID,
+                'fullName': $scope.fullName
+              },
+              object: {
+                name: releaseName,
+                type: "Release",
+                _id: releaseData.releaseId
+              },
+              target: {
+                name: project.name,
+                type: "Project",
+                _id: project._id
+              }
+            }
+            socket.emit('addActivity', data);
           }
         })
       }
@@ -61,25 +89,24 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
     console.log("starFun" + rel);
   };
 
-  $scope.setProject = function(id, releaseID, name, desc) {
-    $rootScope.projectID = id;
+  $scope.setProject = function(projectId, projectName, releaseId, releaseName, releaseDesc) {
+    $rootScope.projectID = projectId;
+    $rootScope.projectName = projectName,
     $rootScope.release = {};
-    $rootScope.release.id = releaseID;
-    $rootScope.release.name = name;
-    $rootScope.release.description = desc;
+    $rootScope.release.id = releaseId;
+    $rootScope.release.name = releaseName;
+    $rootScope.release.description = releaseDesc;
   }
 
-  socket.emit('join:room', {
-    'room': 'projectRoom'
-  });
+
 
   socket.on('project:releaseAdded', function(releaseData) {
+    // Returns entire project document
     $scope.projects.forEach(function(item, index) {
       if (item._id == releaseData._id) { //Comparing  Scope Projects ID with Updated Project ID
         $scope.projects[index] = releaseData;
 
         //Emitting activity data to be added
-
         var data = {
           room: "projectRoom",
           action: "added",
@@ -100,7 +127,6 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
           }
         }
         socket.emit('addActivity', data);
-
       }
     });
   });

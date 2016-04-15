@@ -3,17 +3,18 @@
       <div id="{{project._id}}" class = "container">
         <h4>{{project.name}}<small>{{project.description}}</small></h4>
           <div class="boxContainer" ng-repeat= "release in project.release" >
-            <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,release._id,release.name,release.description)">
+            <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,project.name, release._id,release.name,release.description)">
               <div class="boxHeading">
                 {{release.name}}
               </div>
               <div class="desc">
-                {{release.description | limitTo:longDescLimit }}<span ng-hide="release.description.length < 40 ">
+                {{release.description | limitTo:longDescLimit }}<span ng-hide="release.description.length < longDescLimit ">
                   ...
                 </span>
               </div>
+              <!-- <span am-time-ago="release.creationDate"></span> -->
               <div class="date">
-                From {{release.creationDate | date:'dd-MM-yyyy'}} to {{release.releaseDate | date:'dd-MM-yyyy'}}
+                 {{release.creationDate | date:'dd-MMM-yyyy'}} to {{release.releaseDate | date:'dd-MMM-yyyy'}}
               </div>
               <div class="dummy" ui-sref="release({ prId : project._id, releaseID: release._id})">
               </div>

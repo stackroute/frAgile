@@ -13,7 +13,6 @@ buglist: {
 });
 
 backlogBuglistSchema.statics.addStoryBacklog = function(projectId, storyId, callback) {
-  console.log("-------------------------------projectId: " + projectId);
   this.update(
       { "projectId" : projectId },
       { $push: { "backlogs.stories" : storyId
@@ -34,24 +33,20 @@ backlogBuglistSchema.statics.addStoryBacklog = function(projectId, storyId, call
 }
 
 backlogBuglistSchema.statics.findList = function(projectId, callback) {
-  console.log("----------------------------Inside BackBug Model");
   this.findOne({ 'projectId' : projectId })
-  .populate("backlogs.stories", "storyStatus heading descriptionStatus checklistGroupCount attachmentsCount commentCount")
-  .populate("backlogs.stories", "storyStatus heading descriptionStatus checklistGroupCount attachmentsCount commentCount")
+  .populate("backlogs.stories", "storyStatus heading indicators")
+  .populate("buglist.stories", "storyStatus heading indicators")
    .exec(function(err , doc) {
      if (err) {
-       console.log("+++++++++++++++++++++++++++++++++IF");
        callback(err, null);
      }
      else {
-       console.log("+++++++++++++++++++++++++++++++++ELSE");
        callback(null, doc);
      }
    });
 }
 
 backlogBuglistSchema.statics.deleteStoryBacklog = function(projectId, storyId, callback) {
-  console.log("-------------------------------to delete in projectId: " + projectId);
   this.update(
       { "projectId" : projectId },
       { $pull: { "backlogs.stories" : storyId
@@ -72,7 +67,6 @@ backlogBuglistSchema.statics.deleteStoryBacklog = function(projectId, storyId, c
 }
 
 backlogBuglistSchema.statics.deleteStoryBuglist = function(projectId, storyId, callback) {
-  console.log("-------------------------------to delete in projectId: " + projectId);
   this.update(
       { "projectId" : projectId },
       { $pull: { "buglist.stories" : storyId
@@ -93,7 +87,6 @@ backlogBuglistSchema.statics.deleteStoryBuglist = function(projectId, storyId, c
 }
 
 backlogBuglistSchema.statics.addStoryBuglist = function(projectId, storyId, callback) {
-  console.log("-------------------------------projectId: " + projectId);
   this.update(
     { "projectId" : projectId },
     { $push: { "buglist.stories" : storyId

@@ -16,14 +16,20 @@
     "_id": {
       "$oid": "57026b2f140731cc1810b5bf"
     },
-    "stories": []
+    "stories": [{
+      "$oid": "570e69785e0aceb5b1cb37ed"
+    },{
+      "$oid": "570e69785e0aceb5b1cb37ee"
+    }]
   }, {
     "group": "inProgress",
     "listName": "In progress",
     "_id": {
       "$oid": "57026b2f140731cc1810b5be"
     },
-    "stories": []
+    "stories": [{
+      "$oid": "570e69785e0aceb5b1cb37ef"
+    }]
   }, {
     "group": "inProgress",
     "listName": "SSSSSSS",

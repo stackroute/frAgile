@@ -155,34 +155,42 @@ router.post('/', function(req, res, next){
 //Please refer to new one and do the required changes.
    var newStory=new story(
      {
-       listId:"backlog",
+       listId:String,
        //storyCreatorId: {type:Schema.Types.ObjectId,ref:'User'},
-       storyStatus:"Completed",
-       heading: "This story has been created for a story testing purpose",
-       description: "This was the description given by the scrum master for the story during story creation",
-       descriptionStatus: true,
-       timeStamp: Date.now(),
-       lastUpdated:Date.now(),
-       checklistGroupCount: 3,
-       attachmentsCount: 3,
-       commentCount: 3,
-       labelStatus: 3,
+       storyStatus:String,
+       heading: String,
+       description: String,
+       createdTimeStamp: Date.now(),
+       lastUpdated: Date,
+       indicators:{
+                 descriptionStatus: Boolean,
+                 checklistGroupCount: Number,
+                 attachmentsCount: Number,
+                 commentCount: Number
+      },
        attachmentList: [{
-         fileName: "images/11.jpg",
-         timeStamp: Date.now(),
+         fileName: String,
+         timeStamp: Date,
+         attachmentType:String,
+         addedByUserName:String,
+         addedByUserId:{type:Schema.Types.ObjectId,ref:'User'},
+         path : String
        }],
        checklist: [
          {
-           checklistHeading:"Checklist Group",
-           checkedCount: 1,
+           checklistHeading:String,
+           checkedCount: Number,
            items: [{
-             text: "This is checklist cl1 description",
-             checked: true,
+             text: String,
+             checked: Boolean,
+             createdBy:{type:Schema.Types.ObjectId,ref:'User'},
+             creationDate:Date,
+             creatorName:String
            }]
          }
-       ]
-       //memberList: ["String01","String02"]
-       //labelList:[{type:Schema.Types.ObjectId,ref:'Label'}],
+       ],
+       memberList: [{type:Schema.Types.ObjectId,ref:'User'}],
+       labelList:[{type:Schema.Types.ObjectId,ref:'Sprint.labelSchema'}]
      }
      );
      newStory.save(function(err,doc){

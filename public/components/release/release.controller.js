@@ -1,8 +1,8 @@
 fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'socket', '$state', function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, socket, $state) {
 
-  $scope.$on('$destroy', function() {
-    socket.removeListener();
-  });
+  // $scope.$on('$destroy', function() {
+  //   socket.removeListener();
+  // });
 
 
   $scope.roomName = "release:" + $scope.release.id;
@@ -38,11 +38,32 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
     socket.emit('addActivity', data);
   });
 
-  socket.on('sprintDeleted', function(data) {
+  socket.on('sprintDeleted', function(sprintData) {
     $scope.sprints.forEach(function(sprint){
-      if(sprint._id == data.sprintId){
-        console.log('Sprint Deleted');
+      if(sprint._id == sprintData.sprintId){
+        var sprintName = sprint.name; //For activity
         $scope.sprints.pop();
+        //Emitting activity data to be added
+        var data = {
+          room: 'activity:' + $scope.projectID,
+          action: "deleted",
+          projectID: $rootScope.projectID,
+          user: {
+            '_id': $scope.userID,
+            'fullName': $scope.fullName
+          },
+          object: {
+            name: sprintName,
+            type: "Sprint",
+            _id: sprintData.sprintId
+          },
+          target: {
+            name: $rootScope.projectName,
+            type: "Project",
+            _id: $rootScope.projectID
+          }
+        }
+        socket.emit('addActivity', data);
       }
     })
   })
@@ -71,7 +92,6 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
     $rootScope.isMenu = true;
     $rootScope.SlideMenu = function() {
       $rootScope.isMenu = !$rootScope.isMenu;
-      console.log('menu clicked', $scope.isMenu);
     }
 
 

@@ -1,0 +1,16 @@
+{
+  "_id": {
+    "$oid": "570e69785e0aceb5b1cb37ed"
+  },
+  "heading": "Story 1"
+} {
+  "_id": {
+    "$oid": "570e69785e0aceb5b1cb37ee"
+  },
+  "heading": "Story 2"
+} {
+  "_id": {
+    "$oid": "570e69785e0aceb5b1cb37ef"
+  },
+  "heading": "Story 3"
+}

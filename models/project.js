@@ -45,7 +45,7 @@ projectSchema.statics.addMember = function(projectId, memberId, callback) {
   this.update({
       "_id": projectId
     }, {
-      $push: {
+      $addToSet: {
         "memberList": {
           $each: memberId
         }

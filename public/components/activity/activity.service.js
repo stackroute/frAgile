@@ -4,7 +4,8 @@ var prepositionsMap = {
   "created": " the ",
   "commented": " on ",
   "moved": " to ",
-  "changed": " to "
+  "changed": " to ",
+  "deleted": " from "
 };
 
 angular
@@ -66,6 +67,11 @@ angular
 
         var url = '/project/memberList?id=' + projectID
 
+        return $http.get(url);
+      },
+
+      getUserId: function(userEmailId){
+        var url = "/user/getUserId?email=" + userEmailId;
         return $http.get(url);
       }
     }

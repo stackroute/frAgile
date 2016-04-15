@@ -76,7 +76,8 @@ router.post('/', function(req, res, next) {
 Project.create({
   name: req.body.name,
   description: req.body.desc,
-  date: Date.now()
+  date: Date.now(),
+  memberList :[req.body.userID]
 }, function(err, data) {
   if(err)
     res.send(err);

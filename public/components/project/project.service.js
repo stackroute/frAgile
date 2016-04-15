@@ -5,13 +5,14 @@ angular.module('fragileApp').factory('projectService', ['$http', 'socket',functi
       var url = '/user/projects?id=' + userID;
       return $http.get(url);
     },
-    addProject: function(name, desc) {
+    addProject: function(name, desc,userID) {
       var req = {
         method: 'POST',
         url: '/project',
         data: {
           name: name,
-          desc: desc
+          desc: desc,
+          userID: userID
         }
       }
       return $http(req);

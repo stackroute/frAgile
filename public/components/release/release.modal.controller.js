@@ -30,7 +30,6 @@ fragileApp.controller('modalReleaseController', ['$scope', '$rootScope', 'releas
       $scope.listArray.splice(listIndex, 1);
   };
   $scope.getList = function() {
-    console.log($rootScope.list);
     $scope.listArray =  $rootScope.list;
     };
   $scope.roomName = "release:" + $rootScope.release.id;
