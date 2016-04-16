@@ -21,17 +21,10 @@ io.on('connection', function(socket) {
     socket.lastRoom = data.room;
     // console.log("Joined " + socket.lastRoom);
 
-
-    //Leave the previously connected activity room
-    if (socket.activityRoom) {
-      socket.leave(socket.activityRoom);
-      // console.log("Left " + socket.activityRoom);
-      socket.activityRoom = null;
-    }
-
-    //Join the current activity room
     if (data.activityRoom) {
-      // console.log("Joined " + data.activityRoom);
+      if (socket.activityRoom) {
+        socket.leave(socket.activityRoom);
+      }
       socket.join(data.activityRoom);
       socket.activityRoom = data.activityRoom;
     }
@@ -48,6 +41,49 @@ io.on('connection', function(socket) {
     Project.addRelease(data.projectID, release, function(err, doc) {
       if (!err) {
         io.to(data.room).emit('project:releaseAdded', doc);
+
+        var actData = {
+          room: "activity:"+data.projectID,
+          action: "added",
+          projectID: data.projectID,
+          user: {
+            '_id': data.userID,
+            'fullName': data.fullName
+          },
+          object: {
+            name: data.name,
+            type: "Release",
+            _id: doc._id
+          },
+          target: {
+            name: doc.name,
+            type: "Project",
+            _id: doc._id
+          }
+        }
+        Activity.addEvent(actData, function(data) {
+          io.to(actData.room).emit('activityAdded', data);
+        });
+      }
+    });
+
+  });
+
+  socket.on('project:editRelease', function(data) {
+    release = {
+      name: data.name,
+      description: data.description,
+      creationDate: data.creationDate,
+      releaseDate: data.releaseDate
+    };
+    console.log("--------------------------");
+    console.log(release);
+    console.log("--------------------------");
+    Project.updateRelease(data.projectId,data.releaseId, release, function(err, doc) {
+      if (!err) {
+        release._id = data.releaseId;
+        release.prId = data.projectId;
+        io.to(data.room).emit('project:releaseEdited', release);
       }
     });
 
@@ -67,9 +103,32 @@ io.on('connection', function(socket) {
         Project.addSprint(data.projectId, data.releaseId, doc, function(err, subDoc) {
           if (!err) {
             io.to(data.room).emit('release:sprintAdded', doc);
+
+            var actData = {
+              room: 'activity:' + data.projectId,
+              action: "added",
+              projectID: data.projectId,
+              user: {
+                '_id': data.userID,
+                'fullName': data.fullName
+              },
+              object: {
+                name: data.name,
+                type: "Sprint",
+                _id: doc._id
+              },
+              target: {
+                name: data.releaseName,
+                type: "Release",
+                _id: subDoc._id
+              }
+            }
+            Activity.addEvent(actData, function(data) {
+              io.to(actData.room).emit('activityAdded', data);
+            });
           } else
             console.log(err);
-        })
+        });
       } else
         console.log(err);
     })
@@ -79,7 +138,6 @@ io.on('connection', function(socket) {
 
     //Adding story in new list, then deleting from old list
 
-
     Sprint.addStory(data.sprintId, data.newListId, data.storyId, function(err, addStoryData) {
       if (addStoryData.nModified == 1) { //If add is succesful
         Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
@@ -88,14 +146,14 @@ io.on('connection', function(socket) {
               data.story = storyData;
               data.success = true;
               socket.broadcast.to(data.room).emit('sprint:storyMoved', data);
+              socket.emit('sprint:storyActivity', data)
             });
-          } else {
+          } else { //reverting changes
             console.log("Couldn't delete story", socket.id);
-            //roll back changes
             Sprint.deleteStory(data.sprintId, data.newListId, data.storyId, function(err, delStoryData) {
-              if (err) console.log("Duplicate story created");
+              if (err) console.log("Duplicate story created ",data.storyId);
               else {
-                console.log("Deleted previously added story",socket.id);
+                console.log("Deleted previously added story", socket.id);
                 Story.findById(data.storyId, function(err, storyData) {
                   data.story = storyData
                   data.success = false
@@ -123,10 +181,35 @@ io.on('connection', function(socket) {
     }
     Story.addStory(story, function(err, doc) {
       if (!err) {
+        var actData = {
+          room: data.activityRoom,
+          action: "added",
+          projectID: data.projectId,
+          user: {
+            '_id': data.userID,
+            'fullName': data.fullName
+          },
+          object: {
+            name: data.heading,
+            type: "Story",
+            _id: ""
+          },
+          target: {
+            name: data.listName,
+            type: "List",
+            _id: data.id
+          }
+        }
+
         if (data.addTo == "Backlogs") {
           BackLogsBugList.addStoryBacklog(data.projectId, doc._id, function(err, subDoc) {
             if (!err) {
               io.to(data.room).emit('sprint:storyAdded', doc);
+              actData.object._id = doc._id;
+              Activity.addEvent(actData, function(data) {
+                io.to(data.activityRoom).emit('activityAdded', data);
+              });
+
             } else
               console.log(err);
           })
@@ -134,6 +217,11 @@ io.on('connection', function(socket) {
           BackLogsBugList.addStoryBuglist(data.projectId, doc._id, function(err, subDoc) {
             if (!err) {
               io.to(data.room).emit('sprint:storyAdded', doc);
+              actData.object._id = doc._id
+              Activity.addEvent(actData, function(data) {
+                io.to(data.activityRoom).emit('activityAdded', data);
+              });
+
             } else
               console.log(err);
           })
@@ -141,20 +229,34 @@ io.on('connection', function(socket) {
           Sprint.addStory(data.sprintId, data.id, doc._id, function(err, subDoc) {
             if (!err) {
 
-              //TODO: Fix this :(
+              actData.object._id = doc._id
+
+              //FIXME: Not able to add new property to doc :(
               // doc.idNew = data.id;
               // console.log(doc.idNew);
               // console.log(doc);
-
               doc._id = data.id
+
               io.to(data.room).emit('sprint:storyAdded', doc);
+
+              Activity.addEvent(actData, function(data) {
+                console.log(actData);
+                io.to(actData.room).emit('activityAdded', data);
+              });
+
             } else
               console.log(err);
           })
         }
+
+
       } else
         console.log(err);
-    })
+
+
+
+    });
+
   });
 
   socket.on('addActivity', function(data) {
@@ -165,13 +267,42 @@ io.on('connection', function(socket) {
 
   socket.on('deleteRelease', function(data) {
     Project.deleteRelease(data.projectId, data.releaseId, function(err, doc) {
-      if (!err)
+      if (!err) {
+
         io.to(data.room).emit('releaseDeleted', {
           projectId: data.projectId,
           releaseId: data.releaseId
         });
-    })
-  })
+
+        var actData = {
+          room: data.activityRoom,
+          action: "deleted",
+          projectID: data.projectId,
+          user: {
+            '_id': data.userID,
+            'fullName': data.fullName
+          },
+          object: {
+            name: data.releaseName,
+            type: "Release",
+            _id: data.releaseId
+          },
+          target: {
+            name: data.projectName,
+            type: "Project",
+            _id: data.projectId
+          }
+        }
+        Activity.addEvent(actData, function(data) {
+          io.to(actData.room).emit('activityAdded', data);
+        });
+      }
+
+    });
+
+
+
+  });
 
   socket.on('deleteSprint', function(data) {
     Project.deleteSprint(data.projectId, data.releaseId, data.sprintId, function(err, doc) {

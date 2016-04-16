@@ -28,7 +28,7 @@
 
 </head>
 
-<body>
+<body ng-controller="loginController">
 
   <div class="container-fluid top-header">
       <nav class="navbar navbar-default navbar-xs" role="navigation">
@@ -40,7 +40,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" ui-sref="project({ userID : '570395a239dc5fbac028505c' })" ><b>FrAgile</b></a>
+      <a class="navbar-brand" ng-click ="goToProject()"><b>FrAgile Board</b></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -55,7 +55,7 @@
   </nav>
   </div>
 
-  <div ng-controller="loginController">
+  <div>
     <div ui-view>
     </div>
   </div>

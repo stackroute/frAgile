@@ -12,17 +12,43 @@
                   ...
                 </span>
               </div>
-              <!-- <span am-time-ago="release.creationDate"></span> -->
               <div class="date">
                  {{release.creationDate | date:'dd-MMM-yyyy'}} to {{release.releaseDate | date:'dd-MMM-yyyy'}}
               </div>
+              <!-- <div class="dummy" ui-sref="sprint({ prId : '57026055772a712a164d70bb', sprintID: '57026bfd140731cc1810b5c0'})"> -->
               <div class="dummy" ui-sref="release({ prId : project._id, releaseID: release._id})">
               </div>
               <div class="slideMenuBox">
-                <i class="fa fa-archive" ng-click = "archiveFun(project._id, release._id)"></i>
-                <i class="fa fa-pencil" ng-click = "editFun(release._id)"></i>
+                <i class="fa fa-archive" ng-click = "archiveFun(project._id, release._id,project.name,release.name)"></i>
+                <i class="fa fa-pencil" ng-click = "showEdit=true; newReleaseName= release.name; newReleaseDetails = release.description; newReleaseDate=release.releaseDate"></i>
                 <i class="fa fa-star" ng-click = "starFun(release._id)"></i>
               </div>
+
+                <div class="backgroundBlack" ng-class="{'showEdit':showEdit,'hideEdit':!showEdit}" ng-click = "showEdit=false">
+
+                </div>
+              <form class="editRelease" ng-class="{'showEdit':showEdit,'hideEdit':!showEdit}">
+                <div class="form-group frm">
+                  <label class="col-sm-4" for="releaseName">Name</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="inputName" ng-model = "newReleaseName">
+                  </div>
+                </div>
+                <div class="form-group frm">
+                  <label class="col-sm-4" for="releaseDesc">Name</label>
+                  <div class="col-sm-8">
+                    <textarea class="form-control" id="inputDesc" ng-model = "newReleaseDetails"/>
+                  </div>
+                </div>
+                <div class="form-group frm">
+                  <label class="col-sm-4" for="releaseDate">Release Date</label>
+                  <div class="col-sm-8">
+                    <input type="date" class="form-control" id="inputDate" value = "{{release.releaseDate | date:'yyyy-MM-dd'}}" ng-model = "newReleaseDate" >
+                  </div>
+                </div>
+                <button type="button" class="btn btn-success" ng-click="editRelease(newReleaseName,newReleaseDetails,newReleaseDate,release.creationDate,project._id,release._id); showEdit=false">Save</button>
+                <!-- <button type="button" ng-click = "showEdit=false">X</button> -->
+              </form>
             </div>
           </div>
         <div class="box addMore" ng-click = "setDefaultForRelease(project._id)" data-toggle="modal" data-target="#myModal">

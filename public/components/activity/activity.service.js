@@ -23,8 +23,11 @@ angular
       parseData: function(data) {
         // Adds a preposition
         data.preposition = prepositionsMap[data.action];
+        // FIXME: Time not coming properly.
+        activityDate = new Date(data.date)
+        activityDate.setMinutes(activityDate.getMinutes() - 1);
         // Adds activity corresponding time from now
-        data.timeAgo = moment(data.date).fromNow();
+        data.timeAgo = moment(activityDate).fromNow();
 
         // Adds a class based on target type
         switch (data.target.kind) {

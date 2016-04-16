@@ -1,7 +1,7 @@
 fragileApp.controller('loginController',['$scope','$state','$rootScope',function($scope,$state,$rootScope){
   $rootScope.userID  = "570395a239dc5fbac028505c"; //TODO: get userID after login
   $rootScope.fullName ="Bruce Wayne";
-
+  $scope.x = "QQQQ";
   $rootScope.list = [
   {
     "group": "inProgress",
@@ -29,6 +29,10 @@ fragileApp.controller('loginController',['$scope','$state','$rootScope',function
     "stories": []
   }
 ];
+  $scope.goToProject = function() {
+    console.log("_*_*_*_*_*_*_*_*_*_*_*_");
+    $state.go('project', { userID : '570395a239dc5fbac028505c' });
+  }
   $state.go('project', { userID : '570395a239dc5fbac028505c' });
   //To check user logged in or not  business logic goes here....
 }]);

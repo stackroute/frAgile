@@ -1,10 +1,13 @@
-fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'socket','$filter', function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, socket,$filter) {
+fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket','$filter', function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket,$filter) {
   $scope.loadProjects = function() {
+
     projectService.getUserProjects($stateParams.userID).success(function(response) {
       $rootScope.projects = response.projects
     });
 
+    $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
   }
+  var socket = Socket($scope);
 
   socket.emit('join:room', {
     'room': 'projectRoom'
@@ -17,27 +20,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
           if (release._id == releaseData.releaseId) {
             var releaseName = release.name; //For activity
             project.release.pop();
-            //Emitting activity data to be added
-            var data = {
-              room: "projectRoom",
-              action: "deleted",
-              projectID: project._id,
-              user: {
-                '_id': $scope.userID,
-                'fullName': $scope.fullName
-              },
-              object: {
-                name: releaseName,
-                type: "Release",
-                _id: releaseData.releaseId
-              },
-              target: {
-                name: project.name,
-                type: "Project",
-                _id: project._id
-              }
-            }
-            socket.emit('addActivity', data);
+
           }
         })
       }
@@ -71,13 +54,30 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       controllerAs: 'modalContr'
     });
   }
-
-  $scope.archiveFun = function(projectId, releaseId) {
+  $scope.editRelease = function(newReleaseName,newReleaseDetails,newReleaseDate,creationDate,prId,relId) {
+    var dt = new Date(newReleaseDate);
+    var crDt = new Date(creationDate);
+    socket.emit('project:editRelease', {
+      'room': 'projectRoom',
+      'projectId': prId,
+      'releaseId': relId,
+      "name": newReleaseName,
+      "description": newReleaseDetails,
+      "creationDate": crDt,
+      "releaseDate": dt
+    });
+  }
+  $scope.archiveFun = function(projectId, releaseId,projectName,releaseName) {
     // console.log("archiveFun" + rel)
     socket.emit('deleteRelease', {
       'room': 'projectRoom',
+      'activityRoom' : 'activity:' + projectId,
       'projectId': projectId,
-      'releaseId': releaseId
+      'releaseId': releaseId,
+      'releaseName': releaseName,
+      'projectName' : projectName,
+      'userID' :$scope.userID,
+      'fullName' :$scope.fullName
     });
   };
   $scope.editFun = function(rel) {
@@ -96,7 +96,23 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
     $rootScope.release.description = releaseDesc;
   }
 
-
+  socket.on('project:releaseEdited', function(releaseData) {
+    console.log(releaseData);
+    console.log("--------------");
+    $scope.projects.forEach(function(item, itmIndex) {
+      if(item._id == releaseData.prId){
+        item.release.forEach(function(rel, relIndex) {
+          if(rel._id == releaseData._id){
+            console.log($scope.projects[itmIndex].release[relIndex]);
+            $scope.projects[itmIndex].release[relIndex].name = releaseData.name;
+            $scope.projects[itmIndex].release[relIndex].description = releaseData.description;
+            $scope.projects[itmIndex].release[relIndex].releaseDate = releaseData.releaseDate;
+          }
+        });
+      }
+    });
+    //console.log(releaseData);
+  });
 
   socket.on('project:releaseAdded', function(releaseData) {
     // Returns entire project document
@@ -104,27 +120,6 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       if (item._id == releaseData._id) { //Comparing  Scope Projects ID with Updated Project ID
         $scope.projects[index] = releaseData;
 
-        //Emitting activity data to be added
-        var data = {
-          room: "projectRoom",
-          action: "added",
-          projectID: releaseData._id,
-          user: {
-            '_id': $scope.userID,
-            'fullName': $scope.fullName
-          },
-          object: {
-            name: releaseData.release[releaseData.release.length -1].name,
-            type: "Release",
-            _id: releaseData.release[releaseData.release.length -1]._id
-          },
-          target: {
-            name: releaseData.name,
-            type: "Project",
-            _id: releaseData._id
-          }
-        }
-        socket.emit('addActivity', data);
       }
     });
   });

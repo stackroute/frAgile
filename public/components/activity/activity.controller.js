@@ -1,6 +1,8 @@
 var fragileApp = angular.module('fragileApp');
 
-fragileApp.controller('activityController', function($scope, $http, socket, activityService, $rootScope) {
+fragileApp.controller('activityController', function($scope, $http, Socket, activityService, $rootScope) {
+
+  var socket = Socket();
 
   // Based on the project clicked, send its projectID to display its corresponding activity
   activityService.getProjectData($scope.projectID).success(function(response) {
@@ -52,11 +54,12 @@ $scope.memberList = [];
     response.memberList.forEach(function(data) {
       data.fullName = data.firstName + " " + data.lastName;
     })
+    $scope.memberList = response.memberList;
     $rootScope.memberList = response.memberList;
   });
 
+
   socket.on('activityAdded', function(data) {
-    // console.log('Added activity');
     activityService.parseData(data);
     $scope.activities.unshift(data);
 
@@ -119,11 +122,6 @@ $scope.memberList = [];
     $scope.members = "";
     $scope.addedMembers = "Success: Members Added To Project!";
   });
-
-  // socket.on('activityAdded', function(data){
-  //
-  // })
-
 
 
 

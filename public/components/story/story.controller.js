@@ -1,4 +1,6 @@
-fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','$uibModal','$uibModalInstance','$location','socket','param',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,$uibModal,$uibModalInstance,$location,socket,param){
+fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','$uibModal','$uibModalInstance','$location','Socket','param',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,$uibModal,$uibModalInstance,$location,Socket,param){
+
+  var socket = Socket($scope);
 
   // var story = this;
   // story.items =sprintService.storyData;

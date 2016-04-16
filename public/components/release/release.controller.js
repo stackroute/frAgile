@@ -1,46 +1,24 @@
-fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'socket', '$state', function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, socket, $state) {
+fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'Socket', '$state', function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, Socket, $state) {
 
-  // $scope.$on('$destroy', function() {
-  //   socket.removeListener();
-  // });
-
+  var socket = Socket($scope);
 
   $scope.roomName = "release:" + $scope.release.id;
-  socket.emit('join:room', {
-    'room': $scope.roomName,
-    'activityRoom': 'activity:' + $scope.projectID
-  });
-
+  var emitData = {
+    'room': $scope.roomName
+  }
+  if (!$scope.activityRoom || $scope.activityRoom != ('activity:' + $scope.projectID)) { //Join an activity room if not already     joined || Change room if navigated from other project.
+    $rootScope.activityRoom = 'activity:' + $scope.projectID
+    emitData["activityRoom"] = 'activity:' + $scope.projectID
+  }
+  socket.emit('join:room', emitData);
 
   socket.on('release:sprintAdded', function(data) {
     $scope.sprints.push(data);
-     //Emitting activity data to be added
-
-    var data = {
-      room: 'activity:' + $scope.projectID,
-      action: "added",
-      projectID: $scope.projectID,
-      user: {
-        '_id': $scope.userID,
-        'fullName': $scope.fullName
-      },
-      object: {
-        name: data.name,
-        type: "Sprint",
-        _id: data._id
-      },
-      target: {
-        name: $scope.release.name,
-        type: "Release",
-        _id: $scope.release.id
-      }
-    }
-    socket.emit('addActivity', data);
   });
 
   socket.on('sprintDeleted', function(sprintData) {
-    $scope.sprints.forEach(function(sprint){
-      if(sprint._id == sprintData.sprintId){
+    $scope.sprints.forEach(function(sprint) {
+      if (sprint._id == sprintData.sprintId) {
         var sprintName = sprint.name; //For activity
         $scope.sprints.pop();
         //Emitting activity data to be added
@@ -93,6 +71,7 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
     $rootScope.SlideMenu = function() {
       $rootScope.isMenu = !$rootScope.isMenu;
     }
+
 
 
   };

@@ -1,4 +1,7 @@
-fragileApp.controller('modalReleaseController', ['$scope', '$rootScope', 'releaseService', '$uibModal', '$uibModalInstance','socket', function($scope, $rootScope, releaseService, $uibModal, $uibModalInstance,socket) {
+fragileApp.controller('modalReleaseController', ['$scope', '$rootScope', 'releaseService', '$uibModal', '$uibModalInstance','Socket', function($scope, $rootScope, releaseService, $uibModal, $uibModalInstance,Socket) {
+
+  var socket = Socket($scope);
+
 
   $scope.closeThis = function() {
     $uibModalInstance.dismiss('cancel');
@@ -39,11 +42,14 @@ fragileApp.controller('modalReleaseController', ['$scope', '$rootScope', 'releas
         'room': $scope.roomName,
         'projectId': $rootScope.projectID,
         'releaseId': $rootScope.release.id,
+        'releaseName' : $rootScope.release.name,
         'name': $scope.newSprintName,
         'endDate': $scope.endDate,
         'startDate': $scope.startDate,
         'desc': $scope.newSprintDesc,
-        'list': $scope.listArray
+        'list': $scope.listArray,
+        'userID':$scope.userID,
+        'fullName': $scope.fullName
       });
 
       $uibModalInstance.dismiss('cancel');

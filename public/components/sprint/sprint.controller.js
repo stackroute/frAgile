@@ -1,4 +1,4 @@
-fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'socket','$uibModal', function($scope, $rootScope, $stateParams, sprintService, $state, socket,$uibModal) {
+fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'Socket','$uibModal', function($scope, $rootScope, $stateParams, sprintService, $state, Socket,$uibModal) {
   $scope.getSprints = function() {
     $scope.addToBacklog = false;
     $scope.addToBuglist = false;
@@ -6,49 +6,58 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       $scope.sprint = sprint.data;
       $scope.sprintWidth = ($scope.sprint.list.length * 278 + 560) + "px";
       $scope.sprint = sprint.data;
-      console.log($scope.sprint.list);
 
     });
     sprintService.getBackBug($stateParams.prId).then(function(backBug) {
       $scope.backBug = backBug.data;
     });
 
+
     $rootScope.isMenu = false;
     $rootScope.SlideMenu = function() {
       $rootScope.isMenu = !$rootScope.isMenu;
     }
 
-    $rootScope.projectID = $stateParams.projectID;
-
   };
 
-  $scope.roomName = "sprint:" + $stateParams.sprintID
-  socket.emit('join:room', {
-    'room': $scope.roomName,
-    'activityRoom': 'activity:' + $stateParams.prId
-  });
+  var socket = Socket($scope);
+
+  $scope.roomName = "sprint:" + $stateParams.sprintID;
+  var emitData = {
+    'room': $scope.roomName
+  }
+  if (!$scope.activityRoom || $scope.activityRoom != ('activity:' + $scope.projectID)) { //Join an activity room if not already     joined || Change room if navigated from other project.
+    $rootScope.activityRoom = 'activity:' + $scope.projectID
+    emitData["activityRoom"] = 'activity:' + $scope.projectID
+  }
+  socket.emit('join:room', emitData);
+
+  $rootScope.projectID = $stateParams.prId;
 
   $scope.backClick = function() {
     $state.go('release', {
       prId: $stateParams.prId,
-      releaseID: $rootScope.release.id
+      releaseID: $stateParams.releaseID
     });
   }
 
 
   socket.on('sprint:storyAdded', function(data) {
+    var listName =""
     if (data.listId == "BugLists") {
       $scope.backBug.buglist.stories.push(data);
+      listName ="Bug List"
     } else if (data.listId == "Backlogs") {
       $scope.backBug.backlogs.stories.push(data);
+      listName ="Backlogs"
     } else {
       angular.forEach($scope.sprint.list, function(value, key) {
         if (value._id == data._id) {
           $scope.sprint.list[key].stories.push(data);
+          listName = $scope.sprint.list[key].listName
         }
       });
     }
-    // $scope.sprint.push(data);
   });
 
   $scope.test = function(listId, clicked) {
@@ -57,11 +66,12 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   $scope.show = function(listId, bool) {
     return listId + bool;
   };
-  $scope.addStory = function(listId, storyDetails, id) {
+  $scope.addStory = function(listId, storyDetails, id,listName) {
     // $scope.listIdAdded = id;
     if (storyDetails != undefined && storyDetails != "") {
       socket.emit('sprint:addStory', {
         'room': $scope.roomName,
+        'activityRoom': 'activity:' + $stateParams.prId,
         'addTo': listId,
         'projectId': $stateParams.prId,
         'storyStatus': "",
@@ -69,7 +79,10 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'heading': storyDetails,
         'description': "",
         'listId': listId,
-        'id': id
+        'id': id,
+        'listName' : listName,
+        'userID':$scope.userID,
+        'fullName': $scope.fullName
       });
       $scope.storyDetails = "";
       $scope.addToBacklog = false;
@@ -155,6 +168,40 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     });
 
   });
+
+  socket.on('sprint:storyActivity',function(data){
+    $scope.sprint.list.forEach(function(listItem) {
+
+      if (listItem._id == data.newListId){
+        var actData = {
+          room: 'activity:' + $stateParams.prId,
+          action: "moved",
+          projectID: $stateParams.prId,
+          user: {
+            '_id': $scope.userID,
+            'fullName': $scope.fullName
+          },
+          object: {
+            name: data.story.heading,
+            type: "Story",
+            _id: data.story._id
+          },
+          target: {
+            name: listItem.listName,
+            type: "List",
+            _id: listItem._id
+          }
+        }
+       socket.emit('addActivity', actData);
+
+      }
+
+    });
+
+  });
+
+
+
   /***
   author:Sharan
   Function Name: showModal

@@ -1,4 +1,4 @@
-angular.module('fragileApp').factory('projectService', ['$http', 'socket',function($http,socket) {
+angular.module('fragileApp').factory('projectService', ['$http', 'Socket',function($http,Socket) {
 
   return {
     getUserProjects: function(userID) {

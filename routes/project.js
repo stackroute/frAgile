@@ -26,7 +26,7 @@ backLogsBugList.findList(projectId, function(err, doc) {
 router.get("/memberList", function(req, res, next) {
 
 if (req.query.id) {
-  Project.getProjectMembers(projectId, function(err, doc) {
+  Project.getProjectMembers(req.query.id, function(err, doc) {
     if (err) {
       res.send(err);
     }else {

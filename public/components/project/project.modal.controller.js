@@ -1,4 +1,6 @@
-fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams', 'projectService', '$uibModal', '$uibModalInstance', '$location','socket' ,function($scope, $rootScope, $stateParams, projectService, $uibModal, $uibModalInstance, $location,socket) {
+fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams', 'projectService', '$uibModal', '$uibModalInstance', '$location','Socket' ,function($scope, $rootScope, $stateParams, projectService, $uibModal, $uibModalInstance, $location,Socket) {
+  var socket = Socket($scope);
+
   $scope.dismissThis = "none";
   $scope.warningModalDesc = true;
   $scope.warningModalName = true;
@@ -83,9 +85,13 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
         projectID: modalContr.addId,
         name: $scope.newReleaseName,
         desc: $scope.newReleaseDesc,
-        dt: $scope.newReleaseDate
+        dt: $scope.newReleaseDate,
+        userID:$scope.userID,
+        fullName:$scope.fullName
       }
       socket.emit('project:addRelease', data);
+
+
 
       $scope.dismissThis = "modal";
       $scope.newReleaseName = "";
