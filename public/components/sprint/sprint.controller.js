@@ -1,4 +1,4 @@
-fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'Socket','$uibModal', function($scope, $rootScope, $stateParams, sprintService, $state, Socket,$uibModal) {
+fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'Socket', '$uibModal', function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibModal) {
   $scope.getSprints = function() {
     $scope.addToBacklog = false;
     $scope.addToBuglist = false;
@@ -18,6 +18,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       $rootScope.isMenu = !$rootScope.isMenu;
     }
 
+    $scope.storyDragged = false;
   };
 
   var socket = Socket($scope);
@@ -26,9 +27,9 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   var emitData = {
     'room': $scope.roomName
   }
-  if (!$scope.activityRoom || $scope.activityRoom != ('activity:' + $scope.projectID)) { //Join an activity room if not already     joined || Change room if navigated from other project.
-    $rootScope.activityRoom = 'activity:' + $scope.projectID
-    emitData["activityRoom"] = 'activity:' + $scope.projectID
+  if (!$scope.activityRoom || $scope.activityRoom != ('activity:' + $stateParams.prId)) { //Join an activity room if not already     joined || Change room if navigated from other project.
+    $rootScope.activityRoom = 'activity:' + $stateParams.prId
+    emitData["activityRoom"] = 'activity:' + $stateParams.prId
   }
   socket.emit('join:room', emitData);
 
@@ -37,22 +38,22 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   $scope.backClick = function() {
     $state.go('release', {
       prId: $stateParams.prId,
-      releaseID: $stateParams.releaseID
+      releaseID: $scope.release.id
     });
   }
 
 
   socket.on('sprint:storyAdded', function(data) {
-    var listName =""
+    var listName = ""
     if (data.listId == "BugLists") {
       $scope.backBug.buglist.stories.push(data);
-      listName ="Bug List"
+      listName = "Bug List"
     } else if (data.listId == "Backlogs") {
       $scope.backBug.backlogs.stories.push(data);
-      listName ="Backlogs"
+      listName = "Backlogs"
     } else {
       angular.forEach($scope.sprint.list, function(value, key) {
-        if (value._id == data._id) {
+        if (value._id == data.listId) {
           $scope.sprint.list[key].stories.push(data);
           listName = $scope.sprint.list[key].listName
         }
@@ -66,7 +67,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   $scope.show = function(listId, bool) {
     return listId + bool;
   };
-  $scope.addStory = function(listId, storyDetails, id,listName) {
+  $scope.addStory = function(listId, storyDetails, id, listName) {
     // $scope.listIdAdded = id;
     if (storyDetails != undefined && storyDetails != "") {
       socket.emit('sprint:addStory', {
@@ -80,8 +81,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'description': "",
         'listId': listId,
         'id': id,
-        'listName' : listName,
-        'userID':$scope.userID,
+        'listName': listName,
+        'userID': $scope.userID,
         'fullName': $scope.fullName
       });
       $scope.storyDetails = "";
@@ -111,9 +112,32 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     angular.element(event.target).removeClass("being-dropped")
 
     if (divBeingDragged[0].id != angular.element(event.target)[0].id) { //Checking if card is dropped into a new list
-
-      socket.emit('sprint:moveStory', {
+      var emitData = {
         'room': $scope.roomName,
+        'activityRoom': 'activity:' + $stateParams.prId,
+        'projectID': $stateParams.prId,
+        'sprintId': $stateParams.sprintID,
+        'oldListId': divBeingDragged[0].id,
+        'newListId': angular.element(event.target)[0].id,
+        'storyId': elemBeingDragged[0].id
+      }
+      if (divBeingDragged[0].id == "backlogs" || divBeingDragged[0].id == "buglists")
+        socket.emit('sprint:moveFromBackbugStory', emitData)
+      else
+        socket.emit('sprint:moveStory', emitData)
+    }
+
+  };
+
+  $scope.dropCallback_backbug = function(event, ui) {
+    //Called when story is dropped in backlog/buglist
+    angular.element(event.target).removeClass("being-dropped")
+    if (divBeingDragged[0].id != angular.element(event.target)[0].id) { //Checking if card is dropped into a new list
+
+      socket.emit('sprint:moveToBackbugStory', {
+        'room': $scope.roomName,
+        'activityRoom': 'activity:' + $stateParams.prId,
+        'projectID': $stateParams.prId,
         'sprintId': $stateParams.sprintID,
         'oldListId': divBeingDragged[0].id,
         'newListId': angular.element(event.target)[0].id,
@@ -121,10 +145,10 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       });
     }
 
-  };
+  }
   $scope.startCallback = function(event, ui) {
     angular.element(event.target).addClass("being-dragged");
-    elemBeingDragged = angular.element(event.target)
+    elemBeingDragged = angular.element(event.target);
     divBeingDragged = elemBeingDragged.parent().parent();
   };
   $scope.stopCallback = function(event, ui) {
@@ -133,34 +157,31 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
 
   $scope.overCallback = function(event, ui) {
     //Checking if the list is new or old one.
-    if (!$(divBeingDragged).is(event.target))
+    if (!$(divBeingDragged).is(event.target)) {
       angular.element(event.target).addClass("being-dropped")
+    }
   };
 
   $scope.outCallback = function(event, ui) {
     angular.element(event.target).removeClass("being-dropped")
   };
 
-  socket.on('sprint:storyMoved', function(data) {
 
-    if (data.success == false) {
-      //swapping new List and old list
-      var temp = data.newListId;
-      data.newListId = data.oldListId;
-      data.oldListId = temp;
-    }
+  socket.on('sprint:storyMoved', function(data) {
 
     //Going through all lists
     $scope.sprint.list.forEach(function(listItem) {
 
       //If the list is Old list , removing story
       if (listItem._id == data.oldListId) {
-        // FIXME: Index of 1st card is being read as -1 for some reason. Temporarily fixed.
-        listItem.stories.splice(listItem.stories.indexOf(data.storyId) ? -1 : 0, 1);
+        listItem.stories.forEach(function(storyData, index) {
+          if (storyData._id == data.storyId)
+            listItem.stories.splice(index, 1);
+        });
       }
 
       //If the list is new list, adding story
-      if (listItem._id == data.newListId){
+      if (listItem._id == data.newListId) {
         listItem.stories.push(data.story)
 
       }
@@ -169,10 +190,53 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
 
   });
 
-  socket.on('sprint:storyActivity',function(data){
+  socket.on('sprint:backbugStoryMovedTo', function(data) {
+    if (data.newListId == "backlogs")
+      $scope.backBug.backlogs.stories.push(data.story);
+    else if (data.newListId == "buglists")
+      $scope.backBug.buglist.stories.push(data.story);
+
     $scope.sprint.list.forEach(function(listItem) {
 
-      if (listItem._id == data.newListId){
+      //If the list is Old list , removing story
+      if (listItem._id == data.oldListId) {
+        listItem.stories.forEach(function(storyData, index) {
+          if (storyData._id == data.storyId)
+            listItem.stories.splice(index, 1);
+        });
+      }
+    });
+
+  });
+
+  socket.on('sprint:backbugStoryMovedFrom', function(data) {
+    if (data.oldListId == "backlogs") {
+      $scope.backBug.backlogs.stories.forEach(function(storyData, index) {
+        if (storyData._id == data.storyId)
+          $scope.backBug.backlogs.stories.splice(index, 1);
+      });
+    } else if (data.oldListId == "buglists") {
+      $scope.backBug.buglist.stories.forEach(function(storyData, index) {
+        if (storyData._id == data.storyId)
+          $scope.backBug.buglist.stories.splice(index, 1);
+      });
+    }
+
+    $scope.sprint.list.forEach(function(listItem) {
+      //If the list is new list, adding story
+      if (listItem._id == data.newListId) {
+        listItem.stories.push(data.story)
+      }
+    });
+
+
+  });
+
+  //To emit activity related to story move
+  socket.on('sprint:storyActivity', function(data) {
+    $scope.sprint.list.forEach(function(listItem) {
+
+      if (listItem._id == data.newListId) {
         var actData = {
           room: 'activity:' + $stateParams.prId,
           action: "moved",
@@ -192,7 +256,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
             _id: listItem._id
           }
         }
-       socket.emit('addActivity', actData);
+        socket.emit('addActivity', actData);
 
       }
 
@@ -211,38 +275,37 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   resolve:Sprint, Story,ProjectMembers
   TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
 ***/
-  $scope.showModal = function(storyID,storyGrp)
-    {
-      console.log(storyID);
-      sprintService.getStory(storyID).then(function(story) {
-        console.log(story);
-        var modalInstance = $uibModal.open({
-          animation: $scope.animationsEnabled,
-          templateUrl: '/components/story/story.view.html',
-          controller:'storyController',
-          controllerAs:'storyContr',
-          size:'lg',
-          resolve: {
-            param: function() {
-              console.log("params in modal factory :::::  ");
-              console.log("passing data to story controller");
-              return {
-                story:story,
-                sprint:$scope.sprint,
-                projMembers:$rootScope.memberList,
-                storyGrp:storyGrp
-              };
-            }
+  $scope.showModal = function(storyID, storyGrp) {
+    console.log(storyID);
+    sprintService.getStory(storyID).then(function(story) {
+      console.log(story);
+      var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: '/components/story/story.view.html',
+        controller: 'storyController',
+        controllerAs: 'storyContr',
+        size: 'lg',
+        resolve: {
+          param: function() {
+            console.log("params in modal factory :::::  ");
+            console.log("passing data to story controller");
+            return {
+              story: story,
+              sprint: $scope.sprint,
+              projMembers: $rootScope.memberList,
+              storyGrp: storyGrp
+            };
           }
-        });
-
-        modalInstance.result.then(function (selectedItem) {
-          $scope.selected = selectedItem;
-        }, function () {
-        ///This runs for close or save.... You can delete this
-        });
-
-
+        }
       });
-    }
+
+      modalInstance.result.then(function(selectedItem) {
+        $scope.selected = selectedItem;
+      }, function() {
+        ///This runs for close or save.... You can delete this
+      });
+
+
+    });
+  }
 }]);

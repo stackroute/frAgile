@@ -1,0 +1,50 @@
+<div class="menu-bar pull-right panel panel-default" ng-controller="menuController" ng-show="isMenu">
+  <div class="panel-heading menu-panel-heading">Menu
+    <button type="button" id="sideBarClose" class="close" ng-click="SlideMenu()" style="color:white"><span aria-hidden="true">&times;</span></button>
+  </div>
+  <div class="panel-body">
+
+    <div class="menu-wrap">
+      <div class="settings-members">
+        <h3></span>Members</h3>
+        <div class="menu-bar-avatar" ng-repeat="member in memberList">
+          <ng-letter-avatar data="{{member.fullName}}" charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+        </div>
+      </div>
+
+
+      <div class="add-members">
+        <div>
+          <button class="btn btn-primary btn-add" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-user"></span> Add Members</button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+          <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Members</h4>
+              </div>
+              <div class="modal-body">
+                <div>
+                  <input class="txt-add-members" id="txtAddMember" name="txtAddMember" type="text" placeholder="e.g. you@fragile.com" ng-model="members" required>
+                  <button class="btn btn-default" ng-click="addMember()"><span class="glyphicon glyphicon-plus"></span></button>
+                </div>
+                <p class="desc">Add a member to Fragile by their email address.</p>
+                <b>{{addedMembers}}</b>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-success" ng-click="saveMember()" ng-disabled="!members">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div ng-include="'components/activity/activity.view.html'"></div>
+
+    </div>
+
+  </div>
+</div>

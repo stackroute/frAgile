@@ -27,7 +27,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
     })
   })
 
-  $scope.longDescLimit = 40;
+  $scope.longDescLimit = 38;
   $scope.setDefaultForRelease = function(projectId) {
 
     $scope.addWhat = "Release";

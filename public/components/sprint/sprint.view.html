@@ -1,22 +1,29 @@
 <div ng-init="getSprints()">
   <div class="container sprintDiv">
-    <!-- <div class="row">
-      <button class="btn btn-success" ng-click="backClick()">Back</button>
-    </div> -->
-    <h3 class="row">{{sprint.name}}<small> {{sprint.description}}</small> <br/> <small>{{sprint.startDate|dateSuffix}}  - {{sprint.endDate |dateSuffix}}</small></h3>
+    <div class="row">
+      <h3 >{{sprint.name}}<small> {{sprint.description}}</small> <br/> <small>{{sprint.startDate|dateSuffix}}  - {{sprint.endDate |dateSuffix}}</small>      <button class="btn btn-success btn-back"  ng-click="backClick()">Back</button>
+</h3>
+    </div>
+
     <div class="sprint-wrapper">
-      <div  ng-style="{width: sprintWidth}">
-        <div class='parent backbug'>
+      <div ng-style="{width: sprintWidth}">
+        <div id="backlogs" class='parent backbug' data-drop="true" jqyoui-droppable="{multiple:true,onOver: 'overCallback',onOut: 'outCallback',onDrop:'dropCallback_backbug'}">
           <div class="listHead">
             {{backBug.backlogs.listName}}
           </div>
           <div class="parentInner">
-            <div ng-repeat="story in backBug.backlogs.stories" class="child hideSlide" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="showModal(story._id, 'backBug')">
+            <div id="{{story._id}}" ng-repeat="story in backBug.backlogs.stories" class="child hideSlide" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="showModal(story._id, 'backBug')" data-drag="true"
+              data-jqyoui-options="{revert: 'invalid',helper:'clone'}" jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}">
               <div class="story_Name">
                 {{story.heading}}
               </div>
               <div class="deleteStory">
                 <i class="fa fa-times" aria-hidden="true"></i>
+              </div>
+            </div>
+            <div class="child drag-dummy">
+              <div class="story_Name">
+
               </div>
             </div>
           </div>
@@ -29,22 +36,28 @@
               <button ng-click="addStory(backBug.backlogs.listName, storyDetails,backBug.backlogs.listName)" type="button" class="btn btn-success">Add</button>
               <button ng-click="hideBacklogAddDetails()" type="button" class="btn btn-link"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
-          
+
           </form>
+
         </div>
-        <div id="{{listItem._id}}" ng-repeat="listItem in sprint.list" ng-model="listItem.stories" ng-class='listItem.group' data-drop="true" jqyoui-droppable="{multiple:true,onOver: 'overCallback',onOut: 'outCallback',onDrop:'dropCallback'}" class='parent'>
+        <div id="{{listItem._id}}" ng-repeat="listItem in sprint.list"  ng-class='listItem.group' data-drop="true" jqyoui-droppable="{multiple:true,onOver: 'overCallback',onOut: 'outCallback',onDrop:'dropCallback'}" class='parent'>
           <i class="crossBtn fa fa-times-circle"></i>
           <div class="listHead">
             {{listItem.listName}}
           </div>
           <div class="parentInner">
-            <div id="{{story._id}}" ng-repeat="story in listItem.stories" ng-model="listItem.stories" class="child" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
+            <div id="{{story._id}}" ng-repeat="story in listItem.stories"  class="child" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
               jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}" ng-click="showModal(story._id, listItem.group)">
               <div class="story_Name">
                 {{story.heading}}
               </div>
               <div class="deleteStory">
                 <i class="fa fa-times" aria-hidden="true"></i>
+              </div>
+            </div>
+            <div class="child drag-dummy">
+              <div class="story_Name">
+
               </div>
             </div>
           </div>
@@ -54,24 +67,30 @@
           <form class="showAddDetails" ng-class="{'showAddIcon':clicked,'hideAdd':!clicked}">
             <textarea name="details" class="form-control" placeholder="Card details" ng-model="storyDetails" />
             <div class="col-12 btnAdd">
-              <button ng-click="addStory(listItem.group, storyDetails, listItem._id, listItem.listName)"  type="button" class="btn btn-success">Add</button>
-                <button ng-click="clicked=false" type="button" class="btn btn-link"><i class="fa fa-times" aria-hidden="true"></i></button>
+              <button ng-click="addStory(listItem.group, storyDetails, listItem._id, listItem.listName)" type="button" class="btn btn-success">Add</button>
+              <button ng-click="clicked=false" type="button" class="btn btn-link"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
 
           </form>
         </div>
 
-        <div class='parent backbug'>
+        <div id="buglists" class='parent backbug' data-drop="true" jqyoui-droppable="{multiple:true,onOver: 'overCallback',onOut: 'outCallback',onDrop:'dropCallback_backbug'}">
           <div class="listHead">
             {{backBug.buglist.listName}}
           </div>
           <div class="parentInner">
-            <div ng-repeat="story in backBug.buglist.stories" class="child" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="showModal(story._id, 'backBug')">
+            <div id="{{story._id}}"  ng-repeat="story in backBug.buglist.stories" class="child" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="showModal(story._id, 'backBug')" data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
+              jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}">
               <div class="story_Name">
                 {{story.heading}}
               </div>
               <div class="deleteStory">
                 <i class="fa fa-times" aria-hidden="true"></i>
+              </div>
+            </div>
+            <div class="child drag-dummy">
+              <div class="story_Name">
+
               </div>
             </div>
           </div>
@@ -82,7 +101,7 @@
             <textarea name="details" class="form-control" placeholder="Card details" ng-model="storyDetails" />
             <div class="col-12 btnAdd">
               <button ng-click="addStory(backBug.buglist.listName, storyDetails,backBug.buglist.listName)" type="button" class="btn btn-success">Add</button>
-                <button ng-click="hideBuglistAddDetails()" type="button" class="btn btn-link"><i class="fa fa-times" aria-hidden="true"></i></button>
+              <button ng-click="hideBuglistAddDetails()" type="button" class="btn btn-link"><i class="fa fa-times" aria-hidden="true"></i></button>
             </div>
           </form>
         </div>
@@ -93,4 +112,4 @@
 
 </div>
 
-<div ng-include="'components/activity/activity.view.html'"></div>
+<div ng-include="'components/activity/menu.view.html'"></div>

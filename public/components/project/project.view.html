@@ -8,9 +8,9 @@
                 {{release.name}}
               </div>
               <div class="desc">
-                {{release.description | limitTo:longDescLimit }}<span ng-hide="release.description.length < longDescLimit ">
+                {{release.description | limitTo:longDescLimit }}<span ng-hide="release.description.length < longDescLimit || release.description ==undefined">
                   ...
-                </span>
+                </span>&nbsp;
               </div>
               <div class="date">
                  {{release.creationDate | date:'dd-MMM-yyyy'}} to {{release.releaseDate | date:'dd-MMM-yyyy'}}

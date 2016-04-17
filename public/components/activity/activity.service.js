@@ -19,7 +19,11 @@ angular
         // Returns a promise
         return $http.get(url);
       },
-
+      getStoryData :  function(storyID){
+        var url = '/activity?story=' + storyID;
+        // Returns a promise
+        return $http.get(url);
+      },
       parseData: function(data) {
         // Adds a preposition
         data.preposition = prepositionsMap[data.action];

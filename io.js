@@ -43,7 +43,7 @@ io.on('connection', function(socket) {
         io.to(data.room).emit('project:releaseAdded', doc);
 
         var actData = {
-          room: "activity:"+data.projectID,
+          room: "activity:" + data.projectID,
           action: "added",
           projectID: data.projectID,
           user: {
@@ -79,7 +79,7 @@ io.on('connection', function(socket) {
     console.log("--------------------------");
     console.log(release);
     console.log("--------------------------");
-    Project.updateRelease(data.projectId,data.releaseId, release, function(err, doc) {
+    Project.updateRelease(data.projectId, data.releaseId, release, function(err, doc) {
       if (!err) {
         release._id = data.releaseId;
         release.prId = data.projectId;
@@ -144,21 +144,15 @@ io.on('connection', function(socket) {
           if (delStoryData.nModified == 1) { //If delete is succesful
             Story.findById(data.storyId, function(err, storyData) {
               data.story = storyData;
-              data.success = true;
-              socket.broadcast.to(data.room).emit('sprint:storyMoved', data);
+              io.to(data.room).emit('sprint:storyMoved', data);
               socket.emit('sprint:storyActivity', data)
             });
           } else { //reverting changes
             console.log("Couldn't delete story", socket.id);
             Sprint.deleteStory(data.sprintId, data.newListId, data.storyId, function(err, delStoryData) {
-              if (err) console.log("Duplicate story created ",data.storyId);
+              if (err) console.log("Duplicate story created ", data.storyId);
               else {
                 console.log("Deleted previously added story", socket.id);
-                Story.findById(data.storyId, function(err, storyData) {
-                  data.story = storyData
-                  data.success = false
-                  socket.emit('sprint:storyMoved', data);
-                });
               }
 
             });
@@ -170,6 +164,110 @@ io.on('connection', function(socket) {
 
   });
 
+  socket.on('sprint:moveToBackbugStory', function(data) {
+    //Adding story in new list, then deleting from old list
+    if (data.newListId == "backlogs") {
+
+      BackLogsBugList.addStoryBacklog(data.projectID, data.storyId, function(err, addStoryData) {
+        if (addStoryData.nModified == 1) { //If add is succesful
+          Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
+            if (delStoryData.nModified == 1) { //If delete is succesful
+              Story.findById(data.storyId, function(err, storyData) {
+                data.story = storyData;
+                io.to(data.room).emit('sprint:backbugStoryMovedTo', data);
+              });
+            } else { //reverting changes
+              console.log("Couldn't delete story", socket.id);
+              BackLogsBugList.deleteStoryBacklog(data.projectID, data.storyId, function(err, delStoryData) {
+                if (err) console.log("Duplicate story created ", data.storyId);
+                else {
+                  console.log("Deleted previously added story", socket.id);
+                }
+
+              });
+            }
+          })
+        }
+      });
+
+
+    } else if (data.newListId == "buglists") {
+
+      BackLogsBugList.addStoryBuglist(data.projectID, data.storyId, function(err, addStoryData) {
+        if (addStoryData.nModified == 1) { //If add is succesful
+          Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
+            if (delStoryData.nModified == 1) { //If delete is succesful
+              Story.findById(data.storyId, function(err, storyData) {
+                data.story = storyData;
+                io.to(data.room).emit('sprint:backbugStoryMovedTo', data);
+              });
+            } else { //reverting changes
+              console.log("Couldn't delete story", socket.id);
+              BackLogsBugList.deleteStoryBuglist(data.projectID, data.storyId, function(err, delStoryData) {
+                if (err) console.log("Duplicate story created ", data.storyId);
+                else {
+                  console.log("Deleted previously added story", socket.id);
+                }
+
+              });
+            }
+          })
+        }
+      });
+
+    }
+  });
+
+  socket.on('sprint:moveFromBackbugStory', function(data) {
+    if (data.oldListId == "backlogs") {
+
+      Sprint.addStory(data.sprintId, data.newListId, data.storyId, function(err, addStoryData) {
+        if (addStoryData.nModified == 1) { //If add is succesful
+          BackLogsBugList.deleteStoryBacklog(data.projectID, data.storyId, function(err, delStoryData) {
+            if (delStoryData.nModified == 1) { //If delete is succesful
+              Story.findById(data.storyId, function(err, storyData) {
+                data.story = storyData;
+                io.to(data.room).emit('sprint:backbugStoryMovedFrom', data);
+              });
+            } else { //reverting changes
+              console.log("Couldn't delete story", socket.id);
+              Sprint.deleteStory(data.sprintId, data.newListId, data.storyId, function(err, delStoryData) {
+                if (err) console.log("Duplicate story created ", data.storyId);
+                else {
+                  console.log("Deleted previously added story", socket.id);
+                }
+
+              });
+            }
+          })
+        }
+      });
+    }
+    else if(data.oldListId == "buglists"){
+      Sprint.addStory(data.sprintId, data.newListId, data.storyId, function(err, addStoryData) {
+        if (addStoryData.nModified == 1) { //If add is succesful
+          BackLogsBugList.deleteStoryBuglist(data.projectID, data.storyId, function(err, delStoryData) {
+            if (delStoryData.nModified == 1) { //If delete is succesful
+              Story.findById(data.storyId, function(err, storyData) {
+                data.story = storyData;
+                io.to(data.room).emit('sprint:backbugStoryMovedFrom', data);
+              });
+            } else { //reverting changes
+              console.log("Couldn't delete story", socket.id);
+              Sprint.deleteStory(data.sprintId, data.newListId, data.storyId, function(err, delStoryData) {
+                if (err) console.log("Duplicate story created ", data.storyId);
+                else {
+                  console.log("Deleted previously added story", socket.id);
+                }
+
+              });
+            }
+          })
+        }
+      });
+    }
+  })
+
   socket.on('sprint:addStory', function(data) {
     var story = {
       heading: data.heading,
@@ -179,7 +277,7 @@ io.on('connection', function(socket) {
       description: data.description,
       listId: data.listId
     }
-    Story.addStory(story, function(err, doc) {
+    Story.addStory(story, function(err, storyData) {
       if (!err) {
         var actData = {
           room: data.activityRoom,
@@ -202,10 +300,10 @@ io.on('connection', function(socket) {
         }
 
         if (data.addTo == "Backlogs") {
-          BackLogsBugList.addStoryBacklog(data.projectId, doc._id, function(err, subDoc) {
+          BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
             if (!err) {
-              io.to(data.room).emit('sprint:storyAdded', doc);
-              actData.object._id = doc._id;
+              io.to(data.room).emit('sprint:storyAdded', storyData);
+              actData.object._id = storyData._id;
               Activity.addEvent(actData, function(data) {
                 io.to(data.activityRoom).emit('activityAdded', data);
               });
@@ -214,10 +312,10 @@ io.on('connection', function(socket) {
               console.log(err);
           })
         } else if (data.addTo == "BugLists") {
-          BackLogsBugList.addStoryBuglist(data.projectId, doc._id, function(err, subDoc) {
+          BackLogsBugList.addStoryBuglist(data.projectId, storyData._id, function(err, subDoc) {
             if (!err) {
-              io.to(data.room).emit('sprint:storyAdded', doc);
-              actData.object._id = doc._id
+              io.to(data.room).emit('sprint:storyAdded', storyData);
+              actData.object._id = storyData._id
               Activity.addEvent(actData, function(data) {
                 io.to(data.activityRoom).emit('activityAdded', data);
               });
@@ -226,21 +324,19 @@ io.on('connection', function(socket) {
               console.log(err);
           })
         } else {
-          Sprint.addStory(data.sprintId, data.id, doc._id, function(err, subDoc) {
+          Sprint.addStory(data.sprintId, data.id, storyData._id, function(err, subDoc) {
             if (!err) {
 
-              actData.object._id = doc._id
+              actData.object._id = storyData._id
 
-              //FIXME: Not able to add new property to doc :(
-              // doc.idNew = data.id;
-              // console.log(doc.idNew);
-              // console.log(doc);
-              doc._id = data.id
+              //FIXME: Not able to add new property to storyData :(
+              //storyData.listIdAdded = data.id;
+              //console.log(storyData);
+               storyData.listId = data.id
 
-              io.to(data.room).emit('sprint:storyAdded', doc);
+              io.to(data.room).emit('sprint:storyAdded', storyData);
 
               Activity.addEvent(actData, function(data) {
-                console.log(actData);
                 io.to(actData.room).emit('activityAdded', data);
               });
 

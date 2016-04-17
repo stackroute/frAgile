@@ -17,14 +17,12 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
     } else {
       $scope.warningModalName = true;
     }
-    if ($scope.newReleaseDesc == undefined || $scope.newReleaseDesc == "") {
-      $scope.warningModalDesc = false;
-    } else {
-      $scope.warningModalDesc = true;
-    }
-    if ($scope.newReleaseName != undefined && $scope.newReleaseName != "" &&
-      $scope.newReleaseDesc != undefined && $scope.newReleaseDesc != ""
-    ) {
+    // if ($scope.newReleaseDesc == undefined || $scope.newReleaseDesc == "") {
+    //   $scope.warningModalDesc = false;
+    // } else {
+    //   $scope.warningModalDesc = true;
+    // }
+    if ($scope.newReleaseName != undefined && $scope.newReleaseName != "") {
       projectService.addProject($scope.newReleaseName, $scope.newReleaseDesc,$scope.userID).success(function(response) {
         projectService.addProjectToUser($scope.userID, response._id).success(function(data) {
 
@@ -64,18 +62,17 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
     } else {
       $scope.warningModalName = true;
     }
-    if ($scope.newReleaseDesc == undefined || $scope.newReleaseDesc == "") {
-      $scope.warningModalDesc = false;
-    } else {
-      $scope.warningModalDesc = true;
-    }
-    if ($scope.newReleaseDate == undefined || $scope.newReleaseDate == "") {
-      $scope.warningModalDate = false;
-    } else {
-      $scope.warningModalDate = true;
-    }
+    // if ($scope.newReleaseDesc == undefined || $scope.newReleaseDesc == "") {
+    //   $scope.warningModalDesc = false;
+    // } else {
+    //   $scope.warningModalDesc = true;
+    // }
+    // if ($scope.newReleaseDate == undefined || $scope.newReleaseDate == "") {
+    //   $scope.warningModalDate = false;
+    // } else {
+    //   $scope.warningModalDate = true;
+    // }
     if ($scope.newReleaseName != undefined && $scope.newReleaseName != "" &&
-      $scope.newReleaseDesc != undefined && $scope.newReleaseDesc != "" &&
       $scope.newReleaseDate != undefined && $scope.newReleaseDate != ""
     ) {
 

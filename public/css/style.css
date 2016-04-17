@@ -1,7 +1,7 @@
 body {
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 h4 {
   font-size: 17px;
@@ -241,16 +241,29 @@ h4 {
   cursor: pointer;
   padding-bottom: 7px;
 }
+.btn-back {
+  float: right;
+  position: relative;
+  top: -20px;
+}
+.drag-dummy {
+  background-color: grey;
+  opacity: 0.3;
+  display: none;
+}
+.being-dropped .drag-dummy {
+  display: block;
+}
 .navbar {
   margin-bottom: 0px;
 }
 .sprintDiv .ui-draggable-dragging {
   opacity: 1;
-  -ms-transform: rotate(6deg);
+  -ms-transform: rotate(5deg);
   /* IE 9 */
-  -webkit-transform: rotate(6deg);
+  -webkit-transform: rotate(5deg);
   /* Safari */
-  transform: rotate(6deg);
+  transform: rotate(5deg);
   box-shadow: inset 0px 0px 10px #BBBBBB;
 }
 .sprintDiv .being-dragged {
@@ -585,6 +598,19 @@ h4 small {
   width: 212px;
   min-height: 27px;
   padding: 5px;
+}
+.card-activity-wrap {
+  width: 339px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  overflow: auto;
+  border-left: 1px solid black;
+}
+.card-activity-wrap h3 {
+  color: #8c8c8c;
+  text-align: center
 }
 
 /*This class is used for labels template display*/

@@ -11,18 +11,18 @@ fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','s
   storyContr.storyData=storyContr.complexDataObject.story.data;
   storyContr.storyGrp=storyContr.complexDataObject.storyGrp;
   storyContr.storyData.updatetime = moment(storyContr.storyData.lastUpdated).fromNow();
-  console.log("storyData");
   console.log(storyContr.storyData);
   var dataLoc = $location.search();
   var BoardID = dataLoc.BoardID;
   var storyID = dataLoc.storyId;
 
+  $scope.storyID = storyContr.storyData._id; //Used in loading activity for card.
 
 //This code need to be moved to board code to create the room w.r.t to boardid.
-  console.log("Joining the story room");
-  socket.emit('join:room', {
-				'room': storyContr.storyData._id
-			});
+  // console.log("Joining the story room");
+  // socket.emit('join:room', {
+	// 			'room': storyContr.storyData._id
+	// 		});
 //Ends
 
   $scope.model = {
@@ -200,6 +200,7 @@ Parametes: Modal-size,Template,Controller,Story&Sprint data.
     });
   };
   //TODO Ends
+
 }]);
 
 //
