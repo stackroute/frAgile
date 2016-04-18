@@ -75,9 +75,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'description': "",
         'listId': listId,
         'id': id,
-        'listName' : listName,
-        'userID':$scope.userID,
-        'fullName': $scope.fullName
+        'listName' : listName
       });
       $scope.storyDetails = "";
       return true;
@@ -239,10 +237,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       room: 'activity:' + $stateParams.prId,
       action: "moved",
       projectID: $stateParams.prId,
-      user: {
-        '_id': $scope.userID,
-        'fullName': $scope.fullName
-      },
       object: {
         name: data.story.heading,
         type: "Story",

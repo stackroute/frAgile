@@ -1,7 +1,7 @@
 fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket','$filter', function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket,$filter) {
   $scope.loadProjects = function() {
 
-    projectService.getUserProjects($stateParams.userID).success(function(response) {
+    projectService.getUserProjects().success(function(response) {
       $rootScope.projects = response.projects
     });
 
@@ -81,9 +81,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       'projectId': projectId,
       'releaseId': releaseId,
       'releaseName': releaseName,
-      'projectName' : projectName,
-      'userID' :$scope.userID,
-      'fullName' :$scope.fullName
+      'projectName' : projectName
     });
   };
   $scope.editFun = function(rel) {

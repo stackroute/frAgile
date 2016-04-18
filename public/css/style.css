@@ -131,7 +131,7 @@ border: rgb(255, 253, 236);
 }
 .parentInner {
   min-height: 20px;
-  max-height: 470px;
+  max-height: 450px;
   overflow: auto;
 }
 .hideEdit{
@@ -181,11 +181,11 @@ margin-top: 9px;
 margin-left: 1px;
 }
 .crossBtn .fa {
-      color: white;
-      font-size: 20px;
+  color: white;
+      font-size: 17px;
       position: absolute;
-      margin-top: 4px;
-      margin-left: -2px;
+      margin-top: 3px;
+      margin-left: -4px;
 }
 .showAddIcon{
 
@@ -267,7 +267,7 @@ margin-left: 1px;
   width: 100%;
 }
 .sprintDiv {
-  margin-top: 16px;
+  margin-top: -7px;
   overflow: hidden;
 }
 .listHead {
@@ -349,11 +349,11 @@ outline: -webkit-focus-ring-color auto 5px;
   font-size: 0px;
 }
 .parent {
-  padding-bottom: 4px;
+  padding-bottom: 12px;
   overflow: auto;
   overflow-x: hidden;
   /*float: left;*/
-  max-height: 520px;
+  max-height: 500px;
   min-height: 60px;
   background-color: rgb(241, 255, 252);
   border: 1px solid #36D7B7;
@@ -443,13 +443,13 @@ background-color: rgb(255, 239, 237);
     cursor: pointer;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.17);
 background-color: #D84848;
-margin: -20px 230px;
+margin: -20px 250px;
 /* font-size: 14px; */
 font-weight: bold;
 /* color: grey; */
 /* opacity: 0.7; */
-width: 30px;
-height: 30px;
+width: 25px;
+height: 25px;
 border-radius: 32px;
 padding: 0px 10px;
 text-transform: none;
@@ -458,9 +458,6 @@ position: absolute;
     z-index: 100;
 }
 .crossBtn:hover {
-  margin: -20px 198px;
-  font-size: 19px;
-  z-index: 101;
   -ms-transform: rotate(-7deg);
   -webkit-transform: rotate(-7deg);
   transform: rotate(-7deg);

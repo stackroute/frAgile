@@ -7,8 +7,13 @@ var Sprint = require('./models/sprint.js');
 var Story = require('./models/story.js');
 var BackLogsBugList = require('./models/backlogBuglist.js');
 
-io.on('connection', function(socket) {
+var app = require('./app.js')
 
+io.on('connection', function(socket) {
+  var user = {
+    _id:app.userID,
+    fullName:app.fullName
+  }
   socket.on('join:room', function(data) {
     //To make sure socket connects to one room only
     if (socket.lastRoom) {
@@ -46,10 +51,7 @@ io.on('connection', function(socket) {
           room: "activity:" + data.projectID,
           action: "added",
           projectID: data.projectID,
-          user: {
-            '_id': data.userID,
-            'fullName': data.fullName
-          },
+          user: user,
           object: {
             name: data.name,
             type: "Release",
@@ -126,10 +128,7 @@ io.on('connection', function(socket) {
               room: 'activity:' + data.projectId,
               action: "added",
               projectID: data.projectId,
-              user: {
-                '_id': data.userID,
-                'fullName': data.fullName
-              },
+              user: user,
               object: {
                 name: data.name,
                 type: "Sprint",
@@ -309,10 +308,7 @@ io.on('connection', function(socket) {
           room: data.activityRoom,
           action: "added",
           projectID: data.projectId,
-          user: {
-            '_id': data.userID,
-            'fullName': data.fullName
-          },
+          user: user,
           object: {
             name: data.heading,
             type: "Story",
@@ -382,6 +378,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('addActivity', function(data) {
+    data.user = user;
     Activity.addEvent(data, function(actData) {
       io.to(data.room).emit('activityAdded', actData);
     });
@@ -400,10 +397,7 @@ io.on('connection', function(socket) {
           room: data.activityRoom,
           action: "deleted",
           projectID: data.projectId,
-          user: {
-            '_id': data.userID,
-            'fullName': data.fullName
-          },
+          user: user,
           object: {
             name: data.releaseName,
             type: "Release",
@@ -439,7 +433,6 @@ io.on('connection', function(socket) {
   })
 
 socket.on('activity:addMember', function(data) {
-    console.log('Add Member: Socket Request');
     Project.addMember(data.projectId, data.memberList, function(err, doc) {
       if (!err) {
         data.memberList.forEach(function(memberId){

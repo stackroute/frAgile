@@ -23,8 +23,8 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
     //   $scope.warningModalDesc = true;
     // }
     if ($scope.newReleaseName != undefined && $scope.newReleaseName != "") {
-      projectService.addProject($scope.newReleaseName, $scope.newReleaseDesc,$scope.userID).success(function(response) {
-        projectService.addProjectToUser($scope.userID, response._id).success(function(data) {
+      projectService.addProject($scope.newReleaseName, $scope.newReleaseDesc).success(function(response) {
+        projectService.addProjectToUser( response._id).success(function(data) {
 
           //Pushing added object into the scope to display
           $scope.projects.push(data[0]);
@@ -34,10 +34,6 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
             room: "projectRoom",
             action: "created",
             projectID: data[0]._id,
-            user: {
-              '_id': $scope.userID,
-              'fullName': $scope.fullName
-            },
             target: {
               name: data[0].name,
               type: "Project",
