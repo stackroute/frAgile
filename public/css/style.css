@@ -40,7 +40,9 @@ h3 {
 .top-header {
   padding: 0;
 }
-
+.logo{
+  width:30px;
+}
 .loadingScreen {
   position: fixed;
   background-color: #EEEEEE;
@@ -586,7 +588,7 @@ position: absolute;
   line-height: 13px;
 font-size: 16px;
 text-align: center;
-background-color: rgb(82, 125, 115) !important;
+background-color: rgb(38, 166, 91) !important;
 border: 0;
 border-bottom: 3px solid #33564E !important;
 color: white !important;

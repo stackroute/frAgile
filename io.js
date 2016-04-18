@@ -456,8 +456,8 @@ socket.on('activity:addMember', function(data) {
           if(!err)
             io.to(data.room).emit('activity:memberRemoved', userData[0]);
         });
-        User.removeProjectfromUser(memberId,data.projectId,function(data){
-          
+        User.removeProjectfromUser(data.memberId,data.projectId,function(data){
+
         });
       }
     })
