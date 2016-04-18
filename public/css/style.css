@@ -24,7 +24,7 @@ h3 {
 /* Track */
 
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px #E1EEEA;
   -webkit-border-radius: 10px;
   border-radius: 10px;
 }
@@ -34,8 +34,8 @@ h3 {
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  background: #C0392B;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  background: #527D73;
+  -webkit-box-shadow: inset 0 0 6px #527D73;
 }
 .top-header {
   padding: 0;
@@ -104,17 +104,17 @@ h3 {
 }
 .editRelease .btn.btn-success {
   /*margin-top: -9px;*/
-  background-color: #63E6CB;
+  /*background-color: #63E6CB;*/
   margin-left: 227px;
-  color: #3C5D55;
-  font-weight: bold;
+  /*color: #3C5D55;*/
+  /*font-weight: bold;*/
 }
 .editSprint .btn-success{
   margin-top: 16px;
-  background-color: #63E6CB;
+  /*background-color: #63E6CB;*/
   margin-left: 232px;
-  color: #3C5D55;
-  font-weight: bold;
+  /*color: #3C5D55;*/
+  /*font-weight: bold;*/
 }
 .editRelease #inputName, .editRelease #inputDate, .editRelease #inputDesc {
   background-color: rgb(255, 254, 244);
@@ -294,6 +294,9 @@ position: absolute;
 .backbug .child{
   background-color: rgba(244, 80, 80, 0.31);
 }
+.Releasable .child{
+  background-color: rgba(38, 166, 91, 0.59);
+}
 .drag-dummy {
   background-color: grey;
   opacity: 0.3;
@@ -366,6 +369,14 @@ outline: -webkit-focus-ring-color auto 5px;
   /*padding-bottom: 17px;*/
 
 }
+.parent ::-webkit-scrollbar {
+  width: 5px;
+  height: 4px;
+}
+.parent ::-webkit-scrollbar-thumb {
+  background: #777777;
+  -webkit-box-shadow: inset 0 0 6px #777777;
+}
 .navbar {
     position: fixed;
     width: 100%;
@@ -396,6 +407,13 @@ outline: -webkit-focus-ring-color auto 5px;
 }
 .top-header {
     z-index: 2000;
+}
+.btn-success {
+    background-color: #4FC7AB;
+    border: 1px solid rgba(82, 125, 115, 0.43);
+    border-bottom: 4px solid #537F75;
+    line-height: 19px;
+    font-weight: bold;
 }
 .topRow{
   padding-left:10px;
@@ -429,7 +447,7 @@ h4 small {
   font-size: 20px;
 }
 .Releasable {
-  background-color: rgb(241, 255, 252);
+  background-color: rgba(0, 255, 106, 0.26);
   border: 1px solid #26A65B;
   border-top: 11px solid #26A65B;
 }
@@ -518,14 +536,14 @@ position: absolute;
   padding: 10px;
   border-top: 1px solid #eee;
 }
-.add-members .btn-primary {
+/*.add-members .btn-primary {
     color: #537F75;
     height: 32px;
+        border: 1px solid rgba(83, 127, 117, 0.36);
     background-color: #7DD4C0;
-    border: 0;
     border-radius: 2px;
     border-bottom: 4px solid #537F75;
-}
+}*/
 .remove-members{
   position: relative;
   top: -38px;
@@ -736,6 +754,7 @@ padding-right: 5px;
 }
 .card-activity-wrap {
   width: 339px;
+      word-wrap: break-word;
   position: absolute;
   top: 0px;
   right: 0px;
