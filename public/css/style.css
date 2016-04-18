@@ -10,8 +10,7 @@ h4 {
   font-weight: bold;
 }
 h3 {
-  font-size: 19px;
-  font-weight: bold;
+  font-size: 23px;
 }
 .container-fluid{
   position: fixed;
@@ -397,8 +396,7 @@ outline: -webkit-focus-ring-color auto 5px;
     z-index: 2000;
 }
 .topRow{
-  margin-top: -17px;
-  margin-left: -30px;
+  padding-left:10px;
 }
 .addMore {
   background-color: rgba(131, 179, 167, 0.2);
@@ -415,11 +413,6 @@ h4 {
   margin-bottom: 3px;
 }
 h4 small {
-  color: grey;
-  margin-left: 10px;
-  font-weight: lighter;
-}
-h3 small {
   color: grey;
   margin-left: 10px;
   font-weight: lighter;
