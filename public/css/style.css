@@ -352,7 +352,7 @@ outline: -webkit-focus-ring-color auto 5px;
   padding-bottom: 4px;
   overflow: auto;
   overflow-x: hidden;
-  float: left;
+  /*float: left;*/
   max-height: 520px;
   min-height: 60px;
   background-color: rgb(241, 255, 252);
@@ -363,6 +363,9 @@ outline: -webkit-focus-ring-color auto 5px;
   margin: 3px;
   /*padding-bottom: 17px;*/
 
+}
+.list-wrapper{
+  float:left;
 }
 .navbar {
     position: fixed;
@@ -440,7 +443,7 @@ background-color: rgb(255, 239, 237);
     cursor: pointer;
   box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.17);
 background-color: #D84848;
-margin: -20px 200px;
+margin: -20px 230px;
 /* font-size: 14px; */
 font-weight: bold;
 /* color: grey; */
