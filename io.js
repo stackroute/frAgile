@@ -412,15 +412,33 @@ io.on('connection', function(socket) {
     })
   })
 
-  socket.on('activity:addMember', function(data) {
+socket.on('activity:addMember', function(data) {
+    console.log('Add Member: Socket Request');
     Project.addMember(data.projectId, data.memberList, function(err, doc) {
       if (!err) {
-        io.to(data.room).emit('activity:memberAdded', 1);
-        console.log(doc);
+        data.memberList.forEach(function(memberId){
+          User.find({'_id': memberId}).exec(function(err, userData){
+            if(!err)
+            io.to(data.room).emit('activity:memberAdded', userData[0]);
+          })
+        })
+      }
+    })
+  })
+
+  socket.on('activity:removeMember', function(data) {
+    console.log('Remove Member: Socket Request');
+    Project.removeMember(data.projectId, data.memberId, function(err, doc) {
+      if (!err) {
+        User.find({'_id': data.memberId}).exec(function(err, userData){
+          if(!err)
+            io.to(data.room).emit('activity:memberRemoved', userData[0]);
+        })
       }
     })
   })
 
 });
+
 
 module.exports = io;

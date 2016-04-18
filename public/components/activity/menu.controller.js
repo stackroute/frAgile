@@ -5,14 +5,15 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
   var socket = Socket();
 
   //For members list
-$scope.memberList = [];
+  $scope.memberList = [];
   activityService.getMembers($scope.projectID).success(function(response) {
-
     response.memberList.forEach(function(data) {
-      data.fullName = data.firstName + " " + data.lastName;
-    })
+        data.fullName = data.firstName + " " + data.lastName;
+      })
+      // $rootScope.memberList.push(data.firstName + " " + data.lastName);
+      // console.log(response[0]);
+      // console.log(response);
     $scope.memberList = response.memberList;
-    $rootScope.memberList = response.memberList;
   });
 
   $scope.allMembers = [];
@@ -63,14 +64,56 @@ $scope.memberList = [];
 
   }
 
-  socket.on('activity:memberAdded', function(data){
-    $scope.allMembers.forEach(function(member){
-        $scope.memberList.push(member);
-    })
+socket.on('activity:memberAdded', function(data) {
+    data.fullName = data.firstName + " " + data.lastName;
+    $scope.memberList.push(data);
     $scope.allMembers = [];
     $scope.userIds = [];
     $scope.members = "";
     $scope.addedMembers = "Success: Members Added To Project!";
   });
+
+  socket.on('activity:memberRemoved', function(userData){
+    var fullName = userData.firstName + " " + userData.lastName;
+    $scope.memberList.forEach(function(data){
+      if(userData._id == data._id)
+        $scope.memberList.pop();
+    });
+
+    var data = {
+      room: 'activity:' + $scope.projectID,
+      action: "removed",
+      projectID: $scope.projectID,
+      user: {
+        '_id': $scope.userID,
+        'fullName': $scope.fullName
+      },
+      object: {
+        name: fullName,
+        type: "User",
+        _id: userData._id
+      },
+      target: {
+        name: $scope.projectName,
+        type: "Project",
+        _id: $scope.projectID
+      }
+    }
+    socket.emit('addActivity', data);
+  })
+
+  $scope.removeMember = function(memberId) {
+    console.log('Remove Member: ', memberId);
+
+    socket.emit('activity:removeMember', {
+      'room': 'activity:' + $scope.projectID,
+      'projectId': $scope.projectID,
+      'memberId': memberId
+    });
+
+
+
+  }
+
 
 });
