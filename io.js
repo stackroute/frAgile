@@ -193,6 +193,8 @@ io.on('connection', function(socket) {
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedTo', data);
+                socket.emit('sprint:storyActivity', data)
+
               });
             } else { //reverting changes
               console.log("Couldn't delete story", socket.id);
@@ -218,6 +220,8 @@ io.on('connection', function(socket) {
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedTo', data);
+                socket.emit('sprint:storyActivity', data)
+
               });
             } else { //reverting changes
               console.log("Couldn't delete story", socket.id);
@@ -246,6 +250,8 @@ io.on('connection', function(socket) {
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedFrom', data);
+                socket.emit('sprint:storyActivity', data)
+
               });
             } else { //reverting changes
               console.log("Couldn't delete story", socket.id);
@@ -269,6 +275,8 @@ io.on('connection', function(socket) {
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedFrom', data);
+                socket.emit('sprint:storyActivity', data)
+
               });
             } else { //reverting changes
               console.log("Couldn't delete story", socket.id);
