@@ -439,7 +439,10 @@ socket.on('activity:addMember', function(data) {
           User.find({'_id': memberId}).exec(function(err, userData){
             if(!err)
             io.to(data.room).emit('activity:memberAdded', userData[0]);
-          })
+          });
+          User.addProjectToUser(memberId,data.projectId,function(data){
+
+          });
         })
       }
     })
@@ -452,7 +455,10 @@ socket.on('activity:addMember', function(data) {
         User.find({'_id': data.memberId}).exec(function(err, userData){
           if(!err)
             io.to(data.room).emit('activity:memberRemoved', userData[0]);
-        })
+        });
+        User.removeProjectfromUser(memberId,data.projectId,function(data){
+          
+        });
       }
     })
   })

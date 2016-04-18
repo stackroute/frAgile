@@ -26,7 +26,7 @@ var graph = require('./routes/graph');
 var authenticationHandler = require('./routes/authenticationHandler')(passport);
 app.use(session({
   secret:'fragile',
-  key: 'hell',
+  key: 'limber',
   cookie:{ maxAge: 360000},
   resave: false,
   saveUninitialized:false
