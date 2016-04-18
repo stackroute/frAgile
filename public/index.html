@@ -19,6 +19,7 @@
   <!-- <script src="js/lib/angular-moment.js"></script> -->
   <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
   <link href='https://fonts.googleapis.com/css?family=Slabo+27px' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
   <script src="js/lib/angular-dragdrop.min.js"></script>
   <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.5.js"></script>
   <script src="js/lib/ngletteravatar.js"></script>
@@ -31,18 +32,18 @@
 <body ng-controller="loginController">
 
   <div class="container-fluid top-header">
-      <nav class="navbar navbar-default navbar-xs" role="navigation">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" ng-click ="goToProject()"><b>FrAgile Board</b></a>
-    </div>
 
+    <nav class="navbar navbar-default navbar-xs" role="navigation">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" ng-click ="goToProject()"><center><b><i class="fa fa-paper-plane-o" aria-hidden="true"></i> limBer</b></center></a>
+      </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav pull-right">
@@ -56,7 +57,7 @@
   </div>
 
   <div>
-    <div ui-view>
+    <div ui-view class = "bodyArea">
     </div>
   </div>
 

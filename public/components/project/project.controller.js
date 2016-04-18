@@ -55,17 +55,23 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
     });
   }
   $scope.editRelease = function(newReleaseName,newReleaseDetails,newReleaseDate,creationDate,prId,relId) {
-    var dt = new Date(newReleaseDate);
-    var crDt = new Date(creationDate);
-    socket.emit('project:editRelease', {
-      'room': 'projectRoom',
-      'projectId': prId,
-      'releaseId': relId,
-      "name": newReleaseName,
-      "description": newReleaseDetails,
-      "creationDate": crDt,
-      "releaseDate": dt
-    });
+      if (newReleaseDate != null && creationDate != null && newReleaseName != "" && newReleaseDetails != "") {
+      var dt = new Date(newReleaseDate);
+      var crDt = new Date(creationDate);
+      socket.emit('project:editRelease', {
+        'room': 'projectRoom',
+        'projectId': prId,
+        'releaseId': relId,
+        "name": newReleaseName,
+        "description": newReleaseDetails,
+        "creationDate": crDt,
+        "releaseDate": dt
+      });
+      return true;
+    }
+    else{
+      return false;
+    }
   }
   $scope.archiveFun = function(projectId, releaseId,projectName,releaseName) {
     // console.log("archiveFun" + rel)

@@ -11,6 +11,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     sprintService.getBackBug($stateParams.prId).then(function(backBug) {
       $scope.backBug = backBug.data;
     });
+    $scope.AddStoryDiv = "AddStoryDiv";
 
 
     $rootScope.isMenu = false;
@@ -23,7 +24,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
 
   var socket = Socket($scope);
 
-  $scope.roomName = "sprint:" + $stateParams.sprintID;
+  $scope.roomName = "sprint:" + $stateParams.sprintID
   var emitData = {
     'room': $scope.roomName
   }
@@ -34,13 +35,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   socket.emit('join:room', emitData);
 
   $rootScope.projectID = $stateParams.prId;
-
-  $scope.backClick = function() {
-    $state.go('release', {
-      prId: $stateParams.prId,
-      releaseID: $scope.release.id
-    });
-  }
 
 
   socket.on('sprint:storyAdded', function(data) {
@@ -81,26 +75,19 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'description': "",
         'listId': listId,
         'id': id,
-        'listName': listName,
-        'userID': $scope.userID,
+        'listName' : listName,
+        'userID':$scope.userID,
         'fullName': $scope.fullName
       });
       $scope.storyDetails = "";
-      $scope.addToBacklog = false;
-      $scope.addToBuglist = false;
+      return true;
+    }
+    else {
+      return false
     }
   }
-  $scope.showBacklogAddDetails = function() {
-    $scope.addToBacklog = true;
-  };
-  $scope.hideBacklogAddDetails = function() {
-    $scope.addToBacklog = false;
-  };
-  $scope.showBuglistAddDetails = function() {
-    $scope.addToBuglist = true;
-  };
-  $scope.hideBuglistAddDetails = function() {
-    $scope.addToBuglist = false;
+  $scope.gotoTop = function(id) {
+    angular.element("#"+id)[0].scrollTop=0;
   };
 
 
@@ -145,7 +132,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       });
     }
 
-  }
+  };
   $scope.startCallback = function(event, ui) {
     angular.element(event.target).addClass("being-dragged");
     elemBeingDragged = angular.element(event.target);
