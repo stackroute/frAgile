@@ -220,6 +220,7 @@ position: absolute;
   max-height: 100px;
 }
 .showSlide .slideMenuBox {
+  z-index: 100;
   width: 85px;
   background-color: #283A35;
   position: absolute;
@@ -227,7 +228,7 @@ position: absolute;
   border-top-left-radius: 7px;
   margin-left: 175px;
   padding-left: 8px;
-  margin-top: -74px;
+  /*margin-top: -74px;*/
   color: #9FD8CA;
   letter-spacing: 5px;
   font-size: 13px;
