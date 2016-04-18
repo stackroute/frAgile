@@ -88,6 +88,24 @@ io.on('connection', function(socket) {
     });
 
   });
+  socket.on('release:editSprint', function(data) {
+    sprint = {
+      name: data.name,
+      endDate: data.endDate,
+      startDate: data.startDate,
+      description: data.description,
+    };
+    console.log("--------------------------");
+    console.log(sprint);
+    console.log("--------------------------");
+    Sprint.updateSprint(data.sprintId, sprint, function(err, doc) {
+      if (!err) {
+        sprint._id=data.sprintId;
+        io.to(data.room).emit('release:sprintEdited', sprint);
+      }
+    });
+
+  });
 
   socket.on('release:addSprint', function(data) {
     var sprint = {

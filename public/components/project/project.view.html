@@ -19,7 +19,7 @@
               <div class="dummy" ui-sref="release({ prId : project._id, releaseID: release._id})">
               </div>
               <div class="slideMenuBox">
-                <i class="fa fa-archive" ng-click = "archiveFun(project._id, release._id,project.name,release.name)"></i>
+                <i class="fa fa-trash" ng-click = "archiveFun(project._id, release._id,project.name,release.name)"></i>
                 <i class="fa fa-pencil" ng-click = "showEdit=true; newReleaseName= release.name; newReleaseDetails = release.description; newReleaseDate=release.releaseDate"></i>
                 <i class="fa fa-star" ng-click = "starFun(release._id)"></i>
               </div>
@@ -46,7 +46,7 @@
                     <input type="date" class="form-control" id="inputDate" value = "{{release.releaseDate | date:'yyyy-MM-dd'}}" ng-model = "newReleaseDate" >
                   </div>
                 </div>
-                <button type="button" class="btn btn-success" ng-click="editRelease(newReleaseName,newReleaseDetails,newReleaseDate,release.creationDate,project._id,release._id); showEdit=false">Save</button>
+                <button type="button" class="btn btn-success" ng-click="editRelease(newReleaseName,newReleaseDetails,newReleaseDate,release.creationDate,project._id,release._id)? showEdit=false : showEdit=true">Save</button>
                 <!-- <button type="button" ng-click = "showEdit=false">X</button> -->
               </form>
             </div>

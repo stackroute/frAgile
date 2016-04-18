@@ -16,6 +16,20 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
     $scope.sprints.push(data);
   });
 
+    socket.on('release:sprintEdited', function(sprintData) {
+      console.log("--------------");
+      $scope.sprints.forEach(function(item, itmIndex) {
+        if(item._id == sprintData._id){
+          console.log($scope.sprints[itmIndex]);
+          $scope.sprints[itmIndex].name = sprintData.name;
+          $scope.sprints[itmIndex].description = sprintData.description;
+          $scope.sprints[itmIndex].startDate = sprintData.startDate;
+          $scope.sprints[itmIndex].endDate = sprintData.endDate;
+        }
+      });
+      //console.log(releaseData);
+    });
+    
   socket.on('sprintDeleted', function(sprintData) {
     $scope.sprints.forEach(function(sprint) {
       if (sprint._id == sprintData.sprintId) {
@@ -59,7 +73,27 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
       controller: 'modalReleaseController',
     });
   }
-
+  $scope.editSprint = function(newSprintName,newSprintDetails,newSprintStartDate,newSprintEndDate,sprId) {
+    if (newSprintStartDate != "") {
+      console.log("newSprintStartDate is not null it is -" + newSprintStartDate +"-");
+    }
+    if (newSprintName != "" && newSprintDetails != "" && newSprintStartDate != null && newSprintEndDate != null) {
+    newSprintStartDate = new Date(newSprintStartDate);
+    newSprintEndDate = new Date(newSprintEndDate);
+      socket.emit('release:editSprint', {
+        "room": $scope.roomName,
+        "sprintId": sprId,
+        "name": newSprintName,
+        "description": newSprintDetails,
+        "startDate": newSprintStartDate,
+        "endDate": newSprintEndDate
+      });
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
   $scope.getSprints = function() {
     // $scope.projectID = $stateParams.prId;
     releaseService.getSprints($scope.release.id).success(function(response) {

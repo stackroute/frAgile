@@ -1,11 +1,21 @@
 body {
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
-  overflow-x: hidden;
+  background-color: rgba(162, 222, 208, 0.07)
+
+
 }
 h4 {
   font-size: 17px;
   font-weight: bold;
+}
+h3 {
+  font-size: 19px;
+  font-weight: bold;
+}
+.container-fluid{
+  position: fixed;
+  width: 100%;
 }
 ::-webkit-scrollbar {
   width: 8px;
@@ -31,6 +41,7 @@ h4 {
 .top-header {
   padding: 0;
 }
+
 .loadingScreen {
   position: fixed;
   background-color: #EEEEEE;
@@ -53,14 +64,14 @@ h4 {
   width: 270px;
   height: 85px;
   border-radius: 5px;
-  background-color: #52B3D9;
+  background-color: rgb(82, 125, 115);
   padding: 5px 5px 5px 10px;
   line-height: 25px;
   float: left;
-  color: #34495E;
+  color: #C8E8E1;
 }
 .box:hover {
-  box-shadow: inset 0px 0px 20px #446CB3;
+  box-shadow: inset 0px 0px 20px rgba(81, 121, 111, 0.83);
   border-radius: 5px;
 }
 .boxHeading {
@@ -68,18 +79,25 @@ h4 {
   font-size: 17px;
   font-weight: bold;
 }
-.editRelease {
-  box-shadow: 0px 0px 15px rgba(99, 97, 97, 0.82);
-  z-index: 101;
-  position: absolute;
-  height: 161px;
-  width: 289px;
-  background-color: rgb(255, 253, 236);
-  margin-top: -101px;
-  margin-left: -10px;
-  border-radius: 4px;
+.editRelease, .editSprint {
+  box-shadow: 0px 0px 15px rgb(62, 62, 62);
+      z-index: 101;
+      position: absolute;
+      height: 168px;
+          color: #2D4842;
+      width: 289px;
+      background-color: rgb(255, 255, 255);
+      /* border: 0px solid #87D37C; */
+      margin-top: -101px;
+      margin-left: -10px;
+      border-radius: 2px;
+      /* padding-bottom: 84px; */
+      border-top: 7px solid #63E6CB;
 }
-.editRelease textarea {
+.editSprint{
+  height: 207px;
+}
+.editRelease textarea, .editSprint textarea{
   max-width: 100%;
   min-width: 100%;
   max-height: 68px;
@@ -87,33 +105,43 @@ h4 {
 }
 .editRelease .btn.btn-success {
   /*margin-top: -9px;*/
-  background-color: #6BE064;
+  background-color: #63E6CB;
   margin-left: 227px;
-  color: #FFFFFF;
+  color: #3C5D55;
+  font-weight: bold;
+}
+.editSprint .btn-success{
+  margin-top: 16px;
+  background-color: #63E6CB;
+  margin-left: 232px;
+  color: #3C5D55;
   font-weight: bold;
 }
 .editRelease #inputName, .editRelease #inputDate, .editRelease #inputDesc {
-  background-color: rgba(0, 0, 0, 0.03);
-  border: rgba(0, 0, 0, 0.03);
+  background-color: rgb(255, 254, 244);
+/*box-shadow: 0 0 1 black;*/
+border: rgb(255, 253, 236);
 }
 .frm {
-  margin-top: 8px;
-  margin-bottom: -3px;
-  overflow: auto;
+    margin-top: 8px;
+    margin-bottom: -3px;
+    overflow: auto;
 }
-.frm .btnAdd {
+.frm .col-sm-4{
   padding-right: 0px;
 }
 .parentInner {
   min-height: 20px;
+  max-height: 470px;
+  overflow: auto;
 }
-.hideEdit {
+.hideEdit{
   height: 0px;
   width: 0px;
   font-size: 0px;
   overflow: hidden;
 }
-.backgroundBlack {
+.backgroundBlack{
   z-index: 100;
   height: 100%;
   width: 100%;
@@ -127,35 +155,65 @@ h4 {
   width: 0px;
   height: 0px;
 }
+
 .showAdd {
-  margin: 10px 16px;
-  font-size: 14px;
-  font-weight: bold;
-  /* color: grey; */
-  opacity: 0.7;
-  cursor: pointer;
+      z-index: 100;
+      cursor: pointer;
+      box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.17);
+      background-color: #78CC6C;
+        margin: -25px 226px;
+    /*font-size: 14px;*/
+    font-weight: bold;
+    /* color: grey; */
+    /*opacity: 0.7;*/
+    width: 42px;
+    height: 42px;
+    border-radius: 32px;
+    padding: 0px 10px;
+    text-transform: none;
+    font-size: 40px;
+    position: absolute;
 }
-.showAddIcon {}
-.hideAdd {
+.showAdd .fa{
+      color: white;
+  font-size: 26px;
+position: absolute;
+margin-top: 9px;
+margin-left: 1px;
+}
+.crossBtn .fa {
+      color: white;
+      font-size: 20px;
+      position: absolute;
+      margin-top: 4px;
+      margin-left: -2px;
+}
+.showAddIcon{
+
+
+}
+.hideAdd{
   font-size: 0px;
   width: 0px;
   height: 0px;
   overflow: hidden;
   margin: 0px;
 }
-.showAddDetails .btn-link:hover {
+.showAddDetails .btn-link:hover{
   text-decoration: none;
-  color: #EEEEEE;
+      color: rgba(0, 0, 0, 1);
 }
-.showAddDetails .btnAdd {
-  margin: 7px 5px;
-  float: left;
+.showAddDetails .col-sm-4{
+  margin: 5px -9px;
   font-weight: bolder;
 }
-.showAddDetails .btn-link {
-  color: white;
+.showAddDetails .btn-link{
+      color: rgba(0, 0, 0, 0.63);
 }
-.sprintDiv textarea.form-control {
+.bodyArea {
+    padding-top: 50px;
+}
+.sprintDiv textarea.form-control{
   margin-left: 5px;
   max-width: 96%;
   min-width: 96%;
@@ -163,14 +221,14 @@ h4 {
 }
 .showSlide .slideMenuBox {
   width: 85px;
-  background-color: #2C3E50;
+  background-color: #283A35;
   position: absolute;
   border-bottom-left-radius: 7px;
   border-top-left-radius: 7px;
   margin-left: 175px;
   padding-left: 8px;
   margin-top: -74px;
-  color: #52B3D9;
+  color: #9FD8CA;
   letter-spacing: 5px;
   font-size: 13px;
   opacity: 1;
@@ -181,15 +239,15 @@ h4 {
   font-size: 0px;
   opacity: 1;
 }
-.dummy {
-  position: fixed;
+.dummy{
+  position: absolute;
   margin-top: -80px;
   margin-left: -10px;
   width: 270px;
   height: 85px;
 }
 .slideMenuBox .fa:hover {
-  color: #C5EFF7;
+  color: #ACE6D8;
 }
 .projectPage .btn-success {
   margin: 15px 0px;
@@ -210,27 +268,18 @@ h4 {
   width: 100%;
 }
 .sprintDiv {
-  /*margin-top: 20px;
-  overflow: hidden;*/
-  margin: 10px 10px;
-}
-.sprint-wrapper {
-  position: absolute;
-  top: 150px;
-  bottom: 0px;
-  right: 0px;
-  left: 0px;
-  padding-right: 10px;
-  overflow-x: auto;
+  margin-top: 16px;
+  overflow: hidden;
 }
 .listHead {
-  color: white;
+      color: rgba(0, 0, 0, 0.56);
   margin: 4px 0px 0px 11px;
   font-size: 16px;
   font-weight: bold;
 }
 .child {
-  background-color: rgba(255, 255, 255, 0.93);
+  position: relative;
+      background-color: rgb(157, 237, 221);
   border-radius: 3px;
   margin-top: 20px;
   width: 259px;
@@ -241,10 +290,8 @@ h4 {
   cursor: pointer;
   padding-bottom: 7px;
 }
-.btn-back {
-  float: right;
-  position: relative;
-  top: -20px;
+.backbug .child{
+  background-color: rgba(244, 80, 80, 0.31);
 }
 .drag-dummy {
   background-color: grey;
@@ -254,9 +301,7 @@ h4 {
 .being-dropped .drag-dummy {
   display: block;
 }
-.navbar {
-  margin-bottom: 0px;
-}
+
 .sprintDiv .ui-draggable-dragging {
   opacity: 1;
   -ms-transform: rotate(5deg);
@@ -270,7 +315,15 @@ h4 {
   opacity: 0.4;
 }
 .sprintDiv .being-dropped {
-  outline: -webkit-focus-ring-color auto 5px;
+outline: -webkit-focus-ring-color auto 5px;
+}
+.storyAttributes {
+    margin-left: 14px;
+    opacity: 0.6;
+    font-weight: 700;
+}
+.storyAttributes span {
+    margin-right: 16px;
 }
 .story_Name {
   padding: 6px 12px;
@@ -297,19 +350,58 @@ h4 {
   font-size: 0px;
 }
 .parent {
+  padding-bottom: 4px;
   overflow: auto;
   overflow-x: hidden;
   float: left;
   max-height: 520px;
   min-height: 60px;
-  /*background-color: #F0AD4E;*/
-  background-color: #36D7B7;
+  background-color: rgb(241, 255, 252);
+  border: 1px solid #36D7B7;
+  border-top: 11px solid #36D7B7;
   border-radius: 4px;
   width: 272px;
   margin: 3px;
+  /*padding-bottom: 17px;*/
+
+}
+.navbar {
+    position: fixed;
+    width: 100%;
+    height: 41px;
+    min-height: 0px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+}
+.navbar-default {
+  background-color: rgb(255, 255, 255);
+  border-bottom: 4px solid #527D73;
+}
+.navbar-default .navbar-brand {
+  cursor: pointer;
+    position: fixed;
+    color: #527D73;
+    font-family: 'Lobster', cursive;
+    letter-spacing: 2px;
+    font-size: 27px;
+    /* background-color: red; */
+    width: 100%;
+        margin-top: -10px;
+}
+.navbar-nav {
+    float: left;
+    margin-top: -4px;
+    /* margin: 0; */
+}
+.top-header {
+    z-index: 2000;
+}
+.topRow{
+  margin-top: -17px;
+  margin-left: -30px;
 }
 .addMore {
-  background-color: #EEEEEE;
+  background-color: rgba(131, 179, 167, 0.2);
   color: #888888;
   font-size: 18px;
   top: 50%;
@@ -327,28 +419,52 @@ h4 small {
   margin-left: 10px;
   font-weight: lighter;
 }
+h3 small {
+  color: grey;
+  margin-left: 10px;
+  font-weight: lighter;
+}
 .container {
   overflow: hidden;
+}
+.backButton{
+  margin-top: 17px;
 }
 .addNewProject .fa {
   font-size: 20px;
 }
 .Releasable {
-  background-color: #36D7B7;
+  background-color: rgb(241, 255, 252);
+  border: 1px solid #26A65B;
+  border-top: 11px solid #26A65B;
 }
 .backbug {
-  background-color: #EF4836;
+  border: 1px solid #EF4836;
+border-top: 11px solid #EF4836;
+background-color: rgb(255, 239, 237);
 }
 .crossBtn {
-  font-size: 17px;
-  position: absolute;
-  margin-left: 260px;
-  margin-top: -4px;
+    cursor: pointer;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.17);
+background-color: #D84848;
+margin: -20px 200px;
+/* font-size: 14px; */
+font-weight: bold;
+/* color: grey; */
+/* opacity: 0.7; */
+width: 30px;
+height: 30px;
+border-radius: 32px;
+padding: 0px 10px;
+text-transform: none;
+font-size: 40px;
+position: absolute;
+    z-index: 100;
 }
 .crossBtn:hover {
-  margin-top: -5px;
-  margin-left: 259px;
+  margin: -20px 198px;
   font-size: 19px;
+  z-index: 101;
   -ms-transform: rotate(-7deg);
   -webkit-transform: rotate(-7deg);
   transform: rotate(-7deg);
@@ -356,14 +472,18 @@ h4 small {
 .Releasable .crossBtn {
   z-index: -1;
   font-size: 0px;
+  width: 0px;
+  height: 0px;
 }
 
 /*Activity Bar CSS*/
 
 .menu-bar {
+  z-index: 200;
   width: 339px;
-  position: absolute;
+  position: fixed;
   right: 5px;
+  word-wrap: break-word;
   overflow: hidden;
   box-shadow: 0 5px 9px rgba(0, 0, 0, .5);
   /*display: none;*/
@@ -402,6 +522,14 @@ h4 small {
   clear: both;
   padding: 10px;
   border-top: 1px solid #eee;
+}
+.add-members .btn-primary {
+    color: #537F75;
+    height: 32px;
+    background-color: #7DD4C0;
+    border: 0;
+    border-radius: 2px;
+    border-bottom: 4px solid #537F75;
 }
 .remove-members{
   position: relative;
@@ -462,11 +590,14 @@ h4 small {
   float: left;
 }
 .menu-panel-heading {
-  line-height: 20px;
-  font: 16px "Helvetica Neue", Arial, Helvetica, sans-serif;
-  text-align: center;
-  background-color: #246EB9 !important;
-  color: white !important;
+  line-height: 13px;
+font-size: 16px;
+text-align: center;
+background-color: rgb(82, 125, 115) !important;
+border: 0;
+border-bottom: 3px solid #33564E !important;
+color: white !important;
+font-weight: 600;
 }
 .activity-label {
   position: relative;
@@ -506,19 +637,18 @@ h4 small {
 .btn-section {
   width: 99px;
 }
-
 /*Story CSS Starts*/
 
 .storyHeader {
-  padding: 9px 15px;
-  border-bottom: 1px solid #eee;
-  background-color: #5cb85c;
-  -webkit-border-top-left-radius: 5px;
-  -webkit-border-top-right-radius: 5px;
-  -moz-border-radius-topleft: 5px;
-  -moz-border-radius-topright: 5px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+   padding:9px 15px;
+   border-bottom:1px solid #eee;
+   background-color: #5cb85c;
+   -webkit-border-top-left-radius: 5px;
+   -webkit-border-top-right-radius: 5px;
+   -moz-border-radius-topleft: 5px;
+   -moz-border-radius-topright: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 .done-true {
   text-decoration: line-through;
@@ -553,10 +683,13 @@ h4 small {
   margin-top: 10px;
   overflow: auto;
 }
-.modal-members-list {
-  padding-left: 0;
-  margin-bottom: 10px;
-  padding-right: 5px;
+.modal-backdrop.in{
+  z-index: 110;
+}
+.modal-members-list{
+padding-left: 0;
+margin-bottom: 10px;
+padding-right: 5px;
 }
 
 /*Add below class during mouse pointing on label selection*/
