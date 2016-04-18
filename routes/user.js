@@ -9,9 +9,9 @@ var Story = require('../models/story.js');
 
 
 //to get projects of a userID
-router.get('/projects', function(req, res, next) {
-  if (req.query.id) {
-    User.getProjects(req.query.id, function(data) {
+router.get('/projects', function(req, res, next) {// LOGINCHANGE
+  if (req.user._id) {
+    User.getProjects(req.user._id, function(data) {
       res.send(data);
     })
   } else {
@@ -21,8 +21,8 @@ router.get('/projects', function(req, res, next) {
 
 //to add project to a user
 router.post('/addProject', function(req, res, next) {
-  if (req.body.userID && req.body.projectID) {
-    User.addProjectToUser(req.body.userID, req.body.projectID, function(err, data) {
+  if (req.user._id && req.body.projectID) {// LOGINCHANGE
+    User.addProjectToUser(req.user._id, req.body.projectID, function(err, data) {
       if (err)
         res.send("false");
       else {

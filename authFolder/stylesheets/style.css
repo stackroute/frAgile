@@ -1,0 +1,210 @@
+  body{
+    font-family: 'Roboto', sans-serif;
+    font-size: 13px;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* IE/Edge */
+    user-select: none;           /* non-prefixed version, currently*/
+  }
+  h4 {
+    font-size: 17px;
+    font-weight: bold;
+  }
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background: #36D7B7;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+::-webkit-scrollbar-thumb:window-inactive {
+	background: rgba(255,0,0,0.4);
+}
+  .loadingScreen{
+      position: fixed;
+      background-color: #EEEEEE;
+      height: 100%;
+      margin: -10px;
+      width: 100%;
+      z-index: 10;
+    }
+    .loadingScreen span{
+      position: fixed;
+      top: 50%;
+      left: 50%;
+    }
+    #invisible {
+      display: none;
+    }
+    .box {
+      cursor: pointer;
+      margin: 5px 10px 5px 0px;
+      width: 270px;
+      height: 85px;
+      border-radius: 5px;
+      background-color: #52B3D9;
+      padding: 5px 5px 5px 10px;
+      line-height: 25px;
+      float: left;
+      color: #34495E;
+    }
+    .boxHeading {
+        color: #ffffff;
+        font-size: 17px;
+        font-weight: bold;
+    }
+    .showSlide .slideMenuBox{
+      width: 85px;
+      background-color: #2C3E50;
+      position: absolute;;
+      border-bottom-left-radius: 7px;
+      border-top-left-radius: 7px;
+      margin-left: 175px;
+      padding-left: 8px;
+      margin-top: -79px;
+      color: #52B3D9;
+      letter-spacing: 5px;
+      font-size: 13px;
+      opacity: 1;
+    }
+    .hideSlide .slideMenuBox{
+      width: 0px;
+      height: 0px;
+      font-size: 0px;
+      opacity: 1;
+    }
+    .slideMenuBox .fa:hover{
+      color: #C5EFF7;
+    }
+    .projectPage .btn-success{
+      margin: 15px 0px;
+      font-size: 16px;
+    }
+    .warningModal{
+      color: #D64541;
+      margin-left: 100px;
+      padding: 0px;
+      margin-top: -16px;
+      font-size: 11px;
+      margin-bottom: 3px;
+    }
+    .heading {
+      position: fixed;
+      top: 30px;
+      width: 100%;
+    }
+    .sprintDiv {
+      margin-top: 100px;
+      overflow: hidden;
+    }
+
+    .listHead{
+      color: white;
+      margin: 4px 0px 0px 11px;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .child {
+      background-color: rgba(255, 255, 255, 0.93);
+      border-radius: 3px;
+      margin-top: 20px;
+      width: 259px;
+      overflow: hidden;
+      margin: auto;
+      margin-bottom: 5px;
+      margin-top: 5px;
+      cursor: pointer;
+      padding-bottom: 7px;
+    }
+    .story_Name{
+      width: 100%;
+      padding-left: 6px;
+      float: left;
+      padding-top: 2px;
+    }
+    .parent {
+      overflow: auto;
+      overflow-x: hidden;
+      float: left;
+      max-height: 520px;
+      min-height: 60px;
+      background-color: #F0AD4E;
+      border-radius: 4px;
+      width: 272px;
+      margin: 3px;
+    }
+    .Releasable{
+      background-color: #36D7B7;
+    }
+    .backbug{
+      background-color: #EF4836;
+    }
+    .crossBtn {
+      font-size: 17px;
+      position: absolute;
+      margin-left: 260px;
+      margin-top: -4px;
+    }
+    .crossBtn:hover {
+      margin-top: -5px;
+      margin-left: 259px;
+      font-size: 19px;
+    }
+    .Releasable .crossBtn{
+      z-index: -1;
+      font-size: 0px;
+    }
+    .addMore{
+      background-color: #EEEEEE;
+      color: #888888;
+      font-size: 18px;
+      top: 50%;
+      font-weight: bold;
+    }
+    .dummy:hover{
+      box-shadow: inset 0px 0px 20px #446CB3;
+      border-radius: 5px;
+      } .addMore:hover{
+      box-shadow: inset 0px 0px 20px #BBBBBB;
+    }
+    h4{
+      margin-top: 25px;
+      margin-bottom: 3px;
+    }
+    h4 small {
+        color: grey;
+        margin-left: 10px;
+        font-weight: lighter;
+    }
+    .dummy{
+      height: 113%;
+      position: relative;
+      width: 106%;
+      margin-top: -80px;
+      margin-left: -10px;
+    }
+    .dummyBox{
+      height: 10px;
+      width: 10px;
+      background-color: red;
+    }
+    .container{
+      overflow: hidden;
+    }
+    .addNewProject .fa{
+      font-size: 20px;
+    }
