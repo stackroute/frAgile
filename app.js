@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/frAgile');
+mongoose.connect('mongodb://localhost/fragileDB');
 var db = mongoose.connection
 
 var routes = require('./routes/index');
@@ -26,7 +26,7 @@ var graph = require('./routes/graph');
 var authenticationHandler = require('./routes/authenticationHandler')(passport);
 app.use(session({
   secret:'fragile',
-  key: 'hell',
+  key: 'limber',
   cookie:{ maxAge: 360000},
   resave: false,
   saveUninitialized:false
@@ -54,15 +54,13 @@ app.use(function(req, res, next) {
   //console.log("**************** checking for authentication ************ ");
   if (req.isAuthenticated())
   {
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>",req.user.firstName);
-      app.userName = req.user.firstName + " " + req.user.lastName;
-      app.userID = req.user._id;
-    // console.log('User is authenticated');
+
+    app.userID = req.user._id;
+    app.fullName = req.user.firstName + " " + req.user.lastName;
     return next();
   }
   else
   {
-    console.log(" ************* Redirecting ******** ");
 
     return res.redirect(200,'/index.html');
   }

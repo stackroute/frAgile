@@ -75,9 +75,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'description': "",
         'listId': listId,
         'id': id,
-        'listName' : listName,
-        'userID':$scope.userID,
-        'fullName': $scope.fullName
+        'listName' : listName
       });
       $scope.storyDetails = "";
       return true;
@@ -108,7 +106,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'newListId': angular.element(event.target)[0].id,
         'storyId': elemBeingDragged[0].id
       }
-      console.log(emitData);
       if (divBeingDragged[0].id == "backlogs" || divBeingDragged[0].id == "buglists")
         socket.emit('sprint:moveFromBackbugStory', emitData)
       else
@@ -222,34 +219,36 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
 
   //To emit activity related to story move
   socket.on('sprint:storyActivity', function(data) {
-    $scope.sprint.list.forEach(function(listItem) {
-
-      if (listItem._id == data.newListId) {
-        var actData = {
-          room: 'activity:' + $stateParams.prId,
-          action: "moved",
-          projectID: $stateParams.prId,
-          user: {
-            '_id': $scope.userID,
-            'fullName': $scope.fullName
-          },
-          object: {
-            name: data.story.heading,
-            type: "Story",
-            _id: data.story._id
-          },
-          target: {
-            name: listItem.listName,
-            type: "List",
-            _id: listItem._id
+    var listName ="",
+        listId = "";
+    if(data.newListId == "backlogs" || data.newListId == "buglists")
+      listName = data.newListId.replace("b","B");
+      else{
+        $scope.sprint.list.forEach(function(listItem) {
+          if (listItem._id == data.newListId) {
+            lisId = listItem._id;
+            listName = listItem.listName;
           }
-        }
-        socket.emit('addActivity', actData);
-
+        });
       }
 
-    });
 
+    var actData = {
+      room: 'activity:' + $stateParams.prId,
+      action: "moved",
+      projectID: $stateParams.prId,
+      object: {
+        name: data.story.heading,
+        type: "Story",
+        _id: data.story._id
+      },
+      target: {
+        name: listName,
+        type: "List",
+        _id: data.story._id
+      }
+    }
+    socket.emit('addActivity', actData);
   });
 
 

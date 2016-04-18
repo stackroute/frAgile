@@ -68,7 +68,7 @@ Project.create({
   name: req.body.name,
   description: req.body.desc,
   date: Date.now(),
-  memberList :[req.body.userID]
+  memberList :[req.user._id]
 }, function(err, data) {
   if(err)
     res.send(err);

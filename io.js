@@ -7,14 +7,14 @@ var Sprint = require('./models/sprint.js');
 var Story = require('./models/story.js');
 var BackLogsBugList = require('./models/backlogBuglist.js');
 
-var app = require('./app.js');
+
+var app = require('./app.js')
 
 io.on('connection', function(socket) {
-  user = {
-    _id: app.userID,
-    'fullName': app.userName
+  var user = {
+    _id:app.userID,
+    fullName:app.fullName
   }
-  // console.log( "------------------------------------ In IO " ,app.firstName);
   socket.on('join:room', function(data) {
     //To make sure socket connects to one room only
     if (socket.lastRoom) {
@@ -193,6 +193,8 @@ io.on('connection', function(socket) {
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedTo', data);
+                socket.emit('sprint:storyActivity', data)
+
               });
             } else { //reverting changes
               console.log("Couldn't delete story", socket.id);
@@ -218,6 +220,8 @@ io.on('connection', function(socket) {
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedTo', data);
+                socket.emit('sprint:storyActivity', data)
+
               });
             } else { //reverting changes
               console.log("Couldn't delete story", socket.id);
@@ -246,6 +250,8 @@ io.on('connection', function(socket) {
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedFrom', data);
+                socket.emit('sprint:storyActivity', data)
+
               });
             } else { //reverting changes
               console.log("Couldn't delete story", socket.id);
@@ -269,6 +275,8 @@ io.on('connection', function(socket) {
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedFrom', data);
+                socket.emit('sprint:storyActivity', data)
+
               });
             } else { //reverting changes
               console.log("Couldn't delete story", socket.id);
@@ -371,6 +379,7 @@ io.on('connection', function(socket) {
   });
 
   socket.on('addActivity', function(data) {
+    data.user = user;
     Activity.addEvent(data, function(actData) {
       io.to(data.room).emit('activityAdded', actData);
     });
@@ -425,14 +434,16 @@ io.on('connection', function(socket) {
   })
 
 socket.on('activity:addMember', function(data) {
-    console.log('Add Member: Socket Request');
     Project.addMember(data.projectId, data.memberList, function(err, doc) {
       if (!err) {
         data.memberList.forEach(function(memberId){
           User.find({'_id': memberId}).exec(function(err, userData){
             if(!err)
             io.to(data.room).emit('activity:memberAdded', userData[0]);
-          })
+          });
+          User.addProjectToUser(memberId,data.projectId,function(data){
+
+          });
         })
       }
     })
@@ -445,7 +456,10 @@ socket.on('activity:addMember', function(data) {
         User.find({'_id': data.memberId}).exec(function(err, userData){
           if(!err)
             io.to(data.room).emit('activity:memberRemoved', userData[0]);
-        })
+        });
+        User.removeProjectfromUser(memberId,data.projectId,function(data){
+
+        });
       }
     })
   })

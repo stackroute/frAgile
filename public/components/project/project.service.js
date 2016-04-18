@@ -1,29 +1,27 @@
 angular.module('fragileApp').factory('projectService', ['$http', 'Socket',function($http,Socket) {
 
   return {
-    getUserProjects: function(userID) {
-      var url = '/user/projects?id=' + userID;
+    getUserProjects: function() {
+      var url = '/user/projects?id=' ;
       return $http.get(url);
     },
-    addProject: function(name, desc,userID) {
+    addProject: function(name, desc) {
       var req = {
         method: 'POST',
         url: '/project',
         data: {
           name: name,
           desc: desc,
-          userID: userID
         }
       }
       return $http(req);
     },
-    addProjectToUser: function(userID, projectID) {
+    addProjectToUser: function( projectID) {
       var req = {
         method: 'POST',
         url: '/user/addProject',
         data: {
           projectID: projectID,
-          userID: userID
         }
       }
       return $http(req);

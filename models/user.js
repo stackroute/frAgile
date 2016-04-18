@@ -47,7 +47,7 @@ userSchema.statics.addUser = function(userDetails, callback) {
 
 userSchema.statics.addProjectToUser = function(userID, projectID, callback) {
   this.findByIdAndUpdate(userID, {
-    $push: {
+    $addToSet: {
       'projects': projectID
     },
     $set: {
