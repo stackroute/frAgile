@@ -56,12 +56,14 @@ app.use(function(req, res, next) {
   //console.log("**************** checking for authentication ************ ");
   if (req.isAuthenticated())
   {
+
     app.userID = req.user._id;
     app.fullName = req.user.firstName + " " + req.user.lastName;
     return next();
   }
   else
   {
+
     return res.redirect(200,'/index.html');
   }
 });

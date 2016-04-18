@@ -4,6 +4,11 @@
         <h4>{{project.name}}<small>{{project.description}}</small></h4>
           <div class="boxContainer" ng-repeat= "release in project.release" >
             <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,project.name, release._id,release.name,release.description)">
+            <div class="slideMenuBox">
+              <i class="fa fa-trash" ng-click = "archiveFun(project._id, release._id,project.name,release.name)"></i>
+              <i class="fa fa-pencil" ng-click = "showEdit=true; newReleaseName= release.name; newReleaseDetails = release.description; newReleaseDate=release.releaseDate"></i>
+              <i class="fa fa-star" ng-click = "starFun(release._id)"></i>
+            </div>
               <div class="boxHeading">
                 {{release.name}}
               </div>
@@ -17,11 +22,6 @@
               </div>
               <!-- <div class="dummy" ui-sref="sprint({ prId : '57026055772a712a164d70bb', sprintID: '57026bfd140731cc1810b5c0'})"> -->
               <div class="dummy" ui-sref="release({ prId : project._id, releaseID: release._id})">
-              </div>
-              <div class="slideMenuBox">
-                <i class="fa fa-trash" ng-click = "archiveFun(project._id, release._id,project.name,release.name)"></i>
-                <i class="fa fa-pencil" ng-click = "showEdit=true; newReleaseName= release.name; newReleaseDetails = release.description; newReleaseDate=release.releaseDate"></i>
-                <i class="fa fa-star" ng-click = "starFun(release._id)"></i>
               </div>
 
                 <div class="backgroundBlack" ng-class="{'showEdit':showEdit,'hideEdit':!showEdit}" ng-click = "showEdit=false">

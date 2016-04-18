@@ -7,6 +7,7 @@ var Sprint = require('./models/sprint.js');
 var Story = require('./models/story.js');
 var BackLogsBugList = require('./models/backlogBuglist.js');
 
+
 var app = require('./app.js')
 
 io.on('connection', function(socket) {
@@ -457,7 +458,6 @@ socket.on('activity:addMember', function(data) {
             io.to(data.room).emit('activity:memberRemoved', userData[0]);
         });
         User.removeProjectfromUser(data.memberId,data.projectId,function(data){
-
         });
       }
     })

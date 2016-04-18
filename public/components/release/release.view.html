@@ -3,8 +3,13 @@
     <div class="row">
 
       <h4>{{release.name}}<small>{{release.description}}</small></h3>
-        <div class="boxContainer" ng-repeat= "spr in sprints">
-          <div class="box"  ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" id="{{spr._id}}" >
+        <div class="boxContainer" ng-repeat= "spr in sprints"><!-- TODO: Changed for Testing -->
+          <div class="box"  ng-class="{'hideSlide':!hovering,'showSlide':hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" id="{{spr._id}}" >
+            <div class="slideMenuBox">
+              <i class="fa fa-trash" ng-click="archiveFun(release.id, spr._id)"></i>
+              <i class="fa fa-pencil" ng-click = "showEdit=true; newSprintName= spr.name; newSprintDetails = spr.description; newSprintStartDate = spr.startDate;  newSprintEndDate = spr.endDate"></i>
+              <i class="fa fa-star" ng-click="starFun(release.id)"></i>
+            </div>
             <div class="boxHeading">
               {{spr.name}}
             </div>
@@ -15,11 +20,6 @@
               {{spr.startDate | date:'dd-MMM-yyyy'}} to {{spr.endDate | date:'dd-MMM-yyyy'}}
             </div>
             <div class="dummy" ui-sref="sprint({ prId : projectID, releaseID:release.id, sprintID: spr._id})">
-            </div>
-            <div class="slideMenuBox">
-              <i class="fa fa-trash" ng-click="archiveFun(release.id, spr._id)"></i>
-              <i class="fa fa-pencil" ng-click = "showEdit=true; newSprintName= spr.name; newSprintDetails = spr.description; newSprintStartDate = spr.startDate;  newSprintEndDate = spr.endDate"></i>
-              <i class="fa fa-star" ng-click="starFun(release.id)"></i>
             </div>
             <div class="backgroundBlack" ng-class="{'showEdit':showEdit,'hideEdit':!showEdit}" ng-click = "showEdit=false">
 
