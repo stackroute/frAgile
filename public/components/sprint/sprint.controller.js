@@ -108,6 +108,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'newListId': angular.element(event.target)[0].id,
         'storyId': elemBeingDragged[0].id
       }
+      console.log(emitData);
       if (divBeingDragged[0].id == "backlogs" || divBeingDragged[0].id == "buglists")
         socket.emit('sprint:moveFromBackbugStory', emitData)
       else
