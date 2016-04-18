@@ -7,8 +7,14 @@ var Sprint = require('./models/sprint.js');
 var Story = require('./models/story.js');
 var BackLogsBugList = require('./models/backlogBuglist.js');
 
-io.on('connection', function(socket) {
+var app = require('./app.js');
 
+io.on('connection', function(socket) {
+  user = {
+    _id: app.userID,
+    'fullName': app.userName
+  }
+  // console.log( "------------------------------------ In IO " ,app.firstName);
   socket.on('join:room', function(data) {
     //To make sure socket connects to one room only
     if (socket.lastRoom) {
@@ -46,10 +52,7 @@ io.on('connection', function(socket) {
           room: "activity:" + data.projectID,
           action: "added",
           projectID: data.projectID,
-          user: {
-            '_id': data.userID,
-            'fullName': data.fullName
-          },
+          user: user,
           object: {
             name: data.name,
             type: "Release",
@@ -126,10 +129,7 @@ io.on('connection', function(socket) {
               room: 'activity:' + data.projectId,
               action: "added",
               projectID: data.projectId,
-              user: {
-                '_id': data.userID,
-                'fullName': data.fullName
-              },
+              user: user,
               object: {
                 name: data.name,
                 type: "Sprint",
@@ -301,10 +301,7 @@ io.on('connection', function(socket) {
           room: data.activityRoom,
           action: "added",
           projectID: data.projectId,
-          user: {
-            '_id': data.userID,
-            'fullName': data.fullName
-          },
+          user: user,
           object: {
             name: data.heading,
             type: "Story",
@@ -392,10 +389,7 @@ io.on('connection', function(socket) {
           room: data.activityRoom,
           action: "deleted",
           projectID: data.projectId,
-          user: {
-            '_id': data.userID,
-            'fullName': data.fullName
-          },
+          user: user,
           object: {
             name: data.releaseName,
             type: "Release",

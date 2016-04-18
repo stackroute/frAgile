@@ -2,7 +2,6 @@ var Project = require('../models/project.js');
 
 var mongoose = require('mongoose'),
   userSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     firstName: String,
     lastName: String,
     createdDate: Date,
@@ -14,7 +13,19 @@ var mongoose = require('mongoose'),
     projects: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Project'
-    }]
+    }],
+    	facebook: {
+    		id: String,
+    		token: String,
+    		email: String,
+    		name: String
+    	},
+    	google: {
+    		id: String,
+    		token: String,
+    		email: String,
+    		name: String
+    	}
   });
 
 userSchema.statics.addUser = function(userDetails, callback) {
