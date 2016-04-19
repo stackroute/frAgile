@@ -104,6 +104,15 @@ userSchema.statics.getUserId = function(email, callback) {
   });
 }
 
+userSchema.statics.getUserEmail = function(email, callback) {
+  return this.find({
+    'email': RegExp(email)
+  }).exec(function(err, data) {
+    if (err) callback(err, null);
+    else callback(null, data);
+  });
+}
+
 userSchema.statics.getProjects = function(userID, callback) {
   this.findById(userID).populate("projects").exec(function(err, data) {
     if (err) callback(err)

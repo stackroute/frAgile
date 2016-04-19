@@ -80,6 +80,11 @@ angular
       getUserId: function(userEmailId){
         var url = "/user/getUserId?email=" + userEmailId;
         return $http.get(url);
+      },
+
+      getUsers: function(searchText){
+        var url = "/user/getUsers?email=" + searchText;
+        return $http.get(url);
       }
     }
 

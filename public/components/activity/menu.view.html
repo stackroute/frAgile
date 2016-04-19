@@ -30,10 +30,11 @@
               </div>
               <div class="modal-body">
                 <div>
-                  <input class="txt-add-members" id="txtAddMember" name="txtAddMember" type="text" placeholder="e.g. you@fragile.com" ng-model="members" required>
+                  <autocomplete ng-model="members" data="users" on-type="updateSearch" attr-placeholder="Enter user email..."></autocomplete>
+                  <!-- <input class="txt-add-members" id="txtAddMember" name="txtAddMember" type="text" placeholder="e.g. you@fragile.com" ng-model="members" required> -->
                   <button class="btn btn-default" ng-click="addMember()"><span class="glyphicon glyphicon-plus"></span></button>
                 </div>
-                <p class="desc">Add a member to Fragile by their email address.</p>
+                <p class="desc">Add a member to Limber by their email address.</p>
                 <b>{{addedMembers}}</b>
               </div>
               <div class="modal-footer">
