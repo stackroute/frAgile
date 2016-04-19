@@ -111,6 +111,9 @@ module.exports = function(passport){
 		    				var newUser = new User();
 		    				newUser.facebook.id = profile.id;
 		    				newUser.facebook.token = accessToken;
+								newUser.firstName=profile.name.givenName;
+								newUser.lastName=profile.name.familyName;
+								newUser.email=profile.emails[0].value;
 		    				newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
 		    				newUser.facebook.email = profile.emails[0].value;
 
@@ -144,6 +147,10 @@ module.exports = function(passport){
 		    				var newUser = new User();
 		    				newUser.google.id = profile.id;
 		    				newUser.google.token = accessToken;
+								a=profile.displayName.split(" ");
+								newUser.firstName=a[0];
+								newUser.lastName=a[a.length-1];
+								newUser.email=profile.emails[0].value;
 		    				newUser.google.name = profile.displayName;
 		    				newUser.google.email = profile.emails[0].value;
 

@@ -1,7 +1,9 @@
-<div ng-init="getSprints()">
+<div id="mainSprint" ng-init="getSprints()">
   <div >
     <div class="topRow container">
-      <h3 >{{sprint.name}}<small> {{sprint.description}}</small> <br/> <small>{{sprint.startDate|dateSuffix}}  - {{sprint.endDate |dateSuffix}}</small>
+      <h3 class="pull-left">{{sprint.name}}<small> {{sprint.description}}</small> <br/> <small>{{sprint.startDate|dateSuffix}}  - {{sprint.endDate |dateSuffix}}</small></h3>
+
+      <div class="pull-right"><h3 class="toggleSprintText pull-left" ng-click="toggleScroll()">{{scrollText}}</h3><span class="toggleSprintIcon pull-left" ng-class="scrollClass"</span></div>
     </div>
   </div>
   <div class="sprintDiv" ng-style="{width: sprintWidth}">

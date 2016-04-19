@@ -80,12 +80,11 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'description': "",
         'listId': listId,
         'id': id,
-        'listName' : listName
+        'listName': listName
       });
       $scope.storyDetails = "";
       return true;
-    }
-    else {
+    } else {
       return false
     }
   }
@@ -224,18 +223,18 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
 
   //To emit activity related to story move
   socket.on('sprint:storyActivity', function(data) {
-    var listName ="",
-        listId = "";
-    if(data.newListId == "backlogs" || data.newListId == "buglists")
-      listName = data.newListId.replace("b","B");
-      else{
-        $scope.sprint.list.forEach(function(listItem) {
-          if (listItem._id == data.newListId) {
-            lisId = listItem._id;
-            listName = listItem.listName;
-          }
-        });
-      }
+    var listName = "",
+      listId = "";
+    if (data.newListId == "backlogs" || data.newListId == "buglists")
+      listName = data.newListId.replace("b", "B");
+    else {
+      $scope.sprint.list.forEach(function(listItem) {
+        if (listItem._id == data.newListId) {
+          lisId = listItem._id;
+          listName = listItem.listName;
+        }
+      });
+    }
 
 
     var actData = {
@@ -255,6 +254,22 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     }
     socket.emit('addActivity', actData);
   });
+
+  $scope.scrollText = "Go to Buglists";
+  $scope.scrollClass = "fa fa-chevron-right";
+  $scope.toggleScroll = function() {
+    if ($scope.scrollText == "Go to Buglists") {
+      $('#mainSprint').css('margin-left', "-" + parseInt($scope.sprintWidth)/2.95 + "px");
+      // console.log('margin-left', "-" + parseInt($scope.sprintWidth)/2.95 + "px");
+      $scope.scrollClass = "fa fa-chevron-left";
+      $scope.scrollText = "Go to Backlogs";
+    } else {
+      $('#mainSprint').css('margin-left', '0');
+      $scope.scrollClass = "fa fa-chevron-right";
+      $scope.scrollText = "Go to Buglists";
+    }
+
+  }
 
 
 

@@ -49,4 +49,13 @@ router.get('/getUserId', function(req, res, next) {
   }
 })
 
+router.get('/getUsers', function(req, res, next){
+  if(req.query.email){
+    User.getUserEmail(req.query.email, function(err, data){
+      if(!err){
+        res.send(data);}
+    })
+  }
+})
+
 module.exports = router;
