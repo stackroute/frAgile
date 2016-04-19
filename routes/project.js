@@ -40,13 +40,10 @@ if (req.query.id) {
 
 router.get('/', function(req, res, next) {
 //releaseId = req.query.id.replace("/","");
-if (!req.query.id) {
-  Project.find().exec(function(err, projectsList) {
-    if (err) {
-      return res.status(500).json(err);
-    }
-    res.status(200).json(projectsList)
-  });
+ if(req.query.sprintID){
+  Project.find({"release.sprints":{$in: [req.query.sprintID]}},{"release" : 0}).exec(function(err,data){
+    res.send(data);
+  })
 } else {
   projectId = req.query.id.replace("/", "");
   Project.findProj(projectId, function(err, doc) {

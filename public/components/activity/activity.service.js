@@ -5,7 +5,9 @@ var prepositionsMap = {
   "commented": " on ",
   "moved": " to ",
   "changed": " to ",
-  "deleted": " from "
+  "deleted": " from ",
+  "changed" : " to ",
+  "removed" : " from "
 };
 
 angular

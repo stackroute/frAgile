@@ -54,7 +54,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       controllerAs: 'modalContr'
     });
   }
-  $scope.editRelease = function(newReleaseName,newReleaseDetails,newReleaseDate,creationDate,prId,relId) {
+  $scope.editRelease = function(newReleaseName,newReleaseDetails,newReleaseDate,creationDate,prId,relId,oldName) {
       if (newReleaseDate != null && creationDate != null && newReleaseName != "") {
       var dt = new Date(newReleaseDate);
       var crDt = new Date(creationDate);
@@ -65,7 +65,8 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
         "name": newReleaseName,
         "description": newReleaseDetails,
         "creationDate": crDt,
-        "releaseDate": dt
+        "releaseDate": dt,
+        "oldReleaseName" : oldName
       });
       return true;
     }

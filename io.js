@@ -79,14 +79,32 @@ io.on('connection', function(socket) {
       creationDate: data.creationDate,
       releaseDate: data.releaseDate
     };
-    console.log("--------------------------");
-    console.log(release);
-    console.log("--------------------------");
+
     Project.updateRelease(data.projectId, data.releaseId, release, function(err, doc) {
       if (!err) {
         release._id = data.releaseId;
         release.prId = data.projectId;
         io.to(data.room).emit('project:releaseEdited', release);
+
+        var actData = {
+          room: "activity:" + data.projectId,
+          action: "changed",
+          projectID: data.projectId,
+          user: user,
+          object: {
+            name: data.oldReleaseName,
+            type: "Release",
+            _id: data.releaseId
+          },
+          target: {
+            name: release.name,
+            type: "Release",
+            _id: data.releaseId
+          }
+        }
+        Activity.addEvent(actData, function(data) {
+          io.to(actData.room).emit('activityAdded', data);
+        });
       }
     });
 
@@ -98,13 +116,31 @@ io.on('connection', function(socket) {
       startDate: data.startDate,
       description: data.description,
     };
-    console.log("--------------------------");
-    console.log(sprint);
-    console.log("--------------------------");
+
     Sprint.updateSprint(data.sprintId, sprint, function(err, doc) {
       if (!err) {
         sprint._id=data.sprintId;
         io.to(data.room).emit('release:sprintEdited', sprint);
+
+        var actData = {
+          room: "activity:" + data.projectID,
+          action: "changed",
+          projectID: data.projectID,
+          user: user,
+          object: {
+            name: data.oldName,
+            type: "Sprint",
+            _id: data.sprintId
+          },
+          target: {
+            name: data.name,
+            type: "Sprint",
+            _id: data.sprintId
+          }
+        }
+        Activity.addEvent(actData, function(data) {
+          io.to(actData.room).emit('activityAdded', data);
+        });
       }
     });
 
@@ -429,7 +465,26 @@ io.on('connection', function(socket) {
           releaseId: data.releaseId,
           sprintId: data.sprintId
         });
-      console.log('Delete Sprint: ', doc);
+
+        var actData = {
+          room: "activity:" + data.projectId,
+          action: "deleted",
+          projectID: data.projectId,
+          user: user,
+          object: {
+            name: data.sprintName,
+            type: "Sprint",
+            _id: data.sprintId
+          },
+          target: {
+            name: data.releaseName,
+            type: "Release",
+            _id: data.releaseId
+          }
+        }
+        Activity.addEvent(actData, function(data) {
+          io.to(actData.room).emit('activityAdded', data);
+        });
     })
   })
 
@@ -450,15 +505,35 @@ socket.on('activity:addMember', function(data) {
   })
 
   socket.on('activity:removeMember', function(data) {
-    console.log('Remove Member: Socket Request');
     Project.removeMember(data.projectId, data.memberId, function(err, doc) {
       if (!err) {
         User.find({'_id': data.memberId}).exec(function(err, userData){
           if(!err)
             io.to(data.room).emit('activity:memberRemoved', userData[0]);
+            User.removeProjectfromUser(data.memberId,data.projectId,function(subDoc){
+              console.log(doc);
+              var actData = {
+                room: data.room,
+                action: "removed",
+                projectID: data.projectId,
+                user: user,
+                object: {
+                  name: userData[0].firstName + " " + userData[0].lastName,
+                  type: "User",
+                  _id: data.memberId
+                },
+                target: {
+                  name: doc.name,
+                  type: "Project",
+                  _id: data.projectId
+                }
+              }
+              Activity.addEvent(actData, function(data) {
+                io.to(actData.room).emit('activityAdded', data);
+              });
+            });
         });
-        User.removeProjectfromUser(data.memberId,data.projectId,function(data){
-        });
+
       }
     })
   })

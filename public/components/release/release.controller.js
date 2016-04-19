@@ -17,10 +17,8 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
   });
 
     socket.on('release:sprintEdited', function(sprintData) {
-      console.log("--------------");
       $scope.sprints.forEach(function(item, itmIndex) {
         if(item._id == sprintData._id){
-          console.log($scope.sprints[itmIndex]);
           $scope.sprints[itmIndex].name = sprintData.name;
           $scope.sprints[itmIndex].description = sprintData.description;
           $scope.sprints[itmIndex].startDate = sprintData.startDate;
@@ -29,33 +27,12 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
       });
       //console.log(releaseData);
     });
-    
+
   socket.on('sprintDeleted', function(sprintData) {
     $scope.sprints.forEach(function(sprint) {
       if (sprint._id == sprintData.sprintId) {
         var sprintName = sprint.name; //For activity
         $scope.sprints.pop();
-        //Emitting activity data to be added
-        var data = {
-          room: 'activity:' + $scope.projectID,
-          action: "deleted",
-          projectID: $rootScope.projectID,
-          user: {
-            '_id': $scope.userID,
-            'fullName': $scope.fullName
-          },
-          object: {
-            name: sprintName,
-            type: "Sprint",
-            _id: sprintData.sprintId
-          },
-          target: {
-            name: $rootScope.projectName,
-            type: "Project",
-            _id: $rootScope.projectID
-          }
-        }
-        socket.emit('addActivity', data);
       }
     })
   })
@@ -73,7 +50,7 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
       controller: 'modalReleaseController',
     });
   }
-  $scope.editSprint = function(newSprintName,newSprintDetails,newSprintStartDate,newSprintEndDate,sprId) {
+  $scope.editSprint = function(newSprintName,newSprintDetails,newSprintStartDate,newSprintEndDate,sprId,oldName) {
     if (newSprintStartDate != "") {
       console.log("newSprintStartDate is not null it is -" + newSprintStartDate +"-");
     }
@@ -86,7 +63,9 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
         "name": newSprintName,
         "description": newSprintDetails,
         "startDate": newSprintStartDate,
-        "endDate": newSprintEndDate
+        "endDate": newSprintEndDate,
+        "oldName": oldName,
+        "projectID" : $scope.projectID
       });
       return true;
     }
@@ -110,15 +89,16 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
 
   };
 
-  $scope.archiveFun = function(releaseId, sprintId) {
+  $scope.archiveFun = function(releaseId, sprintId,relName,sprName) {
     // console.log("Release: ", releaseId);
     socket.emit('deleteSprint', {
       'room': $scope.roomName,
       'projectId': $rootScope.projectID,
       'releaseId': releaseId,
-      'sprintId': sprintId
+      'sprintId': sprintId,
+      'releaseName':relName,
+      'sprintName' : sprName
     });
-    console.log('Release Controller: ', $rootScope.projectID, releaseId, sprintId);
   };
 
   $scope.editFun = function(rel) {

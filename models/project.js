@@ -64,20 +64,18 @@ projectSchema.statics.addMember = function(projectId, memberId, callback) {
 }
 
 projectSchema.statics.removeMember = function(projectId, memberId, callback) {
-  this.update({
-      "_id": projectId
-    }, {
+  this.findByIdAndUpdate(projectId, {
       $pull: {
         "memberList": memberId
       }
     }, {
+      new: true,
       upsert: true
     })
     .exec(function(err, doc) {
       if (err) {
         callback(err, null);
       } else {
-
         callback(null, doc);
       }
     });
@@ -106,7 +104,7 @@ projectSchema.statics.updateProject = function(projectId, newProject, callback) 
 }
 
 projectSchema.statics.updateRelease = function(projectId, releaseId, newRelease, callback) {
-  this.update({
+  this.findOneAndUpdate({
       "_id": projectId,
       "release._id": releaseId
     }, {
