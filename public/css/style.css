@@ -369,7 +369,7 @@ position: absolute;
   padding-bottom: 7px;
 }
 .backbug .child{
-  background-color: rgba(244, 80, 80, 0.31);
+  background-color: rgba(255, 0, 0, 0.31);
 }
 .drag-dummy {
   background-color: grey;
