@@ -5,10 +5,8 @@ module.exports = function(passport){
   console.log("called authhandler");
 	//sends successful login state back to angular
 	router.get('/success', function(req, res){
-		//res.send({error:null});
-    	res.send({ error: "Registered Sucessfully"});
-    console.log("In success");
-    console.log(req.body);
+		res.send({error:null});
+    	//res.send({redirect: '/home'});
   //  res.status(200).json();
 	});
 
@@ -17,13 +15,15 @@ module.exports = function(passport){
 		res.send({ error: "Invalid email id or password"});
 		// req.session.user=null;
 	});
-	router.use('/login',function(req,res,next) {
-  //  console.log(req.body);
-  //  console.log(passport);
-    next();
-  });
+
+	// router.use('/login',function(req,res,next) {
+  //     console.log('Login Middleware',req.body);
+  // //  console.log(passport);
+  //   next();
+  // });
+
 	router.post('/login', passport.authenticate('local-login', {
-		successRedirect: '/home.html',
+		successRedirect: '/auth/success',
 		failureRedirect: '/auth/failure'
 	}));
 
@@ -33,7 +33,7 @@ module.exports = function(passport){
     next();
   });
 	router.post('/register', passport.authenticate('sign-up', {
-		successRedirect: '/index.html',
+		successRedirect: '/auth/success',
 		failureRedirect: '/auth/failure'
 	}));
 

@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/fragileDB');
+mongoose.connect('mongodb://localhost/frAgile');
 var db = mongoose.connection
 
 var routes = require('./routes/index');
@@ -33,6 +33,8 @@ app.use(session({
 }));
 
 
+var initPassport = require('./passport-init');
+initPassport(passport);
 
 //
 //Add socket.js link here
@@ -48,8 +50,7 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'authFolder')));
 app.use('/', routes);
 app.use('/auth',authenticationHandler);
-var initPassport = require('./passport-init');
-initPassport(passport);
+
 // view engine setup
 
 app.use(function(req, res, next) {
@@ -67,10 +68,10 @@ app.use(function(req, res, next) {
     return res.redirect(200,'/index.html');
   }
 });
-app.use(function(req,res,next){
-  console.log("Printing session user"+req.session.passport.user);
-  next();
-});
+// app.use(function(req,res,next){
+//   console.log("Printing session user"+req.session.passport.user);
+//   next();
+// });
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

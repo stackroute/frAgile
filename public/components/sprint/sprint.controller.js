@@ -84,7 +84,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     }
   }
   $scope.gotoTop = function(id) {
-    angular.element("#" + id)[0].scrollTop = 0;
+    angular.element("#"+id)[0].scrollBottom=0;
   };
 
 

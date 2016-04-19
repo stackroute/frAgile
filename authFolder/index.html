@@ -2,61 +2,168 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <!-- Mobile viewport optimized -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Limber</title>
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="assets/css/form-elements.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.5/handlebars.min.js"></script>
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-    <!-- Bootstrap CSS -->
-    <link href="stylesheets/lib/bootstrap.min.css" rel="stylesheet">
-    <link href="stylesheets/lib/bootstrap-glyphicons.css" rel="stylesheet">
 
-    <!--  CSS -->
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500,700' rel='stylesheet' type='text/css'>
 
-    <!-- <link rel="stylesheet" href="stylesheets/style.css" media="screen" title="no title" charset="utf-8"> -->
-    <link href="../public/css/style.css" rel="stylesheet">
     <title>fragile</title>
   </head>
-  <body ng-app="frAgile">
+  <body ng-app="frAgile" ng-controller="authController">
 
-    <div>
+    <div class="top-content">
 
-    <div ng-view>
+        <div class="inner-bg">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 text">
+                        <h1><strong>Limber</strong></h1>
+                        <div class="description">
+                          <p>
+                            <h3><i><strong>Manage your projects in a better way</strong><i></h3>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-5">
+
+                      <div class="form-box">
+                        <div class="form-top">
+                          <div class="form-top-left">
+                            <h3>Login</h3>
+                              <p>Enter username and password to log on:</p>
+                          </div>
+                          <div class="form-top-right">
+                            <i class="fa fa-key"></i>
+                          </div>
+                          </div>
+                          <div class="form-bottom">
+                        <form ng-submit="passportLogin()">
+                          <div class="form-group">
+                            <label class="sr-only" for="form-email">Email</label>
+                              <input type="text" name="form-username"  ng-model="user.email" placeholder="Email..." class="form-username form-control" id="form-email">
+                            </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-password">Password</label>
+                              <input type="password" name="form-password" ng-model="user.password" placeholder="Password..." class="form-password form-control" id="form-password">
+                            </div>
+                            <button type="submit"  class="btn">Sign in!</button>
+                        </form>
+                      </div>
+                    </div>
+
+                  <div class="social-login">
+                        <h3>...or login with:</h3>
+                        <div class="social-login-buttons">
+                          <a href="/auth/facebook" class="btn btn-link-1 btn-link-1-facebook" >
+                            <i class="fa fa-facebook"></i> Facebook
+                          </a>
+
+                          <a href="/auth/google" class="btn btn-link-1 btn-link-1-google-plus" >
+                            <i class="fa fa-google-plus"></i> Google Plus
+                          </a>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <div class="col-sm-1 middle-border"></div>
+                    <div class="col-sm-1"></div>
+
+                    <div class="col-sm-5">
+
+                      <div class="form-box">
+                        <div class="form-top">
+                          <div class="form-top-left">
+                            <h3>Sign up</h3>
+                              <p>Fill in the form below to get instant access:</p>
+                          </div>
+                          <div class="form-top-right">
+                            <i class="fa fa-pencil"></i>
+                          </div>
+                          </div>
+                          <div class="form-bottom">
+                        <form ng-submit="register()" class="registration-form">
+                          <div class="form-group">
+                            <label class="sr-only" for="form-first-name">First name</label>
+                              <input type="text" name="form-first-name" placeholder="First name..." ng-model="user.firstName" class="form-first-name form-control" id="form-first-name">
+                            </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-last-name">Last name</label>
+                              <input type="text" name="form-last-name" placeholder="Last name..." ng-model="user.lastName" class="form-last-name form-control" id="form-last-name">
+                            </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-email">Email</label>
+                              <input type="text" name="form-email" placeholder="Email..." ng-model="user.email" class="form-email form-control" id="form-email">
+                            </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-password">Password</label>
+                              <input type="password" name="form-password" placeholder="Password..." ng-model="user.password" class="form-email form-control" id="form-password">
+                            </div>
+                            <button type="submit" class="btn" >Sign me up!</button>
+                        </form>
+                      </div>
+                      </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
     </div>
-    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <div class="row">
+
+          <div class="col-sm-8 col-sm-offset-2">
+            <div class="footer-border"></div>
+            <p>Made by Limber Team at <a href="http://limber.com" target="_blank"><strong>Limber</strong></a>
+              having a lot of fun. <i class="fa fa-smile-o"></i></p>
+          </div>
+
+        </div>
+      </div>
+    </footer>
+
 
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
     <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.17/angular-ui-router.js"></script> -->
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.min.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.5.js"></script>
+    <script src="assets/js/jquery-1.11.1.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery.backstretch.min.js"></script>
+    <script src="assets/js/scripts.js"></script>
     <!-- <script type="text/javascript" src='lib/angular.min.js'></script>
     <script type="text/javascript" src='lib/angular-route.min.js'></script>
     <script type="text/javascript" src="lib/angular-cookies.min.js"></script> -->
     <script src="app.js"></script>
     <script type="text/javascript" src='login/routeProvider.js'></script>
     <script src="/login/authController.js"></script>
-    <!-- <script src="/components/project/project.service.js"></script>
-    <script src="/components/project/project.route.js"></script>
-    <script src="/components/project/project.controller.js"></script>
-    <script src="/components/sprint/sprint.service.js"></script>
-    <script src="/components/sprint/sprint.route.js"></script>
-    <script src="/components/sprint/sprint.controller.js"></script>
-    <script src="/components/release/release.service.js"></script>
-    <script src="/components/release/release.route.js"></script>
-    <script src="/components/release/release.controller.js"></script>
-    <script src="/components/project/project.modal.controller.js"></script> -->
 
     <!-- Bootstrap JS -->
-    <!-- <script src="public/js/lib/bootstrap.min.js"></script> -->
 
   </body>
 </html>
