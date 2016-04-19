@@ -27,7 +27,7 @@ var authenticationHandler = require('./routes/authenticationHandler')(passport);
 app.use(session({
   secret:'fragile',
   key: 'limber',
-  cookie:{ maxAge: 360000},
+  cookie:{ maxAge: 36000000},
   resave: false,
   saveUninitialized:false
 }));

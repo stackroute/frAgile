@@ -10,21 +10,27 @@ h4 {
   font-weight: bold;
 }
 h3 {
-  font-size: 23px;
+    font-size: 19px;
+    font-weight: 600;
 }
 .container-fluid{
   position: fixed;
   width: 100%;
 }
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
+}
+.parent ::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+  bottom: 20px;
 }
 
 /* Track */
 
 ::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px #F8FCFB;
   -webkit-border-radius: 10px;
   border-radius: 10px;
 }
@@ -34,8 +40,11 @@ h3 {
 ::-webkit-scrollbar-thumb {
   -webkit-border-radius: 10px;
   border-radius: 10px;
-  background: #C0392B;
-  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
+  background: #527D73;
+  -webkit-box-shadow: inset 0 0 6px #527D73;
+}
+.parent ::-webkit-scrollbar-thumb {
+  background: #777777;
 }
 .top-header {
   padding: 0;
@@ -43,6 +52,67 @@ h3 {
 .logo{
   width:30px;
 }
+.btn-success {
+    background-color: #63D2B8;
+    border: 1px solid rgba(83, 127, 117, 0.4);
+    line-height: 16px;
+    border-bottom: 4px solid #537F75;
+    font-weight: bold;
+        border-radius: 3px;
+}
+.btn-success:hover {
+    background-color: #3BCCAA;
+    border: 1px solid rgba(83, 127, 117, 0.4);
+    border-bottom: 4px solid #537F75;
+}
+.btn-danger {
+    color: #fff;
+    font-weight: bold;
+    background-color: #E6625E;
+    border-color: rgba(113, 60, 59, 0.36);
+    line-height: 16px;
+    border-bottom: 4px solid #713C3B;
+}
+.btn-danger:hover {
+    background-color: #CC4C49;
+    border-color: rgba(113, 60, 59, 0.36);
+    border-bottom: 4px solid #713C3B;
+}
+
+.btn-primary {
+    color: #fff;
+    font-weight: bold;
+    background-color: #36A5F1;
+    border-color: rgba(26, 67, 95, 0.28);
+    line-height: 16px;
+    border-bottom: 4px solid #1F5477;
+}
+.btn-primary:hover {
+  background-color: #0E8DE4;
+  border-color: rgba(26, 67, 95, 0.28);
+  border-bottom: 4px solid #1F5477;
+}
+.modal.in .modal-dialog {
+    top: 32px;
+  }
+  .modal-header {
+    padding: 10px 16px 10px 15px;
+    background-color: rgb(110, 167, 154);
+     border-bottom: 0;
+}
+.form-control {
+    border: 0px solid #ccc;
+    border-bottom: 2px solid rgba(82, 125, 115, 0.52);
+    box-shadow: 0px;
+    border-radius: 5px;
+    padding-bottom: 0px;
+    margin-top: -4px;
+    -webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0);
+}
+  .close{
+    opacity: .5;
+    margin-top: -4px;
+  }
 .loadingScreen {
   position: fixed;
   background-color: #EEEEEE;
@@ -56,6 +126,10 @@ h3 {
   top: 50%;
   left: 50%;
 }
+.addLst {
+    font-size: 21px;
+    color: #78968F;
+}
 #invisible {
   display: none;
 }
@@ -65,11 +139,11 @@ h3 {
   width: 270px;
   height: 85px;
   border-radius: 5px;
-  background-color: rgb(82, 125, 115);
+  background-color: rgba(82, 125, 115, 0.81);
   padding: 5px 5px 5px 10px;
   line-height: 25px;
   float: left;
-  color: #C8E8E1;
+  color: #E5FFF9;
 }
 .box:hover {
   box-shadow: inset 0px 0px 20px rgba(81, 121, 111, 0.83);
@@ -96,7 +170,10 @@ h3 {
       border-top: 7px solid #63E6CB;
 }
 .editSprint{
-  height: 207px;
+  height: 203px;
+}
+.editRelease {
+    height: 162px;
 }
 .editRelease textarea, .editSprint textarea{
   max-width: 100%;
@@ -106,23 +183,21 @@ h3 {
 }
 .editRelease .btn.btn-success {
   /*margin-top: -9px;*/
-  background-color: #63E6CB;
+  /*background-color: #63E6CB;*/
   margin-left: 227px;
-  color: #3C5D55;
-  font-weight: bold;
+  /*color: #3C5D55;
+  font-weight: bold;*/
+}
+label {
+    margin-top: 4px;
 }
 .editSprint .btn-success{
   margin-top: 16px;
-  background-color: #63E6CB;
-  margin-left: 232px;
-  color: #3C5D55;
-  font-weight: bold;
+/* background-color: #63E6CB; */
+margin-left: 232px;
+box-shadow: 0 0 9px rgba(0, 0, 0, 0.4);
 }
-.editRelease #inputName, .editRelease #inputDate, .editRelease #inputDesc {
-  background-color: rgb(255, 254, 244);
-/*box-shadow: 0 0 1 black;*/
-border: rgb(255, 253, 236);
-}
+
 .frm {
     margin-top: 8px;
     margin-bottom: -3px;
@@ -160,7 +235,7 @@ border: rgb(255, 253, 236);
 .showAdd {
 z-index: 100;
 cursor: pointer;
-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.17);
+box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.5);;
 background-color: #78CC6C;
 margin: -26px 229px;
 /* font-size: 14px; */
@@ -403,7 +478,7 @@ outline: -webkit-focus-ring-color auto 5px;
     z-index: 2000;
 }
 .topRow{
-  padding-left:10px;
+  margin-top: -22px;
 }
 .addMore {
   background-color: rgba(131, 179, 167, 0.2);
@@ -520,14 +595,6 @@ position: absolute;
   padding: 10px;
   border-top: 1px solid #eee;
 }
-.add-members .btn-primary {
-    color: #537F75;
-    height: 32px;
-    background-color: #7DD4C0;
-    border: 0;
-    border-radius: 2px;
-    border-bottom: 4px solid #537F75;
-}
 .remove-members{
   position: relative;
   top: -38px;
@@ -592,7 +659,7 @@ font-size: 16px;
 text-align: center;
 background-color: rgb(38, 166, 91) !important;
 border: 0;
-border-bottom: 3px solid #33564E !important;
+border-bottom: 3px solid rgb(38, 166, 91) !important;
 color: white !important;
 font-weight: 600;
 }

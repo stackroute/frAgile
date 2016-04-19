@@ -55,7 +55,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
     });
   }
   $scope.editRelease = function(newReleaseName,newReleaseDetails,newReleaseDate,creationDate,prId,relId) {
-      if (newReleaseDate != null && creationDate != null && newReleaseName != "" && newReleaseDetails != "") {
+      if (newReleaseDate != null && creationDate != null && newReleaseName != "") {
       var dt = new Date(newReleaseDate);
       var crDt = new Date(creationDate);
       socket.emit('project:editRelease', {

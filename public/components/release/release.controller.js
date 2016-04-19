@@ -77,7 +77,7 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
     if (newSprintStartDate != "") {
       console.log("newSprintStartDate is not null it is -" + newSprintStartDate +"-");
     }
-    if (newSprintName != "" && newSprintDetails != "" && newSprintStartDate != null && newSprintEndDate != null) {
+    if (newSprintName != "" && newSprintStartDate != null && newSprintEndDate != null) {
     newSprintStartDate = new Date(newSprintStartDate);
     newSprintEndDate = new Date(newSprintEndDate);
       socket.emit('release:editSprint', {
