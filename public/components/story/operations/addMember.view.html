@@ -7,9 +7,9 @@
     <input type="text" ng-model="memberName" name="memberSearch" placeholder="Search Member" class="form-control">
     <div id="modal-members">
       <ul class="modal-members-list">
-        <li ng-repeat="membersArray in memberDetails |filter: memberName" class="list-group-item">
-          <a ng-click="addRemoveMembers(membersArray)">
-          <ng-letter-avatar data={{membersArray.fullName}} charCount=2  height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+        <li ng-click="addRemoveMembers(membersArray)" ng-repeat="membersArray in projMemberList |filter: memberName" class="list-group-item">
+          <a >
+            <ng-letter-avatar data={{membersArray.fullName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
 
             {{membersArray.fullName | limitTo:longDescLimit}}<span ng-hide="membersArray.fullName.length < longDescLimit ">
               ...
