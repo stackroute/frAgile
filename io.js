@@ -294,6 +294,44 @@ io.on('connection', function(socket) {
     }
   })
 
+  socket.on('sprint:deleteStory', function(data) {
+    console.log("-------------------------Inside io.js");
+    Story.deleteStory(data.storyId, function(err, delData) {
+      if (!err) {
+        console.log("-------------------------Story Deleted");
+        var error = false;
+        if (data.deleteFrom == 'Backlog') {
+          BackLogsBugList.deleteStoryBacklog(data.projectId,data.storyId, function(err, delDataFrom) {
+            error = err;
+          });
+        }
+        if (data.deleteFrom == 'Buglist') {
+          BackLogsBugList.deleteStoryBuglist(data.projectId,data.storyId, function(err, delDataFrom) {
+            error = err;
+          });
+        }
+        if (data.deleteFrom == 'List') {
+          Sprint.deleteStory(data.sprintId,data.Listid,data.storyId, function(err, delDataFrom) {
+            error = err;
+          });
+        }
+
+        if (!error) {
+          console.log("-------------------------Story Refference Deleted");
+          var storyData = {
+            'deleteFrom': data.deleteFrom,
+            'storyId':data.storyId,
+            'projectId': data.projectId,
+            'Listid': data.Listid,
+            'sprintId': data.sprintId
+          };
+          io.to(data.room).emit('sprint:storyDeleted', storyData);
+        }
+      }
+    });
+
+  });
+
   socket.on('sprint:addStory', function(data) {
     var story = {
       heading: data.heading,

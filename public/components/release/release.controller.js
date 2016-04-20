@@ -1,5 +1,5 @@
 fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'Socket', '$state', function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, Socket, $state) {
-
+  $scope.longDescLimit = 34;
   var socket = Socket($scope);
 
   $scope.roomName = "release:" + $scope.release.id;
@@ -29,7 +29,7 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
       });
       //console.log(releaseData);
     });
-    
+
   socket.on('sprintDeleted', function(sprintData) {
     $scope.sprints.forEach(function(sprint) {
       if (sprint._id == sprintData.sprintId) {
