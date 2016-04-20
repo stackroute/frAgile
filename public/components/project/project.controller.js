@@ -108,7 +108,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       if(item._id == releaseData.prId){
         item.release.forEach(function(rel, relIndex) {
           if(rel._id == releaseData._id){
-            console.log($scope.projects[itmIndex].release[relIndex]);
+            console.log($rootScope.projects[itmIndex].release[relIndex]);
             $rootScope.projects[itmIndex].release[relIndex].name = releaseData.name;
             $rootScope.projects[itmIndex].release[relIndex].description = releaseData.description;
             $rootScope.projects[itmIndex].release[relIndex].releaseDate = releaseData.releaseDate;
