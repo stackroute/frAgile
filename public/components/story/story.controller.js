@@ -12,12 +12,13 @@ var socket = Socket($scope);
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
   storyContr.storyData=storyContr.complexDataObject.story.data;
+  angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
+        storyContr.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+  });
   storyContr.storyGrp=storyContr.complexDataObject.storyGrp;
-
 
   $scope.storyData = storyContr.storyData;
   console.log(  $scope.storyData );
-
 
   storyContr.storyData.updatetime = moment(storyContr.storyData.lastUpdated).fromNow();
 

@@ -41,13 +41,14 @@
         Attachment:
   <div ng-repeat="imagesPath in storyContr.storyData.attachmentList">
       <div class="row">
-        <img class="pull left col-sm-2" src="{{imagesPath.path}}" height='70px'width='70px'alt="" />
-        <div class="pull right col-sm-10">
+          <!-- <img class="pull left col-sm-2" src="{{imagesPath.path}}" height='70px'width='70px'alt="" /> -->
+          <a download="{{imagesPath.fileName}}" href="{{imagesPath.path}}" title="ImageName"><span class="pull left col-sm-1 {{imagesPath.attachmentType}}"></span></a>
+          <div class="pull right col-sm-11 attachmentdetails" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
           <div>{{imagesPath.fileName}}</div>
           <div>{{imagesPath.timeStamp}}</div>
 
           <span>Added by {{imagesPath.addedByUserName}}</span>
-          <button type="button" name="button" ng-click="removeAttachment(storyContr.storyData._id,imagesPath._id,imagesPath.path)"><i class="fa fa-trash fa-fw" aria-hidden="true"></i></button> </div>
+          <span class="attachmentdelete" ng-click="removeAttachment(storyContr.storyData._id,imagesPath._id,imagesPath.path)"><i class="fa fa-trash fa-fw" aria-hidden="true"></i></span> </div>
         </div>
       </div>
 
