@@ -5,15 +5,12 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
   var socket = Socket();
 
   //For members list
-  $scope.memberList = [];
+  $rootScope.projMemberList = [];
   activityService.getMembers($scope.projectID).success(function(response) {
     response.memberList.forEach(function(data) {
         data.fullName = data.firstName + " " + data.lastName;
       })
-      // $rootScope.memberList.push(data.firstName + " " + data.lastName);
-      // console.log(response[0]);
-      // console.log(response);
-    $scope.memberList = response.memberList;
+    $rootScope.projMemberList = response.memberList;
   });
 
   $scope.allMembers = [];
@@ -76,7 +73,7 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
 
   socket.on('activity:memberAdded', function(data) {
     data.fullName = data.firstName + " " + data.lastName;
-    $scope.memberList.push(data);
+    $rootScope.projMemberList.push(data);
     $scope.allMembers = [];
     $scope.userIds = [];
     $scope.members = "";
@@ -85,9 +82,9 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
 
   socket.on('activity:memberRemoved', function(userData) {
     var fullName = userData.firstName + " " + userData.lastName;
-    $scope.memberList.forEach(function(data,index){
+    $rootScope.projMemberList.forEach(function(data,index){
       if(userData._id == data._id)
-        $scope.memberList.splice(index,1);
+        $rootScope.projMemberList.splice(index,1);
 
     });
 

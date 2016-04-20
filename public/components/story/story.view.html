@@ -14,7 +14,7 @@
       </h3>
     </header>
     Member :
-    <a ng-repeat="member in storyContr.storyData.memberList"><ng-letter-avatar data={{member.firstName}} charCount=2  height="30px" width="30px" fontSize="25px"></ng-letter-avatar><span class="remove-members fa fa-times" ng-click="removeMember(member._id)"></a>
+    <a ng-repeat="member in storyData.memberList"> <ng-letter-avatar data={{member.firstName}}  charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar><span class="remove-members fa fa-times" ng-click="removeMember(member._id)"></a>
 
       <!-- TODO change first name to full name -->
       <a ng-click="addMember()"><i class="fa fa-plus" aria-hidden="true"></i></a>
@@ -41,13 +41,14 @@
         Attachment:
   <div ng-repeat="imagesPath in storyContr.storyData.attachmentList">
       <div class="row">
-        <img class="pull left col-sm-2" src="{{imagesPath.path}}" height='70px'width='70px'alt="" />
-        <div class="pull right col-sm-10">
+          <!-- <img class="pull left col-sm-2" src="{{imagesPath.path}}" height='70px'width='70px'alt="" /> -->
+          <a download="{{imagesPath.fileName}}" href="{{imagesPath.path}}" title="ImageName"><span class="pull left col-sm-1 {{imagesPath.attachmentType}}"></span></a>
+          <div class="pull right col-sm-11 attachmentdetails" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
           <div>{{imagesPath.fileName}}</div>
           <div>{{imagesPath.timeStamp}}</div>
 
           <span>Added by {{imagesPath.addedByUserName}}</span>
-          <button type="button" name="button" ng-click="removeAttachment(storyContr.storyData._id,imagesPath._id,imagesPath.path)"><i class="fa fa-trash fa-fw" aria-hidden="true"></i></button> </div>
+          <span class="attachmentdelete" ng-click="removeAttachment(storyContr.storyData._id,imagesPath._id,imagesPath.path)"><i class="fa fa-trash fa-fw" aria-hidden="true"></i></span> </div>
         </div>
       </div>
 
@@ -64,7 +65,7 @@
         <div>
 
 
-          <ul ng-repeat="todo in checklistGrp" class="unstyled">
+          <ul ng-repeat="todo in storyData.checklist" class="unstyled">
 
             <span >{{todo.checklistHeading}}</span>   <a ng-click="removeChecklistGroup(todo._id)">
               <i class="fa fa-trash" ></i></a>

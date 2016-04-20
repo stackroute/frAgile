@@ -20,7 +20,8 @@ var socket = Socket($scope);
   description:This function is used to create\load the required model for members
   ***/
   $scope.initLoadMembers = function(){
-    $scope.memberDetails= param.projMembers;
+    //$scope.memberDetails= param.projMembers;
+
     /*** Declaring variables required for addMembers,addLabels***/
     $scope.longDescLimit=25 ;
     $scope.checked = true;
@@ -294,11 +295,12 @@ var socket = Socket($scope);
   //TODO:Handle the tick marks on the selected members
   $scope.addRemoveMembers=function(memberObj){
     //compare the memberObj with the memberlist in the story collection and check process accordingly.
-    console.log($scope.storyDetails);
     //TODO:checking if the member is already in the story.once the user is removed, it has to send add members request but it is not because initial story member list is brought using resolve. when parent gets updated then child is not . So add one more lisner in sub modal to update the list available with submodal
     var userObj = $scope.storyDetails.memberList.filter(function ( obj ) {
       return obj._id === memberObj._id;
     })[0];
+
+
     if (userObj == undefined) {
       //Add members working,tested
       socket.emit('story:addMembers', {

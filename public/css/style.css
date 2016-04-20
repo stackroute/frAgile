@@ -1,3 +1,146 @@
+.attachmentdetails{
+  top:10px;
+  left:10px;
+
+}
+
+
+.jpg:before{
+  content: "\f1c5";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #EF4836;
+}
+.jpeg:before{
+  content: "\f1c5";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #EF4836;
+}
+.png:before{
+  content: "\f1c5";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: BLUE;
+}
+.zip:before{
+  content: "\f1c6";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: black;
+}
+.xlsx:before{
+  content: "\f1c3";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #1E7145;
+}
+.xls:before{
+  content: "\f1c3";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #1E7145;
+}
+.pptx:before{
+  content: "\f1c4";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #D04525;
+}
+.ppt:before{
+  content: "\f1c4";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #D04525;
+}
+.doc:before{
+  content: "\f1c2";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #2B5797;
+}
+.docx:before{
+  content: "\f1c2";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #2B5797;
+}
+.txt:before{
+  content: "\f0f6";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #7E3878;
+}
+.mpeg:before{
+  content: "\f1c8";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #7E3878;
+}
+.mp4:before{
+  content: "\f1c8";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #7E3878;
+}
+.pdf:before{
+  content: "\f1c1";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #EF4836;
+}
+.avi:before{
+  content: "\f1c8";
+  font-family: FontAwesome;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:55px;
+  color: #7E3878;
+}
+
 body {
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
@@ -272,12 +415,27 @@ border-radius: 107px;
 height: 45px;
 width: 45px;
 }
-.toggleSprintIcon{
-  margin-top: 27px;
-  margin-left: 2px;
+.divToggle{
+  position: fixed;
+  right: 5px;
+}
+.toggleIcon{
+  margin-top: 6px;
+  margin-left: 7px;
+  color: white;
 }
 .toggleSprintText{
   cursor: pointer;
+}
+.scrollBtn{
+  cursor: pointer;
+  background-color: black;
+  border-radius: 32px;
+  float: left;
+  margin-top: 23px;
+  height: 25px;
+  width: 25px;
+  margin-right: 1px;
 }
 .frm {
     margin-top: 8px;
@@ -532,6 +690,23 @@ outline: -webkit-focus-ring-color auto 5px;
   height: 0px;
   font-size: 0px;
 }
+.showSlide .attachmentdelete {
+  z-index: 400;
+  position: absolute;
+  margin-left: 249px;
+  margin-top: -3px;
+  opacity: 0.8;
+  font-size: 20px;
+}
+.hideSlide .attachmentdelete {
+  position: absolute;
+  margin-left: 249px;
+  margin-top: -4px;
+  opacity: 0;
+  width: 0px;
+  height: 0px;
+  font-size: px;
+}
 .parent {
   padding-bottom: 12px;
   overflow: auto;
@@ -590,7 +765,7 @@ outline: -webkit-focus-ring-color auto 5px;
     z-index: 2000;
 }
 .topRow{
-  margin-top: -22px;
+  margin: -22px 20px 0 20px;
 }
 .main {
     /* background-color: red; */

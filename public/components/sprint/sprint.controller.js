@@ -1,4 +1,4 @@
-fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'Socket', '$uibModal', function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibModal) {
+fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'Socket', '$uibModal', '$location', '$anchorScroll', function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibModal, $location, $anchorScroll) {
   $scope.getSprints = function() {
     $scope.addToBacklog = false;
     $scope.addToBuglist = false;
@@ -106,7 +106,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     return listId + bool;
   };
 
-  $scope.deleteStory = function(storyId, from, Listid, sprintId) {
+  $scope.deleteStory = function(storyId, storyName, from, Listid, sprintId) {
     console.log("-----In controller Now emmiting");
     socket.emit('sprint:deleteStory', {
       'room': $scope.roomName,
@@ -115,7 +115,9 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       'storyId':storyId,
       'projectId': $stateParams.prId,
       'Listid': Listid,
-      'sprintId': sprintId
+      'sprintId': sprintId,
+      'storyName' : storyName,
+      'projectName' : $scope.projectName
     });
   };
 
@@ -144,7 +146,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   }
 
   $scope.gotoTop = function(id) {
-    angular.element("#"+id)[0].scrollBottom=0;
+    angular.element("#" + id)[0].scrollBottom = 0;
   };
 
   var divBeingDragged = "",
@@ -309,20 +311,13 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     socket.emit('addActivity', actData);
   });
 
-  $scope.scrollText = "Go to Buglists";
-  $scope.scrollClass = "fa fa-chevron-right";
-  $scope.toggleScroll = function() {
-    if ($scope.scrollText == "Go to Buglists") {
-      $('#mainSprint').css('margin-left', "-" + parseInt($scope.sprintWidth)/2.95 + "px");
-      // console.log('margin-left', "-" + parseInt($scope.sprintWidth)/2.95 + "px");
-      $scope.scrollClass = "fa fa-chevron-left";
-      $scope.scrollText = "Go to Backlogs";
-    } else {
-      $('#mainSprint').css('margin-left', '0');
-      $scope.scrollClass = "fa fa-chevron-right";
-      $scope.scrollText = "Go to Buglists";
-    }
-
+  $scope.scrollRight = function() {
+    $location.hash('buglists');
+    $anchorScroll();
+  }
+  $scope.scrollLeft = function() {
+    $location.hash('backlogs');
+    $anchorScroll();
   }
 
 
