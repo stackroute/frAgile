@@ -16,7 +16,7 @@
         </div>
         <div class="parentInner" id="backbug">
 
-          <div id="{{story._id}}" ng-repeat="story in backBug.backlogs.stories" class="child hideSlide" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="showModal(story._id, 'backBug')"
+          <div id="{{story._id}}" ng-repeat="story in backBug.backlogs.stories" class="child hideSlide" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="showModal(story._id, 'backBug',backBug._id,'Backlog')"
             data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}" jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}">
             <div class="story_Name">
               {{story.heading}}
@@ -68,7 +68,7 @@
         <div class="parentInner" id="list">
 
           <div id="{{story._id}}" ng-repeat="story in listItem.stories" class="child" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
-            jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}" ng-click="showModal(story._id, listItem.group)">
+            jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}" ng-click="showModal(story._id, listItem.group,listItem._id,listItem.listName)">
             <div class="story_Name">
               {{story.heading}}
             </div>
@@ -113,7 +113,7 @@
         </div>
         <div class="parentInner" id="backbug">
 
-          <div id="{{story._id}}" ng-repeat="story in backBug.buglist.stories" class="child" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="showModal(story._id, 'backBug')" data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
+          <div id="{{story._id}}" ng-repeat="story in backBug.buglist.stories" class="child" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="showModal(story._id, 'backBug',backBug._id,'Buglist')" data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
             jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}">
             <div class="story_Name">
               {{story.heading}}

@@ -190,5 +190,15 @@ project.updateRelease(projectId, releaseId, newRelease, function(err, doc) {
 });
 });
 
-
+router.post('/getstorymovedata',function(req,res,next){
+  console.log("received inside route----->"+req.query.id);
+var projectId = req.query.id;
+ Project.getStoryMoveData(projectId,function(err,doc){
+   if (err) {
+res.send(err);
+   }else{
+res.send(doc);
+   }
+ })
+});
 module.exports = router ;

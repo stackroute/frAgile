@@ -281,9 +281,13 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   Parameters:storyId
   resolve:Sprint, Story,ProjectMembers
   TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
-***/
-  $scope.showModal = function(storyID, storyGrp) {
-    console.log(storyID);
+  ***/
+  $scope.showModal = function(storyID,storyGrp,listItemId,listItemName)
+  {
+    var currentPosition = {}
+    currentPosition.listId=listItemId;
+    currentPosition.listItemName = listItemName;
+console.log(listItemName +"   "+listItemId);
     sprintService.getStory(storyID).then(function(story) {
       console.log(story);
       var modalInstance = $uibModal.open({
@@ -297,10 +301,11 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
             console.log("params in modal factory :::::  ");
             console.log("passing data to story controller");
             return {
-              story: story,
-              sprint: $scope.sprint,
-              projMembers: $rootScope.memberList,
-              storyGrp: storyGrp
+              story:story,
+              sprint:$scope.sprint,
+              projMembers:$rootScope.memberList,//TODO:Check if this can be sent directly instead of resolve
+              storyGrp:storyGrp,
+              currentPosition:currentPosition
             };
           }
         }

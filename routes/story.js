@@ -13,6 +13,9 @@ operations.
 ****/
 
 var express = require('express');
+var formidable = require('formidable');
+var path = require('path');
+var fs = require('fs');
 var router = express.Router();
 var story = require('../models/story.js');
 var sprint = require('../models/sprint.js');
@@ -47,29 +50,83 @@ res.send(data);
 });
 
 router.post('/addattachments', function(req, res, next) {
-  var storyId= req.query.storyid.replace("/","");
-  // var storyId= "56ea47bd28c0f3dd0446b660";
-  var atachmentObj={
-    fileName: "sampleFile",
-    timeStamp: Date.now(),
-    attachmentType:"pdf",
-    addedByUserName:"Sharan",
-    addedByUserId:"56ebb688ee6b767262a7ed90",
-    path : "../atacments"
-  }
+  //  var storyId= "5711f523be7cf90d2b5a138c";
+  var form = new formidable.IncomingForm();
+  form.parse(req, function (err, fields, files) {
+    var storyId= fields.storyId;
+    var attachmentObj;
+    var old_path = files.file.path,
+    file_size = files.file.size,
+    file_ext = files.file.name.split('.').pop(),
+    index = old_path.lastIndexOf('/') + 1,
+    file_name = old_path.substr(index),
+    newfile_name=files.file.name.substring(0, (files.file.name.lastIndexOf('.')));
+    new_path = path.join(process.env.PWD, '/public/uploadfile/',storyId +"/"+ file_name + '.' + file_ext);
 
-story.addAttachments(storyId,atachmentObj,function(err,data){
-res.send(data);
-})
+    if((file_size/1024/1024) <= 10)
+    {
+      attachmentObj={
+        fileName: files.file.name,
+        timeStamp: Date.now(),
+        attachmentType: file_ext,
+        addedByUserName:"Sharan",
+        addedByUserId:"56ebb688ee6b767262a7ed90",
+        path : '/uploadfile/'+storyId+"/"+ file_name+"."+file_ext
+      };
+      if(!fs.existsSync(path.join(process.env.PWD, '/public/uploadfile/'+storyId))){
+        fs.mkdirSync(path.join(process.env.PWD, '/public/uploadfile/'+storyId), function(err){
+          fs.readFile(old_path, function(err, data) {
+            fs.writeFile(new_path, data, function(err) {
+              fs.unlink(old_path, function(err) {
+                if (err) {
+                  res.status(500);
+                  res.json({'success': false});
+                } else {
+                  story.addAttachments(storyId,attachmentObj,function(err,data){
+                    res.send(data);
+                  })
+                }
+              });
+            });
+          });
+        });
+      }else{
+        fs.readFile(old_path, function(err, data) {
+          fs.writeFile(new_path, data, function(err) {
+            fs.unlink(old_path, function(err) {
+              if (err) {
+                res.status(500);
+                res.json({'success': false});
+              } else {
+                story.addAttachments(storyId,attachmentObj,function(err,data){
+                  res.send(data);
+                })
+                //res.status(200);
+                //res.json({'success': true});
+              }
+            });
+          });
+        });
+
+      }
+
+    }else{
+      console.log("size extend");
+    }
+  });
 });
 
 router.post('/removeattachement', function(req, res, next) {
-  var storyId= req.query.storyid.replace("/","");
-  var attachmentId=req.query.attachmentid.replace("/","");
-
-story.removeAttachment(storyId,attachmentId,function(err,data){
-res.send(data);
-})
+  var storyId= req.query.storyId,
+  attachmentId=req.query.attachmentId,
+  npath="public"+req.query.file_name;
+  // npath="/public/uploadfile/5711f523be7cf90d2b5a138c/upload_da97b709ce281af6771ed7ea0b2c120d.jpg";
+  console.log(npath);
+  fs.unlink(npath, function(err) {
+    story.removeAttachment(storyId,attachmentId,function(err,data){
+      res.send(data);
+    })
+  })
 });
 
 router.get('/removechecklistgroup', function(req, res, next) {

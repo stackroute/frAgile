@@ -1,17 +1,24 @@
-fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','$uibModal','$uibModalInstance','$location','Socket','param',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,$uibModal,$uibModalInstance,$location,Socket,param){
+/****
+TODO:
+1.Copy
+2.Label
 
-  var socket = Socket($scope);
+*****/
 
-  // var story = this;
-  // story.items =sprintService.storyData;
-  console.log(param);
+fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','param',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,param){
+var socket = Socket($scope);
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
   storyContr.storyData=storyContr.complexDataObject.story.data;
   storyContr.storyGrp=storyContr.complexDataObject.storyGrp;
+
+  $scope.checklistGrp =storyContr.storyData.checklist;
+
+  console.log(storyContr.complexDataObject);
   storyContr.storyData.updatetime = moment(storyContr.storyData.lastUpdated).fromNow();
-  console.log(storyContr.storyData);
+
+  //TODO:Check if these are required????
   var dataLoc = $location.search();
   var BoardID = dataLoc.BoardID;
   var storyID = dataLoc.storyId;
@@ -43,11 +50,7 @@ fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','s
     $scope.set=true;
     $scope.model.selected = angular.copy(descriptions);
   };
-  // $scope.saveDescription = function () {
-  //   $scope.model.description = angular.copy($scope.model.selected);
-  //   $scope.reset();
-  //   $scope.set=false;
-  // };
+
   $scope.reset = function () {
     $scope.model.selected = $scope.model.description;
     $scope.set=false;
@@ -61,26 +64,60 @@ fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','s
   //
   //   });
   // };
-
+  /***
+  author:sharan
+  function:addMember
+  parameters:none
+  description:This function is used to add members modal
+  ***/
+  //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
   $scope.addMember = function() {
     modalService.open('sm', 'components/story/operations/addMember.view.html','storyOperationsController',storyContr.complexDataObject);
   };
 
-/***
-author:Sharan
-Function Name: addLabel
-Function Description: This method is called by Story modal to open sub-Modal of labels.
-This method calls ModalService factory method which creates the sub-Modal.
-Parametes: Modal-size,Template,Controller,Story&Sprint data.
-***/
+  /***
+  author:Sharan
+  Function Name: addLabel
+  Function Description: This method is called by Story modal to open sub-Modal of labels.
+  This method calls ModalService factory method which creates the sub-Modal.
+  Parametes: Modal-size,Template,Controller,Story&Sprint data.
+  ***/
   $scope.addLabel = function() {
     modalService.open('sm', 'components/story/operations/addLabel.view.html','storyOperationsController',storyContr.complexDataObject);
   };
 
+  /***
+  author:srinivas
+  function:removeLabel
+  parameters:LabelObj
+  description:This function is used to remove a label from the story.
+  ***/
+  $scope.removeLabel = function(LabelObj){
+
+  }
+
+  /***
+  author:sharan
+  function:removemember
+  parameters:memberid
+  description:function to remove member from story
+  ***/
+  $scope.removeMember=function(memberId){
+    //working,tested
+    socket.emit('story:removeMembers', {
+      'room': $scope.$parent.roomName,
+      'storyid': storyContr.storyData._id,
+      'memberid': memberId
+    });
+  }
 
   $scope.addAttachment = function() {
-    modalService.open('sm', 'addAttachment.html');
+    modalService.open('sm', 'components/story/operations/addAttachment.view.html','MyCtrl',storyContr.storyData);
     //$uibModalInstance.close($scope.searchTerm);
+  };
+  $scope.removeAttachment = function(storyId,attachmentId,file_name) {
+    console.log(storyId+"======="+attachmentId);
+    storyService.removeAttachment(storyId,attachmentId,file_name);
   };
 
   /***
@@ -94,15 +131,44 @@ Parametes: Modal-size,Template,Controller,Story&Sprint data.
     modalService.open('sm', 'components/story/operations/addChecklistGroup.view.html','storyOperationsController',storyContr.complexDataObject);
   };
 
-  $scope.moveStory = function() {
-    modalService.open('sm', 'moveStory.html');
-  };
-  $scope.copyStory = function() {
-    modalService.open('sm', 'copyStory.html');
+  /***
+  author:Sharan,Srinivas
+  Function Name: moveStory
+  Function Description: This method is called by Story modal to open sub-Modal for story movement between sprints of the project.
+  Parametes: Modal-size,Template,Controller,Story\Project data.
+  ***/
+  $scope.moveCopyStory = function(modalTemplate) {
+    storyContr.complexDataObject.storyMoveData={};
+    storyService.getStoryCopyMovementData($stateParams.prId).then(function(response) {
+
+      //Required to showcase the current position of story in move\copy modal
+      for(var rel=0;rel< response.data.release.length;rel++){
+        if(response.data.release[rel]._id == $stateParams.relId){
+          //TODO:this loop can be resused to give the non admin the rights to move/copy the story between lists of the same sprint.
+          response.data.release.selectedRelease=response.data.release[rel];
+          response.data.release.selectedSprints=storyContr.complexDataObject.sprint;
+          //Below for loop is required because duplicates were displayed in list dropdown if display directly
+          for (var sprIndex = 0; sprIndex < response.data.release.selectedSprints.list.length; sprIndex++) {
+            if (response.data.release.selectedSprints.list[sprIndex]._id == storyContr.complexDataObject.currentPosition.listId) {
+              console.log("enter");
+              response.data.release.selectedList=response.data.release.selectedSprints.list[sprIndex];
+              break;
+            }
+          }
+          break;
+        }
+
+      }
+      storyContr.complexDataObject.storyMoveData=response;
+      modalService.open('sm', modalTemplate,'storyOperationsController',storyContr.complexDataObject);
+    });;
+
   };
   $scope.deleteStory = function() {
-    modalService.open('sm', 'deleteStory.html');
+    // modalService.open('sm', 'deleteStory.html');
+    //Use Tooltip
   };
+  //Not required at story level
   $scope.ok = function() {
     $uibModalInstance.dismiss('cancel');
   };
@@ -110,76 +176,106 @@ Parametes: Modal-size,Template,Controller,Story&Sprint data.
     $uibModalInstance.dismiss('cancel');
   };
 
-  $scope.cancel = function() {
-    // console.log("cancel is working" +JSON.stringify($uibModal));
-    $uibModalInstance.dismiss('cancel');
-  };
+  /****
+  author:Srinivas
+  function:saveDescription
+  parameters:none
+  description:this function is used to update the story description
+  **/
   $scope.saveDescription=function(){
     console.log("save Description in contoller");
-    //  $scope.description=$scope.newdescription;
     $scope.model.description = angular.copy($scope.model.selected);
+    //Post socket below is not required
     storyService.saveStoryDescription(storyContr.storyData._id,$scope.model.description.name);
 
-    $scope.reset();//Not required I guess
+    $scope.reset();
     $scope.set=false;
 
-    ///Socket Coding starts
-    console.log("about to emit in client");
-    story.emit('send:message', {
-      'room': storyContr.storyData._id,
-      'message':$scope.model.description.name
-    });
-
-    story.on('room:message', function(data) {
-  				console.log('recieved messagef rom ', data.room, ' message: ', data.message);
-  			//	$scope.pubMessages.push(data.message);
-        console.log("this is the message received:   "+data.message);
-  				$scope.now = new Date();
-  		//		$scope.$apply();
-  			});
-
-    //Socket coding ends
+    // ///Socket Coding starts
+    // console.log("about to emit in client");
+    // story.emit('send:message', {
+    //   'room': storyContr.storyData._id,
+    //   'message':$scope.model.description.name
+    // });
+    //
+    // story.on('room:message', function(data) {
+    //   console.log('recieved messagef rom ', data.room, ' message: ', data.message);
+    //   //	$scope.pubMessages.push(data.message);
+    //   console.log("this is the message received:   "+data.message);
+    //   $scope.now = new Date();
+    //   //		$scope.$apply();
+    // });
+    //
+    // //Socket coding ends
   };
-  //TODO Starts
-  $scope.todos =storyContr.storyData.checklist;
-  console.log("DATA printed: "+$scope.todos);
-  // [{
-  // heading:"Group 1",
-  // checked:1,
-  // data:[
-  //   {text:'learn angular', checked:true,createdBy:'userId',creatorName:'Sharan'},
-  //   {text:'build an angular app', checked:false,createdBy:'userId',creatorName:'Sharan'}
-  //   ]},{
-  //   heading:"Group 2",
-  //   checked:1,
-  //   data:[
-  //   {text:'learn angular', checked:true,createdBy:'userId',creatorName:'Sharan',createdBy:'userId',creatorName:'Sharan'},
-  //   {text:'build an angular app', checked:false,createdBy:'userId',creatorName:'Sharan',createdBy:'userId',creatorName:'Sharan'}
-  //   ]},{
-  //   heading:"Group 3",
-  //   checked:1,
-  //   data:[
-  //   {text:'learn angular', checked:true,createdBy:'userId',creatorName:'Sharan'},
-  //   {text:'build an angular app', checked:false,createdBy:'userId',creatorName:'Sharan'}
-  //   ]}];
+  //TODO Starts, push this to start of the file
 
-  // $scope.addChecklistGroup = function() {
-  // console.log($scope.todoGroupText);
-  //   $scope.todos.push({
-  //   checklistHeading:$scope.todoGroupText ,
-  //   checkedCount:0,
-  //   items:[{text:'learn angular', checked:false,createdBy:'userId',creatorName:'Sharan'},
-  //   {text:'build an angular app', checked:false,createdBy:'userId',creatorName:'Sharan'}]
-  //   });
-  //   $scope.todoText = '';
-  //   $uibModalInstance.dismiss('cancel');
-  // };
-
-  $scope.addTodoItem = function(todo) {
-    //console.log(todo)
-    todo.items.push({"text":todo.todoText,"done":false})
+  /***
+  authors:sharan
+  function:addTodoItem
+  parameters:todo item,checklistId//Check once
+  description:this fuction is used to add a new item to the checklist group.
+  ***/
+  $scope.addTodoItem = function(todo,todoText) {
+    console.log(todo)
+    //todo.items.push({"text":todo.todoText,"done":false})
+    var itemObj = {
+      text: todo.todoText,
+      checked: false,
+      creationDate:Date.now(),
+    }
+    socket.emit('story:addChecklistItem', {
+      'room': $scope.$parent.roomName,
+      'storyid': storyContr.storyData._id,
+      'checklistGrpId': todo._id,
+      'itemObj':itemObj
+    });
     todo.todoText = '';
   };
+
+/***
+authors:sharan
+function:removeTodoItem
+parameters:todo item,checklistId//Check once
+description:this fuction is used to add a new item to the checklist group.
+***/
+$scope.removeTodoItem = function(listItem,checklistGrp) {
+  console.log(checklistGrp)
+  console.log(listItem);
+  //todo.items.push({"text":todo.todoText,"done":false})
+
+  socket.emit('story:removeChecklistItem', {
+    'room': $scope.$parent.roomName,
+    'storyid': storyContr.storyData._id,
+    'checklistGrpId': checklistGrp._id,
+    'itemid':listItem._id,
+    'checked':listItem.checked
+  });
+
+};
+
+/***
+authors:sharan
+function:updateTodoItem
+parameters:todo item,checklistId//Check once
+description:this fuction is used to add a new item to the checklist group.
+***/
+//TODO:Not working because of nth level
+$scope.updateTodoItem = function(listItem,checklistGrp) {
+  console.log("reacjed");
+  console.log(checklistGrp)
+  console.log(listItem._id);
+  console.log(listItem.checked);
+  //todo.items.push({"text":todo.todoText,"done":false})
+
+  socket.emit('story:updateChecklistItem', {
+    'room': $scope.$parent.roomName,
+    'storyid': storyContr.storyData._id,
+    'checklistGrpId': checklistGrp._id,
+    'itemid':listItem._id,
+    'checked':listItem.checked
+  });
+};
 
   $scope.remaining = function(list, todo) {
 
@@ -192,64 +288,19 @@ Parametes: Modal-size,Template,Controller,Story&Sprint data.
     todo.checked= count;
   };
 
-  $scope.delete = function() {
-    var oldTodos = $scope.todos;
-    $scope.todos = [];
-    angular.forEach(oldTodos, function(todo) {
-      if (!todo.done) $scope.todos.push(todo);
+  /***
+  authors:Sharan,Srinivas
+  Function Name: removeChecklistGroup
+  Function Description: This method is called by sub-Modal window of checklist.It creates a new checklist group in the particular story and pushes the delta value to server.
+  Parameters:None
+  TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
+  ***/
+  $scope.removeChecklistGroup = function(checklistGrpId) {
+//TODO:Add listner
+  socket.emit('story:removeChecklistGroup', {
+      'room': $scope.$parent.roomName,
+      'storyid': $scope.storyDetails._id,
+      'checklistGrpId': checklistGrpId
     });
   };
-  //TODO Ends
-
 }]);
-
-//
-// app.controller('modalController', function($scope, $uibModalInstance, params) {
-//   $scope.ok = function() {
-//     $uibModalInstance.dismiss('cancel');
-//   };
-//   $scope.cancel = function() {
-//     $uibModalInstance.dismiss('cancel');
-//   };
-// })
-
-//Below code was as part of edit description. this can be deleted as srini as used other approach
-
-// story.directive('contenteditable', function() {
-//   return {
-//     require: 'ngModel',
-//     link: function(scope, elm, attrs, ctrl) {
-//       // view -> model
-//       console.log("blur triggered");
-//       elm.bind('blur', function() {
-//         scope.$apply(function() {
-//           ctrl.$setViewValue(elm.html());
-//         });
-//       });
-//
-//       // model -> view
-//       ctrl.render = function(value) {
-//         elm.html(value);
-//       };
-//
-//       // load init value from DOM
-//       ctrl.$setViewValue(elm.html());
-//
-//       elm.bind('keydown', function(event) {
-//         console.log("keydown " + event.which);
-//         var esc = event.which == 27,
-//         el = event.target;
-//
-//         if (esc) {
-//           console.log("esc");
-//           ctrl.$setViewValue(elm.html());
-//           el.blur();
-//           event.preventDefault();
-//         }
-//
-//       });
-//
-//     }
-//   };
-//
-// });

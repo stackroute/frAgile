@@ -13,6 +13,29 @@ fragileApp.factory('storyService',['$http',function($http) {
         return  $http.post('/story/addchecklistgroup?storyId='+storyId+'&checklistObj='+checklistObj);
       };
 
+/***
+author:sharan
+function:getStoryCopyMovementData
+parameters:projectId
+description: This function is used to get the whole set of data particular to a project to copy\move the story across the releases\sprints of  project
+***/
+      this.getStoryCopyMovementData = function(projectId){
+        console.log("projectId"+projectId);
+        return $http.post('/project/getstorymovedata?id='+projectId);
+      }
+
+/***
+author:srinivas
+function:addattachments
+parameters:storyId
+description: This function is used add the attachments in the story
+***/
+  this.addattachments = function(storyId) {
+    return  $http.post('/story/addattachments?storyId='+storyId);
+  };
+  this.removeAttachment = function(storyId,attachmentId,file_name) {
+    return  $http.post('/story/removeattachement?storyId='+storyId+'&attachmentId='+attachmentId+'&file_name='+file_name);
+  };
   return this;
 
 }]);
