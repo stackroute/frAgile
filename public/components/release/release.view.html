@@ -14,7 +14,9 @@
               {{spr.name}}
             </div>
             <div class="desc">
-              {{spr.description}}&nbsp;
+              {{spr.description | limitTo:longDescLimit }}<span ng-hide="spr.description.length < longDescLimit || release.description ==undefined">
+                ...
+              </span>&nbsp;
             </div>
             <div class="date" >
               {{spr.startDate | date:'dd-MMM-yyyy'}} to {{spr.endDate | date:'dd-MMM-yyyy'}}
@@ -49,7 +51,8 @@
                 <input type="date" class="form-control" id="inputDate" value = "{{spr.endDate | date:'yyyy-MM-dd'}}" ng-model = "newSprintEndDate" date-parser="dd.MM.yyyy">
               </div>
             </div>
-            <button type="button" class="btn btn-success" ng-click="editSprint(newSprintName,newSprintDetails,newSprintStartDate,newSprintEndDate,spr._id,spr.name)? showEdit=false : showEdit=true">Save</button>
+            <button type="button" class="btn btn-success" ng-click="editSprint(newSprintName,newSprintDetails,newSprintStartDate,newSprintEndDate,spr._id,spr.name)? showEdit=false : showEdit=true"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+
             <!-- <button type="button" ng-click = "showEdit=false">X</button> -->
           </form>
           </div>

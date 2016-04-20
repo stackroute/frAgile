@@ -58,12 +58,67 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     }
   });
 
-  $scope.test = function(listId, clicked) {
-    $scope.clicked = false;
+    socket.on('sprint:storyDeleted', function(data) {
+      console.log("------------------ inside storyDeleted");
+      console.log(data);
+      console.log("----------------------");
+      if (data.deleteFrom == "Backlog") {
+        $scope.backBug.backlogs.stories.forEach(function(story, storyIndex) {
+          console.log("--------------Inside For Each");
+          if (story._id == data.storyId) {
+            console.log("---------------- Found to delete");
+            $scope.backBug.backlogs.stories.splice(storyIndex, 1);
+          }
+        });
+      }
+      else if (data.deleteFrom == "Buglist") {
+        $scope.backBug.buglist.stories.forEach(function(story, storyIndex) {
+          console.log("--------------Inside For Each");
+          if (story._id == data.storyId) {
+            console.log("---------------- Found to delete");
+            $scope.backBug.buglist.stories.splice(storyIndex, 1);
+          }
+        });
+      }
+      else {
+        console.log("Inside Else");
+        angular.forEach($scope.sprint.list, function(value, key) {
+          if (value._id == data.Listid) {
+            console.log("--------Found List");
+            $scope.sprint.list[key].stories.forEach(function(story, storyIndex) {
+              console.log("--------------Inside For Each");
+              if (story._id == data.storyId) {
+                console.log("---------------- Found to delete");
+                $scope.sprint.list[key].stories.splice(storyIndex, 1);
+              }
+            });
+          }
+        });
+      }
+    });
+
+
+  $scope.clickOnAdd = function(id) {
+    console.log(angular.element('#'+id));
+    angular.element('#'+id).focus();
   };
   $scope.show = function(listId, bool) {
     return listId + bool;
   };
+
+  $scope.deleteStory = function(storyId, from, Listid, sprintId) {
+    console.log("-----In controller Now emmiting");
+    socket.emit('sprint:deleteStory', {
+      'room': $scope.roomName,
+      'activityRoom': 'activity:' + $stateParams.prId,
+      'deleteFrom': from,
+      'storyId':storyId,
+      'projectId': $stateParams.prId,
+      'Listid': Listid,
+      'sprintId': sprintId
+    });
+  };
+
   $scope.addStory = function(listId, storyDetails, id, listName) {
     // $scope.listIdAdded = id;
     if (storyDetails != undefined && storyDetails != "") {
@@ -87,10 +142,10 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       return false
     }
   }
+
   $scope.gotoTop = function(id) {
     angular.element("#"+id)[0].scrollBottom=0;
   };
-
 
   var divBeingDragged = "",
     elemBeingDragged = "";
