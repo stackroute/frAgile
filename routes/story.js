@@ -60,37 +60,21 @@ router.post('/addattachments', function(req, res, next) {
     file_ext = files.file.name.split('.').pop(),
     index = old_path.lastIndexOf('/') + 1,
     file_name = old_path.substr(index),
-    newfile_name=files.file.name.substring(0, (files.file.name.lastIndexOf('.')));
+    newfile_name=files.file.name.substring(0, (files.file.name.lastIndexOf('.'))),
+    folder_path=path.join(process.env.PWD, '/public/uploadfile/',storyId),
     new_path = path.join(process.env.PWD, '/public/uploadfile/',storyId +"/"+ file_name + '.' + file_ext);
 
-    if((file_size/1024/1024) <= 10)
-    {
-      attachmentObj={
-        fileName: files.file.name,
-        timeStamp: Date.now(),
-        attachmentType: file_ext,
-        addedByUserName:"Sharan",
-        addedByUserId:"56ebb688ee6b767262a7ed90",
-        path : '/uploadfile/'+storyId+"/"+ file_name+"."+file_ext
-      };
-      if(!fs.existsSync(path.join(process.env.PWD, '/public/uploadfile/'+storyId))){
-        fs.mkdirSync(path.join(process.env.PWD, '/public/uploadfile/'+storyId), function(err){
-          fs.readFile(old_path, function(err, data) {
-            fs.writeFile(new_path, data, function(err) {
-              fs.unlink(old_path, function(err) {
-                if (err) {
-                  res.status(500);
-                  res.json({'success': false});
-                } else {
-                  story.addAttachments(storyId,attachmentObj,function(err,data){
-                    res.send(data);
-                  })
-                }
-              });
-            });
-          });
-        });
-      }else{
+
+    attachmentObj={
+      fileName: files.file.name,
+      timeStamp: Date.now(),
+      attachmentType: file_ext,
+      addedByUserName:"Sharan",
+      addedByUserId:"56ebb688ee6b767262a7ed90",
+      path : '/uploadfile/'+storyId+"/"+ file_name+"."+file_ext
+    };
+    if(!fs.existsSync(folder_path)){
+      fs.mkdirSync(folder_path, function(err){
         fs.readFile(old_path, function(err, data) {
           fs.writeFile(new_path, data, function(err) {
             fs.unlink(old_path, function(err) {
@@ -101,17 +85,29 @@ router.post('/addattachments', function(req, res, next) {
                 story.addAttachments(storyId,attachmentObj,function(err,data){
                   res.send(data);
                 })
-                //res.status(200);
-                //res.json({'success': true});
               }
             });
           });
         });
-
-      }
-
+      });
     }else{
-      console.log("size extend");
+      fs.readFile(old_path, function(err, data) {
+        fs.writeFile(new_path, data, function(err) {
+          fs.unlink(old_path, function(err) {
+            if (err) {
+              res.status(500);
+              res.json({'success': false});
+            } else {
+              story.addAttachments(storyId,attachmentObj,function(err,data){
+                res.send(data);
+              })
+              //res.status(200);
+              //res.json({'success': true});
+            }
+          });
+        });
+      });
+
     }
   });
 });
