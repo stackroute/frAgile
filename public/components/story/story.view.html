@@ -14,7 +14,7 @@
       </h3>
     </header>
     Member :
-    <a ng-repeat="member in storyContr.storyData.memberList"><ng-letter-avatar data={{member.firstName}} charCount=2  height="30px" width="30px" fontSize="25px"></ng-letter-avatar><span class="remove-members fa fa-times" ng-click="removeMember(member._id)"></a>
+    <a ng-repeat="member in storyData.memberList"> <ng-letter-avatar data={{member.firstName}}  charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar><span class="remove-members fa fa-times" ng-click="removeMember(member._id)"></a>
 
       <!-- TODO change first name to full name -->
       <a ng-click="addMember()"><i class="fa fa-plus" aria-hidden="true"></i></a>

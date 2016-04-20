@@ -106,7 +106,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     return listId + bool;
   };
 
-  $scope.deleteStory = function(storyId, from, Listid, sprintId) {
+  $scope.deleteStory = function(storyId, storyName, from, Listid, sprintId) {
     console.log("-----In controller Now emmiting");
     socket.emit('sprint:deleteStory', {
       'room': $scope.roomName,
@@ -115,7 +115,9 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       'storyId':storyId,
       'projectId': $stateParams.prId,
       'Listid': Listid,
-      'sprintId': sprintId
+      'sprintId': sprintId,
+      'storyName' : storyName,
+      'projectName' : $scope.projectName
     });
   };
 

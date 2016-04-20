@@ -100,13 +100,14 @@ StorySchema.statics.addMembers = function(storyId,membersId, callback) {
   console.log("im inside story model addMembers");
 //Find was written only for reference
 //  this.findOne({"_id":storyId}).exec(function(err,doc){ console.log(doc);});
-  this.update(
+  this.findOneAndUpdate(
       { "_id" : storyId },
-      { $push: { memberList : membersId
+      { $addToSet: { memberList : membersId
         }
       },
       {
-         upsert: true
+         upsert: true,
+         new:true
       }
    )
    .exec(function(err , doc) {
@@ -153,11 +154,12 @@ StorySchema.statics.addStory = function(story, callback) {
 /*** removeMembers function is used to remove the members from
 the story.**/
 StorySchema.statics.removeMembers = function(storyId,membersId, callback) {
-  this.update(
+  this.findOneAndUpdate(
       { "_id" : storyId },
     {$pull: {memberList:membersId}},
     {
-      upsert: true
+      upsert: true,
+      new:true
         }
 
    )

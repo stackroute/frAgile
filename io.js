@@ -331,29 +331,26 @@ io.on('connection', function(socket) {
   })
 
   socket.on('sprint:deleteStory', function(data) {
-    console.log("-------------------------Inside io.js");
     Story.deleteStory(data.storyId, function(err, delData) {
       if (!err) {
-        console.log("-------------------------Story Deleted");
         var error = false;
         if (data.deleteFrom == 'Backlog') {
           BackLogsBugList.deleteStoryBacklog(data.projectId,data.storyId, function(err, delDataFrom) {
             error = err;
           });
         }
-        if (data.deleteFrom == 'Buglist') {
+        else if (data.deleteFrom == 'Buglist') {
           BackLogsBugList.deleteStoryBuglist(data.projectId,data.storyId, function(err, delDataFrom) {
             error = err;
           });
         }
-        if (data.deleteFrom == 'List') {
+        else {
           Sprint.deleteStory(data.sprintId,data.Listid,data.storyId, function(err, delDataFrom) {
             error = err;
           });
         }
 
         if (!error) {
-          console.log("-------------------------Story Refference Deleted");
           var storyData = {
             'deleteFrom': data.deleteFrom,
             'storyId':data.storyId,
@@ -362,6 +359,26 @@ io.on('connection', function(socket) {
             'sprintId': data.sprintId
           };
           io.to(data.room).emit('sprint:storyDeleted', storyData);
+
+          var actData = {
+            room: data.activityRoom,
+            action: "removed",
+            projectID: data.projectId,
+            user: user,
+            object: {
+              name: data.storyName,
+              type: "Story",
+              _id: data.storyId
+            },
+            target: {
+              name: data.deleteFrom,
+              type: "List",
+              _id: data.storyId
+            }
+          }
+          Activity.addEvent(actData, function(data) {
+            io.to(actData.room).emit('activityAdded', data);
+          });
         }
       }
     });
@@ -582,9 +599,11 @@ socket.on('activity:addMember', function(data) {
     console.log('Add Member: Socket Request');
     Story.addMembers(data.storyid, data.memberid, function(err, doc) {
       if (!err) {
-        io.to(data.room).emit('story:memberAdded', doc);
-        // io.to(data.room).emit('activity:memberAdded', 1);
-        // console.log(doc);
+        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+          if(!err){
+            io.to(data.room).emit('story:dataModified', storyData);
+          }
+        });
       }
     })
   })
@@ -596,9 +615,11 @@ socket.on('activity:addMember', function(data) {
     console.log('remove Member: Socket Request');
     Story.removeMembers(data.storyid, data.memberid, function(err, doc) {
       if (!err) {
-        io.to(data.room).emit('story:memberRemoved', doc);
-        // io.to(data.room).emit('activity:memberAdded', 1);
-        // console.log(doc);
+        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+          if(!err){
+            io.to(data.room).emit('story:dataModified', storyData);
+          }
+        });
       }
     })
   })
@@ -610,9 +631,11 @@ socket.on('activity:addMember', function(data) {
     console.log('add checklist Group: Socket Request');
     Story.addChecklistGroup(data.storyid, data.checklistGrp, function(err, doc) {
       if (!err) {
-        io.to(data.room).emit('story:checklistGrpAdded', doc);
-        // io.to(data.room).emit('activity:memberAdded', 1);
-        // console.log(doc);
+        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+          if(!err){
+            io.to(data.room).emit('story:dataModified', storyData);
+          }
+        });
       }
     })
   })

@@ -21,7 +21,7 @@
             <div class="story_Name">
               {{story.heading}}
             </div>
-            <div class="deleteStory" ng-click = "deleteStory(story._id, 'Backlog')">
+            <div class="deleteStory" ng-click = "deleteStory(story._id, story.heading ,'Backlog')">
               <i class="fa fa-times" aria-hidden="true"></i>
             </div>
 
@@ -72,7 +72,7 @@
             <div class="story_Name">
               {{story.heading}}
             </div>
-            <div class="deleteStory" ng-click = "deleteStory(story._id, 'List', listItem._id,sprint._id)">
+            <div class="deleteStory" ng-click = "deleteStory(story._id,story.heading, listItem.listName, listItem._id,sprint._id)">
               <i class="fa fa-times" aria-hidden="true"></i>
             </div>
             <div class="storyAttributes">
@@ -118,7 +118,7 @@
             <div class="story_Name">
               {{story.heading}}
             </div>
-            <div class="deleteStory" ng-click = "deleteStory(story._id, 'Buglist')">
+            <div class="deleteStory" ng-click = "deleteStory(story._id, story.heading, 'Buglist')">
               <i class="fa fa-times" aria-hidden="true"></i>
             </div>
             <div class="storyAttributes">

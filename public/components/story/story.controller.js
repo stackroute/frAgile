@@ -312,7 +312,7 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
     });
   };
 
-  socket.on('story:checklistGrpAdded', function(data) {
+  socket.on('story:dataModified', function(data) {
       $scope.storyData = data;
   })
 
