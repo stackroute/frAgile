@@ -64,7 +64,7 @@
         <div>
 
 
-          <ul ng-repeat="todo in checklistGrp" class="unstyled">
+          <ul ng-repeat="todo in storyData.checklist" class="unstyled">
 
             <span >{{todo.checklistHeading}}</span>   <a ng-click="removeChecklistGroup(todo._id)">
               <i class="fa fa-trash" ></i></a>
