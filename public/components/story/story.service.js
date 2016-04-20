@@ -13,6 +13,17 @@ fragileApp.factory('storyService',['$http',function($http) {
         return  $http.post('/story/addchecklistgroup?storyId='+storyId+'&checklistObj='+checklistObj);
       };
 
+/***
+author:sharan
+function:getStoryCopyMovementData
+parameters:projectId
+description: This function is used to get the whole set of data particular to a project to copy\move the story across the releases\sprints of  project
+***/
+      this.getStoryCopyMovementData = function(projectId){
+        console.log("projectId"+projectId);
+        return $http.post('/project/getstorymovedata?id='+projectId);
+      }
+
   return this;
 
 }]);

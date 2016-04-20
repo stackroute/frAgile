@@ -1,80 +1,88 @@
-<div>
 <div class="modal-header storyHeader" ng-class="storyContr.storyGrp">
-  <span class="modal-title modal-title-text">{{storyContr.storyData.heading}}</span>
-  <span class="fa fa-close fa_text pull-right"data-dismiss="modal" ng-click="cancel()"> </span>
+  <span class="fa fa-close fa_text pull-right" data-dismiss="modal" ng-click="cancel()"> </span>
   <!-- <a href="#addMember" data-toggle="modal" class="pull-right"><span class="fa fa-sort-desc  fa_text"> </span></a> -->
   <span class="fa fa-trash fa_text pull-right" data-dismiss="modal" ng-click="deleteStory()"> </span>
-  <span class="fa fa-files-o  fa_text pull-right" data-dismiss="modal" ng-click="copyStory()"> </span>
-  <span class=" fa fa-arrows fa_text pull-right" data-dismiss="modal" ng-click="moveStory()"> </span>
+  <span class="fa fa-files-o  fa_text pull-right" data-dismiss="modal" ng-click="moveCopyStory('components/story/operations/copyStory.view.html')"></span>
+  <span class=" fa fa-arrows fa_text pull-right" data-dismiss="modal" ng-click="moveCopyStory('components/story/operations/moveStory.view.html')"></span>
 </div>
 <div class="modal-body row">
-  <div class="form-group">
+  <div class="form-group col-sm-8">
+    <header class="modal-title modal-title-text">
+      <h3>
+        {{storyContr.storyData.heading}}
+      </h3>
+    </header>
     Member :
-    <a ng-repeat="member in storyContr.storyData.memberList"><ng-letter-avatar data={{member.firstName}} charCount=2  height="30px" width="30px" fontSize="25px"></ng-letter-avatar><i></i></a>
-    <!-- TODO change first name to full name -->
-    <a ng-click="addMember()"><i class="fa fa-user-plus" aria-hidden="true"></i></a>
+    <a ng-repeat="member in storyContr.storyData.memberList">
+      <ng-letter-avatar data={{member.firstName}} charCount=2 height="30px" width="30px" fontSize="25px"></ng-letter-avatar><span class="remove-members fa fa-times" ng-click="removeMember(member._id)"></a>
+      <!-- TODO change first name to full name -->
+      <a ng-click="addMember()"><i class="fa fa-plus" aria-hidden="true"></i></a>
 
-    <div class="">
-      <span>Last Updated on {{storyContr.storyData.updatetime}}</span>
-    </div>
-    <div class="">
-      <span ng-include="getTemplate(model.contacts)">
-      </span>
-      <script type="text/ng-template" id="display">
+      <div class="">
+        <span>Last Updated on {{storyContr.storyData.updatetime}}</span>
+  </div>
+  <div class="">
+    <span ng-include="getTemplate(model.contacts)">
+        </span>
+    <script type="text/ng-template" id="display">
       <span class="fa fa-pencil-square-o fa-text" ng-click="editDescription(model.description)">{{model.description.name}}</span>
 
-      </script>
-      <script type="text/ng-template" id="edit">
+    </script>
+    <script type="text/ng-template" id="edit">
       <span><input type="text" ng-model="model.selected.name" /></span>
       <span>
-      <button ng-click="saveDescription()">Save</button>
-      <button ng-click="reset()">Cancel</button>
-      </span>
-      </script>
-    </div>
-    <div class="">
-      Attachment:
-      <div ng-repeat="imagesPath in storyContr.storyData.attachmentList"><img src="{{imagesPath.fileName}}" height='50px'width='50px'alt="" /></div>
-      <button class="btn btn-primary" type="button" ng-click="addAttachment()">+</button>
-    </div>
-    <div class="">
-      Label:
-      <button class="btn btn-primary" type="button" ng-click="addLabel()">+</button>
-    </div>
-    <div class="">
-      Checklist:
-      <button class="btn btn-primary" type="button" ng-click="addChecklist()">+</button>
-      <div>
-
-
-        <ul ng-repeat="todo in todos" class="unstyled">
-
-          <span >{{todo.checklistHeading}}</span>  [ <a href="" ng-click="archive()">X</a> ]
-          <h6>
-            <small>{{todo.checkedCount}} of {{todo.items.length}} Completed</small>
-          </h6>
-          <!-- <uib-progressbar max="todo.items.length" value="todo.checkedCount"><span style="color:white; white-space:nowrap;">{{todo.checkedCount}} / {{todo.items.length}}</span></uib-progressbar> -->
-          <uib-progressbar animate="false" value="((todo.checkedCount/todo.items.length)*100)" type="success"><b>{{todo.checkedCount/todo.items.length*100}}%</b></uib-progressbar>
-
-          <li ng-repeat="list in todo.items">
-            <input type="checkbox" ng-model="list.checked" >
-            <span class="done-{{list.checked}}">{{list.text}}</span>
-          </li>
-          <li>
-            <input type="checkbox" disabled>
-            <input type="text" ng-model="todo.todoText"  size="30"
-            placeholder="add new todo here">
-            <input class="btn-primary" type="submit" ng-click="addTodoItem(todo)" value="add"></li>
-
-          </ul>
-        </div>
-
-      </div>
-    </div>
-    <div class="card-activity-wrap">
-      <h3> Activity </h3>
-      <div ng-include="'components/activity/activity.view.html'" style=""></div>
-    </div>
+            <button ng-click="saveDescription()">Save</button>
+            <button ng-click="reset()">Cancel</button>
+          </span>
+    </script>
+  </div>
+  <div class="">
+    Attachment:
+    <div ng-repeat="imagesPath in storyContr.storyData.attachmentList"><img src="{{imagesPath.fileName}}" height='50px' width='50px' alt="" /></div>
+    <a ng-click="addAttachment()"><i class="fa fa-plus" ></i></a>
 
   </div>
+  <div class="">
+    Label:
+    <a ng-click="addLabel()"><i class="fa fa-plus" ></i></a>
+  </div>
+  <div class="">
+    Checklist:
+    <a ng-click="addChecklist()"><i class="fa fa-plus" ></i></a>
+    <div>
+
+
+      <ul ng-repeat="todo in storyData.checklist" class="unstyled">
+
+        <span>{{todo.checklistHeading}}</span>
+        <a ng-click="removeChecklistGroup(todo._id)">
+          <i class="fa fa-trash"></i></a>
+        <!-- <uib-progressbar max="todo.items.length" value="todo.checkedCount"><span style="color:white; white-space:nowrap;">{{todo.checkedCount}} / {{todo.items.length}}</span></uib-progressbar> -->
+        <uib-progressbar animate="false" value="Math.floor((todo.checkedCount/todo.items.length)*100)" type="success"><b>{{Math.floor(todo.checkedCount/todo.items.length*100)}}%</b></uib-progressbar>
+
+        <li ng-repeat="list in todo.items">
+          <input type="checkbox" ng-model="list.checked" ng-click="updateTodoItem(list,todo)">
+          <span class="done-{{list.checked}}">{{list.text}}</span>
+          <a ng-click="removeTodoItem(list,todo)">
+            <i class="fa fa-minus-circle"></i>
+          </a>
+        </li>
+        <li>
+          <a><i class="fa fa-plus" ></i></a>
+          <input type="text" ng-model="todo.todoText" class="form-control" size="30" placeholder="add new todo here">
+          <div class="pull-right">
+            <a ng-click="addTodoItem(todo)"><i class="fa fa-check"></i></a>
+            <a><i class="fa fa-close"></i></a>
+          </div>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="col-sm-4">
+  <header>
+    <h3> Activity </h3>
+    <div ng-include="'components/activity/activity.view.html'" style=""></div>
+  </header>
+</div>
+</div>
 </div>

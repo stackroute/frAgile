@@ -88,7 +88,7 @@ sprintSchema.statics.findSprint = function(sprintId, callback) {
   this.findOne({
       "_id": sprintId
     })
-    .populate("list.stories", "storyStatus heading indicators")
+    .populate("list.stories")
     .exec(function(err, doc) {
       if (err) {
         callback(err, null);

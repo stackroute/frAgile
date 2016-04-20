@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/frAgile');
+mongoose.connect('mongodb://localhost/fragileDB');
 var db = mongoose.connection
 
 var routes = require('./routes/index');
