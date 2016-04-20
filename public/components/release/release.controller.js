@@ -1,8 +1,8 @@
-fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'Socket', '$state', function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, Socket, $state) {
+fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'Socket', '$state','$timeout', function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, Socket, $state, $timeout) {
   $scope.longDescLimit = 34;
   var socket = Socket($scope);
 
-  $scope.roomName = "release:" + $scope.release.id;
+  $scope.roomName = "release:" + $stateParams.releaseID;
   var emitData = {
     'room': $scope.roomName
   }
@@ -52,7 +52,7 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
   }
   $scope.editSprint = function(newSprintName,newSprintDetails,newSprintStartDate,newSprintEndDate,sprId,oldName) {
     if (newSprintStartDate != "") {
-      console.log("newSprintStartDate is not null it is -" + newSprintStartDate +"-");
+      // console.log("newSprintStartDate is not null it is -" + newSprintStartDate +"-");
     }
     if (newSprintName != "" && newSprintStartDate != null && newSprintEndDate != null) {
     newSprintStartDate = new Date(newSprintStartDate);
@@ -73,11 +73,31 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
       return false;
     }
   }
+
+
   $scope.getSprints = function() {
-    // $scope.projectID = $stateParams.prId;
-    releaseService.getSprints($scope.release.id).success(function(response) {
-      $scope.sprints = response[0].release[0].sprints;
+    $scope.projectID = $stateParams.prId;
+    $scope.relId = $stateParams.releaseID;
+
+    $rootScope.projects.forEach(function(project, projectKey) {
+      if (project._id == $stateParams.prId) {
+        $scope.projectKey = projectKey;
+        console.log("found project " + $stateParams.prId);
+        project.release.forEach(function(release, releaseKey) {
+          if (release._id == $stateParams.releaseID) {
+            $scope.releaseKey = releaseKey;
+          }
+        });
+      }
     });
+    console.log("111111111111111111111");
+    console.log($scope.sprints);
+    console.log("22222222222222222222222222");
+    // releaseService.getSprints($stateParams.releaseID).success(function(response) {
+    //   $scope.sprints = response[0].release[0].sprints;
+    //   console.log($scope.sprints);
+    //   console.log("33333333333333333333333");
+    // });
 
     // Menu Click Event
     $rootScope.isMenu = true;
@@ -105,7 +125,7 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
 
   };
   $scope.starFun = function(rel) {
-    console.log("starFun" + rel);
+    // console.log("starFun" + rel);
   };
 
 }]);

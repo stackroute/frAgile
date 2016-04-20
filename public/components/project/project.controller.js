@@ -1,12 +1,12 @@
 fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket','$filter', function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket,$filter) {
-  $scope.loadProjects = function() {
-
-    projectService.getUserProjects().success(function(response) {
-      $rootScope.projects = response.projects
-    });
-
-    $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
-  }
+  // $scope.loadProjects = function() {
+  //
+  //   projectService.getUserProjects().success(function(response) {
+  //     $rootScope.projects = response.projects
+  //   });
+  //
+  //   $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
+  // }
   var socket = Socket($scope);
 
   socket.emit('join:room', {
@@ -14,7 +14,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
   });
 
   socket.on('releaseDeleted', function(releaseData) {
-    $scope.projects.forEach(function(project) {
+    $rootScope.projects.forEach(function(project) {
       if (project._id == releaseData.projectId) {
         project.release.forEach(function(release) {
           if (release._id == releaseData.releaseId) {
@@ -104,14 +104,14 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
   socket.on('project:releaseEdited', function(releaseData) {
     console.log(releaseData);
     console.log("--------------");
-    $scope.projects.forEach(function(item, itmIndex) {
+    $rootScope.projects.forEach(function(item, itmIndex) {
       if(item._id == releaseData.prId){
         item.release.forEach(function(rel, relIndex) {
           if(rel._id == releaseData._id){
             console.log($scope.projects[itmIndex].release[relIndex]);
-            $scope.projects[itmIndex].release[relIndex].name = releaseData.name;
-            $scope.projects[itmIndex].release[relIndex].description = releaseData.description;
-            $scope.projects[itmIndex].release[relIndex].releaseDate = releaseData.releaseDate;
+            $rootScope.projects[itmIndex].release[relIndex].name = releaseData.name;
+            $rootScope.projects[itmIndex].release[relIndex].description = releaseData.description;
+            $rootScope.projects[itmIndex].release[relIndex].releaseDate = releaseData.releaseDate;
           }
         });
       }
@@ -121,9 +121,9 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
 
   socket.on('project:releaseAdded', function(releaseData) {
     // Returns entire project document
-    $scope.projects.forEach(function(item, index) {
+    $rootScope.projects.forEach(function(item, index) {
       if (item._id == releaseData._id) { //Comparing  Scope Projects ID with Updated Project ID
-        $scope.projects[index] = releaseData;
+        $rootScope.projects[index] = releaseData;
 
       }
     });

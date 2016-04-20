@@ -1,9 +1,9 @@
 <div ng-init="getSprints()">
-  <div id="{{release.id}}" class="container">
+  <div id="{{projects[projectKey].release[releaseKey]._id}}" class="container">
     <div class="row">
 
-      <h4>{{release.name}}<small>{{release.description}}</small></h3>
-        <div class="boxContainer" ng-repeat= "spr in sprints"><!-- TODO: Changed for Testing -->
+      <h4>{{projects[projectKey].release[releaseKey].name}}<small>{{projects[projectKey].release[releaseKey].description}}</small></h3>
+        <div class="boxContainer" ng-repeat= "spr in projects[projectKey].release[releaseKey].sprints"><!-- TODO: Changed for Testing -->
           <div class="box"  ng-class="{'hideSlide':!hovering,'showSlide':hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" id="{{spr._id}}" >
             <div class="slideMenuBox">
               <i class="fa fa-trash" ng-click="archiveFun(release.id, spr._id,release.name,spr.name)"></i>

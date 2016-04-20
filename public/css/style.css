@@ -26,7 +26,11 @@ h3 {
   height: 4px;
   bottom: 20px;
 }
-
+.addProject{
+  position: fixed;
+  bottom: 22px;
+  right: 33px;
+}
 /* Track */
 
 ::-webkit-scrollbar-track {
@@ -52,6 +56,50 @@ hr{
 .top-header {
   padding: 0;
 }
+/*Tree Menu*/
+.treeMenu {
+    position: fixed;
+    color: #F4FBF9;
+    width: 251px;
+    height: 91%;
+    z-index: 100;
+    background-color: #1C2F2B;
+    top: 52px;
+    left: 0px;
+    padding-left: 17px;
+    box-shadow: 4px 0px 8px rgba(0, 0, 0, 0.29);
+
+}
+.treeMenu h5 {
+    color: white;
+    font-size: 18px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+.treeMenuBtn {
+    position: fixed;
+    top: 39px;
+    z-index: 101;
+    left: 36px;
+    color: #527D73;
+    font-size: 39px;
+}
+.treeMenu .fa-arrow-circle-o-left {
+    color: #F4FBF9;
+    font-size: 39px;
+    position: absolute;
+    top: 11px;
+    right: 12px;
+}
+span.releaseNameTree.ng-binding {
+    padding-left: 20px;
+    line-height: 32px;
+}
+span.sprintNameTree.ng-binding {
+    padding-left: 35px;
+    line-height: 32px;
+}
+/*Tree Menu Ends*/
 .logo {
     width: 34px;
     padding-right: 6px;

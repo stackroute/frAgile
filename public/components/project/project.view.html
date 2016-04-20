@@ -1,4 +1,4 @@
-<div ng-init="loadProjects()" class = "projectPage container">
+<divs class = "projectPage container">
   <div ng-repeat="project in projects" class="main">
       <div id="{{project._id}}" class = "container">
         <h4>{{project.name}}<small>{{project.description}}</small></h4>
@@ -58,7 +58,7 @@
       </div>
       <hr>
     </div>
-    <div class="btn btn-success" ng-click = "setDefaultForProject(project._id)" data-toggle="modal" data-target="#myModal">
+    <div class="btn btn-success addProject" ng-click = "setDefaultForProject(project._id)" data-toggle="modal" data-target="#myModal">
       <i class="fa fa-plus"></i>  Add New Project
     </div>
 </div>

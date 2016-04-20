@@ -25,7 +25,7 @@
   <script src="js/lib/ngletteravatar.js"></script>
   <script src="js/lib/autocomplete.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/danialfarid-angular-file-upload/12.0.4/ng-file-upload.min.js"></script>
-  
+
   <link rel='stylesheet' href='css/lib/loading-bar.min.css' type='text/css' media='all' />
   <script type='text/javascript' src='js/lib/loading-bar.min.js'></script>
 
@@ -36,8 +36,7 @@
 <body ng-controller="loginController">
 
   <div class="container-fluid top-header">
-
-    <nav class="navbar navbar-default navbar-xs" role="navigation">
+    <nav class="navbar navbar-default navbar-xs" role="navigation"  ng-init="loadProjects()">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -61,16 +60,35 @@
   </nav>
   </div>
 
-  <div>
+  <div ng-click = 'showTree = false'>
     <div ui-view class = "bodyArea">
     </div>
   </div>
+  <div class="treeMenuBtn" ng-click = 'showTree = true' ng-hide = "showTree">
+    <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
+  </div>
+  <div class="treeMenu" ng-show = "showTree">
 
+    <h5>Navigation</h5>
+    <i class="fa fa-arrow-circle-o-left" aria-hidden="true" ng-click = 'showTree = false'></i>
+    <!-- Tree Menu -->
+    <div ng-repeat = "project in projects">
+      <span class="projectNameTree">{{project.name}}</span>
+      <div ng-repeat = "release in project.release">
+        <span class="releaseNameTree">{{release.name}}</span>
+        <div ng-repeat = "sprint in release.sprints">
+          <span class="sprintNameTree">{{sprint.name}}</span>
+        </div>
+      </div>
+      <hr>
+    </div>
 
+  </div>
   <script type="text/javascript" src='app1.js'></script>
   <script type="text/javascript" src='js/socket.js'></script>
 
   <script type="text/javascript" src='components/login/login.controller.js'></script>
+  <script type="text/javascript" src='components/login/login.service.js'></script>
 
   <script type="text/javascript" src='components/project/project.route.js'></script>
   <script type="text/javascript" src='components/project/project.controller.js'></script>

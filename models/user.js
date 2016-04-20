@@ -114,7 +114,7 @@ userSchema.statics.getUserEmail = function(email, callback) {
 }
 
 userSchema.statics.getProjects = function(userID, callback) {
-  this.findById(userID).populate("projects").exec(function(err, data) {
+  this.findById(userID).populate("projects").populate("release.0.sprints").exec(function(err, data) {
     if (err) callback(err)
     else callback(data);
   });

@@ -27,7 +27,7 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
         projectService.addProjectToUser( response._id).success(function(data) {
 
           //Pushing added object into the scope to display
-          $scope.projects.push(data[0]);
+          $rootScope.projects.push(data[0]);
 
           //Emitting add activity event
           var data = {
