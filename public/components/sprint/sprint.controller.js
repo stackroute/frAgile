@@ -5,7 +5,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     sprintService.getSprints($stateParams.sprintID).then(function(sprint) {
       $scope.sprint = sprint.data;
       $scope.sprintWidth = ($scope.sprint.list.length * 278 + 560) + "px";
-      $scope.sprint = sprint.data;
 
     });
     sprintService.getBackBug($stateParams.prId).then(function(backBug) {
@@ -13,6 +12,10 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     });
     $scope.AddStoryDiv = "AddStoryDiv";
 
+    sprintService.getProject($stateParams.sprintID).then(function(project){
+      $rootScope.projectID = project.data[0]._id;
+      $rootScope.projectName = project.data[0].name;
+    })
 
     $rootScope.isMenu = false;
     $rootScope.SlideMenu = function() {
@@ -119,7 +122,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   $scope.addStory = function(listId, storyDetails, id, listName) {
     // $scope.listIdAdded = id;
     if (storyDetails != undefined && storyDetails != "") {
-      socket.emit('sprint:addStory', {
+      var emitData = {
         'room': $scope.roomName,
         'activityRoom': 'activity:' + $stateParams.prId,
         'addTo': listId,
@@ -130,15 +133,19 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'description': "",
         'listId': listId,
         'id': id,
-        'listName' : listName
-      });
+        'listName': listName
+      }
+      socket.emit('sprint:addStory', emitData );
       $scope.storyDetails = "";
       return true;
-    }
-    else {
+    } else {
       return false
     }
   }
+
+  $scope.gotoTop = function(id) {
+    angular.element("#"+id)[0].scrollBottom=0;
+  };
 
   var divBeingDragged = "",
     elemBeingDragged = "";
@@ -270,18 +277,18 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
 
   //To emit activity related to story move
   socket.on('sprint:storyActivity', function(data) {
-    var listName ="",
-        listId = "";
-    if(data.newListId == "backlogs" || data.newListId == "buglists")
-      listName = data.newListId.replace("b","B");
-      else{
-        $scope.sprint.list.forEach(function(listItem) {
-          if (listItem._id == data.newListId) {
-            lisId = listItem._id;
-            listName = listItem.listName;
-          }
-        });
-      }
+    var listName = "",
+      listId = "";
+    if (data.newListId == "backlogs" || data.newListId == "buglists")
+      listName = data.newListId.replace("b", "B");
+    else {
+      $scope.sprint.list.forEach(function(listItem) {
+        if (listItem._id == data.newListId) {
+          lisId = listItem._id;
+          listName = listItem.listName;
+        }
+      });
+    }
 
 
     var actData = {
@@ -302,6 +309,22 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     socket.emit('addActivity', actData);
   });
 
+  $scope.scrollText = "Go to Buglists";
+  $scope.scrollClass = "fa fa-chevron-right";
+  $scope.toggleScroll = function() {
+    if ($scope.scrollText == "Go to Buglists") {
+      $('#mainSprint').css('margin-left', "-" + parseInt($scope.sprintWidth)/2.95 + "px");
+      // console.log('margin-left', "-" + parseInt($scope.sprintWidth)/2.95 + "px");
+      $scope.scrollClass = "fa fa-chevron-left";
+      $scope.scrollText = "Go to Backlogs";
+    } else {
+      $('#mainSprint').css('margin-left', '0');
+      $scope.scrollClass = "fa fa-chevron-right";
+      $scope.scrollText = "Go to Buglists";
+    }
+
+  }
+
 
 
   /***
@@ -312,11 +335,13 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   Parameters:storyId
   resolve:Sprint, Story,ProjectMembers
   TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
-***/
-  $scope.showModal = function(storyID, storyGrp) {
-    console.log(storyID);
+  ***/
+  $scope.showModal = function(storyID,storyGrp,listItemId,listItemName)
+  {
+    var currentPosition = {}
+    currentPosition.listId=listItemId;
+    currentPosition.listItemName = listItemName;
     sprintService.getStory(storyID).then(function(story) {
-      console.log(story);
       var modalInstance = $uibModal.open({
         animation: $scope.animationsEnabled,
         templateUrl: '/components/story/story.view.html',
@@ -325,13 +350,12 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         size: 'lg',
         resolve: {
           param: function() {
-            console.log("params in modal factory :::::  ");
-            console.log("passing data to story controller");
             return {
-              story: story,
-              sprint: $scope.sprint,
-              projMembers: $rootScope.memberList,
-              storyGrp: storyGrp
+              story:story,
+              sprint:$scope.sprint,
+              projMembers:$rootScope.memberList,//TODO:Check if this can be sent directly instead of resolve
+              storyGrp:storyGrp,
+              currentPosition:currentPosition
             };
           }
         }
@@ -340,7 +364,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       modalInstance.result.then(function(selectedItem) {
         $scope.selected = selectedItem;
       }, function() {
-        ///This runs for close or save.... You can delete this
+        socket.emit('join:room', {'room': $scope.roomName}); // To join back the room
       });
 
 

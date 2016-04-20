@@ -64,20 +64,18 @@ projectSchema.statics.addMember = function(projectId, memberId, callback) {
 }
 
 projectSchema.statics.removeMember = function(projectId, memberId, callback) {
-  this.update({
-      "_id": projectId
-    }, {
+  this.findByIdAndUpdate(projectId, {
       $pull: {
         "memberList": memberId
       }
     }, {
+      new: true,
       upsert: true
     })
     .exec(function(err, doc) {
       if (err) {
         callback(err, null);
       } else {
-
         callback(null, doc);
       }
     });
@@ -106,7 +104,7 @@ projectSchema.statics.updateProject = function(projectId, newProject, callback) 
 }
 
 projectSchema.statics.updateRelease = function(projectId, releaseId, newRelease, callback) {
-  this.update({
+  this.findOneAndUpdate({
       "_id": projectId,
       "release._id": releaseId
     }, {
@@ -229,10 +227,27 @@ projectSchema.statics.findProj = function(projectList, callback) {
 }
 projectSchema.statics.getProjectMembers = function(projectId, callback) {
 
-  this.findOne({
-      "_id": projectId
-    })
-    .populate('memberList', '_id firstName lastName initials imageUrl')
+  this.findOne({"_id":projectId})
+  .populate('memberList','_id firstName lastName initials imageUrl' )
+    .exec(function(err, doc) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+}
+
+/***
+author:Sharan
+method: getStoryMoveData
+parameter:projectId
+description: This method will get name and id of all the releases, sprints of each release and list of each sprint required for moving the story within a project.
+***/
+projectSchema.statics.getStoryMoveData=function(projectId,callback){
+  console.log("received inside model----->"+projectId);
+  this.findOne({"_id":projectId},{memberList:0,ScrumMaster:0})
+  .populate('release.sprints','_id list name' )
     .exec(function(err, doc) {
       if (err) {
         callback(err, null);

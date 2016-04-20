@@ -24,6 +24,10 @@ parameter:projectid
    return $http.post('/project/getProjectMembers?id='+projectId);
  };
 
+ this.getProject  = function(sprintID){
+   return $http.get('/project?sprintID='+ sprintID);
+ }
+
   return this;
 
 }]);

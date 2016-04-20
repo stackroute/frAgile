@@ -79,14 +79,32 @@ io.on('connection', function(socket) {
       creationDate: data.creationDate,
       releaseDate: data.releaseDate
     };
-    console.log("--------------------------");
-    console.log(release);
-    console.log("--------------------------");
+
     Project.updateRelease(data.projectId, data.releaseId, release, function(err, doc) {
       if (!err) {
         release._id = data.releaseId;
         release.prId = data.projectId;
         io.to(data.room).emit('project:releaseEdited', release);
+
+        var actData = {
+          room: "activity:" + data.projectId,
+          action: "changed",
+          projectID: data.projectId,
+          user: user,
+          object: {
+            name: data.oldReleaseName,
+            type: "Release",
+            _id: data.releaseId
+          },
+          target: {
+            name: release.name,
+            type: "Release",
+            _id: data.releaseId
+          }
+        }
+        Activity.addEvent(actData, function(data) {
+          io.to(actData.room).emit('activityAdded', data);
+        });
       }
     });
 
@@ -98,13 +116,31 @@ io.on('connection', function(socket) {
       startDate: data.startDate,
       description: data.description,
     };
-    console.log("--------------------------");
-    console.log(sprint);
-    console.log("--------------------------");
+
     Sprint.updateSprint(data.sprintId, sprint, function(err, doc) {
       if (!err) {
         sprint._id=data.sprintId;
         io.to(data.room).emit('release:sprintEdited', sprint);
+
+        var actData = {
+          room: "activity:" + data.projectID,
+          action: "changed",
+          projectID: data.projectID,
+          user: user,
+          object: {
+            name: data.oldName,
+            type: "Sprint",
+            _id: data.sprintId
+          },
+          target: {
+            name: data.name,
+            type: "Sprint",
+            _id: data.sprintId
+          }
+        }
+        Activity.addEvent(actData, function(data) {
+          io.to(actData.room).emit('activityAdded', data);
+        });
       }
     });
 
@@ -467,7 +503,26 @@ io.on('connection', function(socket) {
           releaseId: data.releaseId,
           sprintId: data.sprintId
         });
-      console.log('Delete Sprint: ', doc);
+
+        var actData = {
+          room: "activity:" + data.projectId,
+          action: "deleted",
+          projectID: data.projectId,
+          user: user,
+          object: {
+            name: data.sprintName,
+            type: "Sprint",
+            _id: data.sprintId
+          },
+          target: {
+            name: data.releaseName,
+            type: "Release",
+            _id: data.releaseId
+          }
+        }
+        Activity.addEvent(actData, function(data) {
+          io.to(actData.room).emit('activityAdded', data);
+        });
     })
   })
 
@@ -488,19 +543,145 @@ socket.on('activity:addMember', function(data) {
   })
 
   socket.on('activity:removeMember', function(data) {
-    console.log('Remove Member: Socket Request');
     Project.removeMember(data.projectId, data.memberId, function(err, doc) {
       if (!err) {
         User.find({'_id': data.memberId}).exec(function(err, userData){
           if(!err)
             io.to(data.room).emit('activity:memberRemoved', userData[0]);
+            User.removeProjectfromUser(data.memberId,data.projectId,function(subDoc){
+              console.log(doc);
+              var actData = {
+                room: data.room,
+                action: "removed",
+                projectID: data.projectId,
+                user: user,
+                object: {
+                  name: userData[0].firstName + " " + userData[0].lastName,
+                  type: "User",
+                  _id: data.memberId
+                },
+                target: {
+                  name: doc.name,
+                  type: "Project",
+                  _id: data.projectId
+                }
+              }
+              Activity.addEvent(actData, function(data) {
+                io.to(actData.room).emit('activityAdded', data);
+              });
+            });
         });
-        User.removeProjectfromUser(data.memberId,data.projectId,function(data){
-        });
+
+      }
+    })
+  })
+  /***
+  description:listner to add members to story
+  ****/
+  socket.on('story:addMembers', function(data) {
+    console.log('Add Member: Socket Request');
+    Story.addMembers(data.storyid, data.memberid, function(err, doc) {
+      if (!err) {
+        io.to(data.room).emit('story:memberAdded', doc);
+        // io.to(data.room).emit('activity:memberAdded', 1);
+        // console.log(doc);
       }
     })
   })
 
+  /****
+  description:listner to remove members from story
+  ****/
+  socket.on('story:removeMembers', function(data) {
+    console.log('remove Member: Socket Request');
+    Story.removeMembers(data.storyid, data.memberid, function(err, doc) {
+      if (!err) {
+        io.to(data.room).emit('story:memberRemoved', doc);
+        // io.to(data.room).emit('activity:memberAdded', 1);
+        // console.log(doc);
+      }
+    })
+  })
+
+  /****
+  description:listner to addnew checklist group to story
+  ****/
+  socket.on('story:addChecklistGroup', function(data) {
+    console.log('add checklist Group: Socket Request');
+    Story.addChecklistGroup(data.storyid, data.checklistGrp, function(err, doc) {
+      if (!err) {
+        io.to(data.room).emit('story:checklistGrpAdded', doc);
+        // io.to(data.room).emit('activity:memberAdded', 1);
+        // console.log(doc);
+      }
+    })
+  })
+
+  /****
+  description:listner to addnew item to checklist group in a story
+  ****/
+  socket.on('story:addChecklistItem', function(data) {
+    console.log('add checklist Group: Socket Request');
+    // data.itemObj.creatorName=user.fullName;
+    // data.itemObj.createdBy=user.userID;
+    data.itemObj.createdBy="570395a239dc5fbac028505c";
+    data.itemObj.creatorName="user.fullName";
+
+    Story.addChecklistItem(data.storyid,data.checklistGrpId,data.itemObj, function(err, doc) {
+      if (!err) {
+        //user.userID
+        io.to(data.room).emit('story:checklistItemAdded', doc);
+        // io.to(data.room).emit('activity:memberAdded', 1);
+        // console.log(doc);
+      }
+    })
+  })
+  /****
+  description:listner to remove item to checklist group in a story
+  ****/
+  socket.on('story:removeChecklistItem', function(data) {
+    console.log('add checklist Group: Socket Request');
+    Story.removeChecklistItem(data.storyid,data.checklistGrpId,data.itemid,data.checked, function(err, doc) {
+      if (!err) {
+        //user.userID
+        io.to(data.room).emit('story:checklistItemRemoved', doc);
+      }
+    })
+  })
+  /****
+  description:listner to remove item to checklist group in a story
+  ****/
+  socket.on('story:removeChecklistGroup', function(data) {
+    console.log('add checklist Group: Socket Request');
+    Story.removeChecklistGroup(data.storyid,data.checklistGrpId, function(err, doc) {
+      if (!err) {
+        //user.userID
+        io.to(data.room).emit('story:ChecklistGroupRemoved', doc);
+      }
+    })
+  })
+  /****
+  description:listner to update item to checklist group in a story
+  ****/
+  socket.on('story:updateChecklistItem', function(data) {
+    console.log('update checklist Group: Socket Request');
+
+    // Story.updateChecklistItem(data.storyid,data.checklistGrpId,data.itemid,data.checked, function(err, doc) {
+    //   if (!err) {
+    //     //user.userID
+    //     io.to(data.room).emit('story:checklistItemUpdated', doc);
+    //   }
+    // })
+    Story.getCheckItemIndex(data.itemid,function(err,index){
+      if(index != -1)
+      Story.updateChecklistItem(data.storyid,data.checklistGrpId,data.itemid,data.checked, index,function(err, doc) {
+        if (!err) {
+          //user.userID
+          io.to(data.room).emit('story:checklistItemUpdated', doc);
+        }
+      })
+    })
+  })
 });
 
 

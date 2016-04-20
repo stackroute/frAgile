@@ -224,7 +224,13 @@ border-radius: 107px;
 height: 45px;
 width: 45px;
 }
-
+.toggleSprintIcon{
+  margin-top: 27px;
+  margin-left: 2px;
+}
+.toggleSprintText{
+  cursor: pointer;
+}
 .frm {
     margin-top: 8px;
     margin-bottom: -3px;
@@ -642,6 +648,9 @@ background-color: rgb(255, 239, 237);
 #activities {
   padding: 0px 0px;
 }
+#myModal{
+  top: 20%;
+}
 
 /*CSS for scrollbar*/
 
@@ -708,6 +717,7 @@ background-color: rgb(255, 239, 237);
     color: #4d4d4d;
     font: 14px "Helvetica Neue", Arial, Helvetica, sans-serif;
     line-height: 18px;
+
 }
 .activity-items:after {
   content: "";
@@ -932,3 +942,53 @@ padding-right: 5px;
 }
 
 /*Story CSS Ends*/
+
+/* AUTOCOMPLETE */
+
+.autocomplete input {
+  padding:0.4em;
+  background-color: #e2e4e6;
+  border: 1px solid #cdd2d4;
+  border-radius: 3px;
+  display: block;
+  margin-bottom: 9pt;
+  min-height: 34px;
+  /*padding: 7px;*/
+  width: 80%;
+  float: left;
+  margin-right: 2px;
+  box-sizing: border-box;
+}
+.autocomplete ul {
+  position: absolute;
+  z-index: 1;
+  border: 1px solid #cdd2d4;
+  border-radius: 3px;
+  display: block;
+  margin-bottom: 9pt;
+  max-height: 100%;
+  overflow: auto;
+  width: 72%;
+  margin: 33px 0;
+  padding: 0px;
+  box-sizing: border-box;
+}
+.autocomplete li {
+  text-align: left;
+  list-style: none;
+  width: 100%;
+  padding: 0.4em;
+  background-color: #fff;
+}
+.autocomplete li.active {
+  width: 100%;
+  background-color: rgb(38, 166, 91);
+  font-weight: bold;
+}
+.autocomplete .highlight {
+  background-color: #E2E2E2;
+}
+.autocomplete li.active .highlight {
+  background: #666;
+  color: #fff;
+}

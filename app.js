@@ -68,10 +68,6 @@ app.use(function(req, res, next) {
     return res.redirect(200,'/index.html');
   }
 });
-// app.use(function(req,res,next){
-//   console.log("Printing session user"+req.session.passport.user);
-//   next();
-// });
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');

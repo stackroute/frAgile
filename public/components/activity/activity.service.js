@@ -5,7 +5,9 @@ var prepositionsMap = {
   "commented": " on ",
   "moved": " to ",
   "changed": " to ",
-  "deleted": " from "
+  "deleted": " from ",
+  "changed" : " to ",
+  "removed" : " from "
 };
 
 angular
@@ -79,6 +81,11 @@ angular
 
       getUserId: function(userEmailId){
         var url = "/user/getUserId?email=" + userEmailId;
+        return $http.get(url);
+      },
+
+      getUsers: function(searchText){
+        var url = "/user/getUsers?email=" + searchText;
         return $http.get(url);
       }
     }

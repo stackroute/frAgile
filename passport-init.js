@@ -30,8 +30,6 @@ module.exports = function(passport){
 			// check in mongo if a user with email exists or not
 			User.findOne({ 'email' :  email },
 				function(err, user) {
-					console.log("In passport init",user);
-					console.log(err);
 					// In case of any error, return using the done method
 					if (err)
 						return done(err);
@@ -46,8 +44,6 @@ module.exports = function(passport){
 						return done(null, false); // redirect back to login page
 					}
 					else {
-						console.log("passing This: ");
-						console.log(user);
 						return done(null,user);
 					}
 
@@ -83,7 +79,6 @@ module.exports = function(passport){
 					newUser.password = password;
 					newUser.firstName = req.body.firstName;
           newUser.lastName=req.body.lastName;
-					console.log(req.body.firstName);
 					// save the user
 					newUser.save(function(err) {
 						if (err){
@@ -143,7 +138,6 @@ module.exports = function(passport){
 		  },
 		  function(accessToken, refreshToken, profile, done) {
 		    	process.nextTick(function(){
-						console.log(profile);
 		    		User.findOne({'google.id': profile.id}, function(err, user){
 		    			if(err)
 		    				return done(err);
@@ -165,7 +159,6 @@ module.exports = function(passport){
 		    						throw err;
 		    					return done(null, newUser);
 		    				})
-		    				console.log(profile);
 		    			}
 		    		});
 		    	});

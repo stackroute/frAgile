@@ -30,7 +30,17 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
     })
   }
 
-  // $scope.roomName = 'activity:' + $scope.projectID,
+  // Autocomplete Search
+  $scope.users = [];
+  $scope.updateSearch = function(typed) {
+      $scope.users = [];
+      $scope.newUsers = activityService.getUsers(typed).success(function(data) {
+        data.forEach(function(user) {
+          $scope.users.push(user.email);
+        })
+      });
+    }
+    // $scope.roomName = 'activity:' + $scope.projectID,
   $scope.saveMember = function() {
     socket.emit('activity:addMember', {
       'room': 'activity:' + $scope.projectID,
@@ -39,7 +49,7 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
     });
     $scope.members = "";
 
-    $scope.userIds.forEach(function(userId, index){
+    $scope.userIds.forEach(function(userId, index) {
       var data = {
         room: 'activity:' + $scope.projectID,
         action: "added",
@@ -64,7 +74,7 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
 
   }
 
-socket.on('activity:memberAdded', function(data) {
+  socket.on('activity:memberAdded', function(data) {
     data.fullName = data.firstName + " " + data.lastName;
     $scope.memberList.push(data);
     $scope.allMembers = [];
@@ -73,45 +83,24 @@ socket.on('activity:memberAdded', function(data) {
     $scope.addedMembers = "Success: Members Added To Project!";
   });
 
-  socket.on('activity:memberRemoved', function(userData){
+  socket.on('activity:memberRemoved', function(userData) {
     var fullName = userData.firstName + " " + userData.lastName;
-    $scope.memberList.forEach(function(data){
+    $scope.memberList.forEach(function(data,index){
       if(userData._id == data._id)
-        $scope.memberList.pop();
+        $scope.memberList.splice(index,1);
+
     });
 
-    var data = {
-      room: 'activity:' + $scope.projectID,
-      action: "removed",
-      projectID: $scope.projectID,
-      user: {
-        '_id': $scope.userID,
-        'fullName': $scope.fullName
-      },
-      object: {
-        name: fullName,
-        type: "User",
-        _id: userData._id
-      },
-      target: {
-        name: $scope.projectName,
-        type: "Project",
-        _id: $scope.projectID
-      }
-    }
-    socket.emit('addActivity', data);
+
   })
 
   $scope.removeMember = function(memberId) {
-    console.log('Remove Member: ', memberId);
 
     socket.emit('activity:removeMember', {
       'room': 'activity:' + $scope.projectID,
       'projectId': $scope.projectID,
       'memberId': memberId
     });
-
-
 
   }
 
