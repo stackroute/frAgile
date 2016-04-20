@@ -7,15 +7,18 @@ TODO:
 
 fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','param',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,param){
 var socket = Socket($scope);
+
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
   storyContr.storyData=storyContr.complexDataObject.story.data;
   storyContr.storyGrp=storyContr.complexDataObject.storyGrp;
 
-  $scope.checklistGrp =storyContr.storyData.checklist;
 
-  console.log(storyContr.complexDataObject);
+  $scope.storyData = storyContr.storyData;
+  console.log(  $scope.storyData );
+
+
   storyContr.storyData.updatetime = moment(storyContr.storyData.lastUpdated).fromNow();
 
   //TODO:Check if these are required????
@@ -25,12 +28,11 @@ var socket = Socket($scope);
 
   $scope.storyID = storyContr.storyData._id; //Used in loading activity for card.
 
-//This code need to be moved to board code to create the room w.r.t to boardid.
-  // console.log("Joining the story room");
-  // socket.emit('join:room', {
-	// 			'room': storyContr.storyData._id
-	// 		});
-//Ends
+  $scope.roomName = "story:" + storyContr.storyData._id;
+  var emitData = {
+    'room': $scope.roomName
+  }
+  socket.emit('join:room', emitData);
 
   $scope.model = {
     description: {
@@ -105,7 +107,8 @@ var socket = Socket($scope);
   $scope.removeMember=function(memberId){
     //working,tested
     socket.emit('story:removeMembers', {
-      'room': $scope.$parent.roomName,
+
+      'room': $scope.roomName,
       'storyid': storyContr.storyData._id,
       'memberid': memberId
     });
@@ -190,6 +193,7 @@ var socket = Socket($scope);
 
     $scope.reset();
     $scope.set=false;
+    $scope.checklistGrp =storyContr.storyData.checklist;
 
     // ///Socket Coding starts
     // console.log("about to emit in client");
@@ -225,7 +229,8 @@ var socket = Socket($scope);
       creationDate:Date.now(),
     }
     socket.emit('story:addChecklistItem', {
-      'room': $scope.$parent.roomName,
+
+      'room': $scope.roomName,
       'storyid': storyContr.storyData._id,
       'checklistGrpId': todo._id,
       'itemObj':itemObj
@@ -245,7 +250,8 @@ $scope.removeTodoItem = function(listItem,checklistGrp) {
   //todo.items.push({"text":todo.todoText,"done":false})
 
   socket.emit('story:removeChecklistItem', {
-    'room': $scope.$parent.roomName,
+
+    'room': $scope.roomName,
     'storyid': storyContr.storyData._id,
     'checklistGrpId': checklistGrp._id,
     'itemid':listItem._id,
@@ -269,7 +275,8 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   //todo.items.push({"text":todo.todoText,"done":false})
 
   socket.emit('story:updateChecklistItem', {
-    'room': $scope.$parent.roomName,
+
+    'room': $scope.roomName,
     'storyid': storyContr.storyData._id,
     'checklistGrpId': checklistGrp._id,
     'itemid':listItem._id,
@@ -298,9 +305,15 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   $scope.removeChecklistGroup = function(checklistGrpId) {
 //TODO:Add listner
   socket.emit('story:removeChecklistGroup', {
-      'room': $scope.$parent.roomName,
+
+      'room': $scope.roomName,
       'storyid': $scope.storyDetails._id,
       'checklistGrpId': checklistGrpId
     });
   };
+
+  socket.on('story:checklistGrpAdded', function(data) {
+      $scope.storyData = data;
+  })
+
 }]);

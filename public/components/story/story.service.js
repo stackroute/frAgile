@@ -36,6 +36,7 @@ description: This function is used add the attachments in the story
   this.removeAttachment = function(storyId,attachmentId,file_name) {
     return  $http.post('/story/removeattachement?storyId='+storyId+'&attachmentId='+attachmentId+'&file_name='+file_name);
   };
+
   return this;
 
 }]);

@@ -2,14 +2,16 @@ fragileApp.controller('storyOperationsController',['$scope','$rootScope','$state
 var socket = Socket($scope);
   //TODO:need to check whether we need to get the "$scope.memberDetails" data directly from rootscope without resolving it in story Modal.   ---->Check
 
+
   //TODO:Need to redefine this common controller based on which template getting loaded because we can define scope parameters based on that and reduce unwanted data. ----->Almost done check again
   //This can be done using init function specific to each action
 
   //TODO:Add dismisal for all sub modal --->Added cancel, call it from modals
 
-//TODO:Add websockets in each sub modal windows which story modal gets. And remove listner whenever we close\dismiss the modal.
+
   /***Received the data from resolve functionality of uibModal***/
   $scope.storyDetails= param.story.data;
+  $scope.roomName = "story:" + $scope.storyDetails._id;
 
   /***
   author:Sharan
@@ -208,10 +210,12 @@ var socket = Socket($scope);
     //TODO:Call web sockets to add the checklist group and pass only heading and checkedCount:0
 
     socket.emit('story:addChecklistGroup', {
-      'room': $scope.$parent.roomName,
+
+      'room': $scope.roomName,
       'storyid': $scope.storyDetails._id,
       'checklistGrp': checklistGrp
     });
+
 
     $scope.todoText = '';
     $uibModalInstance.dismiss('cancel');
@@ -259,7 +263,8 @@ var socket = Socket($scope);
     })[0];
 
     socket.emit('story:addRemoveLabel', {
-      'room': $scope.$parent.roomName,
+
+      'room': $scope.roomName,
       'storyid': $scope.storyDetails._id,
       'labelid':labelObj._id,
       'operation':operation
@@ -297,14 +302,16 @@ var socket = Socket($scope);
     if (userObj == undefined) {
       //Add members working,tested
       socket.emit('story:addMembers', {
-        'room': $scope.$parent.roomName,
+
+        'room': $scope.roomName,
         'storyid': $scope.storyDetails._id,
         'memberid': memberObj._id
       });
     }else{
       //remove members working, tested
       socket.emit('story:removeMembers', {
-        'room': $scope.$parent.roomName,
+
+        'room': $scope.roomName,
         'storyid': $scope.storyDetails._id,
         'memberid': memberObj._id
       });
@@ -352,4 +359,5 @@ fragileApp.controller('MyCtrl', ['$scope','param', 'Upload','$uibModalInstance',
   $scope.close = function() {
     $uibModalInstance.dismiss('cancel');
   };
+
 }]);

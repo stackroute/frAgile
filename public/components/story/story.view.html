@@ -1,5 +1,6 @@
 <div class="modal-header storyHeader" ng-class="storyContr.storyGrp">
-  <span class="fa fa-close fa_text pull-right"data-dismiss="modal" ng-click="cancel()"> </span>
+
+  <span class="fa fa-close fa_text pull-right" data-dismiss="modal" ng-click="cancel()"> </span>
   <!-- <a href="#addMember" data-toggle="modal" class="pull-right"><span class="fa fa-sort-desc  fa_text"> </span></a> -->
   <span class="fa fa-trash fa_text pull-right" data-dismiss="modal" ng-click="deleteStory()"> </span>
   <span class="fa fa-files-o  fa_text pull-right" data-dismiss="modal" ng-click="moveCopyStory('components/story/operations/copyStory.view.html')"></span>
@@ -14,6 +15,7 @@
     </header>
     Member :
     <a ng-repeat="member in storyContr.storyData.memberList"><ng-letter-avatar data={{member.firstName}} charCount=2  height="30px" width="30px" fontSize="25px"></ng-letter-avatar><span class="remove-members fa fa-times" ng-click="removeMember(member._id)"></a>
+
       <!-- TODO change first name to full name -->
       <a ng-click="addMember()"><i class="fa fa-plus" aria-hidden="true"></i></a>
 
@@ -91,6 +93,8 @@
         <div class="col-sm-4">
           <header><h3>
 Activity
+<div ng-include="'components/activity/activity.view.html'" style=""></div>
+
           </h3></header>
         </div>
       </div>

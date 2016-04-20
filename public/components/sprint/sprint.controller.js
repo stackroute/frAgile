@@ -5,7 +5,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     sprintService.getSprints($stateParams.sprintID).then(function(sprint) {
       $scope.sprint = sprint.data;
       $scope.sprintWidth = ($scope.sprint.list.length * 278 + 560) + "px";
-      $scope.sprint = sprint.data;
 
     });
     sprintService.getBackBug($stateParams.prId).then(function(backBug) {
@@ -14,7 +13,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     $scope.AddStoryDiv = "AddStoryDiv";
 
     sprintService.getProject($stateParams.sprintID).then(function(project){
-      console.log(project);
       $rootScope.projectID = project.data[0]._id;
       $rootScope.projectName = project.data[0].name;
     })
@@ -69,7 +67,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   $scope.addStory = function(listId, storyDetails, id, listName) {
     // $scope.listIdAdded = id;
     if (storyDetails != undefined && storyDetails != "") {
-      socket.emit('sprint:addStory', {
+      var emitData = {
         'room': $scope.roomName,
         'activityRoom': 'activity:' + $stateParams.prId,
         'addTo': listId,
@@ -81,7 +79,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'listId': listId,
         'id': id,
         'listName': listName
-      });
+      }
+      socket.emit('sprint:addStory', emitData );
       $scope.storyDetails = "";
       return true;
     } else {
@@ -287,9 +286,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     var currentPosition = {}
     currentPosition.listId=listItemId;
     currentPosition.listItemName = listItemName;
-console.log(listItemName +"   "+listItemId);
+
     sprintService.getStory(storyID).then(function(story) {
-      console.log(story);
       var modalInstance = $uibModal.open({
         animation: $scope.animationsEnabled,
         templateUrl: '/components/story/story.view.html',
@@ -298,8 +296,6 @@ console.log(listItemName +"   "+listItemId);
         size: 'lg',
         resolve: {
           param: function() {
-            console.log("params in modal factory :::::  ");
-            console.log("passing data to story controller");
             return {
               story:story,
               sprint:$scope.sprint,
@@ -314,7 +310,7 @@ console.log(listItemName +"   "+listItemId);
       modalInstance.result.then(function(selectedItem) {
         $scope.selected = selectedItem;
       }, function() {
-        ///This runs for close or save.... You can delete this
+        socket.emit('join:room', {'room': $scope.roomName}); // To join back the room
       });
 
 

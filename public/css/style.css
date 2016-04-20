@@ -636,7 +636,7 @@ position: absolute;
   border-top: 1px solid #eee;
 }
 .activity-items {
-  padding: 5px 10px;
+  padding: 5px 5px;
   min-height: 55px;
   /*border-bottom: 1px solid #e2e4e6;*/
   color: #4d4d4d;

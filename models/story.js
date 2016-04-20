@@ -38,6 +38,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var StorySchema = new Schema({
  storyCreatorId: {type:Schema.Types.ObjectId,ref:'User'},
+
+ listId:String,
  heading: String,
  description: String,
  createdTimeStamp: Date,
@@ -176,6 +178,7 @@ where atachments are stored**/
 StorySchema.statics.removeAttachment = function(storyId,attachmentId, callback) {
   this.update(
       { "_id" : storyId },
+
       {$pull: {attachmentList:{_id:attachmentId }}
         }, {
           upsert: true
@@ -356,7 +359,7 @@ addChecklistGroup function is to add new checklist group to the story.
 
 StorySchema.statics.addChecklistGroup = function(storyId,checklistObj, callback) {
 
-  this.update(
+  this.findOneAndUpdate(
       { "_id" : storyId },
       { $push: {checklist:{
         checklistHeading:checklistObj['checklistHeading'],
@@ -366,7 +369,8 @@ StorySchema.statics.addChecklistGroup = function(storyId,checklistObj, callback)
       }
       },
       {
-         upsert: true
+         upsert: true,
+         new:true
       }
    )
    .exec(function(err , doc) {
