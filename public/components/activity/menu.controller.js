@@ -10,9 +10,6 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
     response.memberList.forEach(function(data) {
         data.fullName = data.firstName + " " + data.lastName;
       })
-      // $rootScope.memberList.push(data.firstName + " " + data.lastName);
-      // console.log(response[0]);
-      // console.log(response);
     $scope.memberList = response.memberList;
   });
 

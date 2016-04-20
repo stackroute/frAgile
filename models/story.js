@@ -37,16 +37,17 @@ where ever populate is done.
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var StorySchema = new Schema({
- listId:String,
  storyCreatorId: {type:Schema.Types.ObjectId,ref:'User'},
- storyStatus:String,
+
+ listId:String,
  heading: String,
  description: String,
  createdTimeStamp: Date,
  lastUpdated: Date,
  indicators:{
            descriptionStatus: Boolean,
-           checklistGroupCount: Number,
+    chklstItmsCnt: Number,
+    chklstItmsChkdCnt:Number,
            attachmentsCount: Number,
            commentCount: Number
 },
@@ -130,7 +131,8 @@ StorySchema.statics.addStory = function(story, callback) {
      'lastUpdated': Date.now(),
      'indicators':{
                'descriptionStatus': false,
-               'checklistGroupCount': 0,
+      "chklstItmsCnt": 0,
+      "chklstItmsChkdCnt":0,
                'attachmentsCount': 0,
                'commentCount': 0
     },
@@ -153,7 +155,9 @@ the story.**/
 StorySchema.statics.removeMembers = function(storyId,membersId, callback) {
   this.update(
       { "_id" : storyId },
-      {$pull: {memberList:{$in:[membersId] }}
+    {$pull: {memberList:membersId}},
+    {
+      upsert: true
         }
 
    )
@@ -174,7 +178,10 @@ where atachments are stored**/
 StorySchema.statics.removeAttachment = function(storyId,attachmentId, callback) {
   this.update(
       { "_id" : storyId },
-      {$pull: {attachmentList:{$in:[attachmentId] }}
+
+      {$pull: {attachmentList:{_id:attachmentId }}
+        }, {
+          upsert: true
         }
 
    )
@@ -220,12 +227,131 @@ StorySchema.statics.addAttachments = function(storyId,atachmentObj, callback) {
 }
 
 /***
-updateChecklistItems function is to add or delete or update particular
+addChecklistItem function is to add or delete or update particular
 checklist item in each group.
 ***/
-StorySchema.statics.updateChecklistItems = function(storyId,checklistObj, callback) {
-//TODO: write function to delete particular item or check particular item
+StorySchema.statics.addChecklistItem = function(storyId,checklistGrpId,itemObj, callback) {
+  //TODO: write function to delete particular item or check particular item
+  this.update(
+    { "_id" : storyId,"checklist._id": checklistGrpId },
+     {
+      $push: {
+        "checklist.$.items": itemObj
+      },
+      $inc:{
+        "indicators.chklstItmsCnt" : 1
+      }
+    },
+{
+  upsert: true
 }
+)
+.exec(function(err , doc) {
+  if (err) {
+    callback(err, null);
+  }
+  else {
+    callback(null,doc);
+
+  }
+});
+}
+
+/***
+authors:sharan,srinivas
+function:removeChecklistItem
+description: RemoveChecklistItem function is to delete particular checklist item in each group.
+***/
+StorySchema.statics.removeChecklistItem = function(storyId,checklistGrpId,itemId,checked, callback) {
+  var setIndicators = {};
+  if (checked) {
+    setIndicators["indicators.chklstItmsCnt"]=-1;
+    setIndicators["indicators.chklstItmsChkdCnt"]=-1;
+  }else {
+    setIndicators["indicators.chklstItmsCnt"]=-1;
+  }
+
+this.update(
+    { "_id" : storyId,"checklist._id": checklistGrpId },
+    {
+        $pull: {"checklist.$.items":{"_id":itemId} },
+        $inc:setIndicators
+    },
+    {
+      upsert: true
+    }
+  )
+  .exec(function(err , doc) {
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    }
+    else {
+      console.log(doc);
+      callback(null, doc);
+    }
+  });
+}
+
+/***
+author:Gowtham,
+function:getCheckItemIndex
+parameters:checklistItemId
+description:This function returns the index of the checklistitem
+***/
+StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
+  this.findOne({
+    "checklist.items._id": itemId
+  }, {
+    "checklist.$": 1
+  }).exec(function(err, doc) {
+    doc.checklist.forEach(function(data) {
+      data.items.forEach(function(checkItems, index) {
+        if (checkItems.id == itemId) {
+          callback(null, index);
+        }
+      })
+    })
+  });
+}
+/***
+authors:sharan
+function:updateChecklistItem
+parameters:storyId,checklistGrpId,itemId,item-index
+description: UpdateChecklistItem function is to update particular checklist item in each group.
+***/
+StorySchema.statics.updateChecklistItem = function(storyId,checklistGrpId,itemId,checked,index, callback) {
+
+
+var setter = {};
+var setIndicators={};
+
+//setter index is required because we cant iterate and set values directly 3 levels down using $ operator in MongoDB
+setter["checklist.$.items." + index + ".checked"] = checked;
+if (checked) {
+  setIndicators["indicators.chklstItmsChkdCnt"]= 1;
+  setIndicators["checklist.$.checkedCount"]= 1;
+}else{
+  setIndicators["indicators.chklstItmsChkdCnt"]= -1;
+  setIndicators["checklist.$.checkedCount"]= -1;
+}
+this.update({
+    "checklist.items._id": itemId
+  }, {
+    $set: setter,
+    $inc: setIndicators
+  }, {
+    upsert: true
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
+}
+/////
 
 /***
 addChecklistGroup function is to add new checklist group to the story.
@@ -233,7 +359,7 @@ addChecklistGroup function is to add new checklist group to the story.
 
 StorySchema.statics.addChecklistGroup = function(storyId,checklistObj, callback) {
 
-  this.update(
+  this.findOneAndUpdate(
       { "_id" : storyId },
       { $push: {checklist:{
         checklistHeading:checklistObj['checklistHeading'],
@@ -243,7 +369,8 @@ StorySchema.statics.addChecklistGroup = function(storyId,checklistObj, callback)
       }
       },
       {
-         upsert: true
+         upsert: true,
+         new:true
       }
    )
    .exec(function(err , doc) {
@@ -257,13 +384,13 @@ StorySchema.statics.addChecklistGroup = function(storyId,checklistObj, callback)
 }
 
 /***
-addChecklistGroup function is to remove checklist group to the story.
+removeChecklistGroup function is to remove checklist group from the story.
 ***/
 StorySchema.statics.removeChecklistGroup = function(storyId,checklistgroupId, callback) {
   //TODO: write function to delete particular item or check particular item
   this.update(
       { "_id" : storyId },
-      {$pull: {checklist:{$in:[checklistgroupId] }}
+    {$pull:{checklist:{_id:checklistgroupId}}
         }
    )
    .exec(function(err , doc) {
@@ -300,7 +427,7 @@ switch (operation) {
      }
    });
     break;
-  case "delete": this.update(
+  case "remove": this.update(
       { "_id" : storyId },
       {$pull: {labelList:{$in:[labelListId] }}
         }

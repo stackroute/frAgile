@@ -5,7 +5,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     sprintService.getSprints($stateParams.sprintID).then(function(sprint) {
       $scope.sprint = sprint.data;
       $scope.sprintWidth = ($scope.sprint.list.length * 278 + 560) + "px";
-      $scope.sprint = sprint.data;
 
     });
     sprintService.getBackBug($stateParams.prId).then(function(backBug) {
@@ -13,8 +12,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     });
     $scope.AddStoryDiv = "AddStoryDiv";
 
-    sprintService.getProject($stateParams.sprintID).then(function(project) {
-      console.log(project);
+    sprintService.getProject($stateParams.sprintID).then(function(project){
       $rootScope.projectID = project.data[0]._id;
       $rootScope.projectName = project.data[0].name;
     })
@@ -60,16 +58,71 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     }
   });
 
-  $scope.test = function(listId, clicked) {
-    $scope.clicked = false;
+    socket.on('sprint:storyDeleted', function(data) {
+      console.log("------------------ inside storyDeleted");
+      console.log(data);
+      console.log("----------------------");
+      if (data.deleteFrom == "Backlog") {
+        $scope.backBug.backlogs.stories.forEach(function(story, storyIndex) {
+          console.log("--------------Inside For Each");
+          if (story._id == data.storyId) {
+            console.log("---------------- Found to delete");
+            $scope.backBug.backlogs.stories.splice(storyIndex, 1);
+          }
+        });
+      }
+      else if (data.deleteFrom == "Buglist") {
+        $scope.backBug.buglist.stories.forEach(function(story, storyIndex) {
+          console.log("--------------Inside For Each");
+          if (story._id == data.storyId) {
+            console.log("---------------- Found to delete");
+            $scope.backBug.buglist.stories.splice(storyIndex, 1);
+          }
+        });
+      }
+      else {
+        console.log("Inside Else");
+        angular.forEach($scope.sprint.list, function(value, key) {
+          if (value._id == data.Listid) {
+            console.log("--------Found List");
+            $scope.sprint.list[key].stories.forEach(function(story, storyIndex) {
+              console.log("--------------Inside For Each");
+              if (story._id == data.storyId) {
+                console.log("---------------- Found to delete");
+                $scope.sprint.list[key].stories.splice(storyIndex, 1);
+              }
+            });
+          }
+        });
+      }
+    });
+
+
+  $scope.clickOnAdd = function(id) {
+    console.log(angular.element('#'+id));
+    angular.element('#'+id).focus();
   };
   $scope.show = function(listId, bool) {
     return listId + bool;
   };
+
+  $scope.deleteStory = function(storyId, from, Listid, sprintId) {
+    console.log("-----In controller Now emmiting");
+    socket.emit('sprint:deleteStory', {
+      'room': $scope.roomName,
+      'activityRoom': 'activity:' + $stateParams.prId,
+      'deleteFrom': from,
+      'storyId':storyId,
+      'projectId': $stateParams.prId,
+      'Listid': Listid,
+      'sprintId': sprintId
+    });
+  };
+
   $scope.addStory = function(listId, storyDetails, id, listName) {
     // $scope.listIdAdded = id;
     if (storyDetails != undefined && storyDetails != "") {
-      socket.emit('sprint:addStory', {
+      var emitData = {
         'room': $scope.roomName,
         'activityRoom': 'activity:' + $stateParams.prId,
         'addTo': listId,
@@ -81,17 +134,18 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         'listId': listId,
         'id': id,
         'listName': listName
-      });
+      }
+      socket.emit('sprint:addStory', emitData );
       $scope.storyDetails = "";
       return true;
     } else {
       return false
     }
   }
+
   $scope.gotoTop = function(id) {
     angular.element("#" + id)[0].scrollBottom = 0;
   };
-
 
   var divBeingDragged = "",
     elemBeingDragged = "";
@@ -274,11 +328,14 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
   Parameters:storyId
   resolve:Sprint, Story,ProjectMembers
   TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
-***/
-  $scope.showModal = function(storyID, storyGrp) {
-    console.log(storyID);
+  ***/
+  $scope.showModal = function(storyID,storyGrp,listItemId,listItemName)
+  {
+    var currentPosition = {}
+    currentPosition.listId=listItemId;
+    currentPosition.listItemName = listItemName;
+
     sprintService.getStory(storyID).then(function(story) {
-      console.log(story);
       var modalInstance = $uibModal.open({
         animation: $scope.animationsEnabled,
         templateUrl: '/components/story/story.view.html',
@@ -287,13 +344,12 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         size: 'lg',
         resolve: {
           param: function() {
-            console.log("params in modal factory :::::  ");
-            console.log("passing data to story controller");
             return {
-              story: story,
-              sprint: $scope.sprint,
-              projMembers: $rootScope.memberList,
-              storyGrp: storyGrp
+              story:story,
+              sprint:$scope.sprint,
+              projMembers:$rootScope.memberList,//TODO:Check if this can be sent directly instead of resolve
+              storyGrp:storyGrp,
+              currentPosition:currentPosition
             };
           }
         }
@@ -302,7 +358,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       modalInstance.result.then(function(selectedItem) {
         $scope.selected = selectedItem;
       }, function() {
-        ///This runs for close or save.... You can delete this
+        socket.emit('join:room', {'room': $scope.roomName}); // To join back the room
       });
 
 

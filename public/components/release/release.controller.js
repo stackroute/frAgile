@@ -1,5 +1,5 @@
 fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'Socket', '$state', function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, Socket, $state) {
-
+  $scope.longDescLimit = 34;
   var socket = Socket($scope);
 
   $scope.roomName = "release:" + $scope.release.id;

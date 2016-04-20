@@ -2,18 +2,20 @@
 <div class="modal-header">
   <h4 class="modal-title">Add Member</h4>
 </div>
-<div class="modal-body">
+<div class="modal-body" ng-init="initLoadMembers()">
   <div class="form-group">
     <input type="text" ng-model="memberName" name="memberSearch" placeholder="Search Member" class="form-control">
     <div id="modal-members">
       <ul class="modal-members-list">
         <li ng-repeat="membersArray in memberDetails |filter: memberName" class="list-group-item">
+          <a ng-click="addRemoveMembers(membersArray)">
           <ng-letter-avatar data={{membersArray.fullName}} charCount=2  height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
 
             {{membersArray.fullName | limitTo:longDescLimit}}<span ng-hide="membersArray.fullName.length < longDescLimit ">
               ...
             </span>
             <i class="fa fa-check pull-right"></i>
+            </a>
         </li>
       </ul>
     </div>
