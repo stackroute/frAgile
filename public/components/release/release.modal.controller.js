@@ -1,4 +1,4 @@
-fragileApp.controller('modalReleaseController', ['$scope', '$rootScope', 'releaseService', '$uibModal', '$uibModalInstance', 'Socket', function($scope, $rootScope, releaseService, $uibModal, $uibModalInstance, Socket) {
+fragileApp.controller('modalReleaseController', ['$scope', '$rootScope', 'releaseService', '$uibModal', '$uibModalInstance','$stateParams', 'Socket', function($scope, $rootScope, releaseService, $uibModal, $uibModalInstance,$stateParams, Socket) {
 
   var socket = Socket($scope);
 
@@ -34,13 +34,13 @@ fragileApp.controller('modalReleaseController', ['$scope', '$rootScope', 'releas
   $scope.getList = function() {
     $scope.listArray = $rootScope.list;
   };
-  $scope.roomName = "release:" + $rootScope.release.id;
+  $scope.roomName = "release:" + $stateParams.releaseID;
   $scope.addSprint = function() {
     // Emit to refresh all other clients
     socket.emit('release:addSprint', {
       'room': $scope.roomName,
-      'projectId': $rootScope.projectID,
-      'releaseId': $rootScope.release.id,
+      'projectId': $stateParams.prId,
+      'releaseId': $stateParams.releaseID,
       'releaseName': $rootScope.release.name,
       'name': $scope.newSprintName,
       'endDate': $scope.endDate,

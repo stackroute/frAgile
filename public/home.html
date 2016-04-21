@@ -72,15 +72,16 @@
     <h5>Navigation</h5>
     <i class="fa fa-arrow-circle-o-left" aria-hidden="true" ng-click = 'showTree = false'></i>
     <!-- Tree Menu -->
-    <div ng-repeat = "project in projects">
-      <span class="projectNameTree">{{project.name}}</span>
-      <div ng-repeat = "release in project.release">
-        <span class="releaseNameTree">{{release.name}}</span>
-        <div ng-repeat = "sprint in release.sprints">
-          <span class="sprintNameTree">{{sprint.name}}</span>
-        </div>
-      </div>
-      <hr>
+    <div class="treeMenuInner">
+      <ul ng-repeat = "project in projects" class="projectNameTree">
+        <li>{{project.name}}</li>
+        <ul ng-repeat = "release in project.release" class="releaseNameTree">
+          <li ui-sref="release({ prId : project._id, releaseID: release._id})">{{release.name}}</li>
+          <ul ng-repeat = "sprint in release.sprints" class="sprintNameTree">
+            <li ui-sref="sprint({ prId : project._id, releaseID:release._id, sprintID: sprint._id})">{{sprint.name}}</li>
+          </ul>
+        </ul>
+      </ul>
     </div>
 
   </div>

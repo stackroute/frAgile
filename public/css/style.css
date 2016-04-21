@@ -201,6 +201,7 @@ hr{
 }
 /*Tree Menu*/
 .treeMenu {
+    cursor: pointer;
     position: fixed;
     color: #F4FBF9;
     width: 251px;
@@ -234,13 +235,47 @@ hr{
     top: 11px;
     right: 12px;
 }
-span.releaseNameTree.ng-binding {
-    padding-left: 20px;
-    line-height: 32px;
+.treeMenu ul{
+  list-style-type: none;
 }
-span.sprintNameTree.ng-binding {
-    padding-left: 35px;
-    line-height: 32px;
+.treeMenuInner {
+    /* background-color: red; */
+    overflow-y: auto;
+    max-height: 521px;
+}
+ul.projectNameTree.ng-scope {
+    padding-left: 0px;
+    width: 224px;
+    /* margin-left: 20px; */
+    box-shadow: inset 0px 22px 0px #274A40;
+    overflow: auto;
+}
+ul.releaseNameTree.ng-scope {
+    padding-left: 0px;
+    padding-top: 8px;
+    color: #FFFFFF;
+    line-height: 22px;
+}
+ul.sprintNameTree.ng-scope {
+  color: #B5E4D7;
+    padding-left: 16px;
+        list-style-type: circle;
+}
+.projectNameTree li.ng-binding {
+    font-weight: bold;
+    font-size: 15px;
+}
+.releaseNameTree li.ng-binding {
+  font-weight: 100;
+  font-size: 13px;
+}
+.releaseNameTree li.ng-binding:hover{
+  background-color: #408A7A;
+  padding-left: 4px;
+}
+.sprintNameTree li.ng-binding {
+  font-weight: 100;
+  font-size: 13px;
 }
 /*Tree Menu Ends*/
 .logo {
@@ -429,13 +464,23 @@ width: 45px;
 }
 .scrollBtn{
   cursor: pointer;
-  background-color: black;
+  background-color: #527D73;
   border-radius: 32px;
   float: left;
-  margin-top: 23px;
+  margin-top: -24px;
   height: 25px;
   width: 25px;
   margin-right: 1px;
+}
+h3.pull-left.ng-binding {
+    position: fixed;
+    top: 30px;
+    left: 88px;
+    width: 85%;
+overflow: auto;
+}
+.relDiv {
+    margin-top: 44px;
 }
 .frm {
     margin-top: 8px;
@@ -605,7 +650,7 @@ form.hideAdd{
   width: 100%;
 }
 .sprintDiv {
-  margin-top: -7px;
+  margin-top: 73px;
   overflow: hidden;
 }
 .listHead {

@@ -93,10 +93,8 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
   };
 
   $scope.setProject = function(projectId, projectName, releaseId, releaseName, releaseDesc) {
-    $rootScope.projectID = projectId;
     $rootScope.projectName = projectName,
     $rootScope.release = {};
-    $rootScope.release.id = releaseId;
     $rootScope.release.name = releaseName;
     $rootScope.release.description = releaseDesc;
   }

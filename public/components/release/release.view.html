@@ -1,6 +1,6 @@
 <div ng-init="getSprints()">
   <div id="{{projects[projectKey].release[releaseKey]._id}}" class="container">
-    <div class="row">
+    <div class="relDiv">
 
       <h4>{{projects[projectKey].release[releaseKey].name}}<small>{{projects[projectKey].release[releaseKey].description}}</small></h3>
         <div class="boxContainer" ng-repeat= "spr in projects[projectKey].release[releaseKey].sprints"><!-- TODO: Changed for Testing -->
@@ -57,14 +57,11 @@
           </form>
           </div>
         </div>
-        <div class="box addMore" ng-click="openModal()">
+        <div class="box addMore" ng-click="openModal(projects[projectKey].release[releaseKey].name)">
             Add Sprint...
         </div>
       </div>
 
-        <div class="row">
-          <button class="btn btn-success" ng-click="backClick()">Back</button>
-        </div>
       </div>
 </div>
 

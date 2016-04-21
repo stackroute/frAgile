@@ -6,44 +6,39 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
   var emitData = {
     'room': $scope.roomName
   }
-  if (!$scope.activityRoom || $scope.activityRoom != ('activity:' + $scope.projectID)) { //Join an activity room if not already     joined || Change room if navigated from other project.
-    $rootScope.activityRoom = 'activity:' + $scope.projectID
-    emitData["activityRoom"] = 'activity:' + $scope.projectID
+  if (!$scope.activityRoom || $scope.activityRoom != ('activity:' + $stateParams.prId)) { //Join an activity room if not already     joined || Change room if navigated from other project.
+    $rootScope.activityRoom = 'activity:' + $stateParams.prId
+    emitData["activityRoom"] = 'activity:' + $stateParams.prId
   }
   socket.emit('join:room', emitData);
 
   socket.on('release:sprintAdded', function(data) {
-    $scope.sprints.push(data);
+    $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints.push(data);
   });
 
     socket.on('release:sprintEdited', function(sprintData) {
-      $scope.sprints.forEach(function(item, itmIndex) {
+      $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints.forEach(function(item, itmIndex) {
         if(item._id == sprintData._id){
-          $scope.sprints[itmIndex].name = sprintData.name;
-          $scope.sprints[itmIndex].description = sprintData.description;
-          $scope.sprints[itmIndex].startDate = sprintData.startDate;
-          $scope.sprints[itmIndex].endDate = sprintData.endDate;
+          $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints[itmIndex].name = sprintData.name;
+          $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints[itmIndex].description = sprintData.description;
+          $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints[itmIndex].startDate = sprintData.startDate;
+          $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints[itmIndex].endDate = sprintData.endDate;
         }
       });
       //console.log(releaseData);
     });
 
   socket.on('sprintDeleted', function(sprintData) {
-    $scope.sprints.forEach(function(sprint) {
+    $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints.forEach(function(sprint) {
       if (sprint._id == sprintData.sprintId) {
         var sprintName = sprint.name; //For activity
-        $scope.sprints.pop();
+        $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints.pop();
       }
     })
   })
 
-  $scope.backClick = function() {
-    $state.go('project', {
-      userID: $scope.userID
-    });
-  }
-
-  $scope.openModal = function() {
+  $scope.openModal = function(name) {
+    $rootScope.release.name = name;
     var modalInstance = $uibModal.open({
       animation: $scope.animationsEnabled,
       templateUrl: '/components/release/release.modal.html',
@@ -65,7 +60,7 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
         "startDate": newSprintStartDate,
         "endDate": newSprintEndDate,
         "oldName": oldName,
-        "projectID" : $scope.projectID
+        "projectID" : $stateParams.prId
       });
       return true;
     }
@@ -76,22 +71,19 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
 
 
   $scope.getSprints = function() {
-    $scope.projectID = $stateParams.prId;
     $scope.relId = $stateParams.releaseID;
 
     $rootScope.projects.forEach(function(project, projectKey) {
       if (project._id == $stateParams.prId) {
-        $scope.projectKey = projectKey;
+        $rootScope.projectKey = projectKey;
         console.log("found project " + $stateParams.prId);
         project.release.forEach(function(release, releaseKey) {
           if (release._id == $stateParams.releaseID) {
-            $scope.releaseKey = releaseKey;
+            $rootScope.releaseKey = releaseKey;
           }
         });
       }
     });
-    console.log("111111111111111111111");
-    console.log($scope.sprints);
     console.log("22222222222222222222222222");
     // releaseService.getSprints($stateParams.releaseID).success(function(response) {
     //   $scope.sprints = response[0].release[0].sprints;
@@ -113,7 +105,7 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
     // console.log("Release: ", releaseId);
     socket.emit('deleteSprint', {
       'room': $scope.roomName,
-      'projectId': $rootScope.projectID,
+      'projectId': $stateParams.prId,
       'releaseId': releaseId,
       'sprintId': sprintId,
       'releaseName':relName,

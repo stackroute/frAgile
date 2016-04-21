@@ -6,7 +6,7 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
 
   //For members list
   $rootScope.projMemberList = [];
-  activityService.getMembers($scope.projectID).success(function(response) {
+  activityService.getMembers($rootScope.projects[$rootScope.projectKey]._id).success(function(response) {
     response.memberList.forEach(function(data) {
         data.fullName = data.firstName + " " + data.lastName;
       })
@@ -37,20 +37,20 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
         })
       });
     }
-    // $scope.roomName = 'activity:' + $scope.projectID,
+    // $scope.roomName = 'activity:' + $rootScope.projects[$rootScope.projectKey]._id,
   $scope.saveMember = function() {
     socket.emit('activity:addMember', {
-      'room': 'activity:' + $scope.projectID,
-      'projectId': $scope.projectID,
+      'room': 'activity:' + $rootScope.projects[$rootScope.projectKey]._id,
+      'projectId': $rootScope.projects[$rootScope.projectKey]._id,
       'memberList': $scope.userIds
     });
     $scope.members = "";
 
     $scope.userIds.forEach(function(userId, index) {
       var data = {
-        room: 'activity:' + $scope.projectID,
+        room: 'activity:' + $rootScope.projects[$rootScope.projectKey]._id,
         action: "added",
-        projectID: $scope.projectID,
+        projectID: $rootScope.projects[$rootScope.projectKey]._id,
         user: {
           '_id': $scope.userID,
           'fullName': $scope.fullName
@@ -63,7 +63,7 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
         target: {
           name: $scope.projectName,
           type: "Project",
-          _id: $scope.projectID
+          _id: $rootScope.projects[$rootScope.projectKey]._id
         }
       }
       socket.emit('addActivity', data);
@@ -94,8 +94,8 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
   $scope.removeMember = function(memberId) {
 
     socket.emit('activity:removeMember', {
-      'room': 'activity:' + $scope.projectID,
-      'projectId': $scope.projectID,
+      'room': 'activity:' + $rootScope.projects[$rootScope.projectKey]._id,
+      'projectId': $rootScope.projects[$rootScope.projectKey]._id,
       'memberId': memberId
     });
 
