@@ -214,7 +214,8 @@ var socket = Socket($scope);
 
       'room': $scope.roomName,
       'storyid': $scope.storyDetails._id,
-      'checklistGrp': checklistGrp
+      'checklistGrp': checklistGrp,
+      'projectID' : $scope.projectID
     });
 
 
@@ -307,7 +308,9 @@ var socket = Socket($scope);
 
         'room': $scope.roomName,
         'storyid': $scope.storyDetails._id,
-        'memberid': memberObj._id
+        'memberid': memberObj._id,
+        'projectID' : $scope.projectID,
+        'fullName': memberObj.firstName + " " + memberObj.lastName
       });
     }else{
       //remove members working, tested
@@ -315,7 +318,9 @@ var socket = Socket($scope);
 
         'room': $scope.roomName,
         'storyid': $scope.storyDetails._id,
-        'memberid': memberObj._id
+        'memberid': memberObj._id,
+        'projectID' : $scope.projectID,
+        'fullName': memberObj.firstName + " " + memberObj.lastName
       });
     }
   }

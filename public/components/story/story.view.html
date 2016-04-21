@@ -71,14 +71,14 @@
       <div class="pull-left story-members">
         <h3 class="story-sub-header">Checklists  <button class="btn btn-default btn-sm" ng-click="addChecklist()"><i class="fa fa-plus" aria-hidden="true"></i></button></h3>
         <div ng-repeat="todo in storyData.checklist">
-          <span class="checklist-header">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo._id)">
+          <span class="checklist-header">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo._id,todo.checklistHeading)">
             <i class="fa fa-trash-o" ></i></a></small></span>
 
               <uib-progressbar animate="false" value="(todo.checkedCount/todo.items.length*100)" type="success"><b>{{(todo.checkedCount/todo.items.length) * 100}}%</b></uib-progressbar>
             <li class="checklist-todos" ng-repeat="list in todo.items">
               <input type="checkbox" ng-model="list.checked" ng-click="updateTodoItem(list,todo)">
               <span class="done-{{list.checked}}">{{list.text}}</span>
-              <a ng-click="removeTodoItem(list,todo)">
+              <a ng-click="removeTodoItem(list,todo,list.text)">
               </a>
             </li>
               <input type="text" ng-model="todo.todoText" class="form-control add-todo" size="30"

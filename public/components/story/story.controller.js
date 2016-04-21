@@ -222,7 +222,6 @@ var socket = Socket($scope);
   description:this fuction is used to add a new item to the checklist group.
   ***/
   $scope.addTodoItem = function(todo,todoText) {
-    console.log(todo)
     //todo.items.push({"text":todo.todoText,"done":false})
     var itemObj = {
       text: todo.todoText,
@@ -234,7 +233,9 @@ var socket = Socket($scope);
       'room': $scope.roomName,
       'storyid': storyContr.storyData._id,
       'checklistGrpId': todo._id,
-      'itemObj':itemObj
+      'itemObj':itemObj,
+      'projectID' : $scope.projectID,
+      'text' : todo.todoText
     });
     todo.todoText = '';
   };
@@ -245,7 +246,7 @@ function:removeTodoItem
 parameters:todo item,checklistId//Check once
 description:this fuction is used to add a new item to the checklist group.
 ***/
-$scope.removeTodoItem = function(listItem,checklistGrp) {
+$scope.removeTodoItem = function(listItem,checklistGrp,text) {
   console.log(checklistGrp)
   console.log(listItem);
   //todo.items.push({"text":todo.todoText,"done":false})
@@ -256,7 +257,9 @@ $scope.removeTodoItem = function(listItem,checklistGrp) {
     'storyid': storyContr.storyData._id,
     'checklistGrpId': checklistGrp._id,
     'itemid':listItem._id,
-    'checked':listItem.checked
+    'checked':listItem.checked,
+    'projectID' : $scope.projectID,
+    'text':text
   });
 
 };
@@ -269,10 +272,7 @@ description:this fuction is used to add a new item to the checklist group.
 ***/
 //TODO:Not working because of nth level
 $scope.updateTodoItem = function(listItem,checklistGrp) {
-  console.log("reacjed");
-  console.log(checklistGrp)
-  console.log(listItem._id);
-  console.log(listItem.checked);
+
   //todo.items.push({"text":todo.todoText,"done":false})
 
   socket.emit('story:updateChecklistItem', {
@@ -281,7 +281,9 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
     'storyid': storyContr.storyData._id,
     'checklistGrpId': checklistGrp._id,
     'itemid':listItem._id,
-    'checked':listItem.checked
+    'checked':listItem.checked,
+    'text': listItem.text,
+    'projectID' : $scope.projectID
   });
 };
 
@@ -303,13 +305,15 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   Parameters:None
   TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
   ***/
-  $scope.removeChecklistGroup = function(checklistGrpId) {
+  $scope.removeChecklistGroup = function(checklistGrpId,heading) {
 //TODO:Add listner
   socket.emit('story:removeChecklistGroup', {
 
       'room': $scope.roomName,
       'storyid': $scope.storyDetails._id,
-      'checklistGrpId': checklistGrpId
+      'checklistGrpId': checklistGrpId,
+      'projectID' : $scope.projectID,
+      'heading' : heading
     });
   };
 
