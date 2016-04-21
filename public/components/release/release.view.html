@@ -2,7 +2,7 @@
   <div ng-init="getSprints()"  >
   <div id="{{projects[projectKey].release[releaseKey]._id}}" class="container">
     <div class="relDiv">
-
+      
       <h4>{{projects[projectKey].release[releaseKey].name}}<small>{{projects[projectKey].release[releaseKey].description}}</small></h3>
         <div class="boxContainer" ng-repeat= "spr in projects[projectKey].release[releaseKey].sprints"><!-- TODO: Changed for Testing -->
           <div class="box"  ng-class="{'hideSlide':!hovering,'showSlide':hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" id="{{spr._id}}" >

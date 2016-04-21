@@ -29,7 +29,7 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
       });
       //console.log(releaseData);
     });
-
+// Called from server when sprint is deleted
   socket.on('sprintDeleted', function(sprintData) {
     $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints.forEach(function(sprint) {
       if (sprint._id == sprintData.sprintId) {
@@ -38,7 +38,7 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
       }
     })
   })
-
+// Open modal Window for Story
   $scope.openModal = function(name) {
     $rootScope.release.name = name;
     var modalInstance = $uibModal.open({
