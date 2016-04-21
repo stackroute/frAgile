@@ -964,7 +964,6 @@ background-color: rgb(255, 239, 237);
 .add-members {
   clear: both;
   padding: 10px;
-  border-top: 1px solid #eee;
 }
 .remove-members{
   position: relative;

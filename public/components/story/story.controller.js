@@ -5,7 +5,7 @@ TODO:
 
 *****/
 
-fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','param',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,param){
+fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','param','$window',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,param,$window){
 var socket = Socket($scope);
 
   var storyContr = this;
@@ -115,13 +115,38 @@ var socket = Socket($scope);
     });
   }
 
+  socket.on('story:attachmentAdded', function(data){
+    // data.attachmentList.timeStamp = moment()
+    storyContr.storyData.attachmentList = data.attachmentList;
+
+    angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
+          storyContr.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+    });
+
+    console.log('On socket: ', storyContr.storyData.attachmentList);
+  });
+
+  socket.on('story:attachmentRemoved', function(data){
+    // data.attachmentList.timeStamp = moment()
+    storyContr.storyData.attachmentList = data.attachmentList;
+
+    angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
+          storyContr.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+    });
+
+    console.log('On socket: ', storyContr.storyData.attachmentList);
+  })
+
   $scope.addAttachment = function() {
     modalService.open('sm', 'components/story/operations/addAttachment.view.html','MyCtrl',storyContr.storyData);
     //$uibModalInstance.close($scope.searchTerm);
   };
   $scope.removeAttachment = function(storyId,attachmentId,file_name) {
     console.log(storyId+"======="+attachmentId);
-    storyService.removeAttachment(storyId,attachmentId,file_name);
+    storyService.removeAttachment(storyId,attachmentId,file_name).success(function(data){
+      data.room = $scope.roomName;
+      socket.emit("story:removeAttachment", data);
+    });
   };
 
   /***
@@ -170,8 +195,22 @@ var socket = Socket($scope);
 
   };
   $scope.deleteStory = function() {
-    // modalService.open('sm', 'deleteStory.html');
-    //Use Tooltip
+  //Can use tool tip
+    if ($window.confirm("Do you want to delete story?")){
+      var deleteFrom='List';
+      if(storyContr.complexDataObject.currentPosition.listItemName != 'Backlog'|| storyContr.complexDataObject.currentPosition.listItemName != 'Buglist'){
+        deleteFrom=storyContr.complexDataObject.currentPosition.listItemName;
+      }
+            socket.emit('sprint:deleteStory', {
+              'storyId':$scope.storyData._id,
+              'projectId':$stateParams.prId,
+              'deleteFrom':deleteFrom,
+              'sprintId':storyContr.complexDataObject._id,
+              'Listid':storyContr.complexDataObject.currentPosition.listId
+
+            });
+
+    }
   };
   //Not required at story level
   $scope.ok = function() {
@@ -229,6 +268,15 @@ var socket = Socket($scope);
       checked: false,
       creationDate:Date.now(),
     }
+    console.log({
+
+      'room': $scope.roomName,
+      'storyid': storyContr.storyData._id,
+      'checklistGrpId': todo._id,
+      'itemObj':itemObj,
+      'projectID' : $scope.projectID,
+      'text' : todo.todoText
+    });
     socket.emit('story:addChecklistItem', {
 
       'room': $scope.roomName,
@@ -239,6 +287,7 @@ var socket = Socket($scope);
       'text' : todo.todoText
     });
     todo.todoText = '';
+
   };
 
 /***

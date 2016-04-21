@@ -28,7 +28,7 @@
 
     <input type="text" ng-model="labelTemplate.text" placeholder="Label Name" class="form-control">
     <span ng-repeat="listArray in sprintDetails.labelTemplate">
-      <span class="story-label-design story-label-template-selectable story-label-{{listArray.colorName}}" on-click="createLabel(false,listArray)">
+      <span class="story-label-design story-label-template-selectable story-label-{{listArray.colorName}}" ng-click="createLabel(false,listArray)">
         <i class="fa fa-check"></i>
       </span>
     </span>
