@@ -18,6 +18,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       $rootScope.projectName = project.data[0].name;
     });
 
+
     $rootScope.isMenu = false;
     $rootScope.SlideMenu = function() {
       $rootScope.isMenu = !$rootScope.isMenu;

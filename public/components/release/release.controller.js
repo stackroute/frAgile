@@ -74,7 +74,6 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
 
   $scope.getSprints = function() {
     $scope.relId = $stateParams.releaseID;
-
     $rootScope.projects.forEach(function(project, projectKey) {
       if (project._id == $stateParams.prId) {
         $rootScope.projectKey = projectKey;

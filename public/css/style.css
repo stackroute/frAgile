@@ -482,6 +482,13 @@ h3.pull-left.ng-binding {
     width: 85%;
 overflow: auto;
 }
+.showNewProject {
+    position: fixed;
+    bottom: 248px;
+    width: 100%;
+    font-size: 43px;
+    color: rgba(82, 125, 115, 0.42);
+}
 .relDiv {
     margin-top: 44px;
 }
@@ -632,6 +639,11 @@ form.hideAdd{
   width: 270px;
   height: 85px;
 }
+.dummyStory{
+  background-color: red;
+  width: 100%;
+  height: 100%;
+}
 .slideMenuBox .fa:hover {
   color: #ACE6D8;
 }
@@ -722,21 +734,12 @@ outline: -webkit-focus-ring-color auto 5px;
   line-height: 20px;
   color: #4d4d4d;
 }
-.showSlide .deleteStory {
-  z-index: 400;
+.deleteStory {
+  z-index: 800;
   position: absolute;
   margin-left: 249px;
   margin-top: -3px;
   opacity: 0.8;
-}
-.hideSlide .deleteStory {
-  position: absolute;
-  margin-left: 249px;
-  margin-top: -4px;
-  opacity: 0;
-  width: 0px;
-  height: 0px;
-  font-size: 0px;
 }
 .showSlide .attachmentdelete {
   z-index: 400;
