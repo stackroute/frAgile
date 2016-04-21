@@ -16,11 +16,10 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
   socket.on('releaseDeleted', function(releaseData) {
     $rootScope.projects.forEach(function(project) {
       if (project._id == releaseData.projectId) {
-        project.release.forEach(function(release) {
+        project.release.forEach(function(release, index) {
           if (release._id == releaseData.releaseId) {
             var releaseName = release.name; //For activity
-            project.release.pop();
-
+            project.release.splice(index,1);
           }
         })
       }
