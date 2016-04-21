@@ -1,4 +1,7 @@
 <divs class = "projectPage container">
+  <div class="showNewProject" ng-show = "projects.length == 0">
+    <center>Awesome... You are good to go</center>
+  </div>
   <div ng-repeat="project in projects" class="main">
       <div id="{{project._id}}" class = "container">
         <h4>{{project.name}}<small>{{project.description}}</small></h4>

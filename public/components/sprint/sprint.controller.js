@@ -13,6 +13,10 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     $scope.AddStoryDiv = "AddStoryDiv";
 
     sprintService.getProject($stateParams.sprintID).then(function(project){
+      console.log("inside getProject");
+      console.log($stateParams.sprintID);
+      console.log(project);
+      console.log("-----------------------------");
       $rootScope.projectID = project.data[0]._id;
       $rootScope.projectName = project.data[0].name;
     })
