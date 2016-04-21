@@ -7,19 +7,17 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       $scope.sprintWidth = ($scope.sprint.list.length * 278 + 560) + "px";
 
     });
+
+
     sprintService.getBackBug($stateParams.prId).then(function(backBug) {
       $scope.backBug = backBug.data;
     });
     $scope.AddStoryDiv = "AddStoryDiv";
 
     sprintService.getProject($stateParams.sprintID).then(function(project){
-      console.log("inside getProject");
-      console.log($stateParams.sprintID);
-      console.log(project);
-      console.log("-----------------------------");
-      $rootScope.projectID = project.data[0]._id;
       $rootScope.projectName = project.data[0].name;
-    })
+    });
+
 
     $rootScope.isMenu = false;
     $rootScope.SlideMenu = function() {
@@ -29,20 +27,21 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     $scope.storyDragged = false;
   };
 
+
+
   var socket = Socket($scope);
+
+  $rootScope.projectID = $stateParams.prId //Used in activity. Remove once refresh issue is solved
 
   $scope.roomName = "sprint:" + $stateParams.sprintID
   var emitData = {
     'room': $scope.roomName
   }
-  if (!$scope.activityRoom || $scope.activityRoom != ('activity:' + $stateParams.prId)) { //Join an activity room if not already     joined || Change room if navigated from other project.
+  if (!$scope.activityRoom || $scope.activityRoom != ('activity:' + $stateParams.prId)) { //Join an activity room if not already  joined || Change room if navigated from other project.
     $rootScope.activityRoom = 'activity:' + $stateParams.prId
     emitData["activityRoom"] = 'activity:' + $stateParams.prId
   }
   socket.emit('join:room', emitData);
-
-  $rootScope.projectID = $stateParams.prId;
-
 
   socket.on('sprint:storyAdded', function(data) {
     var listName = ""

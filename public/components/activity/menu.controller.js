@@ -4,9 +4,12 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
 
   var socket = Socket();
 
+  console.log("Menu first");
+  console.log($rootScope.projects);
+
   //For members list
   $rootScope.projMemberList = [];
-  activityService.getMembers($rootScope.projects[$rootScope.projectKey]._id).success(function(response) {
+  activityService.getMembers($rootScope.projectID).success(function(response) {
     response.memberList.forEach(function(data) {
         data.fullName = data.firstName + " " + data.lastName;
       })
@@ -40,17 +43,17 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
     // $scope.roomName = 'activity:' + $rootScope.projects[$rootScope.projectKey]._id,
   $scope.saveMember = function() {
     socket.emit('activity:addMember', {
-      'room': 'activity:' + $rootScope.projects[$rootScope.projectKey]._id,
-      'projectId': $rootScope.projects[$rootScope.projectKey]._id,
+      'room': 'activity:' + $rootScope.projectID,
+      'projectId': $rootScope.projectID,
       'memberList': $scope.userIds
     });
     $scope.members = "";
 
     $scope.userIds.forEach(function(userId, index) {
       var data = {
-        room: 'activity:' + $rootScope.projects[$rootScope.projectKey]._id,
+        room: 'activity:' + $rootScope.projectID,
         action: "added",
-        projectID: $rootScope.projects[$rootScope.projectKey]._id,
+        projectID: $rootScope.projectID,
         user: {
           '_id': $scope.userID,
           'fullName': $scope.fullName
@@ -63,7 +66,7 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
         target: {
           name: $scope.projectName,
           type: "Project",
-          _id: $rootScope.projects[$rootScope.projectKey]._id
+          _id: $rootScope.projectID
         }
       }
       socket.emit('addActivity', data);
@@ -94,8 +97,8 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
   $scope.removeMember = function(memberId) {
 
     socket.emit('activity:removeMember', {
-      'room': 'activity:' + $rootScope.projects[$rootScope.projectKey]._id,
-      'projectId': $rootScope.projects[$rootScope.projectKey]._id,
+      'room': 'activity:' + $rootScope.projectID,
+      'projectId': $rootScope.projectID,
       'memberId': memberId
     });
 

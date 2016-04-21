@@ -16,7 +16,7 @@ fragileApp.controller('activityController', function($scope, $http, Socket, acti
   });
   // Based on the project clicked, send its projectID to display its corresponding activity
   else
-  activityService.getProjectData($rootScope.projects[$rootScope.projectKey]._id).success(function(response) {
+  activityService.getProjectData($rootScope.projectID).success(function(response) {
     // For each activity, go to activityService and add the preposition, etc
     $scope.page = 1;
     response.forEach(function(data) {
@@ -43,7 +43,7 @@ fragileApp.controller('activityController', function($scope, $http, Socket, acti
     // Add +1 to page everytime moreActivity is clicked
     // Added before passing to service coz 1st time on page load it will show 1st page results
     $scope.page = parseInt($scope.page) + 1;
-    activityService.moreActivity($rootScope.projects[$rootScope.projectKey]._id, $scope.page).success(function(response) {
+    activityService.moreActivity($rootScope.projectID, $scope.page).success(function(response) {
       // For each activity, go to activityService and add the preposition, etc
       if (response.length > 0) {
         response.forEach(function(data) {

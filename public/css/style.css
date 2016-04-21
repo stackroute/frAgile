@@ -148,6 +148,9 @@ body {
 
 
 }
+[ng\:cloak], [ng-cloak], .ng-cloak {
+  display: none !important;
+}
 h4 {
   font-size: 17px;
   font-weight: bold;

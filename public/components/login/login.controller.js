@@ -8,8 +8,6 @@ fragileApp.controller('loginController',['$scope','$state','$rootScope','loginSe
         project.release.forEach(function(release, releaseKey) {
           console.log("release._id =" + release._id);
           loginService.getSprints(release._id).success(function(response) {
-            console.log("....");
-            console.log(response[0].release[0].sprints);
             $rootScope.projects[projectKey].release[releaseKey].sprints = [];
             $rootScope.projects[projectKey].release[releaseKey].sprints = response[0].release[0].sprints;
           });
@@ -17,8 +15,10 @@ fragileApp.controller('loginController',['$scope','$state','$rootScope','loginSe
       });
     });
     $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
+    console.log("Login first");
   };
 
+  console.log("Login second");
   $rootScope.list = [
   {
     "group": "inProgress",
