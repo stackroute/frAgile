@@ -172,6 +172,13 @@ h3 {
   height: 4px;
   bottom: 20px;
 }
+
+
+.dropdown-menu {
+    top: 142%;
+    left: -116px;
+  }
+
 .addProject{
   position: fixed;
   bottom: 22px;
@@ -456,6 +463,7 @@ width: 45px;
 .divToggle{
   position: fixed;
   right: 5px;
+  top:80px;
 }
 .toggleIcon{
   margin-top: 6px;

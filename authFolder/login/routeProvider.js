@@ -1,16 +1,6 @@
 
-angular.module('frAgile')
-    .run(function($cookies,$rootScope,$http,$location,$window) {
-
-
-      // $rootScope.logInLogOutSuccessMsg = ''; // used on home.view.html page to display login/logout status msgs
-      // $rootScope.logInLogOutErrorMsg = '';
-      //
-      // $rootScope.serverErrorMsg = 'Error! Check your URL.';
-
-    //   $rootScope.redirectTo = function( location ) {
-    //    $location.path( "/" + location);
-    //  };
+angular.module('Limber')
+    .run(function($rootScope) {
     })
      .config(function($routeProvider){
        $routeProvider

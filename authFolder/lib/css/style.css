@@ -112,6 +112,7 @@ img { max-width: 100%; }
 }
 
 .form-top {
+  margin-top: -11px
 	overflow: hidden;
 	padding: 0 25px 15px 25px;
 	background: #fff;
@@ -138,6 +139,7 @@ img { max-width: 100%; }
 }
 
 .form-bottom {
+  margin-top: -14px;
 	padding: 25px 25px 30px 25px;
 	background: #eee;
 	-moz-border-radius: 0 0 4px 4px; -webkit-border-radius: 0 0 4px 4px; border-radius: 0 0 4px 4px;

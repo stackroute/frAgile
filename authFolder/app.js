@@ -1,2 +1,2 @@
-var angularModule = angular.module('frAgile',['ngRoute','ngCookies']);
+var angularModule = angular.module('Limber',['ngRoute','ngCookies']);
 console.log("In auth app");

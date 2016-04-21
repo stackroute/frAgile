@@ -2,29 +2,21 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> -->
     <title>Limber</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet" href="assets/css/form-elements.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="lib/css/form-elements.css">
+    <link rel="stylesheet" href="lib/css/style.css">
 
 
-
-    <title>fragile</title>
+    <title>Limber</title>
   </head>
-  <body ng-app="frAgile" ng-controller="authController">
+  <body ng-app="Limber" ng-controller="authController">
 
     <div class="top-content">
 
@@ -49,8 +41,13 @@
                         <div class="form-top">
                           <div class="form-top-left">
                             <h3>Login</h3>
-                              <p>Enter username and password to log on:</p>
+                              <p>Enter email and password to log on:</p>
+                              <div id="errorDiv" class="alert alert-danger" role="alert" style="margin-top:10px;padding: 7px; display:none;">
+		                          <button type="button" class="close" ng-click="logInErrorMsg=''" aria-label="Close" style="margin-top: -3px;right:0;"><span aria-hidden="true">&times;</span></button>
+		                           {{logInErrorMsg}}
+	                             </div>
                           </div>
+
                           <div class="form-top-right">
                             <i class="fa fa-key"></i>
                           </div>
@@ -59,12 +56,13 @@
                         <form ng-submit="passportLogin()">
                           <div class="form-group">
                             <label class="sr-only" for="form-email">Email</label>
-                              <input type="text" name="form-username"  ng-model="user.email" placeholder="Email..." class="form-username form-control" id="form-email">
+                              <input type="text" name="form-username"  ng-model="user.email" placeholder="Email..." class="form-username form-control" id="form-email" required>
                             </div>
                             <div class="form-group">
                               <label class="sr-only" for="form-password">Password</label>
-                              <input type="password" name="form-password" ng-model="user.password" placeholder="Password..." class="form-password form-control" id="form-password">
+                              <input type="password" name="form-password" ng-model="user.password" placeholder="Password..." class="form-password form-control" id="form-password" required>
                             </div>
+                            <div><a href="#" style="text-decoration:none;margin-top:-12px;">Forgot Password?</a></div>
                             <button type="submit"  class="btn">Sign in!</button>
                         </form>
                       </div>
@@ -81,7 +79,7 @@
                             <i class="fa fa-google-plus"></i> Google Plus
                           </a>
                         </div>
-                      </div>
+                   </div>
 
                     </div>
 
@@ -95,6 +93,10 @@
                           <div class="form-top-left">
                             <h3>Sign up</h3>
                               <p>Fill in the form below to get instant access:</p>
+                              <div id="errorDiv" class="alert alert-danger" role="alert" style="margin-top:10px;padding: 7px; display:none;">
+		                          <button type="button" class="close" ng-click="registerErrorMsg=''" aria-label="Close" style="margin-top: -3px;right:0;"><span aria-hidden="true">&times;</span></button>
+		                           {{registerErrorMsg}}
+	                             </div>
                           </div>
                           <div class="form-top-right">
                             <i class="fa fa-pencil"></i>
@@ -104,19 +106,19 @@
                         <form ng-submit="register()" class="registration-form">
                           <div class="form-group">
                             <label class="sr-only" for="form-first-name">First name</label>
-                              <input type="text" name="form-first-name" placeholder="First name..." ng-model="user.firstName" class="form-first-name form-control" id="form-first-name">
+                              <input type="text" name="form-first-name" placeholder="First name..." ng-model="user1.firstName" class="form-first-name form-control" id="form-first-name">
                             </div>
                             <div class="form-group">
                               <label class="sr-only" for="form-last-name">Last name</label>
-                              <input type="text" name="form-last-name" placeholder="Last name..." ng-model="user.lastName" class="form-last-name form-control" id="form-last-name">
+                              <input type="text" name="form-last-name" placeholder="Last name..." ng-model="user1.lastName" class="form-last-name form-control" id="form-last-name">
                             </div>
                             <div class="form-group">
                               <label class="sr-only" for="form-email">Email</label>
-                              <input type="text" name="form-email" placeholder="Email..." ng-model="user.email" class="form-email form-control" id="form-email">
+                              <input type="text" name="form-email" placeholder="Email..." ng-model="user1.email" class="form-email form-control" id="form-email" required>
                             </div>
                             <div class="form-group">
                               <label class="sr-only" for="form-password">Password</label>
-                              <input type="password" name="form-password" placeholder="Password..." ng-model="user.password" class="form-email form-control" id="form-password">
+                              <input type="password" name="form-password" placeholder="Password..." ng-model="user1.password" class="form-email form-control" id="form-password" required>
                             </div>
                             <button type="submit" class="btn" >Sign me up!</button>
                         </form>
@@ -152,10 +154,10 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.min.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.5.js"></script>
-    <script src="assets/js/jquery-1.11.1.min.js"></script>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/jquery.backstretch.min.js"></script>
-    <script src="assets/js/scripts.js"></script>
+    <script src="lib/js/jquery-1.11.1.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/js/jquery.backstretch.min.js"></script>
+    <script src="lib/js/scripts.js"></script>
     <!-- <script type="text/javascript" src='lib/angular.min.js'></script>
     <script type="text/javascript" src='lib/angular-route.min.js'></script>
     <script type="text/javascript" src="lib/angular-cookies.min.js"></script> -->

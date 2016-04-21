@@ -178,11 +178,12 @@ StorySchema.statics.removeMembers = function(storyId,membersId, callback) {
 TODO: Need to update the below code w.r.t deletion of files from memory
 where atachments are stored**/
 StorySchema.statics.removeAttachment = function(storyId,attachmentId, callback) {
-  this.update(
+  this.findByIdAndUpdate(
       { "_id" : storyId },
 
       {$pull: {attachmentList:{_id:attachmentId }}
         }, {
+          new:true,
           upsert: true
         }
 
@@ -203,7 +204,7 @@ TODO: Need to implement where the attachments will be stored
 in the disk**/
 StorySchema.statics.addAttachments = function(storyId,atachmentObj, callback) {
   this.findOne({"_id":storyId}).exec(function(err,doc){ console.log(doc);}); //TODO: Update indicators count
-  this.update(
+  this.findByIdAndUpdate(
       { "_id" : storyId },
       { $push: {attachmentList:{
         fileName: atachmentObj['fileName'],
@@ -215,6 +216,7 @@ StorySchema.statics.addAttachments = function(storyId,atachmentObj, callback) {
       }
       },
       {
+        new: true,
          upsert: true
       }
    )

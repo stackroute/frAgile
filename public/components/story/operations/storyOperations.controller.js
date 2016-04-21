@@ -238,7 +238,8 @@ var socket = Socket($scope);
 
       'room': $scope.roomName,
       'storyid': $scope.storyDetails._id,
-      'checklistGrp': checklistGrp
+      'checklistGrp': checklistGrp,
+      'projectID' : $scope.projectID
     });
 
 
@@ -340,7 +341,9 @@ var socket = Socket($scope);
 
         'room': $scope.roomName,
         'storyid': $scope.storyDetails._id,
-        'memberid': memberObj._id
+        'memberid': memberObj._id,
+        'projectID' : $scope.projectID,
+        'fullName': memberObj.firstName + " " + memberObj.lastName
       });
     }else{
       //remove members working, tested
@@ -348,13 +351,16 @@ var socket = Socket($scope);
 
         'room': $scope.roomName,
         'storyid': $scope.storyDetails._id,
-        'memberid': memberObj._id
+        'memberid': memberObj._id,
+        'projectID' : $scope.projectID,
+        'fullName': memberObj.firstName + " " + memberObj.lastName
       });
     }
   }
 }]);
-fragileApp.controller('MyCtrl', ['$scope','param', 'Upload','$uibModalInstance', function ($scope,param, Upload,$uibModalInstance) {
-
+fragileApp.controller('MyCtrl', ['$scope','param', 'Upload','$uibModalInstance','Socket', function ($scope,param, Upload,$uibModalInstance,Socket) {
+var socket = Socket($scope);
+$scope.roomName = "story:" + param._id;
   /***
   author:Shrinivas
   Function Name: submit
@@ -378,6 +384,9 @@ fragileApp.controller('MyCtrl', ['$scope','param', 'Upload','$uibModalInstance',
       data: {file: file,storyId:param._id}
     }).then(function (resp) {
       console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+      resp.data.room = $scope.roomName;
+      socket.emit('story:addAttachment', resp.data);
+      console.log(resp.data);
     }, function (resp) {
       console.log('Error status: ' + resp.status);
     }, function (evt) {

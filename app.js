@@ -67,7 +67,7 @@ app.use(function(req, res, next) {
   else
   {
 
-    return res.redirect(200,'/index.html');
+    return res.redirect('/index.html');
   }
 });
 
@@ -101,11 +101,11 @@ if (app.get('env') === 'development') {
 //no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  console.log(err.message);
-  // res.render('error', {
-  //   message: err.message,
-  //   error: {}
-  // });
+//console.log(err.message);
+ res.render('error', {
+   message: err.message,
+    error: {}
+ });
 });
 
 
