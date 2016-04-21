@@ -147,7 +147,7 @@ var socket = Socket($scope);
 
       //Required to showcase the current position of story in move\copy modal
       for(var rel=0;rel< response.data.release.length;rel++){
-        if(response.data.release[rel]._id == $stateParams.relId){
+        if(response.data.release[rel]._id == $stateParams.releaseID){
           //TODO:this loop can be resused to give the non admin the rights to move/copy the story between lists of the same sprint.
           response.data.release.selectedRelease=response.data.release[rel];
           response.data.release.selectedSprints=storyContr.complexDataObject.sprint;
@@ -156,6 +156,7 @@ var socket = Socket($scope);
             if (response.data.release.selectedSprints.list[sprIndex]._id == storyContr.complexDataObject.currentPosition.listId) {
               console.log("enter");
               response.data.release.selectedList=response.data.release.selectedSprints.list[sprIndex];
+               storyContr.complexDataObject.currentPosition.sprintId=response.data.release.selectedSprints._id;
               break;
             }
           }
