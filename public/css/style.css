@@ -122,6 +122,11 @@ a.attachmentdetails{
   font-size:55px;
   color: #7E3878;
 }
+.graphButton {
+    position: fixed;
+    right: 1%;
+    color: #527D73;
+}
 .pdf:before{
   content: "\f1c1";
   font-family: FontAwesome;

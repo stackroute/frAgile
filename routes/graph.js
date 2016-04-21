@@ -1,48 +1,97 @@
 var express = require('express');
 var router = express.Router();
-// var Subjects = require('./../models/SubjectViews');
-//var app = require('../app');
-var graph = require('../models/graph.js');
+var user = require('../models/user.js');
+var project = require('../models/project.js');
+var sprint = require('../models/sprint.js');
+var story = require('../models/story.js');
+var user = require('../models/user.js');
 
 var mongoose = require('mongoose');
 
-// var fs = require('fs'),
-//     list;
-
-/* GET home page. */
-//
-// router.get('/', function(req, res, next) {
-//   fs.readFile("./public/json/graph_sprintStatus.json", "utf-8", function(error, data) {
-//      list = data;
-//      list1 =  JSON.parse(list);
-//      res.send(list1);
-//      console.log(" Reading Graphs ");
-//   });
-// });
-
-
-router.get('/', function(req, res, next) {
-  console.log("I am in route");
-graph.getgraph("56efbed8e0feada51b660bab",function(err,doc){
-if(err){
-  res.send(err);
-}else{
-  res.send(doc);
-}
+router.get('/home', function(req, res) {
+var userId = req.user._id;
+    user.findOne({'_id': userId },'projects')
+    .populate("projects","_id name release._id release.name release.sprints")
+    .exec(function(err , doc) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(doc);
+      }
+    });
 });
+
+router.get('/project', function(req, res) {
+  var userId = req.query.id;
+    user.findOne({'_id': userId },'projects')
+    .populate("projects","_id name release._id release.name")
+    .exec(function(err , doc) {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send(doc);
+      }
+    });
 });
-// router.get('/', function(req, res, next) {
-//     console.log("----------------------Story Details----------->");
-//   var Subjects = app.db.collection('graphdata');
-//   console.log("Subjects ------>"+Subjects);
-//   Subjects.find({'_id': "56ea4a3f01dbb121bd351eb8" , "storyStatus" : 1},function(err,storyDetails){
-//     console.log("----------------------Story Details----------->"+storyDetails);
-//      if(err){
-//        res.send(err);
-//        return;
-//      }
-//      res.json(storyDetails);
-//    });
-// });
+
+// Route to get release chart data
+router.get('/release', function(req, res) {
+  var projectId = req.query.id;
+  // console.log(id);
+  project.findOne({'_id': projectId},'release._id release.creationDate release.releaseDate release.description release.sprints')
+  .populate("release.sprints", "endDate startDate list.group list.stories")
+  .exec(function(err , doc) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(doc);
+    }
+  });
+
+});
+
+
+// Route to get Cumulative Flow Diagram chart data
+// TODO: Need to get the maximum count among the sprints inside a single release.
+router.get('/cfd', function(req, res) {
+  var projectId = req.query.id;
+  project.findOne({'_id': projectId},'release.sprints')
+  .populate("release.sprints", "name list.group list.stories")
+  .exec(function(err , doc) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(doc);
+    }
+  });
+
+});
+
+// Route to get sprints chart data
+router.get('/sprint', function(req, res) {
+  var sprintId = req.query.id;
+  sprint.findOne({'_id': sprintId },'list')
+  .exec(function(err , doc) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(doc);
+    }
+  });
+});
+
+//Route for getting user details
+router.get('/user', function(req, res) {
+  var userId = req.query.id;
+  user.findOne({'_id': id },'initials firstName createdDate projects')
+  .populate("projects", "name date")
+  .exec(function(err , doc) {
+    if (err) {
+      res.send(err);
+    } else {
+      res.send(doc);
+    }
+  });
+});
 
 module.exports = router;

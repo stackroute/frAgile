@@ -1,0 +1,42 @@
+<h3>Release Chart</h3>
+
+  <div class="modal-body" ng-controller="releaseChartController" ng-init="showProjectsAndReleasesGraph()">
+     <!-- ng-init="init()" -->
+      <div>
+        <div class="row">
+          <div class="col-sm-3">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <ul ng-repeat="project in projRelData track by $index">
+                      <a id="{{project.projId}}" ng-click="releaseChartData(project.projId)">{{project.projName}}<b></b></a>
+                    <!-- <li class="dropdown">
+                      <a id="{{project.projId}}" class="dropdown-toggle" data-toggle="dropdown" ng-click="releaseChartData(project.projId)">{{project.projName}}<b class="caret"></b></a> -->
+                        <!-- <ul class="dropdown-menu">
+                        <li ng-repeat="release in project.release track by $index">
+                          <a id="{{release._id}}">{{release.name}}</a>
+                        </li>
+                      </ul> -->
+                    <!-- </li> -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-9">
+              <div class="panel panel-default">
+                <div class="panel-body">
+                  <table class="table table-striped">
+                    <tr>
+                        <th ng-repeat="column in cols">{{column}}</th>
+                    </tr>
+                    <tr ng-repeat="row in rows">
+                      <td ng-repeat="column in cols">{{row[column]}}</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+      </div><!-- row end -->
+    </div><!-- ng-controller end -->
+  </div><!-- modal body End -->

@@ -1,4 +1,5 @@
-fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket','$filter', function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket,$filter) {
+fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket','$filter', 'graphModalFactory',
+function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket,$filter,graphModalFactory) {
   // $scope.loadProjects = function() {
   //
   //   projectService.getUserProjects().success(function(response) {
@@ -25,6 +26,16 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       }
     })
   })
+
+  // Opening Modal window for Release Chart
+  $scope.openReleaseChart = function() {
+      graphModalFactory.open('lg','./components/releaseChart/releaseChart.html');
+    };
+
+    // Opening Modal window for Overview Chart
+  $scope.showOverGraph = function() {
+      graphModalFactory.open('lg','./components/releaseChart/overViewChart.html');
+    };
 
   $scope.longDescLimit = 38;
   $scope.setDefaultForRelease = function(projectId) {

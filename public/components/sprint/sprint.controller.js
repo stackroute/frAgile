@@ -1,4 +1,5 @@
-fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'Socket', '$uibModal', '$location', '$anchorScroll', function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibModal, $location, $anchorScroll) {
+fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'Socket', '$uibModal', '$location', '$anchorScroll','graphModalFactory',
+function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibModal, $location, $anchorScroll,graphModalFactory) {
   $scope.getSprints = function() {
     $scope.addToBacklog = false;
     $scope.addToBuglist = false;
@@ -369,4 +370,10 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
 
     });
   }
+  // Opening Modal window for Release Chart
+  $scope.displaySprintGraph = function() {
+      graphModalFactory.open('lg','./components/sprint/graph_sprint/sprintChart.html');
+    };
+
+
 }]);

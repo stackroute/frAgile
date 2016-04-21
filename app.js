@@ -13,8 +13,8 @@ var mongoose = require('mongoose');
 var app = express();
 
 
-//mongoose.connect('mongodb://172.23.238.253/frAgile_dummy')
-  mongoose.connect('mongodb://localhost/frAgile');
+mongoose.connect('mongodb://172.23.238.253/frAgile_dummy')
+  // mongoose.connect('mongodb://localhost/frAgile');
 var db = mongoose.connection
 
 var routes = require('./routes/index');
@@ -81,6 +81,7 @@ app.use('/sprint', sprint);
 app.use('/project', project);
 app.use('/user', user);
 app.use('/story', story);
+app.use('/graph',graph);
 
 // error handlers
 
