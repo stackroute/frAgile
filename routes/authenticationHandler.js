@@ -2,7 +2,7 @@ var express = require('express'),
   router = express.Router();
 
 module.exports = function(passport){
-  console.log("called authhandler");
+
 	//sends successful login state back to angular
 	router.get('/success', function(req, res){
 		res.send({error:null});
@@ -12,15 +12,9 @@ module.exports = function(passport){
 
 	//sends failure login state back to angular
 	router.get('/failure', function(req, res){
-		res.send({ error: "Invalid email id or password"});
+		res.send({ error: "Invalid Email or Password"});
 		// req.session.user=null;
 	});
-
-	// router.use('/login',function(req,res,next) {
-  //     console.log('Login Middleware',req.body);
-  // //  console.log(passport);
-  //   next();
-  // });
 
 	router.post('/login', passport.authenticate('local-login', {
 		successRedirect: '/auth/success',
@@ -37,15 +31,22 @@ module.exports = function(passport){
 		failureRedirect: '/auth/failure'
 	}));
 
-  router.get('/home',function(req,res) {
-    console.log("blah");
-  });
 
+  router.get('/logout', function(req, res) {
+          req.logout();
+          res.redirect('/index.html');
+      });
+  // router.get('/home',function(req,res) {
+  //   console.log("blah");
+  // });
+
+//login using facebook
   router.get('/facebook', passport.authenticate('facebook', {scope: ['email']}));
 
   	router.get('/facebook/callback',
   	passport.authenticate('facebook', { successRedirect: '/home.html',
   																			failureRedirect: '/index.html' }));
+
   	//login using google
   	router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}));
 
