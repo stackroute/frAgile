@@ -228,7 +228,7 @@ projectSchema.statics.findProj = function(projectList, callback) {
 projectSchema.statics.getProjectMembers = function(projectId, callback) {
 
   this.findOne({"_id":projectId})
-  .populate('memberList','_id firstName lastName initials imageUrl' )
+  .populate('memberList','_id firstName lastName photo' )
     .exec(function(err, doc) {
       if (err) {
         callback(err, null);

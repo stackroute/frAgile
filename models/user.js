@@ -9,23 +9,23 @@ var mongoose = require('mongoose'),
     password: String,
     email: String,
     initials: String,
-    imageUrl: String,
+    photo: String,
     projects: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Project'
     }],
-    	facebook: {
-    		id: String,
-    		token: String,
-    		email: String,
-    		name: String
-    	},
-    	google: {
-    		id: String,
-    		token: String,
-    		email: String,
-    		name: String
-    	}
+    facebook: {
+      id: String,
+      token: String,
+      email: String,
+      name: String
+    },
+    google: {
+      id: String,
+      token: String,
+      email: String,
+      name: String
+    }
   });
 
 userSchema.statics.addUser = function(userDetails, callback) {
@@ -59,9 +59,11 @@ userSchema.statics.addProjectToUser = function(userID, projectID, callback) {
     if (err) callback(err, null)
     else {
       //To send back added project data
-      Project.find({"_id":projectID}).populate("release").exec(function(err,data){
-        if(err)
-        callback(err,null);
+      Project.find({
+        "_id": projectID
+      }).populate("release").exec(function(err, data) {
+        if (err)
+          callback(err, null);
         else {
           callback(null, data);
         }

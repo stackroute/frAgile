@@ -125,6 +125,8 @@ module.exports = function(passport){
 								console.log('Saved directly from Facebook');
 		    				return done(null, user);
 		    			} else {
+
+								console.log("----------" , profile.photos);
 		    				var newUser = new User();
 		    				newUser.facebook.id = profile.id;
 		    				newUser.facebook.token = accessToken;
@@ -133,7 +135,7 @@ module.exports = function(passport){
 								newUser.firstName=profile.name.givenName;
 								newUser.lastName=profile.name.familyName;
 								newUser.email=profile.emails[0].value;
-		    			
+								newUser.photo = profile.photos[0].value ;
 
 		    				newUser.save(function(err){
 		    					if(err)

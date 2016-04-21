@@ -13,7 +13,8 @@ var app = require('./app.js')
 io.on('connection', function(socket) {
   var user = {
     _id:app.userID,
-    fullName:app.fullName
+    fullName:app.fullName,
+    photo:app.photo
   }
   socket.on('join:room', function(data) {
     //To make sure socket connects to one room only

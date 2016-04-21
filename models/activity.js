@@ -11,6 +11,7 @@ var activitySchema = new mongoose.Schema({
   },
   userCreator: {
     fullName: String,
+    photo:String,
     _id: {
       type: Schema.Types.ObjectId,
       ref: 'User'
@@ -42,7 +43,8 @@ activitySchema.statics.addEvent = function(event, callback) {
     projectID: event.projectID,
     userCreator: {
       fullName: event.user.fullName,
-      _id: event.user._id
+      _id: event.user._id,
+      photo: event.user.photo
     },
     target: {
       name: event.target.name,
