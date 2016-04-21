@@ -197,8 +197,10 @@ io.on('connection', function(socket) {
 
         //Adding below line for moving card across release
         var sprintId=data.sprintId;
-        if(!data.isReleaseMove)
-        sprintId =data.oldSprintId;
+
+        if(data.isReleaseMove != undefined){
+          sprintId =data.oldSprintId;
+        }
 
         Sprint.deleteStory(sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
           if (delStoryData.nModified == 1) { //If delete is succesful

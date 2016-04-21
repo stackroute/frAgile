@@ -77,7 +77,7 @@
         <div class="pull-left story-members">
           <h3 class="story-sub-header">Checklists  <button class="btn btn-default btn-sm" ng-click="addChecklist()"><i class="fa fa-plus" aria-hidden="true"></i></button></h3>
           <div ng-repeat="todo in storyData.checklist">
-            <span class="checklist-header" ng-mouseenter="groupHovering=true" ng-mouseleave="groupHovering=false">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo._id)">
+            <span class="checklist-header" ng-mouseenter="groupHovering=true" ng-mouseleave="groupHovering=false">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo._id,todo.checklistHeading)">
               <i class="fa fa-trash-o" ng-show="groupHovering"></i></a></small></span>
               <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"><b>{{todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0}}%</b></uib-progressbar>
               <li class="checklist-todos" ng-repeat="list in todo.items">

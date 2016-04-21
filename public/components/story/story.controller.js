@@ -268,6 +268,15 @@ var socket = Socket($scope);
       checked: false,
       creationDate:Date.now(),
     }
+    console.log({
+
+      'room': $scope.roomName,
+      'storyid': storyContr.storyData._id,
+      'checklistGrpId': todo._id,
+      'itemObj':itemObj,
+      'projectID' : $scope.projectID,
+      'text' : todo.todoText
+    });
     socket.emit('story:addChecklistItem', {
 
       'room': $scope.roomName,
@@ -278,6 +287,7 @@ var socket = Socket($scope);
       'text' : todo.todoText
     });
     todo.todoText = '';
+
   };
 
 /***
