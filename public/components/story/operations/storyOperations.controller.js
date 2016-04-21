@@ -49,6 +49,8 @@ var socket = Socket($scope);
   description:This function is a init function called by Move and Copy Story modal.
   ***/
   $scope.initCopyMoveStory=function(isMove){
+    $scope.sprintDetails= param.sprint;
+    console.log($scope.sprintDetails);
     if(isMove){
       $scope.moveCopyButtonDisabled=true;
     }else{
@@ -57,16 +59,16 @@ var socket = Socket($scope);
     $scope.storyMoveData=param.storyMoveData.data;
     $scope.storyCurrentPosition=param.currentPosition;
     $scope.moveTo={};
-    $scope.moveTo.listType=[{name:'Backlog',Id:1},{name:'Buglist',Id:2},{name:'Other',Id:3}]  ;
+    $scope.moveTo.listType=[{name:'Backlog',Id:1,value:'backlogs'},{name:'Buglist',Id:2,value:'buglists'},{name:'Other',Id:3,value:''}]  ;
     $scope.moveTo.selectedOption={};
     switch ($scope.storyCurrentPosition.listItemName) {
-      case "Backlog": $scope.moveTo.selectedOption={name:'Backlog',Id:1};
+      case "Backlog": $scope.moveTo.selectedOption={name:'Backlog',Id:1,value:'backlogs'};
       $scope.moveTo.checkDisabled=true;
       break;
-      case "Buglist": $scope.moveTo.selectedOption={name:'Buglist',Id:2};
+      case "Buglist": $scope.moveTo.selectedOption={name:'Buglist',Id:2,value:'buglists'};
       $scope.moveTo.checkDisabled=true;
       break;
-      default: $scope.moveTo.selectedOption={name:'Other',Id:3};
+      default: $scope.moveTo.selectedOption={name:'Other',Id:3,value:''};
       $scope.moveTo.checkDisabled=false;
       break;
     }
@@ -94,15 +96,26 @@ var socket = Socket($scope);
   $scope.moveStory=function(){
 
     if($scope.moveTo.selectedOption.name != "Other"){
-      //trigger websocket to move to backlog
+      socket.emit('sprint:moveToBackbugStory',{
+      'room': $scope.roomName,
+      'newListId':$scope.moveTo.selectedOption.value,
+      'projectID':$stateParams.prId,
+      'storyId':$scope.storyDetails._id,
+      'sprintId':$scope.storyCurrentPosition.sprintId,
+      'oldListId':$scope.storyCurrentPosition.listId
+      });
+        $uibModalInstance.dismiss('cancel');
     }
     else{
-      //trigger websocket :story to move to new list
-
-      //$scope.storyMoveData.release.selectedRelease._id
-      //$scope.storyMoveData.release.selectedSprints._id
-      //$scope.storyMoveData.release.selectedList._id
-
+    socket.emit('sprint:moveStory', {
+        'room': $scope.roomName,
+        'sprintId': $scope.storyMoveData.release.selectedSprints._id,
+        'newListId': $scope.storyMoveData.release.selectedList._id,
+        'storyId': $scope.storyDetails._id,
+        'oldListId': $scope.storyCurrentPosition.listId,
+        'oldSprintId':$scope.storyCurrentPosition.sprintId
+      });
+      $uibModalInstance.dismiss('cancel');
     }
   }
 
@@ -113,19 +126,30 @@ var socket = Socket($scope);
   description:This function is used to create dupilcate of the current story to spcified destination
   ***/
   $scope.copyStory=function(){
-
+//check, not working backlog,buglist,not reflecting back in list
     if($scope.moveTo.selectedOption.name != "Other"){
       //trigger websocket to move to backlog
+      socket.emit('sprint:addStory', {
+      'heading':$scope.storyDetails.heading ,
+      'addTo': $scope.moveTo.selectedOption.value,
+      'storyStatus':'' ,
+      'description': $scope.storyDetails.description ,
+      'projectId':$stateParams.prId,
+      'listName':$scope.moveTo.selectedOption.value,
+      'listId':$scope.moveTo.selectedOption.value
+    });
     }
     else{
       //TODO:below lines
-      //trigger websocket :story to move to new list
-      //Feilds required to be passed
-      //$scope.storyMoveData.release.selectedRelease._id
-      //$scope.storyMoveData.release.selectedSprints._id
-      //$scope.storyMoveData.release.selectedList._id
-      //Story Heading,Story Description
-
+      socket.emit('sprint:addStory', {
+      'heading': $scope.storyDetails.heading,
+      'addTo': $scope.moveTo.selectedOption.value,
+      'storyStatus': '',
+      'description': $scope.storyDetails.description,
+      'listId': $scope.storyMoveData.release.selectedList.group,
+      'sprintId':$scope.storyMoveData.release.selectedSprints._id,
+      'id':$scope.storyMoveData.release.selectedList._id
+    });
     }
   }
 
@@ -170,7 +194,7 @@ var socket = Socket($scope);
     }
     else{
       /**This condition cheks if there was change in other selection and enable move**/
-      if ( !$scope.storyMoveData.release.selectedList || !$scope.storyMoveData.release.selectedList.listName || $scope.storyCurrentPosition.listItemName == $scope.storyMoveData.release.selectedList.listName) {
+      if ( !$scope.storyMoveData.release.selectedList || !$scope.storyMoveData.release.selectedList || $scope.storyCurrentPosition.listId == $scope.storyMoveData.release.selectedList._id) {
         $scope.moveCopyButtonDisabled=true;
       }else{
         $scope.moveCopyButtonDisabled=false;
@@ -233,6 +257,13 @@ var socket = Socket($scope);
   $scope.createLabel=function(isCreate,labelData){
     if(isCreate){
       //TODO:call create template websocket passing $scope.labelTemplate
+      socket.emit('sprint:addNewLabel', {
+
+        'room': $scope.roomName,
+        'sprintid':$scope.sprintDetails._id ,
+        'labelObj': $scope.labelTemplate
+      });
+      $scope.labelTemplate.text ="";
     }else {
       $scope.labelTemplate.colorName=labelData.colorName;
       $scope.labelTemplate.colorCode=labelData.colorCode;
@@ -259,16 +290,18 @@ var socket = Socket($scope);
   //TODO:analyse whether we need to add the label or remove the label by comparing it with story label list array and change the tick mark in sub modal accordingly
   $scope.addRemoveLabel=function(labelObj){
     //pass labelobj._id to backend to add to the story,storyDetails using websocket
-    var operation;
-    var labelObj = $scope.storyDetails.labelList.filter(function ( obj ) {
+    var operation = "remove";
+    var labelCheck = $scope.storyDetails.labelList.filter(function ( obj ) {
       return obj._id === labelObj._id;
     })[0];
-
+  if (labelCheck == undefined) {
+  operation = "add";
+  }
     socket.emit('story:addRemoveLabel', {
 
       'room': $scope.roomName,
       'storyid': $scope.storyDetails._id,
-      'labelid':labelObj._id,
+      'labelid':$scope.sprintDetails._id ,
       'operation':operation
     });
 
@@ -325,8 +358,9 @@ var socket = Socket($scope);
     }
   }
 }]);
-fragileApp.controller('MyCtrl', ['$scope','param', 'Upload','$uibModalInstance', function ($scope,param, Upload,$uibModalInstance) {
-
+fragileApp.controller('MyCtrl', ['$scope','param', 'Upload','$uibModalInstance','Socket', function ($scope,param, Upload,$uibModalInstance,Socket) {
+var socket = Socket($scope);
+$scope.roomName = "story:" + param._id;
   /***
   author:Shrinivas
   Function Name: submit
@@ -350,6 +384,9 @@ fragileApp.controller('MyCtrl', ['$scope','param', 'Upload','$uibModalInstance',
       data: {file: file,storyId:param._id}
     }).then(function (resp) {
       console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+      resp.data.room = $scope.roomName;
+      socket.emit('story:addAttachment', resp.data);
+      console.log(resp.data);
     }, function (resp) {
       console.log('Error status: ' + resp.status);
     }, function (evt) {

@@ -122,6 +122,11 @@ a.attachmentdetails{
   font-size:55px;
   color: #7E3878;
 }
+.graphButton {
+    position: fixed;
+    right: 1%;
+    color: #527D73;
+}
 .pdf:before{
   content: "\f1c1";
   font-family: FontAwesome;
@@ -971,7 +976,6 @@ background-color: rgb(255, 239, 237);
 .add-members {
   clear: both;
   padding: 10px;
-  border-top: 1px solid #eee;
 }
 .remove-members{
   position: relative;

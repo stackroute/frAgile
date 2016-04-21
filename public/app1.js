@@ -1,4 +1,4 @@
-var fragileApp = angular.module('fragileApp',['ui.router','ngLetterAvatar','ui.bootstrap','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload']);
+var fragileApp = angular.module('fragileApp',['ui.router','ngLetterAvatar','ui.bootstrap','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3']);
 
 fragileApp.config(function($stateProvider,$urlRouterProvider) {
 

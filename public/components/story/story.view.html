@@ -12,6 +12,7 @@
     <i class="fa fa-arrows" ></i>
   </div>
 
+
   <div class="col-sm-7">
     <div class="story-details clearfix">
       <span class="pull-left story-left-head"><i class="fa fa-clipboard" aria-hidden="true"></i></span>
@@ -70,6 +71,7 @@
           </div>
         </div>
       </div>
+
       <div class="story-details clearfix">
         <span class="pull-left story-left-head"><i class="fa fa-list-ul" aria-hidden="true"></i></span>
         <div class="pull-left story-members">
@@ -84,13 +86,14 @@
                 <span class="done-{{list.checked}}"  ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{list.text}}
 
                   <a ng-click="removeTodoItem(list,todo,list.text)"  ng-show="itemHovering">
+
                     <i class="fa fa-minus-circle" ></i>
                   </a>
                 </span>
               </li>
-              <input type="text" ng-model="todo.todoText" class="form-control add-todo" size="50"
-              placeholder="Add New Todo"  ng-focus="todoText=true" ng-blur="todoText=false">
-              <button class="btn btn-default btn-xs" ng-click="addTodoItem(todo)" ng-show="todoText"><i class="fa fa-check" aria-hidden="true"></i></button>
+              <input type="text" ng-model="todo.todoText" class="form-control add-todo" size="40"
+              placeholder="Add New Todo" ></input>
+              <button class="btn btn-default btn-xs" ng-click="addTodoItem(todo)" ><i class="fa fa-check" aria-hidden="true"></i></button>
               <br/>
             </div>
           </div>
@@ -111,6 +114,7 @@
       </div> -->
 
     </div>
+
     <div class="col-sm-5">
       <header>
         <h3>

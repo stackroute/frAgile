@@ -1,3 +1,12 @@
+<!-- Start Modal Window-->
+<!-- <button class="btn btn-success pull-right"  ng-click="openReleaseStatus()">
+CFD Graph
+</button> -->
+<div class="graphButton">
+  <i class="fa fa-bar-chart pull-right" ng-click="openReleaseStatus()" style="font-size:30px;margin-right:10px;color:#A60059;"></i>
+</div>
+<!-- End Modal--->
+
 <div ng-init="getSprints()"  ng-if = "projects.length > 0">
   <div ng-init="getSprints()"  >
   <div id="{{projects[projectKey].release[releaseKey]._id}}" class="container">

@@ -1,4 +1,5 @@
-fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'Socket', '$state','$timeout', function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, Socket, $state, $timeout) {
+fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'Socket', '$state','$timeout', 'graphModalFactory',
+function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, Socket, $state, $timeout,graphModalFactory) {
   $scope.longDescLimit = 34;
   var socket = Socket($scope);
 
@@ -119,6 +120,9 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
   };
   $scope.starFun = function(rel) {
     // console.log("starFun" + rel);
+  };
+  $scope.openReleaseStatus = function(){
+    graphModalFactory.open('lg','./components/release/graph_release/releaseGraph.html');
   };
 
 }]);
