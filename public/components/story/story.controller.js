@@ -5,7 +5,7 @@ TODO:
 
 *****/
 
-fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','param',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,param){
+fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','param','$window',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,param,$window){
 var socket = Socket($scope);
 
   var storyContr = this;
@@ -147,7 +147,7 @@ var socket = Socket($scope);
 
       //Required to showcase the current position of story in move\copy modal
       for(var rel=0;rel< response.data.release.length;rel++){
-        if(response.data.release[rel]._id == $stateParams.relId){
+        if(response.data.release[rel]._id == $stateParams.releaseID){
           //TODO:this loop can be resused to give the non admin the rights to move/copy the story between lists of the same sprint.
           response.data.release.selectedRelease=response.data.release[rel];
           response.data.release.selectedSprints=storyContr.complexDataObject.sprint;
@@ -156,6 +156,7 @@ var socket = Socket($scope);
             if (response.data.release.selectedSprints.list[sprIndex]._id == storyContr.complexDataObject.currentPosition.listId) {
               console.log("enter");
               response.data.release.selectedList=response.data.release.selectedSprints.list[sprIndex];
+               storyContr.complexDataObject.currentPosition.sprintId=response.data.release.selectedSprints._id;
               break;
             }
           }
@@ -169,8 +170,22 @@ var socket = Socket($scope);
 
   };
   $scope.deleteStory = function() {
-    // modalService.open('sm', 'deleteStory.html');
-    //Use Tooltip
+  //Can use tool tip
+    if ($window.confirm("Do you want to delete story?")){
+      var deleteFrom='List';
+      if(storyContr.complexDataObject.currentPosition.listItemName != 'Backlog'|| storyContr.complexDataObject.currentPosition.listItemName != 'Buglist'){
+        deleteFrom=storyContr.complexDataObject.currentPosition.listItemName;
+      }
+            socket.emit('sprint:deleteStory', {
+              'storyId':$scope.storyData._id,
+              'projectId':$stateParams.prId,
+              'deleteFrom':deleteFrom,
+              'sprintId':storyContr.complexDataObject._id,
+              'Listid':storyContr.complexDataObject.currentPosition.listId
+
+            });
+
+    }
   };
   //Not required at story level
   $scope.ok = function() {

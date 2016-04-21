@@ -194,7 +194,13 @@ io.on('connection', function(socket) {
 
     Sprint.addStory(data.sprintId, data.newListId, data.storyId, function(err, addStoryData) {
       if (addStoryData.nModified == 1) { //If add is succesful
-        Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
+
+        //Adding below line for moving card across release
+        var sprintId=data.sprintId;
+        if(!data.isReleaseMove)
+        sprintId =data.oldSprintId;
+
+        Sprint.deleteStory(sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
           if (delStoryData.nModified == 1) { //If delete is succesful
             Story.findById(data.storyId, function(err, storyData) {
               data.story = storyData;

@@ -1,7 +1,7 @@
-.attachmentdetails{
+a.attachmentdetails{
   top:10px;
   left:10px;
-
+  text-decoration: none;
 }
 
 
@@ -1033,6 +1033,7 @@ background-color: rgb(255, 239, 237);
   margin-right: 10px;
   /*margin-bottom: 10px;*/
   cursor: pointer;
+  height:30px;
 }
 .activity-username, .messages-username {
   font-weight: bold;
@@ -1277,7 +1278,7 @@ padding-right: 5px;
 }
 .add-todo {
   margin-left: 10px;
-  width: 50%;
+  width: 60%;
   height: 30px;
   margin-bottom: 25px;
   display: inline;
@@ -1287,15 +1288,19 @@ padding-right: 5px;
 }
 .story-close {
   right: 10px;
+  z-index: 100;
 }
 .story-delete {
   right: 45px;
+  z-index: 100;
 }
 .story-copy {
   right: 80px;
+  z-index: 100;
 }
 .story-move {
   right: 115px;
+  z-index: 100;
 }
 .story-delete, .story-close, .story-copy, .story-move {
   top: -8px;
