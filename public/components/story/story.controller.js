@@ -261,7 +261,7 @@ var socket = Socket($scope);
   parameters:todo item,checklistId//Check once
   description:this fuction is used to add a new item to the checklist group.
   ***/
-  $scope.addTodoItem = function(todo,todoText) {
+  $scope.addTodoItem = function(todo) {
     //todo.items.push({"text":todo.todoText,"done":false})
     var itemObj = {
       text: todo.todoText,
