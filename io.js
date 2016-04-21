@@ -596,7 +596,6 @@ socket.on('activity:addMember', function(data) {
   description:listner to add members to story
   ****/
   socket.on('story:addMembers', function(data) {
-    console.log('Add Member: Socket Request');
     Story.addMembers(data.storyid, data.memberid, function(err, doc) {
       if (!err) {
         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
@@ -612,7 +611,6 @@ socket.on('activity:addMember', function(data) {
   description:listner to remove members from story
   ****/
   socket.on('story:removeMembers', function(data) {
-    console.log('remove Member: Socket Request');
     Story.removeMembers(data.storyid, data.memberid, function(err, doc) {
       if (!err) {
         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
@@ -628,7 +626,6 @@ socket.on('activity:addMember', function(data) {
   description:listner to addnew checklist group to story
   ****/
   socket.on('story:addChecklistGroup', function(data) {
-    console.log('add checklist Group: Socket Request');
     Story.addChecklistGroup(data.storyid, data.checklistGrp, function(err, doc) {
       if (!err) {
         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
@@ -644,18 +641,18 @@ socket.on('activity:addMember', function(data) {
   description:listner to addnew item to checklist group in a story
   ****/
   socket.on('story:addChecklistItem', function(data) {
-    console.log('add checklist Group: Socket Request');
-    // data.itemObj.creatorName=user.fullName;
-    // data.itemObj.createdBy=user.userID;
-    data.itemObj.createdBy="570395a239dc5fbac028505c";
-    data.itemObj.creatorName="user.fullName";
+    data.itemObj.creatorName=user.fullName;
+    data.itemObj.createdBy=user._id;
+    // data.itemObj.createdBy="570395a239dc5fbac028505c";
+    // data.itemObj.creatorName="user.fullName";
 
     Story.addChecklistItem(data.storyid,data.checklistGrpId,data.itemObj, function(err, doc) {
       if (!err) {
-        //user.userID
-        io.to(data.room).emit('story:checklistItemAdded', doc);
-        // io.to(data.room).emit('activity:memberAdded', 1);
-        // console.log(doc);
+        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+          if(!err){
+            io.to(data.room).emit('story:dataModified', storyData);
+          }
+        });
       }
     })
   })
@@ -663,11 +660,14 @@ socket.on('activity:addMember', function(data) {
   description:listner to remove item to checklist group in a story
   ****/
   socket.on('story:removeChecklistItem', function(data) {
-    console.log('add checklist Group: Socket Request');
     Story.removeChecklistItem(data.storyid,data.checklistGrpId,data.itemid,data.checked, function(err, doc) {
       if (!err) {
         //user.userID
-        io.to(data.room).emit('story:checklistItemRemoved', doc);
+        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+          if(!err){
+            io.to(data.room).emit('story:dataModified', storyData);
+          }
+        });
       }
     })
   })
@@ -675,11 +675,14 @@ socket.on('activity:addMember', function(data) {
   description:listner to remove item to checklist group in a story
   ****/
   socket.on('story:removeChecklistGroup', function(data) {
-    console.log('add checklist Group: Socket Request');
     Story.removeChecklistGroup(data.storyid,data.checklistGrpId, function(err, doc) {
       if (!err) {
         //user.userID
-        io.to(data.room).emit('story:ChecklistGroupRemoved', doc);
+        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+          if(!err){
+            io.to(data.room).emit('story:dataModified', storyData);
+          }
+        });
       }
     })
   })
@@ -687,7 +690,6 @@ socket.on('activity:addMember', function(data) {
   description:listner to update item to checklist group in a story
   ****/
   socket.on('story:updateChecklistItem', function(data) {
-    console.log('update checklist Group: Socket Request');
 
     // Story.updateChecklistItem(data.storyid,data.checklistGrpId,data.itemid,data.checked, function(err, doc) {
     //   if (!err) {
@@ -700,7 +702,11 @@ socket.on('activity:addMember', function(data) {
       Story.updateChecklistItem(data.storyid,data.checklistGrpId,data.itemid,data.checked, index,function(err, doc) {
         if (!err) {
           //user.userID
-          io.to(data.room).emit('story:checklistItemUpdated', doc);
+          Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+            if(!err){
+              io.to(data.room).emit('story:dataModified', storyData);
+            }
+          });
         }
       })
     })

@@ -2,6 +2,8 @@ fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParam
   $scope.longDescLimit = 34;
   var socket = Socket($scope);
 
+  $rootScope.projectID = $stateParams.prId //Remove this once refresh issue is fixed
+
   $scope.roomName = "release:" + $stateParams.releaseID;
   var emitData = {
     'room': $scope.roomName

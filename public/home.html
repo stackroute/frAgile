@@ -64,10 +64,10 @@
     <div ui-view class = "bodyArea">
     </div>
   </div>
-  <div class="treeMenuBtn" ng-click = 'showTree = true' ng-hide = "showTree">
+  <div class="treeMenuBtn" ng-click = 'showTree = true' ng-hide = "showTree" ng-cloak>
     <i class="fa fa-arrow-circle-o-right" aria-hidden="true"></i>
   </div>
-  <div class="treeMenu" ng-show = "showTree">
+  <div class="treeMenu" ng-show = "showTree" ng-cloak>
 
     <h5>Navigation</h5>
     <i class="fa fa-arrow-circle-o-left" aria-hidden="true" ng-click = 'showTree = false'></i>
