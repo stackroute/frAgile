@@ -44,10 +44,6 @@ $scope.options = {
                     }
                 }
             },
-            title: {
-              enable: true,
-              text: 'Release Chart'
-            },
             subtitle: {
                 enable: true,
                 text: 'This graph shows the lists of this sprint.Hover over it to find the count of stories in each list.',

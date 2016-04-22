@@ -373,7 +373,7 @@ function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibMo
   }
   // Opening Modal window for Release Chart
   $scope.displaySprintGraph = function() {
-      graphModalFactory.open('lg','./components/sprint/graph_sprint/sprintChart.html');
+      graphModalFactory.open('lg','./components/sprint/graph_sprint/sprintChart.html',"Sprint Graph");
     };
 
 
