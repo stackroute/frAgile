@@ -1,8 +1,5 @@
-var fragileApp = angular.module('fragileApp',['ui.router','ngLetterAvatar','ui.bootstrap','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3']);
+var fragileApp = angular.module('fragileApp',['ui.router','ngLetterAvatar','ui.bootstrap','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3','ngAnimate']);
 
-fragileApp.config(function($stateProvider,$urlRouterProvider) {
-
-});
 
 fragileApp.filter('dateSuffix', function($filter) {
  var suffixes = ["th", "st", "nd", "rd"];

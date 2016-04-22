@@ -23,9 +23,9 @@ Over View
           <div class="boxContainer" ng-repeat= "release in project.release" >
             <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,project.name, release._id,release.name,release.description)">
             <div class="slideMenuBox">
-              <i class="fa fa-trash" ng-click = "archiveFun(project._id, release._id,project.name,release.name)"></i>
-              <i class="fa fa-pencil" ng-click = "showEdit=true; newReleaseName= release.name; newReleaseDetails = release.description; newReleaseDate=release.releaseDate"></i>
-              <i class="fa fa-star" ng-click = "starFun(release._id)"></i>
+              <i class="fa fa-trash" uib-tooltip="Delete" ng-click = "archiveFun(project._id, release._id,project.name,release.name)"></i>
+              <i class="fa fa-pencil" uib-tooltip="Edit" ng-click = "showEdit=true; newReleaseName= release.name; newReleaseDetails = release.description; newReleaseDate=release.releaseDate"></i>
+              <i class="fa fa-star" uib-tooltip="Favorite" ng-click = "starFun(release._id)"></i>
             </div>
               <div class="boxHeading">
                 {{release.name}}
