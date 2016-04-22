@@ -1248,6 +1248,7 @@ h4 small {
   text-align: center
 }
 
+
 /*This class is used for labels template display*/
 
 .story-label-template-selectable {
@@ -1404,6 +1405,9 @@ h4 small {
 .attachments-wrap{
   margin-left: 52px;
   min-width: 400px;
+}
+.avatar-wrapper{
+  display:inline;
 }
 .storydiv{
   width:507px;

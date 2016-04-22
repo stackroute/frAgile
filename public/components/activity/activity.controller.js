@@ -17,7 +17,6 @@ fragileApp.controller('activityController', function($scope, $http, Socket, acti
   // Based on the project clicked, send its projectID to display its corresponding activity
   else
   activityService.getProjectData($rootScope.projectID).success(function(response) {
-    console.log(response);
     // For each activity, go to activityService and add the preposition, etc
     $scope.page = 1;
     response.forEach(function(data) {
