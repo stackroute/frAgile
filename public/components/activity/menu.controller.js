@@ -29,11 +29,14 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
 
   // Autocomplete Search
   $scope.users = [];
+  $scope.currentUserEmail = activityService.getCurrentUserEmail();
   $scope.updateSearch = function(typed) {
       $scope.users = [];
+      console.log('User Email: ', $scope.currentUserEmail);
       $scope.newUsers = activityService.getUsers(typed).success(function(data) {
         data.forEach(function(user) {
-          $scope.users.push(user.email);
+          if(user.email != $scope.currentUserEmail)
+            $scope.users.push(user.email);
         })
       });
     }
