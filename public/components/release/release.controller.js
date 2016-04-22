@@ -122,7 +122,7 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
     // console.log("starFun" + rel);
   };
   $scope.openReleaseStatus = function(){
-    graphModalFactory.open('lg','./components/release/graph_release/releaseGraph.html');
+    graphModalFactory.open('lg','./components/release/graph_release/releaseGraph.html',"Release Graph");
   };
 
 }]);

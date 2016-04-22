@@ -29,12 +29,12 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
 
   // Opening Modal window for Release Chart
   $scope.openReleaseChart = function() {
-      graphModalFactory.open('lg','./components/releaseChart/releaseChart.html');
+      graphModalFactory.open('lg','./components/releaseChart/releaseChart.html',"Release Chart");
     };
 
     // Opening Modal window for Overview Chart
   $scope.showOverGraph = function() {
-      graphModalFactory.open('lg','./components/releaseChart/overViewChart.html');
+      graphModalFactory.open('lg','./components/releaseChart/overViewChart.html',"Overview Graph");
     };
 
   $scope.longDescLimit = 38;
