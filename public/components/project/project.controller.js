@@ -11,7 +11,7 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
   var socket = Socket($scope);
 
   socket.emit('join:room', {
-    'room': 'projectRoom'
+    'room': "user:" + $scope.currentUserID
   });
 
   socket.on('releaseDeleted', function(releaseData) {
@@ -38,6 +38,7 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
     };
 
   $scope.longDescLimit = 38;
+  $scope.longPrjDescLimit = 120;
   $scope.setDefaultForRelease = function(projectId) {
 
     $scope.addWhat = "Release";
@@ -105,7 +106,7 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
   $scope.setProject = function(projectId, projectName, releaseId, releaseName, releaseDesc) {
     $rootScope.projectName = projectName,
     $rootScope.release = {};
-    $rootScope.release.name = releaseName;
+    $rootScope.releaseName = releaseName;
     $rootScope.release.description = releaseDesc;
   }
 
@@ -137,5 +138,9 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
     });
   });
 
+  socket.on('project:projectAdded',function(data){
+    console.log(data);
+    $rootScope.projects.push(data);
+  });
 
 }]);
