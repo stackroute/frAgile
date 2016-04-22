@@ -33,7 +33,8 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
       $scope.users = [];
       $scope.newUsers = activityService.getUsers(typed).success(function(data) {
         data.forEach(function(user) {
-          $scope.users.push(user.email);
+          if(user.email != $rootScope.currentUserEmail)
+            $scope.users.push(user.email);
         })
       });
     }
@@ -42,32 +43,10 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
     socket.emit('activity:addMember', {
       'room': 'activity:' + $rootScope.projectID,
       'projectId': $rootScope.projectID,
-      'memberList': $scope.userIds
+      'memberList': $scope.userIds,
+      'projectName' : $scope.projectName
     });
     $scope.members = "";
-
-    $scope.userIds.forEach(function(userId, index) {
-      var data = {
-        room: 'activity:' + $rootScope.projectID,
-        action: "added",
-        projectID: $rootScope.projectID,
-        user: {
-          '_id': $scope.userID,
-          'fullName': $scope.fullName
-        },
-        object: {
-          name: $scope.allMembers[index],
-          type: "User",
-          _id: userId
-        },
-        target: {
-          name: $scope.projectName,
-          type: "Project",
-          _id: $rootScope.projectID
-        }
-      }
-      socket.emit('addActivity', data);
-    })
 
   }
 
