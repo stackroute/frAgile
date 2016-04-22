@@ -115,7 +115,8 @@ projectSchema.statics.updateRelease = function(projectId, releaseId, newRelease,
         "release.$.releaseDate": newRelease.releaseDate
       }
     }, {
-      upsert: true
+      upsert: true,
+      new:true
     })
     .exec(function(err, doc) {
       if (err) {
@@ -128,7 +129,7 @@ projectSchema.statics.updateRelease = function(projectId, releaseId, newRelease,
 
 // Deletes/pulls the release from the Projects Collection
 projectSchema.statics.deleteRelease = function(projectId, releaseId, callback) {
-  this.update({
+  this.findOneAndUpdate({
       "_id": projectId
     }, {
       $pull: {

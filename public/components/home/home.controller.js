@@ -17,6 +17,10 @@ fragileApp.controller('homeController',['$scope','$state','$rootScope','homeServ
     $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
   };
 
+  homeService.getCurrentUser().success(function(response){
+    $rootScope.currentUserID =  response;
+  })
+
   $rootScope.list = [
   {
     "group": "inProgress",

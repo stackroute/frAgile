@@ -9,6 +9,9 @@ angular.module('fragileApp').factory('homeService', ['$http', 'Socket',function(
       var url = '/project/sprints?releaseID=' + releaseID;
       console.log(url);
       return $http.get(url);
+    },
+    getCurrentUser: function(){
+      return $http.get("/user");
     }
   }
 }]);
