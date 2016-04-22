@@ -21,6 +21,7 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
         $scope.allMembers.push(response[0].firstName + " " + response[0].lastName);
         $scope.addedMembers = $scope.allMembers.join(", ");
         $scope.userIds.push(response[0]._id);
+        $scope.members = "";
       } else {
         alert('Error: User Not Found!');
       }

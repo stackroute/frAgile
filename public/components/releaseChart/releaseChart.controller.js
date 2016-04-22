@@ -123,6 +123,9 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
           }
         }
         percentage = completedCount/(inProgressCount+completedCount)*100;
+        if(isNaN(percentage)){
+          percentage = 0;
+        }
         //// Computation Code End----------->
 
         // dataJson['id'] = (graphDetails.data.release[i]._id) == null ? "nil" : (graphDetails.data.release[i]._id);

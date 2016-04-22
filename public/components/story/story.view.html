@@ -24,23 +24,23 @@
         <div class="story-details clearfix">
           <div class="row">
             <span class="pull-left story-left-head attachmentIcon"><i class="fa fa-pencil-square-o fa-text" aria-hidden="true"></i></span>
-            <div class="pull-left story-members">
-              <h3 class="story-sub-header" ng-click="editDescription(model.description)">{{model.description.name}}
-                <span ng-hide ="model.description.name.length>0">
-                  Add description
-                </span>
-              </h3>
+            <div class="pull-left story-members story-sub-description">
+
               <div>
                 <span ng-include="getTemplate(model.contacts)">
                 </span>
                 <script type="text/ng-template" id="display">
-
+                  <div class="story-sub-header" ng-click="editDescription(model.description)">{{model.description.name}}
+                    <span ng-hide ="model.description.name.length>0">
+                      <h3 class="story-sub-header">Edit description</h3>
+                    </span>
+                  </div>
                 </script>
                 <script type="text/ng-template" id="edit">
-                  <span><input type="text" ng-model="model.selected.name" class="form-control" placeholder="Story Description........"/></span>
-                  <span>
-                    <a ng-click="saveDescription()"><i class="fa fa-check"></i></a>
-                    <a ng-click="reset()"><i class="fa fa-close"></i></a>
+                  <span><textarea cols="50" rows="6"  ng-model="model.selected.name" class="form-control" placeholder="Story Description........"></textarea></span>
+                  <span class="pull-right edit-description">
+                    <a ng-click="saveDescription()" ><i class="fa fa-check"></i></a>
+                    <a ng-click="reset()" ><i class="fa fa-close"></i></a>
                   </span>
                 </script>
               </div>
@@ -48,13 +48,12 @@
           </div>
         </div>
 
-        <div class="story-description">
+        <hr class="story-seperator">
 
-        </div>
         <div class="story-details clearfix">
           <span class="pull-left story-left-head"><i class="fa fa-users" aria-hidden="true"></i></span>
           <div class="pull-left story-members">
-            <h3 class="story-sub-header">Story Members <button class="btn btn-default btn-sm" ng-click="addMember()"><i class="fa fa-plus" aria-hidden="true"></i></button></h3>
+            <h3 class="story-sub-header">Members <button class="btn btn-default btn-sm" ng-click="addMember()"><i class="fa fa-plus" aria-hidden="true"></i></button></h3>
             <div class="menu-bar-avatar" ng-repeat="member in storyData.memberList" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
               <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
               <div ng-show="member.photo == undefined">
