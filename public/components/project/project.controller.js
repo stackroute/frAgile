@@ -40,6 +40,7 @@ console.log({
     };
 
   $scope.longDescLimit = 38;
+  $scope.longPrjDescLimit = 120;
   $scope.setDefaultForRelease = function(projectId) {
 
     $scope.addWhat = "Release";
@@ -107,7 +108,7 @@ console.log({
   $scope.setProject = function(projectId, projectName, releaseId, releaseName, releaseDesc) {
     $rootScope.projectName = projectName,
     $rootScope.release = {};
-    $rootScope.release.name = releaseName;
+    $rootScope.releaseName = releaseName;
     $rootScope.release.description = releaseDesc;
   }
 

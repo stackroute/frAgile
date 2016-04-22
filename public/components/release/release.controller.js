@@ -16,32 +16,32 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
   socket.emit('join:room', emitData);
 
   socket.on('release:sprintAdded', function(data) {
-    $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints.push(data);
+    $scope.sprints.push(data);
   });
 
     socket.on('release:sprintEdited', function(sprintData) {
-      $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints.forEach(function(item, itmIndex) {
+      $scope.sprints.forEach(function(item, itmIndex) {
         if(item._id == sprintData._id){
-          $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints[itmIndex].name = sprintData.name;
-          $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints[itmIndex].description = sprintData.description;
-          $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints[itmIndex].startDate = sprintData.startDate;
-          $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints[itmIndex].endDate = sprintData.endDate;
+          $scope.sprints[itmIndex].name = sprintData.name;
+          $scope.sprints[itmIndex].description = sprintData.description;
+          $scope.sprints[itmIndex].startDate = sprintData.startDate;
+          $scope.sprints[itmIndex].endDate = sprintData.endDate;
         }
       });
       //console.log(releaseData);
     });
-
+// Called from server when sprint is deleted
   socket.on('sprintDeleted', function(sprintData) {
-    $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints.forEach(function(sprint) {
+    $scope.sprints.forEach(function(sprint) {
       if (sprint._id == sprintData.sprintId) {
         var sprintName = sprint.name; //For activity
-        $rootScope.projects[$rootScope.projectKey].release[$rootScope.releaseKey].sprints.pop();
+        $scope.sprints.pop();
       }
     })
   })
-
+// Open modal Window for Story
   $scope.openModal = function(name) {
-    $rootScope.release.name = name;
+    $rootScope.releaseName = name;
     var modalInstance = $uibModal.open({
       animation: $scope.animationsEnabled,
       templateUrl: '/components/release/release.modal.html',
@@ -77,15 +77,22 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
     $scope.relId = $stateParams.releaseID;
     $rootScope.projects.forEach(function(project, projectKey) {
       if (project._id == $stateParams.prId) {
-        $rootScope.projectKey = projectKey;
-        console.log("found project " + $stateParams.prId);
+        $scope.curProjectLoc = projectKey;
         project.release.forEach(function(release, releaseKey) {
           if (release._id == $stateParams.releaseID) {
-            $rootScope.releaseKey = releaseKey;
+            $scope.curReleaseLoc = releaseKey;
           }
         });
       }
     });
+    releaseService.getSprints($stateParams.releaseID).success(function(response) {
+        $scope.sprints = response[0].release[0].sprints;
+        console.log($scope.sprints);
+        console.log("?????");
+        console.log(response);
+          // $rootScope.projects[projectKey].release[releaseKey].sprints = [];
+          // $rootScope.projects[projectKey].release[releaseKey].sprints = response[0].release[0].sprints;
+        });
     console.log("22222222222222222222222222");
     // releaseService.getSprints($stateParams.releaseID).success(function(response) {
     //   $scope.sprints = response[0].release[0].sprints;
