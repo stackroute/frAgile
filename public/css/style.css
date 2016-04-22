@@ -186,8 +186,8 @@ h3 {
 }
 
 .addProject{
-  position: fixed;
-  bottom: 22px;
+  position: absolute;
+  top: 44px;
   right: 33px;
 }
 /* Track */
@@ -675,11 +675,11 @@ form.hideAdd{
 }
 .pageHeading {
     position: fixed;
-    top: 41px;
+    bottom: 44px;
     padding: 2px 4px;
     color: #FFFFFF;
     background-color: #527D73;
-    right: 4px;
+    right: 33px;
     font-size: 18px !important;
     text-shadow: 0px 0px 4px solid black;
 }
@@ -1466,6 +1466,7 @@ h4 small {
   background-color: #fff;
 }
 .autocomplete li.active {
+  cursor: pointer;
   width: 100%;
   background-color: rgb(38, 166, 91);
   font-weight: bold;

@@ -9,17 +9,13 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
-var RedisStore = require('connect-redis')(session);
+
 var app = express();
 
 
-
-mongoose.connect('mongodb://localhost/fragileDB');
-//mongoose.connect('mongodb://172.23.238.253/frAgile_dummy');
-
-
-
-var db = mongoose.connection;
+//mongoose.connect('mongodb://172.23.238.253/frAgile_dummy')
+  mongoose.connect('mongodb://localhost/fragileDB');
+var db = mongoose.connection
 
 var routes = require('./routes/index');
 //var users = require('./routes/users');
@@ -31,12 +27,11 @@ var story = require('./routes/story');
 var graph = require('./routes/graph');
 var authenticationHandler = require('./routes/authenticationHandler')(passport);
 app.use(session({
-  store: new RedisStore({
-    host: '172.23.238.253',
-    port: 6379,
-    db: 7
-  }),
-  secret:'fragile'
+  secret:'fragile',
+  key: 'limber',
+  cookie:{ maxAge: 36000000},
+  resave: false,
+  saveUninitialized:false
 }));
 
 
@@ -67,7 +62,6 @@ app.use(function(req, res, next) {
 
     app.userID = req.user._id;
     app.fullName = req.user.firstName + " " + req.user.lastName;
-    app.photo = req.user.photo;
     return next();
   }
   else
@@ -87,7 +81,6 @@ app.use('/sprint', sprint);
 app.use('/project', project);
 app.use('/user', user);
 app.use('/story', story);
-app.use('/graph',graph);
 
 // error handlers
 
