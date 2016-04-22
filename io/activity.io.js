@@ -15,9 +15,9 @@ module.exports = function(socket, io, user) {
   });
 
   socket.on('activity:addMember', function(data) {
+    //Pusing the members in project
     Project.addMember(data.projectId, data.memberList, function(err, doc) {
       if (!err && doc.nModified != 0) {
-        console.log(doc);
         data.memberList.forEach(function(memberId) {
           User.find({
             '_id': memberId
@@ -41,14 +41,20 @@ module.exports = function(socket, io, user) {
                     _id: data.projectId
                   }
                 }
-                Activity.addEvent(actData, function(data) {
-                  io.to(actData.room).emit('activityAdded', data);
+                Activity.addEvent(actData, function(callbackData) {
+                  io.to(actData.room).emit('activityAdded', callbackData);
                 });
           });
-          User.addProjectToUser(memberId, data.projectId, function(data) {
-
+          //Pushing project in the User Collection
+          User.addProjectToUser(memberId, data.projectId, function(subdoc) {
+            //Loading the project and sending it to the user.
+            Project.findById(data.projectId).exec(function(err, projectsData) {
+              if (!err){
+                io.to("user:" + memberId).emit('project:projectAdded', projectsData);
+              }
+            });
           });
-        })
+        }); //For loop end
       }
     })
   });

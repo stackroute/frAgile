@@ -64,10 +64,7 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
     $rootScope.projMemberList.forEach(function(data,index){
       if(userData._id == data._id)
         $rootScope.projMemberList.splice(index,1);
-
     });
-
-
   })
 
   $scope.removeMember = function(memberId) {
