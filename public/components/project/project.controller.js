@@ -13,9 +13,7 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
   socket.emit('join:room', {
     'room': "user:" + $scope.currentUserID
   });
-console.log({
-  'room': "user:" + $scope.currentUserID
-});
+
   socket.on('releaseDeleted', function(releaseData) {
     $rootScope.projects.forEach(function(project) {
       if (project._id == releaseData.projectId) {
@@ -140,5 +138,9 @@ console.log({
     });
   });
 
+  socket.on('project:projectAdded',function(data){
+    console.log(data);
+    $rootScope.projects.push(data);
+  });
 
 }]);

@@ -101,7 +101,7 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
     // });
 
     // Menu Click Event
-    $rootScope.isMenu = true;
+    $rootScope.isMenu = false;
     $rootScope.SlideMenu = function() {
       $rootScope.isMenu = !$rootScope.isMenu;
     }
