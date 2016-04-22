@@ -29,16 +29,16 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
 
   // Autocomplete Search
   $scope.users = [];
-  $scope.currentUserEmail = activityService.getCurrentUserEmail();
   $scope.updateSearch = function(typed) {
       $scope.users = [];
-      console.log('User Email: ', $scope.currentUserEmail);
+      console.log('User Email: ', $rootScope.currentUserEmail);
       $scope.newUsers = activityService.getUsers(typed).success(function(data) {
         data.forEach(function(user) {
-          if(user.email != $scope.currentUserEmail)
+          if(user.email != $rootScope.currentUserEmail)
             $scope.users.push(user.email);
         })
       });
+      console.log('Exit Search');
     }
     // $scope.roomName = 'activity:' + $rootScope.projects[$rootScope.projectKey]._id,
   $scope.saveMember = function() {

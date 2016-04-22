@@ -86,23 +86,6 @@ angular
         return $http.get(url);
       },
 
-      getCurrentUserEmail: function(){
-        var url = "/user";
-        $http.get(url).success(function(data){
-          return data.email;
-          console.log('Service: ',data);
-        })
-
-        $http.get(url).then(function(err, data){
-          if(err)
-          console.log("Error: ",err);
-          else {
-            console.log(data);
-          }
-        })
-
-      },
-
       getUsers: function(searchText){
         var url = "/user/getUsers?email=" + searchText;
         return $http.get(url);

@@ -10,7 +10,7 @@ fragileApp.controller('homeController',['$scope','$state','$rootScope','homeServ
 
   homeService.getCurrentUser().success(function(response){
     $rootScope.currentUserID =  response._id;
-
+    $rootScope.currentUserEmail = response.email;
   })
 
   $rootScope.list = [
