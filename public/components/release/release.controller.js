@@ -47,6 +47,9 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
       templateUrl: '/components/release/release.modal.html',
       controller: 'modalReleaseController',
     });
+  };
+  $scope.loadProject = function() {
+      $state.go('project');
   }
   $scope.editSprint = function(newSprintName,newSprintDetails,newSprintStartDate,newSprintEndDate,sprId,oldName) {
     if (newSprintStartDate != "") {
