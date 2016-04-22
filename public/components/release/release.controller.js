@@ -4,7 +4,7 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
   var socket = Socket($scope);
 
   $rootScope.projectID = $stateParams.prId //Remove this once refresh issue is fixed
-
+  //currentProjectId
   $scope.roomName = "release:" + $stateParams.releaseID;
   var emitData = {
     'room': $scope.roomName

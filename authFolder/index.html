@@ -120,6 +120,14 @@
                               <label class="sr-only" for="form-password">Password</label>
                               <input type="password" name="form-password" placeholder="Password..." ng-model="user1.password" class="form-email form-control" id="form-password" required>
                             </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-password">Confirm Password</label>
+                              <input type="password" name="form-password" placeholder="Confirm Password..." ng-model="user1.confirmpassword" class="form-email form-control" id="form-password" required>
+                            </div>
+                            <div id="passDiv" class="alert alert-danger" role="alert" style="margin-top:10px;padding: 7px; display:none;">
+                            <button type="button" class="close" ng-click="passwordError=''" aria-label="Close" style="margin-top: -3px;right:0;"><span aria-hidden="true">&times;</span></button>
+                             {{passwordError}}
+                             </div>
                             <button type="submit" class="btn" >Sign me up!</button>
                         </form>
                       </div>
