@@ -1,7 +1,5 @@
 
 angular.module('Limber')
-    .run(function($rootScope) {
-    })
      .config(function($routeProvider){
        $routeProvider
         .when('/',{

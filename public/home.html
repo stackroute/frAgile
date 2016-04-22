@@ -17,7 +17,6 @@
   <script src="js/lib/jquery-ui.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-animate.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.17/angular-ui-router.js"></script>
   <script type="text/javascript" src="js/lib/ngDatepicker.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js"></script>
@@ -63,14 +62,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav pull-right">
         <li ng-click="SlideMenu()"><a><i class="glyphicon glyphicon-align-justify"></i></a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user pull-right"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Update Profile<span class="glyphicon glyphicon-cog pull-right"></span></a></li>
-            <li class="divider"></li>
-            <li><a href="/auth/logout">Sign Out <span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
-          </ul>
-        </li>
+        <li><a href="/auth/logout"><span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </nav>
