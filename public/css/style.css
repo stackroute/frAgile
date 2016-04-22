@@ -633,6 +633,12 @@ form.hideAdd{
   min-width: 96%;
   max-height: 100px;
 }
+.form-top-left {
+  width: 80%
+}
+.form-top-right {
+    width: 20%;
+  }
 .showSlide .slideMenuBox {
   z-index: 100;
   width: 85px;
