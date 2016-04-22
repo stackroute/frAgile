@@ -237,12 +237,12 @@ hr{
   padding-bottom: 20px;
 }
 .treeMenuBtn {
-  position: fixed;
-  top: 39px;
-  z-index: 101;
-  left: 36px;
-  color: #527D73;
-  font-size: 39px;
+    position: fixed;
+    top: 6px;
+    z-index: 2000;
+    left: 14px;
+    color: #527D73;
+    font-size: 19px;
 }
 .treeMenu .fa-arrow-circle-o-left {
   color: #F4FBF9;
@@ -258,6 +258,14 @@ hr{
   /* background-color: red; */
   overflow-y: auto;
   max-height: 521px;
+}
+.headingOfPage.ng-binding {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2C5D51;
+}
+#mainSprint .headingOfPage.ng-binding {
+    position: fixed;
 }
 ul.projectNameTree.ng-scope {
   padding-left: 0px;
@@ -716,7 +724,7 @@ form.hideAdd{
   width: 100%;
 }
 .sprintDiv {
-  margin-top: 73px;
+  margin-top: 91px;
   overflow: hidden;
 }
 .listHead {
@@ -890,6 +898,19 @@ h4 {
   margin-bottom: 3px;
   font-size: 21px;
   color: #2C5D51;
+}
+h4.innerPage {
+  margin-top: -32px;
+  margin-bottom: 3px;
+  font-size: 21px;
+  color: #2C5D51;
+}
+h4.sprintPage {
+    margin-top: 31px;
+    margin-bottom: 3px;
+    font-size: 21px;
+    color: #2C5D51;
+    position: fixed;
 }
 h4 small {
   color: grey;

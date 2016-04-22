@@ -9,9 +9,14 @@
   </span>
 </div>
 <div id="mainSprint" ng-init="getSprints()">
+  <div class="container">
+
+  <div class="headingOfPage">
+    {{projects[curProjectLoc].name}} | {{projects[curProjectLoc].release[curReleaseLoc].name}}
+  </div>
   <div>
-    <div class="topRow" ng-style="{{topRowWidth}}">
-      <h3 class="pull-left">{{sprint.name}}<small> {{sprint.description}}</small> <br/> <small>{{sprint.startDate|dateSuffix}}  - {{sprint.endDate |dateSuffix}}</small></h3>
+    <div ng-style="{{topRowWidth}}">
+      <h4 class="sprintPage">{{sprint.name}}<small> {{sprint.description}}</small> <br/> <small>{{sprint.startDate|dateSuffix}}  - {{sprint.endDate |dateSuffix}}</small></h4>
 
       <div class="divToggle pull-left">
         <!-- <h3 class="toggleSprintText pull-left" ng-click="toggleScroll()">{{scrollBuglist}}</h3> -->
@@ -20,6 +25,7 @@
       </div>
     </div>
   </div>
+    </div>
   <div class="sprintDiv" ng-style="{width: sprintWidth}">
     <div class="list-wrapper backBugList">
       <div id="backlogs" class='parent backbug' ng-class='{"extendParent":addToBacklog,"":!addToBacklog}' data-drop="true" jqyoui-droppable="{multiple:true,onOver: 'overCallback',onOut: 'outCallback',onDrop:'dropCallback_backbug'}">

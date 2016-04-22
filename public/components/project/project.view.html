@@ -9,7 +9,7 @@ Over View
 <!-- End Modal--->
 
 
-<divs class = "projectPage container">
+<div class = "projectPage container">
   <div class="showNewProject" ng-show = "projects.length == 0">
     <center>Awesome... You are good to go</center>
   </div>
@@ -41,7 +41,7 @@ Over View
                 </span>&nbsp;
               </div>
               <div class="date">
-                 {{release.creationDate | date:'dd-MMM-yyyy'}} to {{release.releaseDate | date:'dd-MMM-yyyy'}}
+                 Release Date: {{release.releaseDate | date:'dd-MMM-yyyy'}}
               </div>
               <!-- <div class="dummy" ui-sref="sprint({ prId : '57026055772a712a164d70bb', sprintID: '57026bfd140731cc1810b5c0'})"> -->
               <div class="dummy" ui-sref="release({ prId : project._id, releaseID: release._id})">
