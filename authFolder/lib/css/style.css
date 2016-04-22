@@ -3,19 +3,43 @@ body {
     font-family: 'Roboto', sans-serif;
     font-size: 16px;
     font-weight: 300;
-    color: #888;
+    color: #F8F8F8;
+    background-color: rgba(82, 125, 115, 0.18);
     line-height: 30px;
     text-align: center;
 }
 
 strong { font-weight: 500; }
-
+input[type="text"], input[type="password"], textarea, textarea.form-control {
+    font-style: normal;
+    height: 36px;
+    margin: 0;
+    background: #f8f8f8;
+    border: 0;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 36px;
+    color: #888;
+    border-radius: 0px;
+    box-shadow: none;
+}
 a, a:hover, a:focus {
 	color: #19b9e7;
 	text-decoration: none;
     -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
 }
-
+button.btn {
+    height: 36px;
+    border: 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 0px;
+    font-style: normal;
+    border-radius: 0px;
+  }
+  button.btn:hover{
+    background: "#17B8E6";
+  }
 h1, h2 {
 	margin-top: 10px;
 	font-size: 38px;
@@ -82,7 +106,7 @@ img { max-width: 100%; }
 /***** Top content *****/
 
 .inner-bg {
-    padding: 60px 0 80px 0;
+    padding: 60px 0 0px 0;
 }
 
 .top-content .text {
@@ -93,8 +117,10 @@ img { max-width: 100%; }
     /* line-height: 12px; */
     margin-bottom: 0px;
 }
-.top-content .text h1 { color: #fff; }
-
+.top-content .text h1 {
+  font-family: 'Lobster', cursive;
+    color: #527D73;
+}
 .top-content .description {
 	margin: -20px 0 -51px 0;
 }
@@ -106,7 +132,11 @@ img { max-width: 100%; }
 }
 .top-content .description a:hover,
 .top-content .description a:focus { border-bottom: 1px dotted #fff; }
-
+soft {
+    font-size: 17px;
+    font-style: normal;
+    color: #6AA094;
+}
 .form-box {
 	margin-top: 70px;
 }
@@ -115,7 +145,7 @@ img { max-width: 100%; }
   margin-top: -11px
 	overflow: hidden;
 	padding: 0 25px 15px 25px;
-	background: #fff;
+	background: #668A81;
 	-moz-border-radius: 4px 4px 0 0; -webkit-border-radius: 4px 4px 0 0; border-radius: 4px 4px 0 0;
 	text-align: left;
 }
@@ -125,8 +155,20 @@ img { max-width: 100%; }
 	width: 75%;
 	padding-top: 25px;
 }
-
-.form-top-left h3 { margin-top: 0; }
+.form-top {
+    margin-top: -11px
+ padding: 0 25px 0px 25px;
+    border-top: 4px solid #516B64;
+    background: #668A81;
+    border-radius: 0px;
+}
+.form-top-left h3 {
+    margin-top: 0;
+    font-style: normal;
+    color: #DDDDDD;
+    font-weight: 400;
+    font-size: 27px;
+}
 
 .form-top-right {
 	float: left;
@@ -139,10 +181,10 @@ img { max-width: 100%; }
 }
 
 .form-bottom {
-  margin-top: -14px;
+  margin-top: -26px;
 	padding: 25px 25px 30px 25px;
-	background: #eee;
-	-moz-border-radius: 0 0 4px 4px; -webkit-border-radius: 0 0 4px 4px; border-radius: 0 0 4px 4px;
+	background: #668A81;
+  border-radius: 0px;
 	text-align: left;
 }
 
@@ -157,51 +199,41 @@ img { max-width: 100%; }
 .form-bottom form .input-error {
 	border-color: #19b9e7;
 }
-
+hr {
+    margin-top: 14px;
+    width: 81%;
+    border-top: 1px solid rgba(102, 138, 129, 0.45);
+}
 .social-login {
 	margin-top: 35px;
 }
 
-.social-login h3 {
-    margin-top: -18px;
-    color: #fff;
-    margin-bottom: -9px;
-}
 .social-login-buttons {
-	margin-top: 25px;
+  background-color: #668A81;
+  height: 14%;
+  border-top: 4px solid #516B64;
+  padding-top: 18px;
+  margin-top: -21px;
 }
 
 .middle-border {
-	min-height: 300px;
+	min-height: 359px;
 	margin-top: 127px;
 	border-right: 1px solid #fff;
-	border-right: 1px solid rgba(255, 255, 255, 0.6);
+	border-right: 1px solid rgb(169, 189, 184);
 }
 
 
 /***** Footer *****/
 
 footer {
-	padding-bottom: 70px;
-	color: #fff;
+    position: fixed;
+     padding-bottom: 3px;
+    color: #516B64;
+    bottom: 0px;
+    width: 100%;
+    margin: auto;
 }
-
-footer .footer-border {
-	width: 200px;
-	margin: 0 auto;
-	padding-bottom: 30px;
-	border-top: 1px solid #fff;
-	border-top: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-footer p { opacity: 0.8; }
-
-footer a {
-	color: #fff;
-}
-footer a:hover, footer a:focus { color: #fff; border-bottom: 1px dotted #fff; }
-
-
 /***** Media queries *****/
 
 @media (min-width: 992px) and (max-width: 1199px) {}
@@ -211,7 +243,7 @@ footer a:hover, footer a:focus { color: #fff; border-bottom: 1px dotted #fff; }
 @media (max-width: 767px) {
 
 	.middle-border { min-height: auto; margin: 65px 30px 0 30px; border-right: 0;
-						border-top: 1px solid #fff; border-top: 1px solid rgba(255, 255, 255, 0.6); }
+						border-top: 1px solid #fff; border-top: 1px solid rgb(102, 138, 129); }
 
 }
 

@@ -64,39 +64,41 @@ function($scope,$rootScope,$uibModal,$http,$timeout,rgService,graphModalFactory)
 // TODO - Add the project id here
   $scope.releaseChartData($rootScope.projectID);
 
-//Oprtions for Progress Chart
+//Options for Progress Chart
+
+//Horizontal Bar chart
 
   $scope.options = {
-    chart: {
-      type: 'multiBarHorizontalChart',
-      height: 450,
-      x: function(d){return d.label;},
-      y: function(d){return d.value;},
-      showControls: true,
-      showValues: true,
-      duration: 500,
-      xAxis: {
-        showMaxMin: false
-      },
-      yAxis: {
-        axisLabel: 'Stories',
-        tickFormat: function(d){
-          return d3.format(',.2f')(d);
-        }
-      },
-    },
-    title: {
-      enable: true,
-      text: 'Release Chart'
-    },
-    subtitle: {
-        enable: true,
-        text: 'This graph gives the status of your sprints in this release.It shows how many stories are in progress and releasable ',
-        css: {
-            'text-align': 'center',
-            'margin': '10px 13px 0px 7px'
-        }
-    },
-  };
+   chart: {
+     type: 'multiBarChart',
+     height: 450,
+     x: function(d){return d.label;},
+     y: function(d){return d.value;},
+     showControls: false,
+     grouped:false,
+     stacked:true,
+     showValues: true,
+     duration: 500,
+     xAxis: {
+       showMaxMin: false
+     },
+     yAxis: {
+       axisLabel: 'Stories',
+       tickFormat: function(d){
+         return d3.format(',')(d);
+       }
+     },
+   },
+   subtitle: {
+       enable: true,
+       text: 'This graph gives the status of your sprints in this release.It shows how many stories are in progress and releasable ',
+       css: {
+           'text-align': 'center',
+           'margin': '10px 13px 0px 7px'
+       }
+   },
+ };
+// Horizontal bar chart end
+
 
 }]);
