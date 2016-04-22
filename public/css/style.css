@@ -1293,9 +1293,16 @@ h4 small {
   margin-top: 10px;
   margin-left: 10px;
 }
+.story-sub-description{
+      width: 87%;
+}
+.edit-description{
+  margin-right:30px;
+}
 .story-sub-header {
   margin-top: 5px;
   font-weight: 400;
+  margin-right: 20px;
 }
 .story-left-head {
   font-weight: bold;
