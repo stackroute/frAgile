@@ -1462,6 +1462,7 @@ h4 small {
   background-color: #fff;
 }
 .autocomplete li.active {
+  cursor: pointer;
   width: 100%;
   background-color: rgb(38, 166, 91);
   font-weight: bold;
