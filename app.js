@@ -13,8 +13,9 @@ var mongoose = require('mongoose');
 var app = express();
 
 
+ //mongoose.connect('mongodb://localhost/fragileDB');
+mongoose.connect('mongodb://172.23.238.253/frAgile_dummy');
 
-mongoose.connect('mongodb://localhost/frAgile');
 var db = mongoose.connection;
 
 var routes = require('./routes/index');
@@ -62,6 +63,7 @@ app.use(function(req, res, next) {
 
     app.userID = req.user._id;
     app.fullName = req.user.firstName + " " + req.user.lastName;
+    app.photo = req.user.photo;
     return next();
   }
   else

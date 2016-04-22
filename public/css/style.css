@@ -1027,9 +1027,7 @@ background-color: rgb(255, 239, 237);
     min-height: 48px;
     border-bottom: 1px solid rgba(226, 228, 230, 0.28);
     color: #4d4d4d;
-    font: 14px "Helvetica Neue", Arial, Helvetica, sans-serif;
-    line-height: 18px;
-
+    font-size: 15px;
 }
 .activity-items:after {
   content: "";
@@ -1072,6 +1070,10 @@ background-color: rgb(255, 239, 237);
   /*margin-bottom: 10px;*/
   cursor: pointer;
   height:30px;
+}
+.pic-avatar{
+  border-radius: 30px;
+height: 30px;
 }
 .activity-username, .messages-username {
   font-weight: bold;

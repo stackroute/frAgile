@@ -8,6 +8,14 @@ var Sprint = require('../models/sprint.js');
 var Story = require('../models/story.js');
 
 
+router.get('/',function(req,res,next){
+  user ={
+    _id : req.user._id,
+    email : req.user.email
+  }
+  res.send(user);
+});
+
 //to get projects of a userID
 router.get('/projects', function(req, res, next) {// LOGINCHANGE
   if (req.user._id) {
