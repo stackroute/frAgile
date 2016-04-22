@@ -11,9 +11,11 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
   var socket = Socket($scope);
 
   socket.emit('join:room', {
-    'room': 'projectRoom'
+    'room': "user:" + $scope.currentUserID
   });
-
+console.log({
+  'room': "user:" + $scope.currentUserID
+});
   socket.on('releaseDeleted', function(releaseData) {
     $rootScope.projects.forEach(function(project) {
       if (project._id == releaseData.projectId) {
