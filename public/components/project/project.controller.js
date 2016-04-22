@@ -139,7 +139,6 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
   });
 
   socket.on('project:projectAdded',function(data){
-    console.log(data);
     $rootScope.projects.push(data);
   });
 
