@@ -3,17 +3,22 @@
 CFD Graph
 </button> -->
 <div class="graphButton">
-  <i class="fa fa-bar-chart pull-right" ng-click="openReleaseStatus()" style="font-size:30px;margin-right:10px;color:#A60059;"></i>
 </div>
-<!-- End Modal--->
 
+<div class="pageHeading">
+  <b>Project</b> >
+  <b>Release</b>
+  <span>
+    <b class="fa fa-bar-chart" ng-click="openReleaseStatus()"></b>
+  </span>
+</div>
 <div ng-init="getSprints()"  ng-if = "projects.length > 0">
   <div ng-init="getSprints()"  >
-  <div id="{{projects[projectKey].release[releaseKey]._id}}" class="container">
+  <div id="{{projects[curProjectLoc].release[curReleaseLoc]._id}}" class="container">
     <div class="relDiv">
-      
-      <h4>{{projects[projectKey].release[releaseKey].name}}<small>{{projects[projectKey].release[releaseKey].description}}</small></h3>
-        <div class="boxContainer" ng-repeat= "spr in projects[projectKey].release[releaseKey].sprints"><!-- TODO: Changed for Testing -->
+
+      <h4>{{projects[curProjectLoc].release[curReleaseLoc].name}}<small>{{projects[curProjectLoc].release[curReleaseLoc].description}}</small></h3>
+        <div class="boxContainer" ng-repeat= "spr in sprints"><!-- TODO: Changed for Testing -->
           <div class="box"  ng-class="{'hideSlide':!hovering,'showSlide':hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" id="{{spr._id}}" >
             <div class="slideMenuBox">
               <i class="fa fa-trash" ng-click="archiveFun(release.id, spr._id,release.name,spr.name)"></i>
@@ -31,10 +36,9 @@ CFD Graph
             <div class="date" >
               {{spr.startDate | date:'dd-MMM-yyyy'}} to {{spr.endDate | date:'dd-MMM-yyyy'}}
             </div>
-            <div class="dummy" ui-sref="sprint({ prId : projects[projectKey]._id, releaseID:projects[projectKey].release[releaseKey]._id, sprintID: spr._id})">
+            <div class="dummy" ui-sref="sprint({ prId : projects[curProjectLoc]._id, releaseID:projects[curProjectLoc].release[curReleaseLoc]._id, sprintID: spr._id})">
             </div>
             <div class="backgroundBlack" ng-class="{'showEdit':showEdit,'hideEdit':!showEdit}" ng-click = "showEdit=false">
-
             </div>
           <form class="editSprint" ng-class="{'showEdit':showEdit,'hideEdit':!showEdit}">
             <div class="form-group frm">
@@ -67,7 +71,7 @@ CFD Graph
           </form>
           </div>
         </div>
-        <div class="box addMore" ng-click="openModal(projects[projectKey].release[releaseKey].name)">
+        <div class="box addMore" ng-click="openModal(projects[curProjectLoc].release[curReleaseLoc].name)">
             Add Sprint...
         </div>
       </div>

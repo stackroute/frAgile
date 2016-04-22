@@ -6,10 +6,6 @@ Release Chart
 Over View
 </button> -->
 <!-- Start Modal Window-->
-<div class="graphButton">
-  <i class="fa fa-table pull-right" ng-click="openReleaseChart()" style="font-size:30px;margin-right: 10px"></i>
-  <i class="fa fa-sun-o pull-right" ng-click="showOverGraph()" style="font-size:30px;margin-right: 10px"></i>
-</div>
 <!-- End Modal--->
 
 
@@ -18,11 +14,17 @@ Over View
     <center>Awesome... You are good to go</center>
   </div>
   <div class="pageHeading">
-    Project
+    <b>Project</b>
+    <span>
+    <b class="fa fa-table" ng-click="openReleaseChart()"></b>
+    <b class="fa fa-sun-o" ng-click="showOverGraph()"></b>
+    </span>
   </div>
   <div ng-repeat="project in projects" class="main">
       <div id="{{project._id}}" class = "container">
-        <h4>{{project.name}}<small>{{project.description}}</small></h4>
+        <h4>{{project.name}}<small>{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
+          ...
+        </span></small></h4>
           <div class="boxContainer" ng-repeat= "release in project.release" >
             <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,project.name, release._id,release.name,release.description)">
             <div class="slideMenuBox">

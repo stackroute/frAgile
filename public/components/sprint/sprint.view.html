@@ -1,6 +1,13 @@
 <!-- Start Modal Window-->
-<i class="fa fa-pie-chart" ng-click="displaySprintGraph()" style="font-size:30px;margin-right: 10px"></i>
 <!-- End Modal--->
+<div class="pageHeading">
+  <b>Project</b> >
+  <b>Release</b> >
+  <b>Sprint</b>
+  <span>
+    <b class="fa fa-pie-chart" ng-click="displaySprintGraph()"></b>
+  </span>
+</div>
 <div id="mainSprint" ng-init="getSprints()">
   <div>
     <div class="topRow" ng-style="{{topRowWidth}}">
@@ -56,7 +63,7 @@
         </div>
       </form>
       <div class="showAdd" ng-hide="addToBacklog" ng-click="clickOnAdd('backlogTxt'); addToBacklog = true;">
-        <i class="fa fa-plus" aria-hidden="true"></i>
+        <span>+</span>
         <!-- Add Story... -->
       </div>
     </div>
@@ -101,14 +108,14 @@
       <form class="showAddDetails" ng-class="{'showAddIcon':clicked,'hideAdd':!clicked}">
         <textarea name="details" class="form-control" placeholder="Story details" id = "{{listItem._id}}Txt" ng-model="storyDetails" />
         <div class="col-sm-4">
-          <button ng-click="addStory(listItem.group, storyDetails, listItem._id, listItem.listName)?clicked=false:clicked=true;; storyDetails=''" type="button" class="btn btn-success">Add</button>
+          <button ng-click="addStory(listItem.group, storyDetails, listItem._id, listItem.listName)?clicked=false:clicked=true; storyDetails=''; gotoTop(listItem._id)" type="button" class="btn btn-success">Add</button>
         </div>
         <div class="col-sm-4">
           <button ng-click="clicked=false" type="button" class="btn btn-link"><i class="fa fa-times" aria-hidden="true"></i></button>
         </div>
       </form>
       <div class='showAdd' ng-class="{'showAddIcon':!clicked,'hideAdd':clicked}" ng-click="clickOnAdd(listItem._id + 'Txt'); clicked=true;">
-        <i class="fa fa-plus" aria-hidden="true"></i>
+        <span>+</span>
         <!-- Add Story... -->
       </div>
     </div>
@@ -153,7 +160,7 @@
       </form>
       <div class="showAdd" ng-hide="addToBuglist" ng-click="clickOnAdd('buglistTxt'); addToBuglist = true;">
 
-        <i class="fa fa-plus" aria-hidden="true"></i>
+        <span>+</span>
         <!-- Add Story... -->
       </div>
     </div>
