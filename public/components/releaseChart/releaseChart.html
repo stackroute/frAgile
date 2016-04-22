@@ -1,9 +1,14 @@
-<h3>Release Chart</h3>
 
   <div class="modal-body" ng-controller="releaseChartController" ng-init="showProjectsAndReleasesGraph()">
      <!-- ng-init="init()" -->
       <div>
-        <div class="row">
+
+        <div ng-if="dataNo">
+          <h3>No Data Available.</h3>
+          <hr>
+        </div>
+
+        <div class="row" ng-if="!dataNo">
           <div class="col-sm-3">
               <div class="panel panel-default">
                 <div class="panel-body">

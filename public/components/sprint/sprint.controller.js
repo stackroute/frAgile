@@ -59,6 +59,7 @@ function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibMo
           listName = $scope.sprint.list[key].listName
         }
       });
+        angular.element("#" + data.listId)[0].scrollTop = angular.element("#" + data.listId)[0].scrollHeight;
     }
   });
 
@@ -150,7 +151,7 @@ function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibMo
   }
 
   $scope.gotoTop = function(id) {
-    angular.element("#" + id)[0].scrollBottom = 0;
+    angular.element("#" + id)[0].scrollTop = angular.element("#" + id)[0].scrollHeight;
   };
 
   var divBeingDragged = "",
@@ -372,7 +373,7 @@ function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibMo
   }
   // Opening Modal window for Release Chart
   $scope.displaySprintGraph = function() {
-      graphModalFactory.open('lg','./components/sprint/graph_sprint/sprintChart.html');
+      graphModalFactory.open('lg','./components/sprint/graph_sprint/sprintChart.html',"Sprint Graph");
     };
 
 

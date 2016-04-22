@@ -15,19 +15,46 @@ module.exports = function(socket, io, user) {
   });
 
   socket.on('activity:addMember', function(data) {
+    //Pusing the members in project
     Project.addMember(data.projectId, data.memberList, function(err, doc) {
-      if (!err) {
+      if (!err && doc.nModified != 0) {
         data.memberList.forEach(function(memberId) {
           User.find({
             '_id': memberId
           }).exec(function(err, userData) {
             if (!err)
               io.to(data.room).emit('activity:memberAdded', userData[0]);
-          });
-          User.addProjectToUser(memberId, data.projectId, function(data) {
 
+                var actData = {
+                  room: 'activity:' +data.projectId,
+                  action: "added",
+                  projectID: data.projectId,
+                  user: user,
+                  object: {
+                    name: userData[0].firstName +  " " + userData[0].lastName,
+                    type: "User",
+                    _id: userData[0]._id
+                  },
+                  target: {
+                    name: data.projectName,
+                    type: "Project",
+                    _id: data.projectId
+                  }
+                }
+                Activity.addEvent(actData, function(callbackData) {
+                  io.to(actData.room).emit('activityAdded', callbackData);
+                });
           });
-        })
+          //Pushing project in the User Collection
+          User.addProjectToUser(memberId, data.projectId, function(subdoc) {
+            //Loading the project and sending it to the user.
+            Project.findById(data.projectId).exec(function(err, projectsData) {
+              if (!err){
+                io.to("user:" + memberId).emit('project:projectAdded', projectsData);
+              }
+            });
+          });
+        }); //For loop end
       }
     })
   });

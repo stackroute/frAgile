@@ -1,16 +1,16 @@
 fragileApp.controller('releaseChartController', ['$scope','$uibModal','$http','$timeout','releaseGraphService','graphModalFactory','$log',//'$uibModalInstance',
 function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,$log) {//$uibModalInstance
 
-//TODO :Need to verified
+  //TODO :Need to verified
   $scope.showProjectsAndReleasesGraph = function(){
     $scope.getProjectAndReleaseData()
   };
 
   $scope.loadData = function(aModalInstance) {
-   $log.info("starts loading");
- };
- var ModalInstanceCtrl = function($scope, $modalInstance, mydata) {
-  $scope.mydata = mydata;
+    $log.info("starts loading");
+  };
+  var ModalInstanceCtrl = function($scope, $modalInstance, mydata) {
+    $scope.mydata = mydata;
 
     $modalInstance.setMyData = function(theData) {
       $scope.mydata = theData;
@@ -25,14 +25,31 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
   };
   //// modal window dismiss
 
-
   // Release Chart Data and Sunburst Data
   $scope.getProjectAndReleaseData = function(){
-    console.log("Overview chart");
     releaseGraphService.getUserProjectsAndReleases().success(function(projDetails){
+      var len=projDetails.projects.length;
 
-      if(projDetails === null){
-        console.log("no data recieved");
+      $scope.sunBurstOptions = {
+        chart: {
+          type: 'sunburstChart',
+          height: 450,
+          color: d3.scale.category20c(),
+          duration: 250
+        },
+        subtitle: {
+          enable: true,
+          text: 'This graph displays project and releases. Hover on the graphs to see which project you are working on and its associated release.',
+          css: {
+            'margin': '10px 13px 0px 7px'
+          }
+        }
+      };
+
+      //Error Handeling
+      if(projDetails === null || len <= 0){
+        $scope.sunBurstdata = [];
+        $scope.dataNo = true;
         return;
       }
 
@@ -41,8 +58,8 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
       var s_dataBegin = {};
       s_dataBegin['name'] = "Projects";
       s_dataBegin['children'] = [];
-      // console.log(projDetails);
-      for(var i=0,len=projDetails.projects.length;i<len;i++){
+
+      for(var i=0;i<len;i++){
         var dataJson = {};
         var temp = projDetails.projects[i];
 
@@ -72,31 +89,8 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
       s_data.push(s_dataBegin);// Sunburst data
 
       $scope.projRelData = jdata;
-
-
-      $scope.sunBurstOptions = {
-        chart: {
-          type: 'sunburstChart',
-          height: 450,
-          color: d3.scale.category20c(),
-          duration: 250
-        },
-        title: {
-                enable: true,
-                text: 'Sunburst Graph'
-        },
-        subtitle: {
-                enable: true,
-                text: 'This graph displays project and releases. Hover on the graphs to see which project you are working on and its associated release.',
-                css: {
-                    'margin': '10px 13px 0px 7px'
-                }
-            }
-       // chart.noData("There is no Data to display")
-      };
-        // Save the Sunburst Data.
-        $scope.sunBurstdata = s_data;
-
+      // Save the Sunburst Data.
+      $scope.sunBurstdata = s_data;
     });
   };
 
@@ -108,9 +102,8 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
         console.log("no data recieved");
         return;
       }
-
+      console.log(""+JSON.stringify(graphDetails) );
       var jdata = [];
-      // console.log(graphDetails);
       for(var i = 0 ,len = graphDetails.release.length; i < len ; i++) {
         var dataJson = {};
         //// Computation Code ----------->
@@ -121,15 +114,15 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
         for(var j=0,sprLen = graphDetails.release[i].sprints.length; j < sprLen ; j++){
           for(var k=0,lstLen = graphDetails.release[i].sprints[j].list.length; k < lstLen ; k++){
             var temp = graphDetails.release[i].sprints[j].list[k];
-            if(temp.group == 'completed'){
-              completedCount = temp.stories.length;
+            if(temp.group === 'Releasable'){
+              completedCount += temp.stories.length;
             }
-            else if(temp.group == 'inProgress'){
-              inProgressCount = temp.stories.length;
+            else if(temp.group === 'inProgress'){
+              inProgressCount += temp.stories.length;
             }
           }
         }
-        percentage = inProgressCount/(inProgressCount+completedCount)*100;
+        percentage = completedCount/(inProgressCount+completedCount)*100;
         //// Computation Code End----------->
 
         // dataJson['id'] = (graphDetails.data.release[i]._id) == null ? "nil" : (graphDetails.data.release[i]._id);
@@ -148,12 +141,5 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
 
   $scope.closeGraph = function() {
   }
-
-
-
-
-
-
-
 
 }]);//End

@@ -13,9 +13,7 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
   socket.emit('join:room', {
     'room': "user:" + $scope.currentUserID
   });
-console.log({
-  'room': "user:" + $scope.currentUserID
-});
+
   socket.on('releaseDeleted', function(releaseData) {
     $rootScope.projects.forEach(function(project) {
       if (project._id == releaseData.projectId) {
@@ -31,15 +29,16 @@ console.log({
 
   // Opening Modal window for Release Chart
   $scope.openReleaseChart = function() {
-      graphModalFactory.open('lg','./components/releaseChart/releaseChart.html');
+      graphModalFactory.open('lg','./components/releaseChart/releaseChart.html',"Release Chart");
     };
 
     // Opening Modal window for Overview Chart
   $scope.showOverGraph = function() {
-      graphModalFactory.open('lg','./components/releaseChart/overViewChart.html');
+      graphModalFactory.open('lg','./components/releaseChart/overViewChart.html',"Overview Graph");
     };
 
   $scope.longDescLimit = 38;
+  $scope.longPrjDescLimit = 120;
   $scope.setDefaultForRelease = function(projectId) {
 
     $scope.addWhat = "Release";
@@ -107,7 +106,7 @@ console.log({
   $scope.setProject = function(projectId, projectName, releaseId, releaseName, releaseDesc) {
     $rootScope.projectName = projectName,
     $rootScope.release = {};
-    $rootScope.release.name = releaseName;
+    $rootScope.releaseName = releaseName;
     $rootScope.release.description = releaseDesc;
   }
 
@@ -139,5 +138,9 @@ console.log({
     });
   });
 
+  socket.on('project:projectAdded',function(data){
+    console.log(data);
+    $rootScope.projects.push(data);
+  });
 
 }]);

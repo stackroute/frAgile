@@ -36,12 +36,17 @@ fragileApp.controller('modalReleaseController', ['$scope', '$rootScope', 'releas
   };
   $scope.roomName = "release:" + $stateParams.releaseID;
   $scope.addSprint = function() {
+    $scope.startDate = new Date($scope.startDate);
+    $scope.endDate = new Date($scope.endDate);
+    console.log("$scope.newSprintName-" + $scope.newSprintName);
+    console.log("$scope.startDate-" + $scope.startDate);
+    console.log("$scope.endDate-" + $scope.endDate);
     // Emit to refresh all other clients
     socket.emit('release:addSprint', {
       'room': $scope.roomName,
       'projectId': $stateParams.prId,
       'releaseId': $stateParams.releaseID,
-      'releaseName': $rootScope.release.name,
+      'releaseName': $rootScope.releaseName,
       'name': $scope.newSprintName,
       'endDate': $scope.endDate,
       'startDate': $scope.startDate,

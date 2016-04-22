@@ -48,6 +48,7 @@
   z-index: 10002;
   top: 10px;
   left: 10px;
+  display: none
 }
 #loading-bar-spinner .spinner-icon {
   width: 14px;

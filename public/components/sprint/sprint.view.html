@@ -1,6 +1,13 @@
 <!-- Start Modal Window-->
-<i class="fa fa-pie-chart" ng-click="displaySprintGraph()" style="font-size:30px;margin-right: 10px"></i>
 <!-- End Modal--->
+<div class="pageHeading">
+  <b>Project</b> >
+  <b>Release</b> >
+  <b>Sprint</b>
+  <span>
+    <b class="fa fa-pie-chart" ng-click="displaySprintGraph()"></b>
+  </span>
+</div>
 <div id="mainSprint" ng-init="getSprints()">
   <div>
     <div class="topRow" ng-style="{{topRowWidth}}">
@@ -23,20 +30,17 @@
         </div>
         <div class="parentInner" id="backbug">
 
-          <div id="{{story._id}}" ng-repeat="story in backBug.backlogs.stories" class="child hideSlide" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="showModal(story._id, 'backBug',backBug._id,'Backlog')"
+          <div id="{{story._id}}" ng-repeat="story in backBug.backlogs.stories" class="child" ng-click="showModal(story._id, 'backBug',backBug._id,'Backlog')"
             data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}" jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}">
             <div class="story_Name">
               {{story.heading}}
             </div>
-            <div class="deleteStory" ng-click = "deleteStory(story._id, story.heading ,'Backlog')">
-              <i class="fa fa-times" aria-hidden="true"></i>
-            </div>
 
             <div class="storyAttributes">
-              <span ng-hide="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
-              <span ng-hide="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{story.indicators.commentCount}}</span>
-              <span ng-hide="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{story.indicators.attachmentsCount}}</span>
-              <span ng-hide="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{story.indicators.chklstItmsChkdCnt}} / {{story.indicators.chklstItmsCnt}}</span>
+              <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+              <span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{story.indicators.commentCount}}</span>
+              <span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{story.indicators.attachmentsCount}}</span>
+              <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{story.indicators.chklstItmsChkdCnt}} / {{story.indicators.chklstItmsCnt}}</span>
             </div>
           </div>
           <div class="child drag-dummy">
@@ -56,7 +60,7 @@
         </div>
       </form>
       <div class="showAdd" ng-hide="addToBacklog" ng-click="clickOnAdd('backlogTxt'); addToBacklog = true;">
-        <i class="fa fa-plus" aria-hidden="true"></i>
+        <span>+</span>
         <!-- Add Story... -->
       </div>
     </div>
@@ -74,13 +78,10 @@
         </div>
         <div class="parentInner" id="list">
 
-          <div id="{{story._id}}" ng-repeat="story in listItem.stories" class="child" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
+          <div id="{{story._id}}" ng-repeat="story in listItem.stories" class="child"data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
             jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}" ng-click="showModal(story._id, listItem.group,listItem._id,listItem.listName)">
             <div class="story_Name">
               {{story.heading}}
-            </div>
-            <div class="deleteStory" ng-click = "deleteStory(story._id,story.heading, listItem.listName, listItem._id,sprint._id)" ng-show= "hovering">
-              <i class="fa fa-times" aria-hidden="true"></i>
             </div>
             <div class="storyAttributes">
               <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
@@ -101,14 +102,14 @@
       <form class="showAddDetails" ng-class="{'showAddIcon':clicked,'hideAdd':!clicked}">
         <textarea name="details" class="form-control" placeholder="Story details" id = "{{listItem._id}}Txt" ng-model="storyDetails" />
         <div class="col-sm-4">
-          <button ng-click="addStory(listItem.group, storyDetails, listItem._id, listItem.listName)?clicked=false:clicked=true;; storyDetails=''" type="button" class="btn btn-success">Add</button>
+          <button ng-click="addStory(listItem.group, storyDetails, listItem._id, listItem.listName)?clicked=false:clicked=true; storyDetails=''; gotoTop(listItem._id)" type="button" class="btn btn-success">Add</button>
         </div>
         <div class="col-sm-4">
           <button ng-click="clicked=false" type="button" class="btn btn-link"><i class="fa fa-times" aria-hidden="true"></i></button>
         </div>
       </form>
       <div class='showAdd' ng-class="{'showAddIcon':!clicked,'hideAdd':clicked}" ng-click="clickOnAdd(listItem._id + 'Txt'); clicked=true;">
-        <i class="fa fa-plus" aria-hidden="true"></i>
+        <span>+</span>
         <!-- Add Story... -->
       </div>
     </div>
@@ -120,19 +121,16 @@
         </div>
         <div class="parentInner" id="backbug">
 
-          <div id="{{story._id}}" ng-repeat="story in backBug.buglist.stories" class="child" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="showModal(story._id, 'backBug',backBug._id,'Buglist')" data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
+          <div id="{{story._id}}" ng-repeat="story in backBug.buglist.stories" class="child" ng-click="showModal(story._id, 'backBug',backBug._id,'Buglist')" data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
             jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}">
             <div class="story_Name">
               {{story.heading}}
             </div>
-            <div class="deleteStory" ng-click = "deleteStory(story._id, story.heading, 'Buglist')">
-              <i class="fa fa-times" aria-hidden="true"></i>
-            </div>
             <div class="storyAttributes">
-              <span ng-hide="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
-              <span ng-hide="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{story.indicators.commentCount}}</span>
-              <span ng-hide="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{story.indicators.attachmentsCount}}</span>
-              <span ng-hide="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{story.indicators.chklstItmsChkdCnt}} / {{story.indicators.chklstItmsCnt}}</span>
+              <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+              <span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{story.indicators.commentCount}}</span>
+              <span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{story.indicators.attachmentsCount}}</span>
+              <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{story.indicators.chklstItmsChkdCnt}} / {{story.indicators.chklstItmsCnt}}</span>
             </div>
           </div>
           <div class="child drag-dummy">
@@ -153,7 +151,7 @@
       </form>
       <div class="showAdd" ng-hide="addToBuglist" ng-click="clickOnAdd('buglistTxt'); addToBuglist = true;">
 
-        <i class="fa fa-plus" aria-hidden="true"></i>
+        <span>+</span>
         <!-- Add Story... -->
       </div>
     </div>

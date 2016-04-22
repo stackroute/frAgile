@@ -9,6 +9,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
     <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
 <link rel="stylesheet" href="lib/css/form-elements.css">
     <link rel="stylesheet" href="lib/css/style.css">
@@ -28,7 +29,7 @@
                         <h1><strong>Limber</strong></h1>
                         <div class="description">
                           <p>
-                            <h3><i><strong>Manage your projects in a better way</strong><i></h3>
+                            <h3><i><soft>Manage your projects in a better way</soft><i></h3>
                           </p>
                         </div>
                     </div>
@@ -41,7 +42,6 @@
                         <div class="form-top">
                           <div class="form-top-left">
                             <h3>Login</h3>
-                              <p>Enter email and password to log on:</p>
                               <div id="errorDiv" class="alert alert-danger" role="alert" style="margin-top:10px;padding: 7px; display:none;">
 		                          <button type="button" class="close" ng-click="logInErrorMsg=''" aria-label="Close" style="margin-top: -3px;right:0;"><span aria-hidden="true">&times;</span></button>
 		                           {{logInErrorMsg}}
@@ -51,6 +51,7 @@
                           <div class="form-top-right">
                             <i class="fa fa-key"></i>
                           </div>
+                          <p>Enter email and password to log on:</p>
                           </div>
                           <div class="form-bottom">
                         <form ng-submit="passportLogin()">
@@ -67,9 +68,8 @@
                         </form>
                       </div>
                     </div>
-
+                    <hr>
                   <div class="social-login">
-                        <h3>...or login with:</h3>
                         <div class="social-login-buttons">
                           <a href="/auth/facebook" class="btn btn-link-1 btn-link-1-facebook" >
                             <i class="fa fa-facebook"></i> Facebook
@@ -92,7 +92,6 @@
                         <div class="form-top">
                           <div class="form-top-left">
                             <h3>Sign up</h3>
-                              <p>Fill in the form below to get instant access:</p>
                               <div id="errorDiv" class="alert alert-danger" role="alert" style="margin-top:10px;padding: 7px; display:none;">
 		                          <button type="button" class="close" ng-click="registerErrorMsg=''" aria-label="Close" style="margin-top: -3px;right:0;"><span aria-hidden="true">&times;</span></button>
 		                           {{registerErrorMsg}}
@@ -101,6 +100,7 @@
                           <div class="form-top-right">
                             <i class="fa fa-pencil"></i>
                           </div>
+                          <p>Fill in the form below to get instant access:</p>
                           </div>
                           <div class="form-bottom">
                         <form ng-submit="register()" class="registration-form">
@@ -120,6 +120,14 @@
                               <label class="sr-only" for="form-password">Password</label>
                               <input type="password" name="form-password" placeholder="Password..." ng-model="user1.password" class="form-email form-control" id="form-password" required>
                             </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-password">Confirm Password</label>
+                              <input type="password" name="form-password" placeholder="Confirm Password..." ng-model="user1.confirmpassword" class="form-email form-control" id="form-password" required>
+                            </div>
+                            <div id="passDiv" class="alert alert-danger" role="alert" style="margin-top:10px;padding: 7px; display:none;">
+                            <button type="button" class="close" ng-click="passwordError=''" aria-label="Close" style="margin-top: -3px;right:0;"><span aria-hidden="true">&times;</span></button>
+                             {{passwordError}}
+                             </div>
                             <button type="submit" class="btn" >Sign me up!</button>
                         </form>
                       </div>
@@ -135,17 +143,8 @@
 
     <!-- Footer -->
     <footer>
-      <div class="container">
-        <div class="row">
+      <i class="fa fa-copyright" aria-hidden="true"></i> Wave 4 Limber Group
 
-          <div class="col-sm-8 col-sm-offset-2">
-            <div class="footer-border"></div>
-            <p>Made by Limber Team at <a href="https://limber.com" target="_blank"><strong>Limber</strong></a>
-              having a lot of fun. <i class="fa fa-smile-o"></i></p>
-          </div>
-
-        </div>
-      </div>
     </footer>
 
 

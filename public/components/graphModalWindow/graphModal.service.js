@@ -1,6 +1,6 @@
 angular.module('fragileApp').factory('graphModalFactory', function($uibModal) {
   return {
-    open: function(size,componentTemplate) {
+    open: function(size,componentTemplate,title) {
       return $uibModal.open({
         animation: true,
         templateUrl: './components/graphModalWindow/graphModal.view.html',
@@ -9,27 +9,12 @@ angular.module('fragileApp').factory('graphModalFactory', function($uibModal) {
         resolve: {
           componentTemplate: function() {
             return componentTemplate;
+          },
+          title: function() {
+            return title;
           }
         }
       });
     }
   };
 });
-
-// angular.module('fragileApp').factory('graphModalFactory', function($uibModal) {
-//   return {
-//     open: function(size, template,subController, params) {
-//       return $uibModal.open({
-//         animation: true,
-//         templateUrl: template,
-//         controller: subController,
-//         size: size,
-//         resolve: {
-//           params: function() {
-//             return params;
-//           }
-//         }
-//       });
-//     }
-//   };
-// });
