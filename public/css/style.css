@@ -483,7 +483,7 @@ width: 45px;
   background-color: #527D73;
   border-radius: 32px;
   float: left;
-  margin-top: -24px;
+  margin-top: 0px;
   height: 25px;
   width: 25px;
   margin-right: 1px;
@@ -540,29 +540,38 @@ overflow: auto;
 }
 
 .showAdd {
-z-index: 100;
-cursor: pointer;
-background-color: #78CC6C;
-margin: -26px 229px;
-/* font-size: 14px; */
-font-weight: bold;
-/* color: grey; */
-/* opacity: 0.7; */
-width: 42px;
-height: 42px;
-border-radius: 32px;
-padding: 0px 10px;
-text-transform: none;
-font-size: 40px;
-position: absolute;
-}
-.showAdd .fa{
+  z-index: 100;
+  cursor: pointer;
+  background-color: #78CC6C;
+  margin: -26px 229px;
   color: white;
+  width: 42px;
+  height: 42px;
+  border-radius: 32px;
+  padding: 0px 10px;
+  text-transform: none;
   font-size: 29px;
-  font-weight: 100;
   position: absolute;
-  margin-top: 7px;
-  margin-left: -1px;
+}
+.showAdd span {
+    position: absolute;
+    margin-top: 1px;
+    margin-left: 3px;
+}
+i.fa.fa-calendar {
+    margin: 4px 5px 0 -19px;
+    position: absolute;
+    font-size: 15px;
+    color: #2DB394;
+}
+.ng-datepicker-input{
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    border: 0;
+    width: 100%;
+    margin-top: 7px;
+    border-bottom: 1px solid #A4BBB6;
 }
 form.showAddDetails{
     background-color: #F1FFFC;
@@ -657,6 +666,23 @@ form.hideAdd{
   width: 100%;
   height: 100%;
 }
+.pageHeading {
+    position: fixed;
+    top: 41px;
+    padding: 2px 4px;
+    color: #FFFFFF;
+    background-color: #527D73;
+    right: 4px;
+    font-size: 18px !important;
+    text-shadow: 0px 0px 4px solid black;
+}
+.pageHeading span{
+  border-left: 1px solid white;
+}
+.pageHeading b{
+  padding-right: 6px;
+  padding-left: 6px;
+  }
 .slideMenuBox .fa:hover {
   color: #ACE6D8;
 }
@@ -701,7 +727,7 @@ form.hideAdd{
   padding-bottom: 7px;
 }
 .backbug .child{
-  background-color: rgba(255, 0, 0, 0.31);
+  background-color: rgb(255, 109, 109);
 }
 .Releasable .child{
   background-color: rgba(38, 166, 91, 0.56);
@@ -1001,9 +1027,7 @@ background-color: rgb(255, 239, 237);
     min-height: 48px;
     border-bottom: 1px solid rgba(226, 228, 230, 0.28);
     color: #4d4d4d;
-    font: 14px "Helvetica Neue", Arial, Helvetica, sans-serif;
-    line-height: 18px;
-
+    font-size: 15px;
 }
 .activity-items:after {
   content: "";
@@ -1046,6 +1070,10 @@ background-color: rgb(255, 239, 237);
   /*margin-bottom: 10px;*/
   cursor: pointer;
   height:30px;
+}
+.pic-avatar{
+  border-radius: 30px;
+height: 30px;
 }
 .activity-username, .messages-username {
   font-weight: bold;

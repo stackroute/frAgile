@@ -4,9 +4,6 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
 
   var socket = Socket();
 
-  console.log("Menu first");
-  console.log($rootScope.projects);
-
   //For members list
   $rootScope.projMemberList = [];
   activityService.getMembers($rootScope.projectID).success(function(response) {
