@@ -28,6 +28,7 @@ var socket = Socket($scope);
   var storyID = dataLoc.storyId;
 
   $scope.storyID = storyContr.storyData._id; //Used in loading activity for card.
+  $scope.sprintID =storyContr.complexDataObject.sprint._id;
 
   $scope.roomName = "story:" + storyContr.storyData._id;
   var emitData = {
@@ -206,16 +207,22 @@ var socket = Socket($scope);
         deleteFrom=storyContr.complexDataObject.currentPosition.listItemName;
       }
             socket.emit('sprint:deleteStory', {
+              'room': "sprint:" + $scope.sprintID,
               'storyId':$scope.storyData._id,
               'projectId':$stateParams.prId,
               'deleteFrom':deleteFrom,
-              'sprintId':storyContr.complexDataObject._id,
-              'Listid':storyContr.complexDataObject.currentPosition.listId
-
+              'sprintId': $scope.sprintID,
+              'Listid':storyContr.complexDataObject.currentPosition.listId,
+              'storyName':$scope.storyData.heading
             });
+
+
 
     }
   };
+
+  
+
   //Not required at story level
   $scope.ok = function() {
     $uibModalInstance.dismiss('cancel');

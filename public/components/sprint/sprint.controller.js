@@ -113,15 +113,14 @@ function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibMo
 
 
   $scope.clickOnAdd = function(id) {
-    console.log(angular.element('#'+id));
     angular.element('#'+id).focus();
   };
   $scope.show = function(listId, bool) {
     return listId + bool;
   };
 
+  //DEPRECATED
   $scope.deleteStory = function(storyId, storyName, from, Listid, sprintId) {
-    console.log("-----In controller Now emmiting");
     socket.emit('sprint:deleteStory', {
       'room': $scope.roomName,
       'activityRoom': 'activity:' + $stateParams.prId,
