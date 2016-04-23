@@ -1,7 +1,7 @@
 fragileApp.config(function($stateProvider,$urlRouterProvider){
 
   $stateProvider
-  .state('story',{
+  .state('sprint.story',{
     templateUrl: 'components/story/story.view.html',
     controller: 'storyController'
   });

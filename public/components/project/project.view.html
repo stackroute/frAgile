@@ -26,7 +26,7 @@ Over View
   <div ng-repeat="project in projects" class="main">
       <div id="{{project._id}}" class = "container">
         <h4>{{project.name}} <i class="fa fa-pencil" ng-click = "editProjectShow=true; newProjectName=project.name; newProjectDetails=project.description"></i>
-        <i class="fa fa-user-plus" aria-hidden="true"></i></h4>
+        <i class="fa fa-user-plus" data-toggle="modal" data-target="#addMembersModal"  ng-click="getAllUsers(project._id,project.name)" aria-hidden="true"></i></h4>
         <small tooltip-placement="bottom"  uib-tooltip="{{project.description}}" >{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
           ...
         </span></small>
@@ -121,3 +121,42 @@ Over View
       </div>
     </div>
 </div>
+
+<!-- FIXME: Make a directive for this modal to avoid duplication -->
+  <div class="modal fade" id="addMembersModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add Members</h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form>
+              <autocomplete ng-model="addedUserEmail" data="dbUsers" attr-placeholder="Enter user email..."></autocomplete>
+              <button class="btn btn-default" ng-click="addMember()" type="submit"><span class="glyphicon glyphicon-plus"></span></button>
+            </form>
+
+            <!-- <input class="txt-add-members" id="txtAddMember" name="txtAddMember" type="text" placeholder="e.g. you@fragile.com" ng-model="members" required> -->
+
+          </div>
+          <p class="release-add">Add a member</p>
+          <div class="clearfix">
+            <div class="menu-bar-avatar" ng-repeat="member in projMemberList" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
+              <div>
+                <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
+                <div ng-show="member.photo == undefined">
+                  <ng-letter-avatar data="{{member.fullName}}" charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+                </div>
+                &nbsp;
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
