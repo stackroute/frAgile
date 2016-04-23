@@ -202,6 +202,8 @@ var socket = Socket($scope);
   $scope.deleteStory = function() {
   //Can use tool tip
     if ($window.confirm("Do you want to delete story?")){
+      $uibModalInstance.dismiss('cancel');
+
       var deleteFrom='List';
       if(storyContr.complexDataObject.currentPosition.listItemName != 'Backlog'|| storyContr.complexDataObject.currentPosition.listItemName != 'Buglist'){
         deleteFrom=storyContr.complexDataObject.currentPosition.listItemName;
@@ -221,7 +223,7 @@ var socket = Socket($scope);
     }
   };
 
-  
+
 
   //Not required at story level
   $scope.ok = function() {
