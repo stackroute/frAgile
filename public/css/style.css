@@ -785,7 +785,7 @@ icon.graphIconTwo {
   width: 100%;
 }
 .sprintDiv {
-  margin-top: 85px;
+  margin-top: 81px;
   overflow: hidden;
 }
 .sprintPage .fa{
@@ -1222,7 +1222,9 @@ h4 i.fa{
 .story-backBug {
   background-color: #EF4836 !Important;
 }
-
+.AlertBox .modal-footer {
+     border-top: 0px;
+}
 .story-inProgress
 {
 background-color: #9DEDDD !Important;

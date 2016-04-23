@@ -47,14 +47,14 @@ Over View
                 <textarea class="form-control" id="inputDesc" ng-model = "newProjectDetails"/>
               </div>
             </div>
-            <button type="button" class="btn btn-success" ng-click="editProject(newProjectName,newProjectDetails, project._id); editProjectShow=false"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+            <button type="button" class="btn btn-success" ng-click="editProject(newProjectName,newProjectDetails, project._id)?editProjectShow=false:editProjectShow=true"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
 
             <!-- <button type="button" ng-click = "showEdit=false">X</button> -->
           </form>
           <div class="boxContainer" ng-repeat= "release in project.release" >
             <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,project.name, release._id,release.name,release.description)">
             <div class="slideMenuBox">
-              <i class="fa fa-trash" uib-tooltip="Delete" ng-click = "archiveFun(project._id, release._id,project.name,release.name)"></i>
+              <i class="fa fa-trash" uib-tooltip="Delete" data-toggle="modal" data-target="#deleteReleae" ng-click = "setReleaseToDelete(project._id, release._id,project.name,release.name)"></i>
               <i class="fa fa-pencil" uib-tooltip="Edit" ng-click = "showEdit=true; newReleaseName= release.name; newReleaseDetails = release.description; newReleaseDate=release.releaseDate"></i>
               <i class="fa fa-star" uib-tooltip="Favorite" ng-click = "starFun(release._id)"></i>
             </div>
@@ -160,3 +160,22 @@ Over View
       </div>
     </div>
   </div>
+
+
+<!-- Delete Release Modal -->
+<div class="modal fade AlertBox" id="deleteReleae" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header story-backBug">
+        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+        <h4 class="modal-title">Warning</h4>
+      </div>
+      <div class="modal-body">
+        Do you want to delete the Release?
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click = "archiveFun()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
