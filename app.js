@@ -82,7 +82,7 @@ app.use('/sprint', sprint);
 app.use('/project', project);
 app.use('/user', user);
 app.use('/story', story);
-
+app.use('/graph', graph);
 // error handlers
 
 // development error handler
