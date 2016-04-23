@@ -181,8 +181,8 @@ soft {
 }
 
 .form-bottom {
-  margin-top: -26px;
-	padding: 25px 25px 30px 25px;
+  margin-top: -25px;
+	padding: 25px 25px 19px 25px;
 	background: #668A81;
   border-radius: 0px;
 	text-align: left;
@@ -218,7 +218,7 @@ hr {
 
 .middle-border {
 	min-height: 359px;
-	margin-top: 127px;
+  margin-top: 94px;
 	border-right: 1px solid #fff;
 	border-right: 1px solid rgb(169, 189, 184);
 }
