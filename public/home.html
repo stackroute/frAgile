@@ -47,7 +47,7 @@
 
 </head>
 
-<body ng-controller="homeController">
+<body ng-controller="homeController" ng-cloak>
 
   <div class="container-fluid top-header">
     <nav class="navbar navbar-default navbar-xs" role="navigation"  ng-init="loadProjects()">
@@ -76,19 +76,18 @@
     <div ui-view class = "bodyArea">
     </div>
   </div>
-  <div class="treeMenuBtn" ng-click = 'showTree = true' ng-hide = "showTree" ng-cloak>
+  <div class="treeMenuBtn" ng-click = 'showTree = !showTree' ng-cloak>
     <i class="fa fa-align-justify" aria-hidden="true"></i>
   </div>
   <div class="treeMenu" ng-show = "showTree" ng-cloak>
 
     <h5>Navigation</h5>
-    <i class="fa fa-arrow-circle-o-left" aria-hidden="true" ng-click = 'showTree = false'></i>
     <!-- Tree Menu -->
     <div class="treeMenuInner">
       <ul ng-repeat = "project in projects" class="projectNameTree">
         <li>{{project.name}}</li>
         <ul ng-repeat = "release in project.release" class="releaseNameTree">
-          <li ui-sref="release({ prId : project._id, releaseID: release._id})">{{release.name}}</li>
+          <li ng-click="showTree=false" ui-sref="release({ prId : project._id, releaseID: release._id})">{{release.name}}</li>
         </ul>
       </ul>
     </div>

@@ -46,6 +46,23 @@ module.exports = function(socket, io, user) {
 
   });
 
+  socket.on('project:editProject', function(data) {
+    newProject = {
+      name:data.name,
+      description:data.description,
+    };
+    Project.updateProject(data.prId, newProject, function (err, doc) {
+      if (!err) {
+        newProject._id = data.prId;
+        console.log("--------------Project Edited now inside IO.js");
+        console.log(doc.memberList);
+        doc.memberList.forEach(function(userID){
+          var room = "user:"+ userID;
+          io.to(room).emit('project:projectEdited', newProject);
+        });
+      }
+    });
+  });
   socket.on('project:editRelease', function(data) {
     release = {
       name: data.name,

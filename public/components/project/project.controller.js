@@ -1,5 +1,5 @@
 fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket', '$filter', 'graphModalFactory',
-  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter) {
+  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter,graphModalFactory) {
     // $scope.loadProjects = function() {
     //
     //   projectService.getUserProjects().success(function(response) {
@@ -40,35 +40,46 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       graphModalFactory.open('lg', './components/releaseChart/overViewChart.html', "Overview Graph");
     };
 
-    $scope.longDescLimit = 38;
-    $scope.longPrjDescLimit = 120;
-    $scope.setDefaultForRelease = function(projectId) {
+  $scope.longDescLimit = 38;
+  $scope.longPrjDescLimit = 120;
+  $scope.setDefaultForRelease = function(projectId) {
 
-      $scope.addWhat = "Release";
-      $scope.projectId = projectId;
-      projectService.setData($scope.addWhat, projectId);
-      var modalInstance = $uibModal.open({
-        animation: $scope.animationsEnabled,
-        templateUrl: '/components/project/project.modal.html',
-        controller: 'modalController',
-        controllerAs: 'modalContr'
-      });
-    }
-    $scope.setDefaultForProject = function(projectId) {
-      $scope.dismissThis = "none";
-      $scope.addWhat = "Project";
-      $scope.warningModalDesc = true;
-      $scope.warningModalName = true;
-      $scope.warningModalDate = true;
-      projectService.setData($scope.addWhat);
-      var modalInstance = $uibModal.open({
-        animation: $scope.animationsEnabled,
-        templateUrl: '/components/project/project.modal.html',
-        controller: 'modalController',
-        controllerAs: 'modalContr'
-      });
-    }
-    $scope.editRelease = function(newReleaseName, newReleaseDetails, newReleaseDate, creationDate, prId, relId, oldName) {
+    $scope.addWhat = "Release";
+    $scope.projectId = projectId;
+    projectService.setData($scope.addWhat, projectId);
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: '/components/project/project.modal.html',
+      controller: 'modalController',
+      controllerAs: 'modalContr'
+    });
+  }
+  $scope.setDefaultForProject = function(projectId) {
+    $scope.dismissThis = "none";
+    $scope.addWhat = "Project";
+    $scope.warningModalDesc = true;
+    $scope.warningModalName = true;
+    $scope.warningModalDate = true;
+    projectService.setData($scope.addWhat);
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: '/components/project/project.modal.html',
+      controller: 'modalController',
+      controllerAs: 'modalContr'
+    });
+  }
+  $scope.editProject = function(newProjectName,newProjectDetails,prId) {
+    console.log(newProjectName);
+    console.log(newProjectDetails);
+    console.log(prId);
+    socket.emit('project:editProject', {
+      'room': 'projectRoom',
+      'name': newProjectName,
+      'description': newProjectDetails,
+      "prId": prId
+    });
+  };
+  $scope.editRelease = function(newReleaseName,newReleaseDetails,newReleaseDate,creationDate,prId,relId,oldName) {
       if (newReleaseDate != null && creationDate != null && newReleaseName != "") {
         var dt = new Date(newReleaseDate);
         var crDt = new Date(creationDate);
@@ -130,20 +141,33 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       //console.log(releaseData);
     });
 
-    socket.on('project:releaseAdded', function(releaseData) {
-      // Returns entire project document
-      $rootScope.projects.forEach(function(item, index) {
-        if (item._id == releaseData._id) { //Comparing  Scope Projects ID with Updated Project ID
-          $rootScope.projects[index] = releaseData;
-
-        }
-      });
+  socket.on('project:projectEdited', function(newProject) {
+    console.log("----projectEdited----");
+    console.log(newProject);
+    $rootScope.projects.forEach(function(project, projectIndex) {
+      if (project._id == newProject._id) {
+        $rootScope.projects[projectIndex].name = newProject.name;
+        $rootScope.projects[projectIndex].description = newProject.description;
+      }
     });
+  });
+  socket.on('project:releaseEdited', function(releaseData) {
+    console.log(releaseData);
+    console.log("--------------");
+    $rootScope.projects.forEach(function(item, itmIndex) {
+      if(item._id == releaseData.prId){
+        item.release.forEach(function(rel, relIndex) {
+          if(rel._id == releaseData._id){
+            console.log($rootScope.projects[itmIndex].release[relIndex]);
+            $rootScope.projects[itmIndex].release[relIndex].name = releaseData.name;
+            $rootScope.projects[itmIndex].release[relIndex].description = releaseData.description;
+            $rootScope.projects[itmIndex].release[relIndex].releaseDate = releaseData.releaseDate;
+          }
+        });
+      }
 
-    socket.on('project:projectAdded', function(data) {
-      $rootScope.projects.push(data);
     });
-
+});
     // FIXME: Code duplicated in Menu controller. Can be fixed
     var dbIds;
     $scope.getAllUsers = function(projectID, projectName) {

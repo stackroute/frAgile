@@ -111,7 +111,9 @@ function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibMo
       }
     });
 
-
+$scope.gotoProject=function() {
+  $state.go('project');
+}
   $scope.clickOnAdd = function(id) {
     angular.element('#'+id).focus();
   };

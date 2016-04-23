@@ -2,9 +2,11 @@
 
 <div class="modal-header">
   <div ng-show="checked">
+    <button type="button" class="close" ng-click="cancel()"><i class="fa fa-times-circle"></i></button>
     <h4 class="modal-title">Add label</h4>
   </div>
   <div ng-hide="checked">
+    <button type="button" class="close" ng-click="cancel()"><i class="fa fa-times-circle"></i></button>
     <h4 class="modal-title">Create label</h4>
   </div>
 </div>

@@ -57,6 +57,7 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
       var s_data = [];
       var s_dataBegin = {};
       s_dataBegin['name'] = "Projects";
+      s_dataBegin['text'] = "Home"
       s_dataBegin['children'] = [];
 
       for(var i=0;i<len;i++){
@@ -64,7 +65,8 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
         var temp = projDetails.projects[i];
 
         var s_Json = {};
-        s_Json['name'] = temp.name;
+        s_Json['name'] = "Project";
+        s_Json['text'] = temp.name;
         s_Json['children'] = [];//Add Releases here
 
         dataJson['projName'] = temp.name;
@@ -77,8 +79,9 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
           obj['relId'] = temp.release[j]._id;
 
           var s_obj = {};
-          s_obj['name'] = temp.release[j].name;
-          s_obj['size'] = 10;
+          s_obj['name'] = "Release";
+          s_obj['text'] = temp.release[j].name;
+          s_obj['size'] = relLen;
 
           dataJson['release'].push(obj);
           s_Json['children'].push(s_obj);
@@ -98,13 +101,16 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
     // console.log(projectID);
     releaseGraphService.getReleaseGraph(projectID).success(function(graphDetails) {
 
-      if(graphDetails === null){
+      $scope.noReleaseData = false;
+      var len = graphDetails.release.length;
+      if(graphDetails === null || len <= 0){
         console.log("no data recieved");
+        $scope.noReleaseData = true;
         return;
       }
-      console.log(""+JSON.stringify(graphDetails) );
+      // console.log(""+JSON.stringify(graphDetails) );
       var jdata = [];
-      for(var i = 0 ,len = graphDetails.release.length; i < len ; i++) {
+      for(var i = 0 ; i < len ; i++) {
         var dataJson = {};
         //// Computation Code ----------->
         var testTime = new Date(graphDetails.release[i].releaseDate)
@@ -129,16 +135,15 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
         //// Computation Code End----------->
 
         // dataJson['id'] = (graphDetails.data.release[i]._id) == null ? "nil" : (graphDetails.data.release[i]._id);
+        dataJson['Release name'] = graphDetails.release[i].name == null ? "nil" :  graphDetails.release[i].name;
         dataJson['Status'] = status == null ? "nil" : status;
         dataJson['Progress'] = (Math.round(percentage)+'%') == null ? "nil" : (Math.round(percentage)+'%');
-        dataJson['Start Date'] = graphDetails.release[i].creationDate == null ? "nil" : new Date(graphDetails.release[i].creationDate).toISOString().slice(0, 10);
-        dataJson['Release Date'] = graphDetails.release[i].releaseDate == null ? "nil" : new Date (graphDetails.release[i].releaseDate).toISOString().slice(0, 10);
-        dataJson['Description'] = graphDetails.release[i].description == null ? "nil" :  graphDetails.release[i].description;
+        dataJson['Start Date'] = graphDetails.release[i].creationDate == null ? "nil" : new Date(graphDetails.release[i].creationDate).toUTCString().slice(0, 17);
+        dataJson['Release Date'] = graphDetails.release[i].releaseDate == null ? "nil" : new Date (graphDetails.release[i].releaseDate).toUTCString().slice(0, 17);
         jdata.push(dataJson);
       }
       $scope.rows = jdata;
       $scope.cols = Object.keys($scope.rows[0]);
-      // console.log(JSON.stringify(jdata));
     });
   };
 

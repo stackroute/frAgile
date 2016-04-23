@@ -126,10 +126,12 @@ Project.addRelease(projectId, release, function(err, doc) {
 
 router.post('/updateProject', function(req, res, next) {
 newProject = {};
-newProject.name = "Batman";
-newProject.description = "I am awesome";
-newProject.date = Date.now();
-project.updateProject(projectId, newProject, function(err, doc) {
+newProject.name = req.body.name;
+newProject.description = req.body.description;
+console.log("-------------------Inside update project");
+console.log(newProject);
+console.log("Project id - " + req.body.projectId);
+Project.updateProject(req.body.projectId, newProject, function(err, doc) {
   if (err) {
     res.send(err);
   } else {
