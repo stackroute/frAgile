@@ -24,13 +24,14 @@
             Please enter {{modalContr.addWhat}} Description
           </p>
           <div class="form-group" ng-hide = "modalContr.addWhat == 'Project'">
-            <label for="inputReleaseDate" class="col-sm-2 control-label">Date</label>
+            <label for="inputReleaseDate" class="col-sm-2 control-label">End Date</label>
             <!-- <div class="col-sm-10">
             <input type="date" class="form-control"  id="inputReleaseDate" ng-model="newReleaseDate">
             </div> -->
             <div class="col-sm-6">
-                <ng-datepicker ng-model="newReleaseDate" locale="sl" format="DD.MM.YYYY" view-format="Do MMMM YYYY" required>
-                </ng-datepicker>
+                <!-- <ng-datepicker ng-model="newReleaseDate" locale="sl" format="DD.MM.YYYY" view-format="Do MMMM YYYY" required>
+                </ng-datepicker> -->
+                <input type="date" class="form-control" id="inputDate" value = "{{release.releaseDate | date:'yyyy-MM-dd'}}" ng-model = "newReleaseDate" >
           </div>
           </div>
           <p class="warningModal" ng-hide = "warningModalDate">

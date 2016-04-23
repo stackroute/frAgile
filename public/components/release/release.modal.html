@@ -24,13 +24,15 @@
       <div class="form-group">
         <label for="startDate" class="col-sm-2 control-label">Start Date</label>
         <div class="col-sm-4">
-          <ng-datepicker ng-model="startDate" locale="sl" format="DD.MM.YYYY" view-format="Do MMMM YYYY" required>
-          </ng-datepicker>
+          <!-- <ng-datepicker ng-model="startDate" locale="sl" format="DD.MM.YYYY" view-format="Do MMMM YYYY" required>
+          </ng-datepicker> -->
+          <input type="date" class="form-control" id="inputDate" value = "{{spr.startDate | date:'yyyy-MM-dd'}}" ng-model = "startDate" date-parser="dd.MM.yyyy">
         </div>
         <label for="endDate" class="col-sm-2 control-label">End Date</label>
         <div class="col-sm-4">
-          <ng-datepicker ng-model="endDate" locale="sl" format="DD.MM.YYYY" view-format="Do MMMM YYYY" required>
-          </ng-datepicker>
+          <!-- <ng-datepicker ng-model="endDate" locale="sl" format="DD.MM.YYYY" view-format="Do MMMM YYYY" required>
+          </ng-datepicker> -->
+          <input type="date" class="form-control" id="inputDate" value = "{{spr.startDate | date:'yyyy-MM-dd'}}" ng-model = "endDate" date-parser="dd.MM.yyyy">
         </div>
       </div>
       <hr>

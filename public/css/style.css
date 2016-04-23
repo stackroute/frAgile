@@ -237,12 +237,12 @@ hr{
   padding-bottom: 20px;
 }
 .treeMenuBtn {
-  position: fixed;
-  top: 39px;
-  z-index: 101;
-  left: 36px;
-  color: #527D73;
-  font-size: 39px;
+    position: fixed;
+    top: 6px;
+    z-index: 2000;
+    left: 14px;
+    color: #527D73;
+    font-size: 19px;
 }
 .treeMenu .fa-arrow-circle-o-left {
   color: #F4FBF9;
@@ -258,6 +258,14 @@ hr{
   /* background-color: red; */
   overflow-y: auto;
   max-height: 521px;
+}
+.headingOfPage.ng-binding {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2C5D51;
+}
+#mainSprint .headingOfPage.ng-binding {
+    position: fixed;
 }
 ul.projectNameTree.ng-scope {
   padding-left: 0px;
@@ -435,9 +443,14 @@ ul.sprintNameTree.ng-scope {
 .editSprint{
   height: 203px;
 }
-.editRelease {
+.editRelease{
   height: 162px;
 }
+.editProject {
+  margin-top: -41px;
+      height: 128px;
+}
+
 .editRelease textarea, .editSprint textarea{
   max-width: 100%;
   min-width: 100%;
@@ -465,6 +478,10 @@ label {
   border-radius: 107px;
   height: 45px;
   width: 45px;
+}
+
+.editProject .btn.btn-success {
+  margin-top: 5px;
 }
 .divToggle{
   position: fixed;
@@ -699,7 +716,7 @@ form.hideAdd{
   color: #ACE6D8;
 }
 .projectPage .btn-success {
-  margin: 15px 0px;
+  margin: 6px 0px;
   margin-left: 15px;
 }
 .warningModal {
@@ -716,7 +733,7 @@ form.hideAdd{
   width: 100%;
 }
 .sprintDiv {
-  margin-top: 73px;
+  margin-top: 91px;
   overflow: hidden;
 }
 .listHead {
@@ -891,11 +908,32 @@ h4 {
   font-size: 21px;
   color: #2C5D51;
 }
+h4.innerPage {
+  margin-top: -32px;
+  margin-bottom: 3px;
+  font-size: 21px;
+  color: #2C5D51;
+}
+h4.sprintPage {
+    margin-top: 31px;
+    margin-bottom: 3px;
+    font-size: 21px;
+    color: #2C5D51;
+    position: fixed;
+}
 h4 small {
   color: grey;
   margin-left: 10px;
   font-weight: lighter;
 }
+small {
+    color: #70948C;
+    font-size: 13px;
+}
+h4 i.fa{
+    padding-left: 16px;
+    font-size: 14px;
+  }
 .container {
   overflow: hidden;
 }

@@ -9,7 +9,7 @@ Over View
 <!-- End Modal--->
 
 
-<divs class = "projectPage container">
+<div class = "projectPage container">
   <div class="showNewProject" ng-show = "projects.length == 0">
     <center>Awesome... You are good to go</center>
   </div>
@@ -25,9 +25,32 @@ Over View
   </div> -->
   <div ng-repeat="project in projects" class="main">
       <div id="{{project._id}}" class = "container">
-        <h4>{{project.name}}<small>{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
+        <h4>{{project.name}} <i class="fa fa-pencil" ng-click = "editProject=true"></i>
+        <i class="fa fa-user-plus" aria-hidden="true"></i></h4>
+        <small>{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
           ...
-        </span></small></h4>
+        </span></small>
+
+                        <div class="backgroundBlack" ng-class="{'showEdit':editProject,'hideEdit':!editProject}" ng-click = "editProject=false">
+
+                        </div>
+                      <form class="editRelease editProject" ng-class="{'showEdit':editProject,'hideEdit':!editProject}">
+                        <div class="form-group frm">
+                          <label class="col-sm-4" for="projectName">Name</label>
+                          <div class="col-sm-8">
+                            <input type="text" class="form-control" id="inputName" ng-model = "newReleaseName">
+                          </div>
+                        </div>
+                        <div class="form-group frm">
+                          <label class="col-sm-4" for="projectDesc">Name</label>
+                          <div class="col-sm-8">
+                            <textarea class="form-control" id="inputDesc" ng-model = "newReleaseDetails"/>
+                          </div>
+                        </div>
+                        <button type="button" class="btn btn-success" ng-click="editRelease(newReleaseName,newReleaseDetails,newReleaseDate,release.creationDate,project._id,release._id,release.name)? showEdit=false : showEdit=true"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+
+                        <!-- <button type="button" ng-click = "showEdit=false">X</button> -->
+                      </form>
           <div class="boxContainer" ng-repeat= "release in project.release" >
             <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,project.name, release._id,release.name,release.description)">
             <div class="slideMenuBox">
@@ -44,7 +67,7 @@ Over View
                 </span>&nbsp;
               </div>
               <div class="date">
-                 {{release.creationDate | date:'dd-MMM-yyyy'}} to {{release.releaseDate | date:'dd-MMM-yyyy'}}
+                 Release Date: {{release.releaseDate | date:'dd-MMM-yyyy'}}
               </div>
               <!-- <div class="dummy" ui-sref="sprint({ prId : '57026055772a712a164d70bb', sprintID: '57026bfd140731cc1810b5c0'})"> -->
               <div class="dummy" ui-sref="release({ prId : project._id, releaseID: release._id})">
