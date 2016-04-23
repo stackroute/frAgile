@@ -6,7 +6,16 @@ function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibMo
     sprintService.getSprints($stateParams.sprintID).then(function(sprint) {
       $scope.sprint = sprint.data;
       $scope.sprintWidth = ($scope.sprint.list.length * 278 + 560) + "px";
-
+      $rootScope.projects.forEach(function(project, projectKey) {
+        if (project._id == $stateParams.prId) {
+          $scope.curProjectLoc = projectKey;
+          project.release.forEach(function(release, releaseKey) {
+            if (release._id == $stateParams.releaseID) {
+              $scope.curReleaseLoc = releaseKey;
+            }
+          });
+        }
+      });
     });
 
 

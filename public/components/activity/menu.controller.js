@@ -2,69 +2,68 @@ var fragileApp = angular.module('fragileApp');
 
 fragileApp.controller('menuController', function($scope, $http, Socket, activityService, $rootScope) {
 
-  var socket = Socket();
+  var socket = Socket($scope);
 
   //For members list
   $rootScope.projMemberList = [];
   activityService.getMembers($rootScope.projectID).success(function(response) {
     response.memberList.forEach(function(data) {
-        data.fullName = data.firstName + " " + data.lastName;
-      })
+      data.fullName = data.firstName + " " + data.lastName;
+    })
     $rootScope.projMemberList = response.memberList;
   });
 
-  $scope.allMembers = [];
-  $scope.userIds = [];
-  $scope.addMember = function() {
-    activityService.getUserId($scope.members).success(function(response) {
-      if (response.length > 0) {
-        $scope.allMembers.push(response[0].firstName + " " + response[0].lastName);
-        $scope.addedMembers = $scope.allMembers.join(", ");
-        $scope.userIds.push(response[0]._id);
-        $scope.members = "";
-      } else {
-        alert('Error: User Not Found!');
-      }
-    })
-  }
-
-  // Autocomplete Search
-  $scope.users = [];
-  $scope.updateSearch = function(typed) {
-      $scope.users = [];
-      $scope.newUsers = activityService.getUsers(typed).success(function(data) {
-        data.forEach(function(user) {
-          if(user.email != $rootScope.currentUserEmail)
-            $scope.users.push(user.email);
-        })
+  var dbIds;
+  $scope.getAllUsers = function() {
+    $scope.dbUsers = [];
+    dbIds = [];
+    activityService.getAllUsers().success(function(response) {
+      response.forEach(function(data) {
+        $scope.dbUsers.push(data.email);
+        dbIds.push(data._id);
       });
-    }
-    // $scope.roomName = 'activity:' + $rootScope.projects[$rootScope.projectKey]._id,
-  $scope.saveMember = function() {
-    socket.emit('activity:addMember', {
-      'room': 'activity:' + $rootScope.projectID,
-      'projectId': $rootScope.projectID,
-      'memberList': $scope.userIds,
-      'projectName' : $scope.projectName
     });
-    $scope.members = "";
-
   }
+
+  $scope.addMember = function() {
+      var userFound = false;
+      var addedUserId = "";
+      $scope.dbUsers.forEach(function(value, index) {
+        if (value == $scope.addedUserEmail) {
+          addedUserId = dbIds[index];
+          userFound = true;
+        }
+      });
+
+      if (userFound == false) {
+        alert('User Not Found!');
+        $scope.addedUserEmail = "";
+      } else {
+        socket.emit('activity:addMember', {
+          'room': 'activity:' + $rootScope.projectID,
+          'projectId': $rootScope.projectID,
+          'memberList': [addedUserId],
+          'projectName': $scope.projectName
+        });
+        $scope.addedUserEmail = "";
+      }
+
+    }
 
   socket.on('activity:memberAdded', function(data) {
     data.fullName = data.firstName + " " + data.lastName;
     $rootScope.projMemberList.push(data);
-    $scope.allMembers = [];
-    $scope.userIds = [];
-    $scope.members = "";
-    $scope.addedMembers = "Success: Members Added To Project!";
+  });
+
+  socket.on('activity:addMemberFailed',function(data){
+      alert(data);
   });
 
   socket.on('activity:memberRemoved', function(userData) {
     var fullName = userData.firstName + " " + userData.lastName;
-    $rootScope.projMemberList.forEach(function(data,index){
-      if(userData._id == data._id)
-        $rootScope.projMemberList.splice(index,1);
+    $rootScope.projMemberList.forEach(function(data, index) {
+      if (userData._id == data._id)
+        $rootScope.projMemberList.splice(index, 1);
     });
   })
 

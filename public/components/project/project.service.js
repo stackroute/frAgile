@@ -29,6 +29,19 @@ angular.module('fragileApp').factory('projectService', ['$http', 'Socket',functi
     setData: function(name, id) {
       this.addWhat = name;
       this.addId = id;
+    },
+    getCurrentUser: function(){
+      return $http.get("/user");
+    },
+    getAllUsers:function(){
+      var url = "/user/all";
+      return $http.get(url);
+    },
+    getMembers: function(projectID){
+
+      var url = '/project/memberList?id=' + projectID
+
+      return $http.get(url);
     }
   }
 }]);

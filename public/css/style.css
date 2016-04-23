@@ -237,12 +237,12 @@ hr{
   padding-bottom: 20px;
 }
 .treeMenuBtn {
-  position: fixed;
-  top: 39px;
-  z-index: 101;
-  left: 36px;
-  color: #527D73;
-  font-size: 39px;
+    position: fixed;
+    top: 6px;
+    z-index: 2000;
+    left: 14px;
+    color: #527D73;
+    font-size: 19px;
 }
 .treeMenu .fa-arrow-circle-o-left {
   color: #F4FBF9;
@@ -259,12 +259,23 @@ hr{
   overflow-y: auto;
   max-height: 521px;
 }
+.headingOfPage.ng-binding {
+    font-size: 22px;
+    font-weight: 600;
+    color: #2C5D51;
+}
+#mainSprint .headingOfPage.ng-binding {
+    position: fixed;
+}
 ul.projectNameTree.ng-scope {
   padding-left: 0px;
   width: 224px;
   /* margin-left: 20px; */
   box-shadow: inset 0px 22px 0px #274A40;
   overflow: auto;
+}
+.release-add{
+  margin: 13px 0px;
 }
 ul.releaseNameTree.ng-scope {
   padding-left: 0px;
@@ -435,9 +446,14 @@ ul.sprintNameTree.ng-scope {
 .editSprint{
   height: 203px;
 }
-.editRelease {
+.editRelease{
   height: 162px;
 }
+.editProject {
+  margin-top: -41px;
+      height: 128px;
+}
+
 .editRelease textarea, .editSprint textarea{
   max-width: 100%;
   min-width: 100%;
@@ -465,6 +481,10 @@ label {
   border-radius: 107px;
   height: 45px;
   width: 45px;
+}
+
+.editProject .btn.btn-success {
+  margin-top: 5px;
 }
 .divToggle{
   position: fixed;
@@ -698,8 +718,8 @@ form.hideAdd{
 .slideMenuBox .fa:hover {
   color: #ACE6D8;
 }
-.projectPage .btn-success {
-  margin: 15px 0px;
+.projectPage .btn-success  {
+  margin: 6px 0px;
   margin-left: 15px;
 }
 .warningModal {
@@ -716,7 +736,7 @@ form.hideAdd{
   width: 100%;
 }
 .sprintDiv {
-  margin-top: 73px;
+  margin-top: 91px;
   overflow: hidden;
 }
 .listHead {
@@ -891,11 +911,32 @@ h4 {
   font-size: 21px;
   color: #2C5D51;
 }
+h4.innerPage {
+  margin-top: -32px;
+  margin-bottom: 3px;
+  font-size: 21px;
+  color: #2C5D51;
+}
+h4.sprintPage {
+    margin-top: 31px;
+    margin-bottom: 3px;
+    font-size: 21px;
+    color: #2C5D51;
+    position: fixed;
+}
 h4 small {
   color: grey;
   margin-left: 10px;
   font-weight: lighter;
 }
+small {
+    color: #70948C;
+    font-size: 13px;
+}
+h4 i.fa{
+    padding-left: 16px;
+    font-size: 14px;
+  }
 .container {
   overflow: hidden;
 }
@@ -1157,6 +1198,7 @@ background-color: #9DEDDD !Important;
   background-color: #F89406;
 }
 
+
 /*CSS for sub Modals inside story*/
 
 #modal-members {
@@ -1251,6 +1293,7 @@ background-color: #9DEDDD !Important;
   color: #8c8c8c;
   text-align: center
 }
+
 
 /*This class is used for labels template display*/
 
@@ -1417,6 +1460,9 @@ right: 84px;
 .attachments-wrap{
   margin-left: 52px;
   min-width: 400px;
+}
+.avatar-wrapper{
+  display:inline;
 }
 .storydiv{
   width:507px;

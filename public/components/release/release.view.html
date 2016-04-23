@@ -2,18 +2,20 @@
 <!-- <button class="btn btn-success pull-right"  ng-click="openReleaseStatus()">
 CFD Graph
 </button> -->
-<div class="graphButton">
-</div>
 
 <div class="pageHeading">
     <b class="fa fa-bar-chart" ng-click="openReleaseStatus()"></b>
 </div>
-<div ng-init="getSprints()"  ng-if = "projects.length > 0">
-  <div ng-init="getSprints()"  >
+
+<div ng-if = "projects.length > 0">
+  <div ng-init="getSprints()">
   <div id="{{projects[curProjectLoc].release[curReleaseLoc]._id}}" class="container">
+    <div class="headingOfPage">
+      {{projects[curProjectLoc].name}}
+    </div>
     <div class="relDiv">
 
-      <h4>{{projects[curProjectLoc].release[curReleaseLoc].name}}<small>{{projects[curProjectLoc].release[curReleaseLoc].description}}</small></h3>
+      <h4 class="innerPage" >{{projects[curProjectLoc].release[curReleaseLoc].name}}<small>{{projects[curProjectLoc].release[curReleaseLoc].description}}</small></h3>
         <div class="boxContainer" ng-repeat= "spr in sprints"><!-- TODO: Changed for Testing -->
           <div class="box"  ng-class="{'hideSlide':!hovering,'showSlide':hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" id="{{spr._id}}" >
             <div class="slideMenuBox">
