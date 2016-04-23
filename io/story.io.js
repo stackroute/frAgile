@@ -270,10 +270,50 @@ module.exports = function(socket, io, user) {
 
   socket.on('story:addAttachment', function(data) {
     io.to(data.room).emit('story:attachmentAdded', data);
+
+    var actData = {
+      room: "activity:" + data.projectID,
+      action: "attached",
+      projectID: data.projectID,
+      user: user,
+      object: {
+        name: data.type,
+        type: "Story",
+        _id: data._id
+      },
+      target: {
+        name: data.heading,
+        type: "Story",
+        _id: data._id
+      }
+    }
+    Activity.addEvent(actData, function(data) {
+      io.to(actData.room).emit('activityAdded', data);
+    });
   });
 
   socket.on('story:removeAttachment', function(data) {
     io.to(data.room).emit('story:attachmentRemoved', data);
+
+    var actData = {
+      room: "activity:" + data.projectID,
+      action: "removed",
+      projectID: data.projectID,
+      user: user,
+      object: {
+        name: data.type,
+        type: "Story",
+        _id: data._id
+      },
+      target: {
+        name: data.heading,
+        type: "Story",
+        _id: data._id
+      }
+    }
+    Activity.addEvent(actData, function(data) {
+      io.to(actData.room).emit('activityAdded', data);
+    });
   });
 
 }

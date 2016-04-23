@@ -15,12 +15,12 @@ var socket = Socket($scope);
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
         storyContr.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
   });
+
   storyContr.storyGrp=storyContr.complexDataObject.storyGrp;
 
   $scope.storyData = storyContr.storyData;
-  console.log(  $scope.storyData );
 
-  storyContr.storyData.updatetime = moment(storyContr.storyData.lastUpdated).fromNow();
+  $scope.storyData.updatetime = moment($scope.storyData.lastUpdated).fromNow();
 
   //TODO:Check if these are required????
   var dataLoc = $location.search();
@@ -37,7 +37,7 @@ var socket = Socket($scope);
 
   $scope.model = {
     description: {
-      name: storyContr.storyData.description
+      name: $scope.storyData.description
     },
     selected: {}
   };
@@ -117,35 +117,39 @@ var socket = Socket($scope);
 
   socket.on('story:attachmentAdded', function(data){
     // data.attachmentList.timeStamp = moment()
-    storyContr.storyData.attachmentList = data.attachmentList;
+    $scope.storyData.attachmentList = data.attachmentList;
 
-    angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
-          storyContr.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+    angular.forEach($scope.storyData.attachmentList, function(value, key) {
+          $scope.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
     });
 
-    console.log('On socket: ', storyContr.storyData.attachmentList);
+    console.log('On socket: ', $scope.storyData.attachmentList);
   });
 
   socket.on('story:attachmentRemoved', function(data){
     // data.attachmentList.timeStamp = moment()
-    storyContr.storyData.attachmentList = data.attachmentList;
+    $scope.storyData.attachmentList = data.attachmentList;
 
-    angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
-          storyContr.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+    angular.forEach($scope.storyData.attachmentList, function(value, key) {
+          $scope.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
     });
 
-    console.log('On socket: ', storyContr.storyData.attachmentList);
+    console.log('On socket: ', $scope.storyData.attachmentList);
   })
 
   $scope.addAttachment = function() {
-    modalService.open('sm', 'components/story/operations/addAttachment.view.html','MyCtrl',storyContr.storyData);
+    modalService.open('sm', 'components/story/operations/addAttachment.view.html','MyCtrl',$scope.storyData);
     //$uibModalInstance.close($scope.searchTerm);
   };
-  $scope.removeAttachment = function(storyId,attachmentId,file_name) {
-    console.log(storyId+"======="+attachmentId);
+  $scope.removeAttachment = function(storyId,attachmentId,file_name,name) {
     storyService.removeAttachment(storyId,attachmentId,file_name).success(function(data){
+
       data.room = $scope.roomName;
+      data.projectID = $scope.projectID;
+      data.type = name;
+
       socket.emit("story:removeAttachment", data);
+
     });
   };
 
@@ -227,14 +231,13 @@ var socket = Socket($scope);
   description:this function is used to update the story description
   **/
   $scope.saveDescription=function(){
-    console.log("save Description in contoller");
     $scope.model.description = angular.copy($scope.model.selected);
     //Post socket below is not required
-    storyService.saveStoryDescription(storyContr.storyData._id,$scope.model.description.name);
+    storyService.saveStoryDescription($scope.storyData._id,$scope.model.description.name);
 
     $scope.reset();
     $scope.set=false;
-    $scope.checklistGrp =storyContr.storyData.checklist;
+    $scope.checklistGrp =$scope.storyData.checklist;
 
     // ///Socket Coding starts
     // console.log("about to emit in client");
@@ -268,15 +271,7 @@ var socket = Socket($scope);
       checked: false,
       creationDate:Date.now(),
     }
-    console.log({
 
-      'room': $scope.roomName,
-      'storyid': storyContr.storyData._id,
-      'checklistGrpId': todo._id,
-      'itemObj':itemObj,
-      'projectID' : $scope.projectID,
-      'text' : todo.todoText
-    });
     socket.emit('story:addChecklistItem', {
 
       'room': $scope.roomName,

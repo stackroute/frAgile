@@ -383,8 +383,9 @@ $scope.roomName = "story:" + param._id;
       url: '/story/addattachments',
       data: {file: file,storyId:param._id}
     }).then(function (resp) {
-      console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
       resp.data.room = $scope.roomName;
+      resp.data.projectID = $scope.projectID;
+      resp.data.type = file.name;
       socket.emit('story:addAttachment', resp.data);
       console.log(resp.data);
     }, function (resp) {
