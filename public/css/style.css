@@ -443,9 +443,14 @@ ul.sprintNameTree.ng-scope {
 .editSprint{
   height: 203px;
 }
-.editRelease {
+.editRelease{
   height: 162px;
 }
+.editProject {
+  margin-top: -41px;
+      height: 128px;
+}
+
 .editRelease textarea, .editSprint textarea{
   max-width: 100%;
   min-width: 100%;
@@ -473,6 +478,10 @@ label {
   border-radius: 107px;
   height: 45px;
   width: 45px;
+}
+
+.editProject .btn.btn-success {
+  margin-top: 5px;
 }
 .divToggle{
   position: fixed;
@@ -707,7 +716,7 @@ form.hideAdd{
   color: #ACE6D8;
 }
 .projectPage .btn-success {
-  margin: 15px 0px;
+  margin: 6px 0px;
   margin-left: 15px;
 }
 .warningModal {
@@ -917,6 +926,14 @@ h4 small {
   margin-left: 10px;
   font-weight: lighter;
 }
+small {
+    color: #70948C;
+    font-size: 13px;
+}
+h4 i.fa{
+    padding-left: 16px;
+    font-size: 14px;
+  }
 .container {
   overflow: hidden;
 }
