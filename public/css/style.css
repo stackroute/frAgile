@@ -276,6 +276,7 @@ ul.projectNameTree.ng-scope {
 }
 .release-add{
   margin: 13px 0px;
+margin-bottom: 0px;
 }
 ul.releaseNameTree.ng-scope {
   padding-left: 0px;
@@ -1115,6 +1116,9 @@ h4 i.fa{
 .activity-label {
   position: relative;
   left: 10px;
+}
+.avatars-wrap{
+  margin-bottom: 20px;
 }
 .menu-bar-avatar {
   width: 30px;
