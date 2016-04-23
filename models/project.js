@@ -82,13 +82,15 @@ projectSchema.statics.removeMember = function(projectId, memberId, callback) {
 }
 
 projectSchema.statics.updateProject = function(projectId, newProject, callback) {
-  this.update({
+  console.log("----------Inside project model");
+  console.log("-" + projectId + "-");
+  console.log(newProject);
+  this.findOneAndUpdate({
       "_id": projectId
     }, {
       $set: {
         name: newProject.name,
-        description: newProject.description,
-        date: newProject.date
+        description: newProject.description
       }
     }, {
       upsert: true

@@ -259,12 +259,13 @@ hr{
   overflow-y: auto;
   max-height: 521px;
 }
-.headingOfPage.ng-binding {
+.headingOfPage {
     font-size: 22px;
     font-weight: 600;
     color: #2C5D51;
+    cursor: pointer;
 }
-#mainSprint .headingOfPage.ng-binding {
+#mainSprint .headingOfPage {
     position: fixed;
 }
 ul.projectNameTree.ng-scope {
@@ -447,8 +448,9 @@ ul.sprintNameTree.ng-scope {
   height: 162px;
 }
 .editProject {
-  margin-top: -41px;
-      height: 128px;
+    margin-top: -41px;
+    height: 128px;
+    width: 315px;
 }
 
 .editRelease textarea, .editSprint textarea{
@@ -482,6 +484,7 @@ label {
 
 .editProject .btn.btn-success {
   margin-top: 5px;
+  margin-left: 257px;
 }
 .divToggle{
   position: fixed;
@@ -691,26 +694,72 @@ form.hideAdd{
   height: 100%;
 }
 .pageHeading {
+    cursor: pointer;
     position: fixed;
     bottom: 44px;
+    height: 45px;
+    width: 45px;
+    border-radius: 400px;
     padding: 2px 4px;
     color: #FFFFFF;
-    background-color: #527D73;
+    background-color: #55C7AD;
     right: 33px;
+    box-shadow: 0px 2px 4px #70948C;
     font-size: 18px !important;
-    text-shadow: 0px 0px 4px solid black;
 }
-.pageHeading span{
-      margin-left: 20px;
-  border-left: 1px solid white;
+.graphMenu {
+  width: 85px;
+  padding: 5px;
+  height: 200px;
+  position: absolute;
+  /* background-color: #67E2C6; */
+  margin: 5px 0px 0px -80px;
+  border-radius: 16px;
 }
+icon.graphIconOne {
+    width: 30px;
+    position: fixed;
+    height: 30px !important;
+    border-radius: 98px;
+    padding: 0px;
+    font-size: 12px;
+    background-color: #64DCC1;
+    margin: 1px;
+}
+icon.graphIconTwo {
+    position: fixed;
+    height: 30px;
+    margin-left: 35px;
+    background-color: #64DCC1;
+    width: 30px;
+    border-radius: 200px;
+}
+.graphIconTwo b.fa {
+    margin-top: 6px;
+    margin-left: 1px;
+}
+.pageHeading span {
+    margin-left: 10px;
+    font-weight: bold;
+    margin-top: 1px;
+    font-size: 21px;
+    /* padding-top: 54px; */
+    position: absolute;
+    /* background-color: red; */
+    /* border-left: 1px solid white; */
+}
+.graphIconOne b.fa {
+    margin-top: 7px;
+    margin-left: 2px;
+}
+
 .pageHeading b {
     font-weight: 100;
     font-size: 16px;
-}
-.pageHeading b{
   padding-right: 6px;
   padding-left: 6px;
+    margin: 11px 4px;
+    position: absolute;
   }
 .slideMenuBox .fa:hover {
   color: #ACE6D8;
@@ -733,8 +782,11 @@ form.hideAdd{
   width: 100%;
 }
 .sprintDiv {
-  margin-top: 91px;
+  margin-top: 85px;
   overflow: hidden;
+}
+.sprintPage .fa{
+  cursor: pointer;
 }
 .listHead {
   color: rgba(0, 0, 0, 0.56);
@@ -907,6 +959,7 @@ h4 {
   margin-bottom: 3px;
   font-size: 21px;
   color: #2C5D51;
+  font-weight: normal;
 }
 h4.innerPage {
   margin-top: -32px;
@@ -925,6 +978,9 @@ h4 small {
   color: grey;
   margin-left: 10px;
   font-weight: lighter;
+}
+tiny {
+    font-size: 12px;
 }
 small {
     color: #70948C;
@@ -1511,4 +1567,9 @@ h4 i.fa{
 .autocomplete li.active .highlight {
   background: #666;
   color: #fff;
+}
+.tooltip-inner {
+    max-width: 700px;
+    /* If max-width does not work, try using width instead */
+    /*width: 350px;*/
 }

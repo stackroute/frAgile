@@ -11,7 +11,7 @@ CFD Graph
   <div ng-init="getSprints()">
   <div id="{{projects[curProjectLoc].release[curReleaseLoc]._id}}" class="container">
     <div class="headingOfPage">
-      {{projects[curProjectLoc].name}}
+      <tag ng-click="loadProject()">{{projects[curProjectLoc].name}}</tag>
     </div>
     <div class="relDiv">
 

@@ -25,32 +25,32 @@ Over View
   </div> -->
   <div ng-repeat="project in projects" class="main">
       <div id="{{project._id}}" class = "container">
-        <h4>{{project.name}} <i class="fa fa-pencil" ng-click = "editProject=true"></i>
+        <h4>{{project.name}} <i class="fa fa-pencil" ng-click = "editProjectShow=true; newProjectName=project.name; newProjectDetails=project.description"></i>
         <i class="fa fa-user-plus" aria-hidden="true"></i></h4>
-        <small>{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
+        <small tooltip-placement="bottom"  uib-tooltip="{{project.description}}" >{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
           ...
         </span></small>
 
-                        <div class="backgroundBlack" ng-class="{'showEdit':editProject,'hideEdit':!editProject}" ng-click = "editProject=false">
+          <div class="backgroundBlack" ng-class="{'showEdit':editProjectShow,'hideEdit':!editProjectShow}" ng-click = "editProjectShow=false">
 
-                        </div>
-                      <form class="editRelease editProject" ng-class="{'showEdit':editProject,'hideEdit':!editProject}">
-                        <div class="form-group frm">
-                          <label class="col-sm-4" for="projectName">Name</label>
-                          <div class="col-sm-8">
-                            <input type="text" class="form-control" id="inputName" ng-model = "newReleaseName">
-                          </div>
-                        </div>
-                        <div class="form-group frm">
-                          <label class="col-sm-4" for="projectDesc">Name</label>
-                          <div class="col-sm-8">
-                            <textarea class="form-control" id="inputDesc" ng-model = "newReleaseDetails"/>
-                          </div>
-                        </div>
-                        <button type="button" class="btn btn-success" ng-click="editRelease(newReleaseName,newReleaseDetails,newReleaseDate,release.creationDate,project._id,release._id,release.name)? showEdit=false : showEdit=true"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+          </div>
+          <form class="editRelease editProject" ng-class="{'showEdit':editProjectShow,'hideEdit':!editProjectShow}">
+            <div class="form-group frm">
+              <label class="col-sm-3" for="projectName">Name</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control" id="inputName" ng-model = "newProjectName">
+              </div>
+            </div>
+            <div class="form-group frm">
+              <label class="col-sm-3" for="projectDesc">Description</label>
+              <div class="col-sm-9">
+                <textarea class="form-control" id="inputDesc" ng-model = "newProjectDetails"/>
+              </div>
+            </div>
+            <button type="button" class="btn btn-success" ng-click="editProject(newProjectName,newProjectDetails, project._id); editProjectShow=false"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
 
-                        <!-- <button type="button" ng-click = "showEdit=false">X</button> -->
-                      </form>
+            <!-- <button type="button" ng-click = "showEdit=false">X</button> -->
+          </form>
           <div class="boxContainer" ng-repeat= "release in project.release" >
             <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,project.name, release._id,release.name,release.description)">
             <div class="slideMenuBox">
@@ -104,15 +104,20 @@ Over View
         <div class="box addMore" ng-click = "setDefaultForRelease(project._id)" data-toggle="modal" data-target="#myModal">
             Add Release...
         </div>
-        <div class="pageHeading">
-          <p>
-            <b class="fa fa-table" ng-click="openReleaseChart()"></b>
-          </p>
-          <p>
-            <b class="fa fa-sun-o" ng-click="showOverGraph()"></b>
-          </p>
-        </div>
       </div>
       <hr>
+    </div>
+
+    <div class="pageHeading" ng-click="showGraph=!showGraph">
+      <span>...</span>
+      <div class="graphMenu" ng-show="showGraph">
+        <icon class="graphIconOne">
+          <b class="fa fa-table" ng-click="openReleaseChart()"></b>
+        </icon>
+        <icon class="graphIconTwo">
+          <b class="fa fa-sun-o" ng-click="showOverGraph()"></b>
+        </icon>
+
+      </div>
     </div>
 </div>

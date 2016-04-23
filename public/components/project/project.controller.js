@@ -65,6 +65,17 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
       controllerAs: 'modalContr'
     });
   }
+  $scope.editProject = function(newProjectName,newProjectDetails,prId) {
+    console.log(newProjectName);
+    console.log(newProjectDetails);
+    console.log(prId);
+    socket.emit('project:editProject', {
+      'room': 'projectRoom',
+      'name': newProjectName,
+      'description': newProjectDetails,
+      "prId": prId
+    });
+  };
   $scope.editRelease = function(newReleaseName,newReleaseDetails,newReleaseDate,creationDate,prId,relId,oldName) {
       if (newReleaseDate != null && creationDate != null && newReleaseName != "") {
       var dt = new Date(newReleaseDate);
@@ -110,6 +121,16 @@ function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, So
     $rootScope.release.description = releaseDesc;
   }
 
+  socket.on('project:projectEdited', function(newProject) {
+    console.log("----projectEdited----");
+    console.log(newProject);
+    $rootScope.projects.forEach(function(project, projectIndex) {
+      if (project._id == newProject._id) {
+        $rootScope.projects[projectIndex].name = newProject.name;
+        $rootScope.projects[projectIndex].description = newProject.description;
+      }
+    });
+  });
   socket.on('project:releaseEdited', function(releaseData) {
     console.log(releaseData);
     console.log("--------------");
