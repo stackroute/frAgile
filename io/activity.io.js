@@ -24,7 +24,7 @@ module.exports = function(socket, io, user) {
           }).exec(function(err, userData) {
             if (!err){
               io.to(data.room).emit('activity:memberAdded', userData[0]);
-
+              socket.emit('project:memberAdded',userData[0]); //When user is added in project Page
                 var actData = {
                   room: 'activity:' +data.projectId,
                   action: "added",
@@ -47,6 +47,7 @@ module.exports = function(socket, io, user) {
             }
             else{
               io.to(data.room).emit('activity:addMemberFailed', "Adding user failed");
+              socket.emit('project:addMemberFailed', "Adding user failed") //When user is added in project Page
             }
           });
           //Pushing project in the User Collection
@@ -62,6 +63,7 @@ module.exports = function(socket, io, user) {
       }
       else {
         io.to(data.room).emit('activity:addMemberFailed', "User already exists");
+        socket.emit('project:addMemberFailed', "User already exists"); //When user is added in project Page
       }
     })
   });

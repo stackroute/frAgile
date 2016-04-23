@@ -1,7 +1,7 @@
 var fragileApp = angular.module('fragileApp');
 
 fragileApp.controller('activityController', function($scope, $http, Socket, activityService, $rootScope) {
-  var socket = Socket();
+  var socket = Socket($scope);
 
   $scope.storyID = $scope.$parent.storyID;
 
