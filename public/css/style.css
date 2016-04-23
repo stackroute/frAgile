@@ -274,6 +274,9 @@ ul.projectNameTree.ng-scope {
   box-shadow: inset 0px 22px 0px #274A40;
   overflow: auto;
 }
+.release-add{
+  margin: 13px 0px;
+}
 ul.releaseNameTree.ng-scope {
   padding-left: 0px;
   padding-top: 8px;
@@ -443,9 +446,14 @@ ul.sprintNameTree.ng-scope {
 .editSprint{
   height: 203px;
 }
-.editRelease {
+.editRelease{
   height: 162px;
 }
+.editProject {
+  margin-top: -41px;
+      height: 128px;
+}
+
 .editRelease textarea, .editSprint textarea{
   max-width: 100%;
   min-width: 100%;
@@ -473,6 +481,10 @@ label {
   border-radius: 107px;
   height: 45px;
   width: 45px;
+}
+
+.editProject .btn.btn-success {
+  margin-top: 5px;
 }
 .divToggle{
   position: fixed;
@@ -706,8 +718,8 @@ form.hideAdd{
 .slideMenuBox .fa:hover {
   color: #ACE6D8;
 }
-.projectPage .btn-success {
-  margin: 15px 0px;
+.projectPage .btn-success  {
+  margin: 6px 0px;
   margin-left: 15px;
 }
 .warningModal {
@@ -917,6 +929,14 @@ h4 small {
   margin-left: 10px;
   font-weight: lighter;
 }
+small {
+    color: #70948C;
+    font-size: 13px;
+}
+h4 i.fa{
+    padding-left: 16px;
+    font-size: 14px;
+  }
 .container {
   overflow: hidden;
 }
@@ -1174,6 +1194,7 @@ h4 small {
   background-color: #F89406;
 }
 
+
 /*CSS for sub Modals inside story*/
 
 #modal-members {
@@ -1268,6 +1289,7 @@ h4 small {
   color: #8c8c8c;
   text-align: center
 }
+
 
 /*This class is used for labels template display*/
 
@@ -1425,6 +1447,9 @@ h4 small {
 .attachments-wrap{
   margin-left: 52px;
   min-width: 400px;
+}
+.avatar-wrapper{
+  display:inline;
 }
 .storydiv{
   width:507px;

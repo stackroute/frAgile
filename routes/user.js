@@ -15,6 +15,11 @@ router.get('/',function(req,res,next){
   res.send(user);
 });
 
+router.get('/all',function(req,res,next){
+  User.find({},{email : 1},function(err,data){
+    res.send(data);
+  })
+})
 //to get projects of a userID
 router.get('/projects', function(req, res, next) {// LOGINCHANGE
   if (req.user._id) {

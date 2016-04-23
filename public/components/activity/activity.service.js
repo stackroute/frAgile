@@ -89,6 +89,10 @@ angular
       getUsers: function(searchText){
         var url = "/user/getUsers?email=" + searchText;
         return $http.get(url);
+      },
+      getAllUsers:function(){
+        var url = "/user/all";
+        return $http.get(url);
       }
     }
 

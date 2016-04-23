@@ -3,8 +3,7 @@ angular.module('Limber')
       $scope.logInErrorMsg = '';
       $scope.passwordError='';
          $scope.dismissMsg = function() {
-           $rootScope.registerErrorMsg = '';
-          // $rootScope.registerSuccessMsg = '';
+           $scope.registerErrorMsg = '';
            $scope.logInErrorMsg = '';
            $scope.passwordError='';
          }
@@ -15,6 +14,13 @@ angular.module('Limber')
        $('#errorDiv').slideUp();
      }
    });
+   $scope.$watch('registerErrorMsg', function(nv,ov) {
+if (nv) {
+ $('#regDiv').slideDown();
+}else {
+ $('#regDiv').slideUp();
+}
+});
    $scope.$watch('passwordError', function(nv,ov) {
    if (nv) {
     $('#passDiv').slideDown();

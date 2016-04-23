@@ -13,13 +13,9 @@ var RedisStore = require('connect-redis')(session);
 var app = express();
 
 
-
-mongoose.connect('mongodb://localhost/fragileDB');
-//mongoose.connect('mongodb://172.23.238.253/frAgile_dummy');
-
-
-
-var db = mongoose.connection;
+//mongoose.connect('mongodb://172.23.238.253/frAgile_dummy')
+  mongoose.connect('mongodb://localhost/fragileDB');
+var db = mongoose.connection
 
 var routes = require('./routes/index');
 //var users = require('./routes/users');
@@ -67,7 +63,6 @@ app.use(function(req, res, next) {
 
     app.userID = req.user._id;
     app.fullName = req.user.firstName + " " + req.user.lastName;
-    app.photo = req.user.photo;
     return next();
   }
   else
@@ -87,7 +82,6 @@ app.use('/sprint', sprint);
 app.use('/project', project);
 app.use('/user', user);
 app.use('/story', story);
-app.use('/graph',graph);
 
 // error handlers
 
