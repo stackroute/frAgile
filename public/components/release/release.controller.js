@@ -40,6 +40,7 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
     })
   })
 // Open modal Window for Story
+  $scope.longRelDescLimit = 130;
   $scope.openModal = function(name) {
     $rootScope.releaseName = name;
     var modalInstance = $uibModal.open({

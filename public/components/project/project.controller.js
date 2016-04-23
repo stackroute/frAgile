@@ -68,16 +68,25 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       controllerAs: 'modalContr'
     });
   }
+  $scope.closeThis = function() {
+    $uibModalInstance.dismiss('cancel');
+  }
   $scope.editProject = function(newProjectName,newProjectDetails,prId) {
     console.log(newProjectName);
     console.log(newProjectDetails);
     console.log(prId);
-    socket.emit('project:editProject', {
-      'room': 'projectRoom',
-      'name': newProjectName,
-      'description': newProjectDetails,
-      "prId": prId
-    });
+    if (newProjectName!="") {
+      socket.emit('project:editProject', {
+        'room': 'projectRoom',
+        'name': newProjectName,
+        'description': newProjectDetails,
+        "prId": prId
+      });
+      return true;
+    }
+    else {
+      return false;
+    }
   };
   $scope.editRelease = function(newReleaseName,newReleaseDetails,newReleaseDate,creationDate,prId,relId,oldName) {
       if (newReleaseDate != null && creationDate != null && newReleaseName != "") {
@@ -98,15 +107,21 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
         return false;
       }
     }
-    $scope.archiveFun = function(projectId, releaseId, projectName, releaseName) {
+    $scope.setReleaseToDelete = function(projectId, releaseId, projectName, releaseName) {
+      $scope.toDeleteProjectId = projectId;
+      $scope.toDeleteReleaseId = releaseId;
+      $scope.toDeleteProjectName = projectName;
+      $scope.toDeleteReleaseName = releaseName;
+    }
+    $scope.archiveFun = function() {
       // console.log("archiveFun" + rel)
       socket.emit('deleteRelease', {
         'room': 'projectRoom',
-        'activityRoom': 'activity:' + projectId,
-        'projectId': projectId,
-        'releaseId': releaseId,
-        'releaseName': releaseName,
-        'projectName': projectName
+        'activityRoom': 'activity:' + $scope.toDeleteProjectId,
+        'projectId': $scope.toDeleteProjectId,
+        'releaseId': $scope.toDeleteReleaseId,
+        'releaseName': $scope.toDeleteReleaseName,
+        'projectName': $scope.toDeleteProjectName
       });
     };
     $scope.editFun = function(rel) {
