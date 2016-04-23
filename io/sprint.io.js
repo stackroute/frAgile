@@ -185,7 +185,7 @@ module.exports = function(socket, io, user) {
           io.to(data.room).emit('sprint:storyDeleted', storyData);
 
           var actData = {
-            room: data.activityRoom,
+            room: "activity:" + data.projectId,
             action: "removed",
             projectID: data.projectId,
             user: user,
