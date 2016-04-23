@@ -1120,13 +1120,17 @@ h4 small {
   padding:9px 15px;
   border-bottom:1px solid #eee;
   background-color: #5cb85c;
-  -webkit-border-top-left-radius: 5px;
-  -webkit-border-top-right-radius: 5px;
-  -moz-border-radius-topleft: 5px;
-  -moz-border-radius-topright: 5px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
 }
+
+.story-backBug {
+  background-color: #EF4836 !Important;
+}
+
+.story-inProgress
+{
+background-color: #9DEDDD !Important;
+}
+
 .done-true {
   text-decoration: line-through;
   color: grey;
@@ -1274,8 +1278,7 @@ h4 small {
 
 .story-content {
   padding-bottom: 12px;
-  border: 1px solid #36D7B7;
-  border-top: 35px solid #36D7B7;
+  border: 1px solid rgba(70, 76, 69, 0.22);
   margin: 3px;
   margin: 0px 0px;
   padding: 0px 0px;
@@ -1286,7 +1289,10 @@ h4 small {
 }
 .story-seperator{
   margin:21px 7px 25px 51px;
-
+  border-top: 1px solid #eee;
+}
+.checklist-seperator{
+  width: 75%;
 }
 .story-header {
   font-size: 20px;
@@ -1303,6 +1309,9 @@ h4 small {
   margin-top: 5px;
   font-weight: 400;
   margin-right: 20px;
+  min-width: 96%;
+  max-width: 96%;
+  word-wrap: break-word;
 }
 .story-left-head {
   font-weight: bold;
@@ -1345,40 +1354,44 @@ h4 small {
 }
 .progress {
   margin-bottom: 5px;
+  height: 8px;
 }
-.story-close {
-  right: 10px;
-  z-index: 100;
-  top: -30px;
-  cursor: pointer;
-  border-radius: 32px;
-  height: 25px;
-  width: 25px;
-  background-color: darkgreen;
-  color: white;
-  position: absolute;
+.progress-per{
+  font-weight: 100;
+  color: rgb(82, 125, 115);
 }
+
+.desc-btn{
+  margin-top:5px;
+}
+.check-item-btn, .desc-btn{
+  border:0px;
+}
+
 .story-delete {
-  right: 10px;
-  z-index: 100;
+  top: 87px;
+  z-index: -100;
 }
 .story-copy {
-  right: 45px;
-  z-index: 100;
+  top: 44px;
+  z-index: -100;
 }
 .story-move {
-  right: 80px;
-  z-index: 100;
+  top: 1px;
+  z-index: -100;
 }
 .story-delete, .story-copy, .story-move {
-  top: 10px;
-  cursor: pointer;
-  border-radius: 32px;
-  height: 25px;
-  width: 25px;
-  background-color: darkgreen;
-  color: white;
-  position: absolute;
+cursor: pointer;
+height: 40px;
+width: 40px;
+background-color: rgb(255, 255, 255);
+color: #100F0F;
+padding-left: 6px;
+padding-top: 6px;
+position: absolute;
+margin-right: -121px;
+border-left: 2px solid #797575;
+right: 84px;
 }
 .story-close .fa, .story-delete .fa {
   margin-left: 6px;
@@ -1407,18 +1420,25 @@ h4 small {
 }
 .storydiv{
   width:507px;
-  max-height:calc(90vh - 150px);;
-  overflow:auto;
-  overflow-x:hidden;
-  height:calc(90vh - 150px);
+  /*max-height:calc(90vh - 150px);;*/
+  min-height:calc(90vh - 150px);;
+  /*overflow:auto;
+  overflow-x:hidden;*/
+  /*height:calc(90vh - 150px);*/
 }
 .activityouterdiv{
-  top:0px;
-  border-left:2px solid;
+  border-left: 1px solid rgba(136, 135, 135, 0.38);
+  position: absolute;
+    top: 60px;
+    right: 0px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    bottom: 0px;
 }
 .activityinnerdiv{
-  max-height:calc(90vh - 200px);
-  overflow:auto;
+  /*max-height:calc(90vh - 200px);*/
+  min-height:calc(90vh - 200px);
+  /*overflow:auto;*/
   width:356px;
   word-wrap: break-word;
   height:calc(90vh - 200px);
@@ -1473,4 +1493,12 @@ h4 small {
 .autocomplete li.active .highlight {
   background: #666;
   color: #fff;
+}
+.story-textarea{
+  min-width: 95%;
+  max-width: 95%;
+  min-height: 85px;
+  max-height: 85px;
+  margin-right: 20px;
+  word-wrap: break-word;
 }

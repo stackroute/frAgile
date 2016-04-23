@@ -1,15 +1,15 @@
+<div class="modal-header storyHeader story-{{storyContr.storyGrp}}">
+  <button type="button" class="close" ng-click="cancel()"><i class="fa fa-times-circle"></i></button>
+</div>
 <div class="modal-body row story-content">
-  <div class="story-close" data-dismiss="modal" ng-click="cancel()">
-    <i class="fa fa-close" ></i>
-  </div>
-  <div class="story-delete" data-dismiss="modal" ng-click="deleteStory()">
+  <div class="story-delete" uib-tooltip="Delete" data-dismiss="modal" ng-click="deleteStory()" >
     <i class="fa fa-trash-o" ></i>
   </div>
-  <div class="story-copy" data-dismiss="modal" ng-click="moveCopyStory('components/story/operations/copyStory.view.html')">
+  <div class="story-copy" data-dismiss="modal" uib-tooltip="Copy" ng-click="moveCopyStory('components/story/operations/copyStory.view.html')">
     <i class="fa fa-files-o" ></i>
   </div>
-  <div class="story-move" data-dismiss="modal" ng-click="moveCopyStory('components/story/operations/moveStory.view.html')">
-    <i class="fa fa-arrows" ></i>
+  <div class="story-move" data-dismiss="modal" uib-tooltip="Move" ng-click="moveCopyStory('components/story/operations/moveStory.view.html')">
+    <i class="fa fa-share" ></i>
   </div>
   <div class="story-details clearfix">
     <!-- <span class="pull-left story-left-head"><i class="fa fa-clipboard" aria-hidden="true"></i></span> -->
@@ -37,10 +37,10 @@
                   </div>
                 </script>
                 <script type="text/ng-template" id="edit">
-                  <span><textarea cols="50" rows="6"  ng-model="model.selected.name" class="form-control" placeholder="Story Description........"></textarea></span>
+                  <span><textarea class="story-textarea form-control"   ng-model="model.selected.name" class="form-control" placeholder="Story Description........" autofocus></textarea></span>
                   <span class="pull-right edit-description">
-                    <a ng-click="saveDescription()" ><i class="fa fa-check"></i></a>
-                    <a ng-click="reset()" ><i class="fa fa-close"></i></a>
+                    <a class="btn btn-default btn-xs desc-btn" ng-click="saveDescription()" ><i class="fa fa-check"></i></a>
+                    <a class="btn btn-default btn-xs desc-btn"ng-click="reset()" ><i class="fa fa-close"></i></a>
                   </span>
                 </script>
               </div>
@@ -94,7 +94,8 @@
               <div ng-repeat="todo in storyData.checklist">
                 <span class="checklist-header" ng-mouseenter="groupHovering=true" ng-mouseleave="groupHovering=false">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo._id,todo.checklistHeading)">
                   <i class="fa fa-trash-o" ng-show="groupHovering"></i></a></small></span>
-                  <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"><b>{{todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0}}%</b></uib-progressbar>
+                  <b class="progress-per">{{todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0}}%</b>
+                  <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar>
                   <li class="checklist-todos" ng-repeat="list in todo.items">
                     <input type="checkbox" ng-model="list.checked" ng-click="updateTodoItem(list,todo)">
 
@@ -106,10 +107,12 @@
                       </a>
                     </span>
                   </li>
-                  <input type="text" ng-model="todo.todoText" class="form-control add-todo" size="40"
-                  placeholder="Add New Todo" ></input>
-                  <button class="btn btn-default btn-xs" ng-click="addTodoItem(todo)" ><i class="fa fa-check" aria-hidden="true"></i></button>
-                  <br/>
+                  <form>
+                    <input type="text" ng-model="todo.todoText" class="form-control add-todo" size="40"
+                    placeholder="Add New Todo" ></input>
+                    <button type="submit" class="btn btn-default btn-xs check-item-btn" ng-click="addTodoItem(todo)" ><i class="fa fa-plus" aria-hidden="true"></i></button>
+                  </form>
+                  <hr class="story-seperator checklist-seperator">
                 </div>
               </div>
             </div>
