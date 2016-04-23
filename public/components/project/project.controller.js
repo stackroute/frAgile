@@ -1,5 +1,5 @@
 fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket', '$filter', 'graphModalFactory',
-  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter) {
+  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter,graphModalFactory) {
     // $scope.loadProjects = function() {
     //
     //   projectService.getUserProjects().success(function(response) {
