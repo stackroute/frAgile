@@ -15,16 +15,16 @@ module.exports = function(socket, io, user) {
   });
 
   socket.on('activity:addMember', function(data) {
-    //Pusing the members in project
+    //Pushing the members in project
     Project.addMember(data.projectId, data.memberList, function(err, doc) {
       if (!err && doc.nModified != 0) {
         data.memberList.forEach(function(memberId) {
           User.find({
             '_id': memberId
           }).exec(function(err, userData) {
-            if (!err)
+            if (!err){
               io.to(data.room).emit('activity:memberAdded', userData[0]);
-
+              socket.emit('project:memberAdded',userData[0]); //When user is added in project Page
                 var actData = {
                   room: 'activity:' +data.projectId,
                   action: "added",
@@ -44,6 +44,11 @@ module.exports = function(socket, io, user) {
                 Activity.addEvent(actData, function(callbackData) {
                   io.to(actData.room).emit('activityAdded', callbackData);
                 });
+            }
+            else{
+              io.to(data.room).emit('activity:addMemberFailed', "Adding user failed");
+              socket.emit('project:addMemberFailed', "Adding user failed") //When user is added in project Page
+            }
           });
           //Pushing project in the User Collection
           User.addProjectToUser(memberId, data.projectId, function(subdoc) {
@@ -55,6 +60,10 @@ module.exports = function(socket, io, user) {
             });
           });
         }); //For loop end
+      }
+      else {
+        io.to(data.room).emit('activity:addMemberFailed', "User already exists");
+        socket.emit('project:addMemberFailed', "User already exists"); //When user is added in project Page
       }
     })
   });

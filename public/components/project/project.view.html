@@ -1,5 +1,4 @@
-
-  <!-- <button class="btn btn-success pull-right" ng-click="openReleaseChart()">
+<!-- <button class="btn btn-success pull-right" ng-click="openReleaseChart()">
 Release Chart
 </button>
 <button class="btn btn-success pull-right" ng-click="showOverGraph()">
@@ -9,79 +8,150 @@ Over View
 <!-- End Modal--->
 
 
-<divs class = "projectPage container">
-  <div class="showNewProject" ng-show = "projects.length == 0">
+<div class="projectPage container">
+  <div class="showNewProject" ng-show="projects.length == 0">
     <center>Awesome... You are good to go</center>
   </div>
-  <div class="pageHeading">
+  <div class="btn btn-success addProject" ng-click="setDefaultForProject(project._id)" data-toggle="modal" data-target="#myModal">
+    <i class="fa fa-plus"></i> Add New Project
+  </div>
+  <!-- <div class="pageHeading">
     <b>Project</b>
     <span>
     <b class="fa fa-table" ng-click="openReleaseChart()"></b>
     <b class="fa fa-sun-o" ng-click="showOverGraph()"></b>
     </span>
-  </div>
+  </div> -->
   <div ng-repeat="project in projects" class="main">
-      <div id="{{project._id}}" class = "container">
-        <h4>{{project.name}}<small>{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
+    <div id="{{project._id}}" class="container">
+      <h4>{{project.name}} <i class="fa fa-pencil" ng-click = "editProject=true"></i>
+        <i class="fa fa-user-plus" data-toggle="modal" data-target="#addMembersModal" ng-click="getAllUsers(project._id,project.name)" ></i></h4>
+      <small>{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
           ...
-        </span></small></h4>
-          <div class="boxContainer" ng-repeat= "release in project.release" >
-            <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} "   ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,project.name, release._id,release.name,release.description)">
-            <div class="slideMenuBox">
-              <i class="fa fa-trash" uib-tooltip="Delete" ng-click = "archiveFun(project._id, release._id,project.name,release.name)"></i>
-              <i class="fa fa-pencil" uib-tooltip="Edit" ng-click = "showEdit=true; newReleaseName= release.name; newReleaseDetails = release.description; newReleaseDate=release.releaseDate"></i>
-              <i class="fa fa-star" uib-tooltip="Favorite" ng-click = "starFun(release._id)"></i>
-            </div>
-              <div class="boxHeading">
-                {{release.name}}
-              </div>
-              <div class="desc">
-                {{release.description | limitTo:longDescLimit }}<span ng-hide="release.description.length < longDescLimit || release.description ==undefined">
+        </span></small>
+
+      <div class="backgroundBlack" ng-class="{'showEdit':editProject,'hideEdit':!editProject}" ng-click="editProject=false">
+
+      </div>
+      <form class="editRelease editProject" ng-class="{'showEdit':editProject,'hideEdit':!editProject}">
+        <div class="form-group frm">
+          <label class="col-sm-4" for="projectName">Name</label>
+          <div class="col-sm-8">
+            <input type="text" class="form-control" id="inputName" ng-model="newReleaseName">
+          </div>
+        </div>
+        <div class="form-group frm">
+          <label class="col-sm-4" for="projectDesc">Name</label>
+          <div class="col-sm-8">
+            <textarea class="form-control" id="inputDesc" ng-model="newReleaseDetails" />
+          </div>
+        </div>
+        <button type="button" class="btn btn-success" ng-click="editRelease(newReleaseName,newReleaseDetails,newReleaseDate,release.creationDate,project._id,release._id,release.name)? showEdit=false : showEdit=true"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+
+        <!-- <button type="button" ng-click = "showEdit=false">X</button> -->
+      </form>
+      <div class="boxContainer" ng-repeat="release in project.release">
+        <div class="box" id="{{release._id}}" ng-class="{'showSlide':hovering,'hideSlide':!hovering} " ng-mouseenter="hovering=true" ng-mouseleave="hovering=false" ng-click="setProject(project._id,project.name, release._id,release.name,release.description)">
+          <div class="slideMenuBox">
+            <i class="fa fa-trash" uib-tooltip="Delete" ng-click="archiveFun(project._id, release._id,project.name,release.name)"></i>
+            <i class="fa fa-pencil" uib-tooltip="Edit" ng-click="showEdit=true; newReleaseName= release.name; newReleaseDetails = release.description; newReleaseDate=release.releaseDate"></i>
+            <i class="fa fa-star" uib-tooltip="Favorite" ng-click="starFun(release._id)"></i>
+          </div>
+          <div class="boxHeading">
+            {{release.name}}
+          </div>
+          <div class="desc">
+            {{release.description | limitTo:longDescLimit }}<span ng-hide="release.description.length < longDescLimit || release.description ==undefined">
                   ...
                 </span>&nbsp;
-              </div>
-              <div class="date">
-                 {{release.creationDate | date:'dd-MMM-yyyy'}} to {{release.releaseDate | date:'dd-MMM-yyyy'}}
-              </div>
-              <!-- <div class="dummy" ui-sref="sprint({ prId : '57026055772a712a164d70bb', sprintID: '57026bfd140731cc1810b5c0'})"> -->
-              <div class="dummy" ui-sref="release({ prId : project._id, releaseID: release._id})">
-              </div>
-
-                <div class="backgroundBlack" ng-class="{'showEdit':showEdit,'hideEdit':!showEdit}" ng-click = "showEdit=false">
-
-                </div>
-              <form class="editRelease" ng-class="{'showEdit':showEdit,'hideEdit':!showEdit}">
-                <div class="form-group frm">
-                  <label class="col-sm-4" for="releaseName">Name</label>
-                  <div class="col-sm-8">
-                    <input type="text" class="form-control" id="inputName" ng-model = "newReleaseName">
-                  </div>
-                </div>
-                <div class="form-group frm">
-                  <label class="col-sm-4" for="releaseDesc">Name</label>
-                  <div class="col-sm-8">
-                    <textarea class="form-control" id="inputDesc" ng-model = "newReleaseDetails"/>
-                  </div>
-                </div>
-                <div class="form-group frm">
-                  <label class="col-sm-4" for="releaseDate">Release Date</label>
-                  <div class="col-sm-8">
-                    <input type="date" class="form-control" id="inputDate" value = "{{release.releaseDate | date:'yyyy-MM-dd'}}" ng-model = "newReleaseDate" >
-                  </div>
-                </div>
-                <button type="button" class="btn btn-success" ng-click="editRelease(newReleaseName,newReleaseDetails,newReleaseDate,release.creationDate,project._id,release._id,release.name)? showEdit=false : showEdit=true"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-
-                <!-- <button type="button" ng-click = "showEdit=false">X</button> -->
-              </form>
-            </div>
           </div>
-        <div class="box addMore" ng-click = "setDefaultForRelease(project._id)" data-toggle="modal" data-target="#myModal">
-            Add Release...
+          <div class="date">
+            Release Date: {{release.releaseDate | date:'dd-MMM-yyyy'}}
+          </div>
+          <!-- <div class="dummy" ui-sref="sprint({ prId : '57026055772a712a164d70bb', sprintID: '57026bfd140731cc1810b5c0'})"> -->
+          <div class="dummy" ui-sref="release({ prId : project._id, releaseID: release._id})">
+          </div>
+
+          <div class="backgroundBlack" ng-class="{'showEdit':showEdit,'hideEdit':!showEdit}" ng-click="showEdit=false">
+
+          </div>
+          <form class="editRelease" ng-class="{'showEdit':showEdit,'hideEdit':!showEdit}">
+            <div class="form-group frm">
+              <label class="col-sm-4" for="releaseName">Name</label>
+              <div class="col-sm-8">
+                <input type="text" class="form-control" id="inputName" ng-model="newReleaseName">
+              </div>
+            </div>
+            <div class="form-group frm">
+              <label class="col-sm-4" for="releaseDesc">Name</label>
+              <div class="col-sm-8">
+                <textarea class="form-control" id="inputDesc" ng-model="newReleaseDetails" />
+              </div>
+            </div>
+            <div class="form-group frm">
+              <label class="col-sm-4" for="releaseDate">Release Date</label>
+              <div class="col-sm-8">
+                <input type="date" class="form-control" id="inputDate" value="{{release.releaseDate | date:'yyyy-MM-dd'}}" ng-model="newReleaseDate">
+              </div>
+            </div>
+            <button type="button" class="btn btn-success" ng-click="editRelease(newReleaseName,newReleaseDetails,newReleaseDate,release.creationDate,project._id,release._id,release.name)? showEdit=false : showEdit=true"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+
+            <!-- <button type="button" ng-click = "showEdit=false">X</button> -->
+          </form>
         </div>
       </div>
-      <hr>
+      <div class="box addMore" ng-click="setDefaultForRelease(project._id)" data-toggle="modal" data-target="#myModal">
+        Add Release...
+      </div>
+      <div class="pageHeading">
+        <p>
+          <b class="fa fa-table" ng-click="openReleaseChart()"></b>
+        </p>
+        <p>
+          <b class="fa fa-sun-o" ng-click="showOverGraph()"></b>
+        </p>
+      </div>
     </div>
-    <div class="btn btn-success addProject" ng-click = "setDefaultForProject(project._id)" data-toggle="modal" data-target="#myModal">
-      <i class="fa fa-plus"></i>  Add New Project
+    <hr>
+  </div>
+
+<!-- FIXME: Make a directive for this modal to avoid duplication -->
+  <div class="modal fade" id="addMembersModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Add Members</h4>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form>
+              <autocomplete ng-model="addedUserEmail" data="dbUsers" attr-placeholder="Enter user email..."></autocomplete>
+              <button class="btn btn-default" ng-click="addMember()" type="submit"><span class="glyphicon glyphicon-plus"></span></button>
+            </form>
+
+            <!-- <input class="txt-add-members" id="txtAddMember" name="txtAddMember" type="text" placeholder="e.g. you@fragile.com" ng-model="members" required> -->
+
+          </div>
+          <p class="release-add">Add a member</p>
+          <div class="clearfix">
+            <div class="menu-bar-avatar" ng-repeat="member in projMemberList" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
+              <div>
+                <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
+                <div ng-show="member.photo == undefined">
+                  <ng-letter-avatar data="{{member.fullName}}" charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+                </div>
+                &nbsp;
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
+  </div>
+
 </div>

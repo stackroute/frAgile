@@ -38,7 +38,7 @@ router.get('/project', function(req, res) {
 router.get('/release', function(req, res) {
   var projectId = req.query.id;
   // console.log(id);
-  project.findOne({'_id': projectId},'release._id release.creationDate release.releaseDate release.description release.sprints')
+  project.findOne({'_id': projectId},'release._id release.creationDate release.releaseDate release.name release.sprints')
   .populate("release.sprints", "endDate startDate list.group list.stories")
   .exec(function(err , doc) {
     if (err) {

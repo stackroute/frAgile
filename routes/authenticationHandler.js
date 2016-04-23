@@ -15,6 +15,10 @@ module.exports = function(passport){
 		res.send({ error: "Invalid Email or Password"});
 		// req.session.user=null;
 	});
+  router.get('/regfailure', function(req, res){
+		res.send({ error: "Email Id already exits"});
+		// req.session.user=null;
+	});
 
 	router.post('/login', passport.authenticate('local-login', {
 		successRedirect: '/auth/success',
@@ -28,7 +32,7 @@ module.exports = function(passport){
   });
 	router.post('/register', passport.authenticate('sign-up', {
 		successRedirect: '/auth/success',
-		failureRedirect: '/auth/failure'
+		failureRedirect: '/auth/regfailure'
 	}));
 
 
