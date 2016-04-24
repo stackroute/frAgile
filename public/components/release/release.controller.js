@@ -3,6 +3,7 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
   $scope.longDescLimit = 34;
   $rootScope.refreshProjects = true;
   var socket = Socket($scope);
+  $rootScope.inprojectRoom=false;
 
   $rootScope.projectID = $stateParams.prId //Remove this once refresh issue is fixed
   //currentProjectId
@@ -111,7 +112,6 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
       $rootScope.isMenu = !$rootScope.isMenu;
     }
 
-    $rootScope.hideActivity = false;
 
 
 

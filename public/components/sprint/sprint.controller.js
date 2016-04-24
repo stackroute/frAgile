@@ -18,6 +18,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         });
       });
 
+      $rootScope.inprojectRoom=false;
 
       sprintService.getBackBug($stateParams.prId).then(function(backBug) {
         $scope.backBug = backBug.data;
@@ -34,7 +35,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         $rootScope.isMenu = !$rootScope.isMenu;
       }
 
-      $rootScope.hideActivity = false;
       $rootScope.refreshProjects = true;
 
       var emitData =  {

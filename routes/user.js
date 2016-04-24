@@ -47,6 +47,9 @@ router.post('/addProject', function(req, res, next) {
   }
 });
 
+router.get('/getUserDetails', function(req, res, next) {
+  res.send(req.user);
+});
 router.get('/getUserId', function(req, res, next) {
   if (req.query.email) {
     User.getUserId(req.query.email, function(err, data) {

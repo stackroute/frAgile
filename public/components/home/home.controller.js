@@ -1,7 +1,11 @@
 fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'homeService', '$filter','Socket', function($scope, $state, $rootScope, homeService, $filter,socket) {
 
   $scope.loadProjects = function() {
-
+    homeService.getUserDetails().success(function(response) {
+      $rootScope.user = response;
+      console.log(response);
+      $rootScope.user.fullName = $rootScope.user.firstName + " " + $rootScope.user.lastName;
+    });
     homeService.getUserProjects().success(function(response) {
       $rootScope.projects = response.projects
     });
@@ -9,7 +13,11 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
     $rootScope.refreshProjects = false;
     $rootScope.defaultDate = $filter('date')(Date.now(), "yyyy-MM-dd");
   };
-
+  $scope.setUserDetails = function() {
+    $scope.firstName = $rootScope.user.firstName;
+    $scope.lastName = $rootScope.user.lastName;
+    $rootScope.email = $rootScope.user.email;
+  }
   homeService.getCurrentUser().success(function(response) {
     $rootScope.currentUserID = response._id;
     $rootScope.currentUserEmail = response.email;
