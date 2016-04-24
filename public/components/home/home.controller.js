@@ -23,6 +23,7 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
       $rootScope.user.firstName = $scope.firstName;
       $rootScope.user.lastName = $scope.lastName;
       $rootScope.user.email = $rootScope.email;
+      $rootScope.user.fullName = $rootScope.user.firstName + " " + $rootScope.user.lastName;
     })
   }
   $rootScope.list = [{
