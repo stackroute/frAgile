@@ -180,11 +180,6 @@ h3 {
 }
 
 
-.dropdown-menu {
-  top: 142%;
-  left: -116px;
-}
-
 .addProject{
   position: absolute;
   top: 44px;
@@ -932,9 +927,56 @@ icon.graphIconTwo {
   margin-top: -10px;
 }
 .navbar-nav {
-  float: left;
-  margin-top: -4px;
-  /* margin: 0; */
+    float: left;
+    margin-top: -4px;
+    /* margin: 0; */
+    font-size: 18px;
+    margin-top: -7px;
+}
+.navbar-default .navbar-nav>li>a {
+    color: #527D73;
+}
+.navbar-default .navbar-nav>li>a:hover {
+    color: #639C8F;
+}
+.user {
+  cursor: pointer;
+    padding: 3px 12px;
+    margin-top: 9px;
+    color: #F4FBF9 !important;
+    background-color: #527D73;
+    border-radius: 4px;
+    /* box-shadow: inset 0px -3px 0px #B0E4D9; */
+}
+.user:hover {
+    background-color: #639C8F;
+}
+.user a {
+  color: #F4FBF9;
+  text-decoration: none;
+}
+.btn-group.open .dropdown-toggle {
+    -webkit-box-shadow: 0 0 0 black;
+    box-shadow: 0 0 0 black;
+}
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px 3px 10px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #527D73;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.dropdown-menu small.ng-binding {
+    padding-left: 12px;
+}
+.dropdown-menu {
+    top: 142%;
+    left: -120px;
+    width: 220px;
+    overflow-x: hidden;
 }
 .top-header {
   z-index: 2000;

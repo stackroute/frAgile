@@ -66,7 +66,32 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav pull-right">
         <li ng-click="SlideMenu()"><a><i class="fa fa-bell" aria-hidden="true"></i></a></li>
-        <li><a href="/auth/logout"><span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+        <li>
+          <div class="user">
+            <a>
+              <!-- <div>
+                <ng-letter-avatar data="{{user.fullName}}" charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+              </div> -->
+
+              <div class="btn-group" uib-dropdown is-open="status.isopen">
+  <div id="single-button" uib-dropdown-toggle ng-disabled="disabled">
+    {{user.firstName}} <span class="caret"></span>
+  </div>
+  <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+    <li><small>{{user.fullName}}</small></li>
+    <li><small>{{user.email}}</small></li>
+    <li class="divider"></li>
+    <li role="menuitem"><a>profile</a></li>
+    <li role="menuitem"><a>Invite</a></li>
+    <li class="divider"></li>
+    <li role="menuitem"><a>Help</a></li>
+    <li role="menuitem"><a href="/auth/logout">Sign out</a></li>
+  </ul>
+</div>
+
+            </a>
+          </div>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </nav>
