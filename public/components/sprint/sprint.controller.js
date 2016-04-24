@@ -18,6 +18,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         });
       });
 
+      $rootScope.inprojectRoom=false;
 
       sprintService.getBackBug($stateParams.prId).then(function(backBug) {
         $scope.backBug = backBug.data;

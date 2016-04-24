@@ -29,7 +29,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
         }
       })
     })
-
+    $rootScope.inprojectRoom=true;
     // Opening Modal window for Release Chart
     $scope.openReleaseChart = function() {
       graphModalFactory.open('lg', './components/releaseChart/releaseChart.html', "Release Chart");

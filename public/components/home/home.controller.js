@@ -11,7 +11,11 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
     });
     $rootScope.defaultDate = $filter('date')(Date.now(), "yyyy-MM-dd");
   };
-
+  $scope.setUserDetails = function() {
+    $scope.firstName = $rootScope.user.firstName;
+    $scope.lastName = $rootScope.user.lastName;
+    $rootScope.email = $rootScope.user.email;
+  }
   homeService.getCurrentUser().success(function(response) {
     $rootScope.currentUserID = response._id;
     $rootScope.currentUserEmail = response.email;
