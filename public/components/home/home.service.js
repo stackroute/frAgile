@@ -5,6 +5,18 @@ angular.module('fragileApp').factory('homeService', ['$http', 'Socket',function(
       var url = '/user/projects' ;
       return $http.get(url);
     },
+    updateProfile: function(firstName, lastName, email) {
+      var req = {
+        method: 'POST',
+        url: '/user/updateUser',
+        data: {
+          firstName: firstName,
+          lastName: lastName,
+          email:email
+        }
+      }
+      return $http(req);
+    },
     getUserDetails: function() {
       var url = '/user/getUserDetails' ;
       return $http.get(url);

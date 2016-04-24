@@ -536,7 +536,7 @@ h3.pull-left.ng-binding {
 }
 .parentInner {
   min-height: 20px;
-  max-height: 450px;
+  max-height: 448px;
   overflow: auto;
 }
 .hideEdit{
@@ -736,7 +736,7 @@ icon.graphIconTwo {
 }
 .graphIconTwo b.fa {
     margin-top: 6px;
-    margin-left: 1px;
+    margin-left: 2px;
 }
 .pageHeading span {
     margin-left: 10px;
@@ -750,7 +750,7 @@ icon.graphIconTwo {
 }
 .graphIconOne b.fa {
     margin-top: 7px;
-    margin-left: 2px;
+    margin-left: 1px;
 }
 
 .pageHeading b {
@@ -782,7 +782,7 @@ icon.graphIconTwo {
   width: 100%;
 }
 .sprintDiv {
-  margin-top: 81px;
+  margin-top: 85px;
   overflow: hidden;
 }
 .sprintPage .fa{
@@ -883,7 +883,7 @@ icon.graphIconTwo {
   overflow: auto;
   overflow-x: hidden;
   /*float: left;*/
-  max-height: 500px;
+  max-height: 498px;
   min-height: 60px;
   background-color: rgb(241, 255, 252);
   border: 1px solid #36D7B7;
@@ -899,7 +899,7 @@ icon.graphIconTwo {
 }
 .extendParent .parentInner {
   /* background-color: black; */
-  max-height: 367px;
+  max-height: 365px;
 }
 .list-wrapper{
   float:left;
@@ -972,6 +972,10 @@ icon.graphIconTwo {
     font-weight: 700;
     white-space: nowrap;
 }
+.dropdown-menu .divider {
+    width: 192px;
+    margin-left: 13px;
+}
 .dropdown-menu small.ng-binding {
     padding-left: 12px;
 }
@@ -1021,7 +1025,7 @@ h4.sprintPage {
     margin-top: 31px;
     margin-bottom: 3px;
     font-size: 21px;
-    padding-top: 4px;
+    padding-top: 8px;
     color: #2C5D51;
     width: 100%;
     position: fixed;

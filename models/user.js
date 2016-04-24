@@ -44,7 +44,30 @@ userSchema.statics.addUser = function(userDetails, callback) {
     else callback(data);
   });
 }
-
+userSchema.statics.updateUser = function(userId, newUserDetails, callback) {
+  console.log("----------Inside updateUser model");
+  console.log("-" + userId + "-");
+  console.log(newUserDetails);
+  this.findOneAndUpdate({
+      "_id": userId
+    }, {
+      $set: {
+        firstName: newUserDetails.firstName,
+        lastName: newUserDetails.lastName,
+        email: newUserDetails.email
+      }
+    }, {
+      upsert: true
+    })
+    .exec(function(err, doc) {
+      if (err) {
+        console.log(err);
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+}
 userSchema.statics.addProjectToUser = function(userID, projectID, callback) {
   this.findByIdAndUpdate(userID, {
     $addToSet: {
