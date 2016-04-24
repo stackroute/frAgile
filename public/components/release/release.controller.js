@@ -1,6 +1,7 @@
 fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'Socket', '$state','$timeout', 'graphModalFactory',
 function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, Socket, $state, $timeout,graphModalFactory) {
   $scope.longDescLimit = 34;
+  $rootScope.refreshProjects = true;
   var socket = Socket($scope);
 
   $rootScope.projectID = $stateParams.prId //Remove this once refresh issue is fixed

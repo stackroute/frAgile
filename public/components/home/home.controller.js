@@ -2,11 +2,11 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
 
   $scope.loadProjects = function() {
 
-
-
     homeService.getUserProjects().success(function(response) {
       $rootScope.projects = response.projects
     });
+
+    $rootScope.refreshProjects = false;
     $rootScope.defaultDate = $filter('date')(Date.now(), "yyyy-MM-dd");
   };
 
