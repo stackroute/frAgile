@@ -35,7 +35,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         $rootScope.isMenu = !$rootScope.isMenu;
       }
 
-      $scope.storyDragged = false;
+      $rootScope.refreshProjects = true;
 
       var emitData =  {
         'room': "sprint:" + $stateParams.sprintID

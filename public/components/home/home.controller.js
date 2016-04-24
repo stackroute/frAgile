@@ -1,4 +1,4 @@
-fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'homeService', '$filter', function($scope, $state, $rootScope, homeService, $filter) {
+fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'homeService', '$filter','Socket', function($scope, $state, $rootScope, homeService, $filter,socket) {
 
   $scope.loadProjects = function() {
     homeService.getUserDetails().success(function(response) {
@@ -9,6 +9,8 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
     homeService.getUserProjects().success(function(response) {
       $rootScope.projects = response.projects
     });
+
+    $rootScope.refreshProjects = false;
     $rootScope.defaultDate = $filter('date')(Date.now(), "yyyy-MM-dd");
   };
   $scope.setUserDetails = function() {

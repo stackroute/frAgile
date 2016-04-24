@@ -1,5 +1,5 @@
-fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket', '$filter', 'graphModalFactory',
-  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter, graphModalFactory) {
+fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket', '$filter', 'graphModalFactory','homeService',
+  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter, graphModalFactory,homeService) {
     // $scope.loadProjects = function() {
     //
     //   projectService.getUserProjects().success(function(response) {
@@ -9,6 +9,15 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
     //   $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
     // }
     var socket = Socket($scope);
+
+    //Temporary fix, make a better logic
+    if ($scope.refreshProjects) {
+      console.log("Refreshing project");
+      homeService.getUserProjects().success(function(response) {
+        $rootScope.projects = response.projects
+      });
+    }
+
 
     projectService.getCurrentUser().success(function(response) {
       socket.emit('join:room', {
@@ -29,6 +38,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
         }
       })
     })
+
     $rootScope.inprojectRoom=true;
     // Opening Modal window for Release Chart
     $scope.openReleaseChart = function() {

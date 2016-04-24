@@ -18,7 +18,7 @@ module.exports = function(socket, io, user) {
     //Pushing the members in project
     Project.addMember(data.projectId, data.memberList, function(err, doc) {
       if (!err && doc.nModified != 0) {
-        data.memberList.forEach(function(memberId) {
+        data.memberList.forEach(function(memberId) { // Intimating the user, project has been added
           User.find({
             '_id': memberId
           }).exec(function(err, userData) {

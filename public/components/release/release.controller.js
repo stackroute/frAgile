@@ -1,6 +1,7 @@
 fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'Socket', '$state','$timeout', 'graphModalFactory',
 function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, Socket, $state, $timeout,graphModalFactory) {
   $scope.longDescLimit = 34;
+  $rootScope.refreshProjects = true;
   var socket = Socket($scope);
   $rootScope.inprojectRoom=false;
 
@@ -110,6 +111,7 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
     $rootScope.SlideMenu = function() {
       $rootScope.isMenu = !$rootScope.isMenu;
     }
+
 
 
 
