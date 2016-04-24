@@ -1,12 +1,5 @@
-/****
-TODO:
-1.Copy
-2.Label
-
-*****/
-
 fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','param','$window',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,param,$window){
-var socket = Socket($scope);
+var socket = Socket();
 
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
@@ -30,11 +23,11 @@ var socket = Socket($scope);
   $scope.storyID = storyContr.storyData._id; //Used in loading activity for card.
   $scope.sprintID =storyContr.complexDataObject.sprint._id;
 
-  $scope.roomName = "story:" + storyContr.storyData._id;
-  var emitData = {
-    'room': $scope.roomName
-  }
-  socket.emit('join:room', emitData);
+  $scope.roomName = "sprint:" + $scope.sprintID;
+  // var emitData = {
+  //   'room': $scope.roomName
+  // }
+  // socket.emit('join:room', emitData);
 
   $scope.model = {
     description: {
@@ -117,25 +110,35 @@ var socket = Socket($scope);
   }
 
   socket.on('story:attachmentAdded', function(data){
-    // data.attachmentList.timeStamp = moment()
-    $scope.storyData.attachmentList = data.attachmentList;
+    console.log(data._id);
+    console.log($scope.storyData._id);
+    if(data._id == $scope.storyData._id){
+      // data.attachmentList.timeStamp = moment()
+      $scope.storyData.attachmentList = data.attachmentList;
 
-    angular.forEach($scope.storyData.attachmentList, function(value, key) {
-          $scope.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
-    });
+      angular.forEach($scope.storyData.attachmentList, function(value, key) {
+            $scope.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+      });
 
-    console.log('On socket: ', $scope.storyData.attachmentList);
+      console.log('On socket: ', $scope.storyData.attachmentList);
+    }
+
   });
 
   socket.on('story:attachmentRemoved', function(data){
-    // data.attachmentList.timeStamp = moment()
-    $scope.storyData.attachmentList = data.attachmentList;
+    console.log(data._id);
+    console.log($scope.storyData._id);
+    if(data._id == $scope.storyData._id){
+      // data.attachmentList.timeStamp = moment()
+      $scope.storyData.attachmentList = data.attachmentList;
 
-    angular.forEach($scope.storyData.attachmentList, function(value, key) {
-          $scope.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
-    });
+      angular.forEach($scope.storyData.attachmentList, function(value, key) {
+            $scope.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+      });
 
-    console.log('On socket: ', $scope.storyData.attachmentList);
+      console.log('On socket: ', $scope.storyData.attachmentList);
+    }
+
   })
 
   $scope.addAttachment = function() {
@@ -202,12 +205,14 @@ var socket = Socket($scope);
   $scope.deleteStory = function() {
   //Can use tool tip
     if ($window.confirm("Do you want to delete story?")){
+      $uibModalInstance.dismiss('cancel');
+
       var deleteFrom='List';
       if(storyContr.complexDataObject.currentPosition.listItemName != 'Backlog'|| storyContr.complexDataObject.currentPosition.listItemName != 'Buglist'){
         deleteFrom=storyContr.complexDataObject.currentPosition.listItemName;
       }
             socket.emit('sprint:deleteStory', {
-              'room': "sprint:" + $scope.sprintID,
+              'room': $scope.roomName,
               'storyId':$scope.storyData._id,
               'projectId':$stateParams.prId,
               'deleteFrom':deleteFrom,
@@ -221,7 +226,7 @@ var socket = Socket($scope);
     }
   };
 
-  
+
 
   //Not required at story level
   $scope.ok = function() {
@@ -246,22 +251,6 @@ var socket = Socket($scope);
     $scope.set=false;
     $scope.checklistGrp =$scope.storyData.checklist;
 
-    // ///Socket Coding starts
-    // console.log("about to emit in client");
-    // story.emit('send:message', {
-    //   'room': storyContr.storyData._id,
-    //   'message':$scope.model.description.name
-    // });
-    //
-    // story.on('room:message', function(data) {
-    //   console.log('recieved messagef rom ', data.room, ' message: ', data.message);
-    //   //	$scope.pubMessages.push(data.message);
-    //   console.log("this is the message received:   "+data.message);
-    //   $scope.now = new Date();
-    //   //		$scope.$apply();
-    // });
-    //
-    // //Socket coding ends
   };
   //TODO Starts, push this to start of the file
 
@@ -288,6 +277,7 @@ var socket = Socket($scope);
       'projectID' : $scope.projectID,
       'text' : todo.todoText
     });
+
     todo.todoText = '';
 
   };
@@ -369,8 +359,13 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
     });
   };
 
+//Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
+    console.log(data);
+    console.log($scope.storyData);
+    if(data._id == $scope.storyData._id){ //If the updated card is same as current opened card
       $scope.storyData = data;
+    }
   })
 
 }]);

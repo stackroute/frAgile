@@ -132,17 +132,7 @@ Over View
           <h4 class="modal-title">Add Members</h4>
         </div>
         <div class="modal-body">
-          <div>
-            <form>
-              <autocomplete ng-model="addedUserEmail" data="dbUsers" attr-placeholder="Enter user email..."></autocomplete>
-              <button class="btn btn-default" ng-click="addMember()" type="submit"><span class="glyphicon glyphicon-plus"></span></button>
-            </form>
-
-            <!-- <input class="txt-add-members" id="txtAddMember" name="txtAddMember" type="text" placeholder="e.g. you@fragile.com" ng-model="members" required> -->
-
-          </div>
-          <p class="release-add">Add a member</p>
-          <div class="clearfix">
+          <div class="clearfix avatars-wrap">
             <div class="menu-bar-avatar" ng-repeat="member in projMemberList" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
               <div>
                 <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
@@ -153,6 +143,16 @@ Over View
               </div>
             </div>
           </div>
+          <div>
+            <form>
+              <autocomplete ng-model="addedUserEmail" data="dbUsers" attr-placeholder="Enter user email..."></autocomplete>
+              <a ng-click="addMember()" type="submit" class="addLst"><i class="fa fa-plus" aria-hidden="true"></i></a>
+            </form>
+
+            <!-- <input class="txt-add-members" id="txtAddMember" name="txtAddMember" type="text" placeholder="e.g. you@fragile.com" ng-model="members" required> -->
+
+          </div>
+
 
         </div>
         <div class="modal-footer">

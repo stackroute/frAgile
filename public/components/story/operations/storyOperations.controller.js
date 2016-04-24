@@ -1,5 +1,5 @@
 fragileApp.controller('storyOperationsController',['$scope','$rootScope','$stateParams','storyService','modalService','$uibModal','$uibModalInstance','$location','param','Socket',function($scope,$rootScope,$stateParams,storyService,modalService,$uibModal,$uibModalInstance,$location,param,Socket){
-var socket = Socket($scope);
+var socket = Socket();
   //TODO:need to check whether we need to get the "$scope.memberDetails" data directly from rootscope without resolving it in story Modal.   ---->Check
 
 
@@ -11,7 +11,7 @@ var socket = Socket($scope);
 
   /***Received the data from resolve functionality of uibModal***/
   $scope.storyDetails= param.story.data;
-  $scope.roomName = "story:" + $scope.storyDetails._id;
+  $scope.roomName = "sprint:" + param.sprint._id;
 
   /***
   author:Sharan
@@ -242,7 +242,13 @@ var socket = Socket($scope);
       'projectID' : $scope.projectID
     });
 
+    console.log({
 
+      'room': $scope.roomName,
+      'storyid': $scope.storyDetails._id,
+      'checklistGrp': checklistGrp,
+      'projectID' : $scope.projectID
+    });
     $scope.todoText = '';
     $uibModalInstance.dismiss('cancel');
   };
@@ -358,9 +364,11 @@ var socket = Socket($scope);
     }
   }
 }]);
+
 fragileApp.controller('MyCtrl', ['$scope','param', 'Upload','$uibModalInstance','Socket', function ($scope,param, Upload,$uibModalInstance,Socket) {
 var socket = Socket($scope);
-$scope.roomName = "story:" + param._id;
+//FIXME:Get sprint ID
+$scope.roomName = "sprint:" + $scope.sprintID;
   /***
   author:Shrinivas
   Function Name: submit
