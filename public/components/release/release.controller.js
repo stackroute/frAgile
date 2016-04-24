@@ -110,6 +110,8 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
       $rootScope.isMenu = !$rootScope.isMenu;
     }
 
+    $rootScope.hideActivity = false;
+
 
 
   };

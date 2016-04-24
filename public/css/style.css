@@ -151,9 +151,8 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
   background-color: rgba(162, 222, 208, 0.12);
-
-
 }
+
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
 }
@@ -179,7 +178,9 @@ h3 {
   bottom: 20px;
 }
 
-
+i.fa{
+  cursor: pointer;
+}
 .dropdown-menu {
   top: 142%;
   left: -116px;
@@ -189,6 +190,10 @@ h3 {
   position: absolute;
   top: 44px;
   right: 33px;
+}
+.top-header .fa-bell, .top-header .fa-sign-out{
+  font-size: 19px;
+color: #527D73;
 }
 /* Track */
 
@@ -1052,7 +1057,9 @@ h4 i.fa{
 }
 
 /*Activity Bar CSS*/
-
+.activity-icon{
+  margin-right: -12px;
+}
 .menu-bar {
   z-index: 200;
   width: 339px;

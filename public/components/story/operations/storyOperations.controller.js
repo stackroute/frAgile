@@ -98,6 +98,7 @@ var socket = Socket();
     if($scope.moveTo.selectedOption.name != "Other"){
       socket.emit('sprint:moveToBackbugStory',{
       'room': $scope.roomName,
+      'activityRoom': 'activity:' + $scope.projectID,
       'newListId':$scope.moveTo.selectedOption.value,
       'projectID':$stateParams.prId,
       'storyId':$scope.storyDetails._id,
@@ -109,6 +110,7 @@ var socket = Socket();
     else{
     socket.emit('sprint:moveStory', {
         'room': $scope.roomName,
+        'activityRoom': 'activity:' + $scope.projectID,
         'sprintId': $scope.storyMoveData.release.selectedSprints._id,
         'newListId': $scope.storyMoveData.release.selectedList._id,
         'storyId': $scope.storyDetails._id,
@@ -130,6 +132,8 @@ var socket = Socket();
     if($scope.moveTo.selectedOption.name != "Other"){
       //trigger websocket to move to backlog
       socket.emit('sprint:addStory', {
+      'room': $scope.roomName,
+      'activityRoom': 'activity:' + $scope.projectID,
       'heading':$scope.storyDetails.heading ,
       'addTo': $scope.moveTo.selectedOption.value,
       'storyStatus':'' ,
@@ -142,13 +146,16 @@ var socket = Socket();
     else{
       //TODO:below lines
       socket.emit('sprint:addStory', {
+      'room': $scope.roomName,
+      'activityRoom': 'activity:' + $scope.projectID,
       'heading': $scope.storyDetails.heading,
       'addTo': $scope.moveTo.selectedOption.value,
       'storyStatus': '',
       'description': $scope.storyDetails.description,
       'listId': $scope.storyMoveData.release.selectedList.group,
       'sprintId':$scope.storyMoveData.release.selectedSprints._id,
-      'id':$scope.storyMoveData.release.selectedList._id
+      'id':$scope.storyMoveData.release.selectedList._id,
+      'listName':$scope.moveTo.selectedOption.value 
     });
     }
   }
@@ -242,13 +249,6 @@ var socket = Socket();
       'projectID' : $scope.projectID
     });
 
-    console.log({
-
-      'room': $scope.roomName,
-      'storyid': $scope.storyDetails._id,
-      'checklistGrp': checklistGrp,
-      'projectID' : $scope.projectID
-    });
     $scope.todoText = '';
     $uibModalInstance.dismiss('cancel');
   };

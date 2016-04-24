@@ -1,6 +1,8 @@
-fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'homeService', '$filter', function($scope, $state, $rootScope, homeService, $filter) {
+fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'homeService', '$filter','Socket', function($scope, $state, $rootScope, homeService, $filter,socket) {
 
   $scope.loadProjects = function() {
+
+
 
     homeService.getUserProjects().success(function(response) {
       $rootScope.projects = response.projects

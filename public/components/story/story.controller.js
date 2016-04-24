@@ -1,5 +1,5 @@
 fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','param','$window',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,param,$window){
-var socket = Socket();
+var socket = Socket($scope);
 
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/

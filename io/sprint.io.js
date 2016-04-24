@@ -45,6 +45,8 @@ module.exports = function(socket, io, user) {
 
   });
 
+  // TODO:  Write a better unified logic for moving story across back-bug lists
+
   socket.on('sprint:moveToBackbugStory', function(data) {
     //Adding story in new list, then deleting from old list
     if (data.newListId == "backlogs") {

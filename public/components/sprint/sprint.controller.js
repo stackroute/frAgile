@@ -33,6 +33,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       $rootScope.SlideMenu = function() {
         $rootScope.isMenu = !$rootScope.isMenu;
       }
+      $rootScope.hideActivity = false;
+
 
       $scope.storyDragged = false;
 

@@ -65,8 +65,8 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav pull-right">
-        <li ng-click="SlideMenu()"><a><i class="fa fa-bell" aria-hidden="true"></i></a></li>
-        <li><a href="/auth/logout"><span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+        <li class="activity-icon" ng-hide="hideActivity" ng-click="SlideMenu()"><a><i class="fa fa-bell" aria-hidden="true"></i></a></li>
+        <li ><a href="/auth/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </nav>
