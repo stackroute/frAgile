@@ -271,7 +271,7 @@ var socket = Socket($scope);
     socket.emit('story:addChecklistItem', {
 
       'room': $scope.roomName,
-      'storyid': storyContr.storyData._id,
+      'storyid': $scope.storyData._id,
       'checklistGrpId': todo._id,
       'itemObj':itemObj,
       'projectID' : $scope.projectID,
@@ -296,7 +296,7 @@ $scope.removeTodoItem = function(listItem,checklistGrp,text) {
   socket.emit('story:removeChecklistItem', {
 
     'room': $scope.roomName,
-    'storyid': storyContr.storyData._id,
+    'storyid': $scope.storyData._id,
     'checklistGrpId': checklistGrp._id,
     'itemid':listItem._id,
     'checked':listItem.checked,
@@ -320,7 +320,7 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   socket.emit('story:updateChecklistItem', {
 
     'room': $scope.roomName,
-    'storyid': storyContr.storyData._id,
+    'storyid': $scope.storyData._id,
     'checklistGrpId': checklistGrp._id,
     'itemid':listItem._id,
     'checked':listItem.checked,
@@ -352,7 +352,7 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   socket.emit('story:removeChecklistGroup', {
 
       'room': $scope.roomName,
-      'storyid': $scope.storyDetails._id,
+      'storyid': $scope.storyData._id,
       'checklistGrpId': checklistGrpId,
       'projectID' : $scope.projectID,
       'heading' : heading
@@ -361,8 +361,6 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
 
 //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
-    console.log(data);
-    console.log($scope.storyData);
     if(data._id == $scope.storyData._id){ //If the updated card is same as current opened card
       $scope.storyData = data;
     }
