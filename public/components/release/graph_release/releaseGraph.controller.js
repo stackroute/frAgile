@@ -76,11 +76,11 @@ function($scope,$rootScope,$uibModal,$http,$timeout,rgService,graphModalFactory)
      y: function(d){return d.value;},
      showControls: false,
      grouped:false,
-     stacked:true,
+     stacked:false,
      showValues: true,
      duration: 500,
      xAxis: {
-       showMaxMin: false
+       showMaxMin: true
      },
      yAxis: {
        axisLabel: 'Stories',
