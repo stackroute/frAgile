@@ -47,7 +47,7 @@
 
 </head>
 
-<body ng-controller="homeController">
+<body ng-controller="homeController" ng-cloak>
 
   <div class="container-fluid top-header">
     <nav class="navbar navbar-default navbar-xs" role="navigation"  ng-init="loadProjects()">
@@ -59,14 +59,39 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand"><center><b ng-click ="goToProject()"><img src="img/logo.png" class="logo"></img>limber</b></center></a>
+        <a class="navbar-brand"><center><b ng-click ="goToProject()"><img src="img/logo.png" class="logo"></img>limber</b><tiny class="beta">Beta</tiny></center></a>
 
       </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav pull-right">
-        <li ng-click="SlideMenu()"><a><i class="glyphicon glyphicon-align-justify"></i></a></li>
-        <li><a href="/auth/logout"><span class="glyphicon glyphicon-log-out pull-right"></span></a></li>
+        <li ng-click="SlideMenu()" ng-hide="inprojectRoom"><a><i class="fa fa-bell" aria-hidden="true"></i></a></li>
+        <li>
+          <div class="user">
+            <a>
+              <!-- <div>
+                <ng-letter-avatar data="{{user.fullName}}" charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+              </div> -->
+
+              <div class="btn-group" uib-dropdown is-open="status.isopen">
+  <div id="single-button" uib-dropdown-toggle ng-disabled="disabled">
+    {{user.firstName}} <span class="caret"></span>
+  </div>
+  <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+    <li><small>{{user.fullName}}</small></li>
+    <li><small>{{user.email}}</small></li>
+    <li class="divider"></li>
+    <li role="menuitem"><a ng-click = "setUserDetails()" data-toggle="modal" data-target="#profileModal">Profile</a></li>
+    <li role="menuitem"><a>Invite</a></li>
+    <li class="divider"></li>
+    <li role="menuitem"><a>Help</a></li>
+    <li role="menuitem"><a href="/auth/logout">Sign out</a></li>
+  </ul>
+</div>
+
+            </a>
+          </div>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </nav>
@@ -76,26 +101,62 @@
     <div ui-view class = "bodyArea">
     </div>
   </div>
-  <div class="treeMenuBtn" ng-click = 'showTree = true' ng-hide = "showTree" ng-cloak>
+  <div class="treeMenuBtn" ng-click = 'showTree = !showTree' ng-cloak>
     <i class="fa fa-align-justify" aria-hidden="true"></i>
   </div>
   <div class="treeMenu" ng-show = "showTree" ng-cloak>
 
     <h5>Navigation</h5>
-    <i class="fa fa-arrow-circle-o-left" aria-hidden="true" ng-click = 'showTree = false'></i>
     <!-- Tree Menu -->
     <div class="treeMenuInner">
       <ul ng-repeat = "project in projects" class="projectNameTree">
         <li>{{project.name}}</li>
         <ul ng-repeat = "release in project.release" class="releaseNameTree">
-          <li ui-sref="release({ prId : project._id, releaseID: release._id})">{{release.name}}</li>
+          <li ng-click="showTree = !showTree" ui-sref="release({ prId : project._id, releaseID: release._id})">{{release.name}}</li>
         </ul>
       </ul>
     </div>
 
   </div>
 
-
+<!-- Profile Modal Starts -->
+<div class="modal fade" id="profileModal" role="dialog">
+  <div class="modal-dialog modal-m">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
+        <h4 class="modal-title">Profile</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="Name" class="col-sm-2 control-label">First Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model = "firstName">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="Name" class="col-sm-2 control-label">Last Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model = "lastName">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="Name" class="col-sm-2 control-label">Last Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" ng-model = "email">
+            </div>
+          </div>
+        </form>
+    </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+    <button type="button" class="btn btn-success" data-dismiss="modal" ng-click = "updateProfile()">Update</button>
+  </div>
+  </div>
+</div>
+</div>
+<!-- Profile modal ends -->
 
   <script type="text/javascript" src='app1.js'></script>
   <script type="text/javascript" src='js/socket.js'></script>
@@ -117,7 +178,7 @@
   <script type="text/javascript" src='components/release/release.service.js'></script>
   <script type="text/javascript" src='components/release/release.service.js'></script>
   <script type="text/javascript" src="/components/release/release.modal.controller.js"></script>
-  
+
   <script type="text/javascript" src="/components/release/graph_release/releaseGraph.controller.js"></script>
   <script type="text/javascript" src="/components/release/graph_release/releaseGraph.service.js"></script>
 

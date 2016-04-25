@@ -1,7 +1,9 @@
 fragileApp.controller('releaseController', ['$scope', '$rootScope', '$stateParams', '$state', 'releaseService', '$uibModal', 'Socket', '$state','$timeout', 'graphModalFactory',
 function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, Socket, $state, $timeout,graphModalFactory) {
   $scope.longDescLimit = 34;
+  $rootScope.refreshProjects = true;
   var socket = Socket($scope);
+  $rootScope.inprojectRoom=false;
 
   $rootScope.projectID = $stateParams.prId //Remove this once refresh issue is fixed
   //currentProjectId
@@ -40,6 +42,7 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
     })
   })
 // Open modal Window for Story
+  $scope.longRelDescLimit = 130;
   $scope.openModal = function(name) {
     $rootScope.releaseName = name;
     var modalInstance = $uibModal.open({
@@ -111,17 +114,25 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
 
 
 
+
   };
 
-  $scope.archiveFun = function(releaseId, sprintId,relName,sprName) {
+  $scope.setArchiveFun = function(releaseId, sprintId,relName,sprName) {
+    $scope.releaseId = releaseId;
+    $scope.sprintId = sprintId;
+    $scope.relName = relName;
+    $scope.sprName = sprName;
+  };
+
+  $scope.archiveFun = function() {
     // console.log("Release: ", releaseId);
     socket.emit('deleteSprint', {
       'room': $scope.roomName,
       'projectId': $stateParams.prId,
-      'releaseId': releaseId,
-      'sprintId': sprintId,
-      'releaseName':relName,
-      'sprintName' : sprName
+      'releaseId': $scope.releaseId,
+      'sprintId': $scope.sprintId,
+      'releaseName':$scope.relName,
+      'sprintName' : $scope.sprName
     });
   };
 

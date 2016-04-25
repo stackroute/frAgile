@@ -14,7 +14,8 @@ var app = express();
 
 mongoose.connect('mongodb://172.23.238.253/frAgile_dummy');
 // mongoose.connect('mongodb://localhost/fragileDB');
-var db = mongoose.connection
+var db = mongoose.connection;
+// mongoose.connect('mongodb://localhost/frAgile')
 
 var routes = require('./routes/index');
 //var users = require('./routes/users');
@@ -33,7 +34,13 @@ app.use(session({
   }),
   secret:'fragile'
 }));
-
+// app.use(session({
+//   secret:'fragile',
+//   key:'limber',
+//   cookie:{maxAge : 360000000},
+//   resave:false,
+//   saveUninitialized:false
+// }));
 
 var initPassport = require('./passport-init');
 initPassport(passport);

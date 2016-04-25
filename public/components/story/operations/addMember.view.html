@@ -10,6 +10,7 @@
       <ul class="modal-members-list">
         <li ng-click="addRemoveMembers(membersArray)" ng-repeat="membersArray in projMemberList |filter: memberName" class="list-group-item">
           <a >
+            <i class="fa fa-check pull-right" ng-show = "membersData.indexOf(membersArray._id)!=-1"></i>
             <img ng-src={{membersArray.photo}} class="pic-avatar" ng-hide="membersArray.photo == undefined" />
             <div class="avatar-wrapper" ng-show="membersArray.photo == undefined">
               <ng-letter-avatar data={{membersArray.fullName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
@@ -19,7 +20,6 @@
             {{membersArray.fullName | limitTo:longDescLimit}}<span ng-hide="membersArray.fullName.length < longDescLimit ">
               ...
             </span>
-            <i class="fa fa-check pull-right"></i>
             </a>
         </li>
       </ul>

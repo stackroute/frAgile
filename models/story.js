@@ -72,6 +72,14 @@ var StorySchema = new Schema({
      }]
    }
  ],
+ comments:[
+   {
+     text:String,
+     commentedBy:{type:Schema.Types.ObjectId,ref:'User'},
+     userName:String,
+     commentedData:Date
+   }
+ ],
  memberList: [{type:Schema.Types.ObjectId,ref:'User'}],
  labelList:[{type:Schema.Types.ObjectId,ref:'Sprint.labelSchema'}]
 });
@@ -479,5 +487,69 @@ StorySchema.statics.saveDescription = function(storyId,Desc,callback){
   });
 
 }
+
+/***
+addComment function is to add new comments to the story.
+***/
+
+StorySchema.statics.addComment = function(storyId,commentsObj, callback) {
+console.log("add comments" + storyId);
+console.log(commentsObj);
+  this.findOneAndUpdate(
+      { "_id" : storyId },
+      { $push: {"comments":      commentsObj
+
+      }
+      },
+      {
+         upsert: true,
+         new:true
+      }
+   )
+   .exec(function(err , doc) {
+     if (err) {
+       console.log(err);
+       callback(err, null);
+     }
+     else {
+       console.log(doc);
+       callback(null, doc);
+     }
+   });
+}
+
+/***
+deleteComment function is to add new comments to the story.
+***/
+
+StorySchema.statics.deleteComment = function(storyId,commentId, callback) {
+
+  this.update(
+      { "_id" : storyId },
+    {$pull:{comments:{_id:commentId}}
+        }
+   )
+   .exec(function(err , doc) {
+     if (err) {
+       callback(err, null);
+     }
+     else {
+       callback(null, doc);
+     }
+   });
+}
+
+StorySchema.statics.getMembers = function(storyId, callback) {
+  this.findOne({"_id":storyId})
+  .exec(function(err,doc){
+    if (err) {
+      callback(err, null);
+    }
+    else {
+      callback(null, doc);
+    }
+   });
+}
+
 var Story = mongoose.model('Story', StorySchema,'Stories');
 module.exports=Story;

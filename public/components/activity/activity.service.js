@@ -9,7 +9,8 @@ var prepositionsMap = {
   "changed" : " to ",
   "removed" : " from ",
   "completed" : " in ",
-  "unchecked" : " in "
+  "unchecked" : " in ",
+  "attached" : " to "
 };
 
 angular

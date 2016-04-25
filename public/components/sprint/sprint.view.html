@@ -1,27 +1,23 @@
 <!-- Start Modal Window-->
 <!-- End Modal--->
-<div class="pageHeading">
-  <b>Project</b> >
-  <b>Release</b> >
-  <b>Sprint</b>
-  <span>
-    <b class="fa fa-pie-chart" ng-click="displaySprintGraph()"></b>
-  </span>
-</div>
+
 <div id="mainSprint" ng-init="getSprints()">
   <div class="container">
 
   <div class="headingOfPage">
-    {{projects[curProjectLoc].name}} | {{projects[curProjectLoc].release[curReleaseLoc].name}}
+    <tag ng-click="gotoProject()">{{projects[curProjectLoc].name}}</tag> <small> | </small> <tag ui-sref="release({ prId : projects[curProjectLoc]._id, releaseID: projects[curProjectLoc].release[curReleaseLoc]._id})">{{projects[curProjectLoc].release[curReleaseLoc].name}}</tag>
   </div>
   <div>
     <div ng-style="{{topRowWidth}}">
-      <h4 class="sprintPage">{{sprint.name}}<small> {{sprint.description}}</small> <br/> <small>{{sprint.startDate|dateSuffix}}  - {{sprint.endDate |dateSuffix}}</small></h4>
 
-      <div class="divToggle pull-left">
+<h4 class="sprintPage"><b class="fa fa-pie-chart" ng-click="displaySprintGraph()"></b> {{sprint.name}}<small> {{sprint.description | limitTo:longSprDescLimit }}<span ng-hide="sprint.description.length < longSprDescLimit || sprint.description.length==undefined">
+  ...
+</span></small> <br/> <tiny>{{sprint.startDate|dateSuffix}}  - {{sprint.endDate |dateSuffix}}</tiny></h4>
+
+      <div class="divToggle pull-left scrollBtn">
         <!-- <h3 class="toggleSprintText pull-left" ng-click="toggleScroll()">{{scrollBuglist}}</h3> -->
-        <div class="scrollBtn" ng-click="scrollLeft()"><span class="toggleIcon fa fa-chevron-left" </span></div>
-        <div class="scrollBtn" ng-click="scrollRight()"><span class="toggleIcon fa fa-chevron-right" </span></div>
+        <span ng-click="scrollLeft()" class="toggleIcon fa fa-chevron-left"> </span>
+        <span ng-click="scrollRight()" class="toggleIcon fa fa-chevron-right"> </span>
       </div>
     </div>
   </div>
@@ -75,9 +71,9 @@
     <!-- List -->
     <div class="list-wrapper" ng-repeat="listItem in sprint.list">
       <div id="{{listItem._id}}"  ng-class='{"extendParent":clicked,"":!clicked,"":showTrash,"dontShowTrash":!showTrash}' data-drop="true" jqyoui-droppable="{multiple:true,onOver: 'overCallback',onOut: 'outCallback',onDrop:'dropCallback'}" class='parent {{listItem.group}}' scroll-to-bottom="clicked" ng-mouseenter="showTrash=true" ng-mouseleave="showTrash=false" >
-        <div class='crossBtn'>
+        <!-- <div class='crossBtn'>
           <i class="fa fa-trash" aria-hidden="true"></i>
-        </div>
+        </div> -->
 
         <div class="listHead">
           {{listItem.listName}}

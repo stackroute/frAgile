@@ -36,25 +36,31 @@ fragileApp.controller('modalReleaseController', ['$scope', '$rootScope', 'releas
   };
   $scope.roomName = "release:" + $stateParams.releaseID;
   $scope.addSprint = function() {
-    $scope.startDate = new Date($scope.startDate);
-    $scope.endDate = new Date($scope.endDate);
-    console.log("$scope.newSprintName-" + $scope.newSprintName);
-    console.log("$scope.startDate-" + $scope.startDate);
-    console.log("$scope.endDate-" + $scope.endDate);
     // Emit to refresh all other clients
-    socket.emit('release:addSprint', {
-      'room': $scope.roomName,
-      'projectId': $stateParams.prId,
-      'releaseId': $stateParams.releaseID,
-      'releaseName': $rootScope.releaseName,
-      'name': $scope.newSprintName,
-      'endDate': $scope.endDate,
-      'startDate': $scope.startDate,
-      'desc': $scope.newSprintDesc,
-      'list': $scope.listArray
-    });
+    if ($scope.newSprintName == undefined || $scope.newSprintName == "") {
+      $scope.warningModalName = true;
+    }
+    if ($scope.startDate != undefined && $scope.startDate != "") {
+      $scope.startDate = new Date($scope.startDate);
+    }
+    if ($scope.endDate != undefined && $scope.endDate != "") {
+      $scope.endDate = new Date($scope.endDate);
+    }
+    if ($scope.newSprintName != undefined && $scope.newSprintName != "" && $scope.startDate != undefined && $scope.endDate != undefined && $scope.startDate != "" && $scope.endDate != "") {
+      socket.emit('release:addSprint', {
+        'room': $scope.roomName,
+        'projectId': $stateParams.prId,
+        'releaseId': $stateParams.releaseID,
+        'releaseName': $rootScope.releaseName,
+        'name': $scope.newSprintName,
+        'endDate': $scope.endDate,
+        'startDate': $scope.startDate,
+        'desc': $scope.newSprintDesc,
+        'list': $scope.listArray
+      });
+      $uibModalInstance.dismiss('cancel');
+    }
 
-    $uibModalInstance.dismiss('cancel');
 
   }
 

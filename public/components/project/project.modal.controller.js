@@ -55,7 +55,10 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
     }
   }
   $scope.AddNewRelease = function() {
-    $scope.newReleaseDate = new Date($scope.newReleaseDate);
+    console.log("=========" + $scope.newReleaseDate);
+    if ($scope.newReleaseDate != undefined) {
+      $scope.newReleaseDate = new Date($scope.newReleaseDate);
+    }
     console.log("1------" + $scope.newReleaseName);
     console.log("2------" + $scope.newReleaseDesc);
     console.log("3------" + $scope.newReleaseDate);
@@ -69,11 +72,12 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
     // } else {
     //   $scope.warningModalDesc = true;
     // }
-    // if ($scope.newReleaseDate == undefined || $scope.newReleaseDate == "") {
-    //   $scope.warningModalDate = false;
-    // } else {
-    //   $scope.warningModalDate = true;
-    // }
+    if ($scope.newReleaseDate == undefined || $scope.newReleaseDate == "") {
+      $scope.warningModalDate = false;
+    } else {
+      $scope.warningModalDate = true;
+    }
+    console.log("$scope.newReleaseDate -" + $scope.newReleaseDate);
     if ($scope.newReleaseName != undefined && $scope.newReleaseName != "" &&
       $scope.newReleaseDate != undefined && $scope.newReleaseDate != ""
     ) {

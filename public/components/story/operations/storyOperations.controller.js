@@ -11,7 +11,7 @@ var socket = Socket($scope);
 
   /***Received the data from resolve functionality of uibModal***/
   $scope.storyDetails= param.story.data;
-  $scope.roomName = "story:" + $scope.storyDetails._id;
+  $scope.roomName = "sprint:" + param.sprint._id;
 
   /***
   author:Sharan
@@ -25,6 +25,13 @@ var socket = Socket($scope);
     /*** Declaring variables required for addMembers,addLabels***/
     $scope.longDescLimit=25 ;
     $scope.checked = true;
+    $scope.membersData = [];
+    /** XHR request to fetch latest members details***/
+    console.log($scope.storyDetails._id);
+    storyService.getMembersData($scope.storyDetails._id).then(function(response) {
+      console.log(response);
+      $scope.membersData=response.data;
+    });
 
   }
 
@@ -98,6 +105,7 @@ var socket = Socket($scope);
     if($scope.moveTo.selectedOption.name != "Other"){
       socket.emit('sprint:moveToBackbugStory',{
       'room': $scope.roomName,
+      'activityRoom': 'activity:' + $scope.projectID,
       'newListId':$scope.moveTo.selectedOption.value,
       'projectID':$stateParams.prId,
       'storyId':$scope.storyDetails._id,
@@ -109,6 +117,7 @@ var socket = Socket($scope);
     else{
     socket.emit('sprint:moveStory', {
         'room': $scope.roomName,
+        'activityRoom': 'activity:' + $scope.projectID,
         'sprintId': $scope.storyMoveData.release.selectedSprints._id,
         'newListId': $scope.storyMoveData.release.selectedList._id,
         'storyId': $scope.storyDetails._id,
@@ -130,6 +139,8 @@ var socket = Socket($scope);
     if($scope.moveTo.selectedOption.name != "Other"){
       //trigger websocket to move to backlog
       socket.emit('sprint:addStory', {
+      'room': $scope.roomName,
+      'activityRoom': 'activity:' + $scope.projectID,
       'heading':$scope.storyDetails.heading ,
       'addTo': $scope.moveTo.selectedOption.value,
       'storyStatus':'' ,
@@ -142,13 +153,16 @@ var socket = Socket($scope);
     else{
       //TODO:below lines
       socket.emit('sprint:addStory', {
+      'room': $scope.roomName,
+      'activityRoom': 'activity:' + $scope.projectID,
       'heading': $scope.storyDetails.heading,
       'addTo': $scope.moveTo.selectedOption.value,
       'storyStatus': '',
       'description': $scope.storyDetails.description,
       'listId': $scope.storyMoveData.release.selectedList.group,
       'sprintId':$scope.storyMoveData.release.selectedSprints._id,
-      'id':$scope.storyMoveData.release.selectedList._id
+      'id':$scope.storyMoveData.release.selectedList._id,
+      'listName':$scope.moveTo.selectedOption.value
     });
     }
   }
@@ -242,7 +256,6 @@ var socket = Socket($scope);
       'projectID' : $scope.projectID
     });
 
-
     $scope.todoText = '';
     $uibModalInstance.dismiss('cancel');
   };
@@ -330,22 +343,12 @@ var socket = Socket($scope);
   $scope.addRemoveMembers=function(memberObj){
     //compare the memberObj with the memberlist in the story collection and check process accordingly.
     //TODO:checking if the member is already in the story.once the user is removed, it has to send add members request but it is not because initial story member list is brought using resolve. when parent gets updated then child is not . So add one more lisner in sub modal to update the list available with submodal
-    var userObj = $scope.storyDetails.memberList.filter(function ( obj ) {
-      return obj._id === memberObj._id;
-    })[0];
+    // var userObj = $scope.storyDetails.memberList.filter(function ( obj ) {
+    //   return obj._id === memberObj._id;
+    // })[0];
 
 
-    if (userObj == undefined) {
-      //Add members working,tested
-      socket.emit('story:addMembers', {
-
-        'room': $scope.roomName,
-        'storyid': $scope.storyDetails._id,
-        'memberid': memberObj._id,
-        'projectID' : $scope.projectID,
-        'fullName': memberObj.firstName + " " + memberObj.lastName
-      });
-    }else{
+    if ($scope.membersData.indexOf(memberObj._id) !=-1) {
       //remove members working, tested
       socket.emit('story:removeMembers', {
 
@@ -355,53 +358,16 @@ var socket = Socket($scope);
         'projectID' : $scope.projectID,
         'fullName': memberObj.firstName + " " + memberObj.lastName
       });
+    }else{
+      //Add members working,tested
+      socket.emit('story:addMembers', {
+
+        'room': $scope.roomName,
+        'storyid': $scope.storyDetails._id,
+        'memberid': memberObj._id,
+        'projectID' : $scope.projectID,
+        'fullName': memberObj.firstName + " " + memberObj.lastName
+      });
     }
   }
-}]);
-fragileApp.controller('MyCtrl', ['$scope','param', 'Upload','$uibModalInstance','Socket', function ($scope,param, Upload,$uibModalInstance,Socket) {
-var socket = Socket($scope);
-$scope.roomName = "story:" + param._id;
-  /***
-  author:Shrinivas
-  Function Name: submit
-  Function Description: This method is called by sub-Modal window of attachment. It will call the upload function which will take $scope.file as parameter which has details like file name, file path, file size etc..
-  Parameters:$scope.file
-  ***/
-  $scope.submit = function() {
-    if ($scope.form.file.$valid && $scope.file) {
-      $scope.upload($scope.file);
-    }
-  };
-  /***
-  author:Shrinivas
-  Function Name: upload
-  Function Description: This method is called by sub-Modal window of attachment. It will upload the file from client side and put the file in server side in uploadfile folder.
-  Parameters:file
-  ***/
-  $scope.upload = function (file) {
-    Upload.upload({
-      url: '/story/addattachments',
-      data: {file: file,storyId:param._id}
-    }).then(function (resp) {
-      console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
-      resp.data.room = $scope.roomName;
-      socket.emit('story:addAttachment', resp.data);
-      console.log(resp.data);
-    }, function (resp) {
-      console.log('Error status: ' + resp.status);
-    }, function (evt) {
-      var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-      console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-    });
-    $uibModalInstance.dismiss('cancel');
-  };
-  /***
-  author:Shrinivas
-  Function Name: close
-  Function Description: This method is called by sub-Modal window of close the window.
-  ***/
-  $scope.close = function() {
-    $uibModalInstance.dismiss('cancel');
-  };
-
 }]);

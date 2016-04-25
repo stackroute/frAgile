@@ -3,8 +3,25 @@ a.attachmentdetails{
   left:10px;
   text-decoration: none;
 }
+.attachmentdetails{
+  margin-left:0px;
+}
+.attachmentText{
+  color:black !important;
+}
 .attachmentIcon{
   margin-left:14px;
+}
+.attachedIcon{
+  margin-left:10px;
+}
+.story-addbutton{
+  padding-left:10px;
+  font-size:18px;
+}
+.attachments-wrap .list-group{
+  margin-bottom:0px;
+  margin-left:0px;
 }
 .jpg:before{
   content: "\f1c5";
@@ -12,7 +29,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #EF4836;
 }
 .jpeg:before{
@@ -21,7 +38,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #EF4836;
 }
 .png:before{
@@ -30,7 +47,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: BLUE;
 }
 .zip:before{
@@ -39,7 +56,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: black;
 }
 .xlsx:before{
@@ -48,7 +65,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #1E7145;
 }
 .xls:before{
@@ -57,7 +74,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #1E7145;
 }
 .pptx:before{
@@ -66,7 +83,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #D04525;
 }
 .ppt:before{
@@ -75,7 +92,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #D04525;
 }
 .doc:before{
@@ -84,7 +101,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #2B5797;
 }
 .docx:before{
@@ -93,7 +110,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #2B5797;
 }
 .txt:before{
@@ -102,7 +119,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 .mpeg:before{
@@ -111,7 +128,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 .mp4:before{
@@ -120,7 +137,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 .graphButton {
@@ -128,13 +145,16 @@ a.attachmentdetails{
   right: 1%;
   color: #527D73;
 }
+.attachmentdetails .col-sm-1{
+  padding-left:0px !important;
+}
 .pdf:before{
   content: "\f1c1";
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #EF4836;
 }
 .avi:before{
@@ -143,7 +163,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 
@@ -151,9 +171,8 @@ body {
   font-family: 'Roboto', sans-serif;
   font-size: 13px;
   background-color: rgba(162, 222, 208, 0.12);
-
-
 }
+
 [ng\:cloak], [ng-cloak], .ng-cloak {
   display: none !important;
 }
@@ -179,16 +198,23 @@ h3 {
   bottom: 20px;
 }
 
-
+i.fa{
+  cursor: pointer;
+}
 .dropdown-menu {
   top: 142%;
   left: -116px;
 }
 
+
 .addProject{
   position: absolute;
   top: 44px;
   right: 33px;
+}
+.top-header .fa-bell, .top-header .fa-sign-out{
+  font-size: 19px;
+color: #527D73;
 }
 /* Track */
 
@@ -259,12 +285,13 @@ hr{
   overflow-y: auto;
   max-height: 521px;
 }
-.headingOfPage.ng-binding {
+.headingOfPage {
     font-size: 22px;
     font-weight: 600;
     color: #2C5D51;
+    cursor: pointer;
 }
-#mainSprint .headingOfPage.ng-binding {
+#mainSprint .headingOfPage {
     position: fixed;
 }
 ul.projectNameTree.ng-scope {
@@ -276,6 +303,7 @@ ul.projectNameTree.ng-scope {
 }
 .release-add{
   margin: 13px 0px;
+margin-bottom: 0px;
 }
 ul.releaseNameTree.ng-scope {
   padding-left: 0px;
@@ -325,12 +353,11 @@ ul.sprintNameTree.ng-scope {
   box-shadow: 0px 2px 5px rgba(29, 109, 91, 0.34);
 }
 .btn-danger {
-  font-weight: 100;
   color: #fff;
-  font-weight: bold;
+  font-weight: 100;
   background-color: #E6625E;
   /* border-color: rgba(26, 67, 95, 0.28); */
-  line-height: 18px;
+  line-height: 20px;
   border: 0;
   border-radius: 0;
 }
@@ -341,12 +368,11 @@ ul.sprintNameTree.ng-scope {
 }
 
 .btn-primary {
-  font-weight: 100;
   color: #fff;
-  font-weight: bold;
+  font-weight: 100;
   background-color: #36A5F1;
   /* border-color: rgba(26, 67, 95, 0.28); */
-  line-height: 18px;
+  line-height: 20px;
   border: 0;
   border-radius: 0;
 }
@@ -450,8 +476,9 @@ ul.sprintNameTree.ng-scope {
   height: 162px;
 }
 .editProject {
-  margin-top: -41px;
-      height: 128px;
+    margin-top: -41px;
+    height: 128px;
+    width: 315px;
 }
 
 .editRelease textarea, .editSprint textarea{
@@ -485,29 +512,34 @@ label {
 
 .editProject .btn.btn-success {
   margin-top: 5px;
+  margin-left: 257px;
 }
 .divToggle{
   position: fixed;
   right: 5px;
   top:80px;
 }
-.toggleIcon{
-  margin-top: 6px;
-  margin-left: 7px;
-  color: white;
+.toggleIcon {
+    margin-top: 3px;
+    margin-left: 13px;
+    /* margin-right: 7px; */
+    /* padding-right: 4px; */
+    color: white;
 }
 .toggleSprintText{
   cursor: pointer;
 }
-.scrollBtn{
-  cursor: pointer;
-  background-color: #527D73;
-  border-radius: 32px;
-  float: left;
-  margin-top: -5px;
-  height: 25px;
-  width: 25px;
-  margin-right: 1px;
+.scrollBtn {
+    cursor: pointer;
+    background-color: #36D7B7;
+     border-radius: 5px;
+    float: left;
+    margin-top: 2px;
+    height: 25px;
+    width: 60px;
+    padding: 0px;
+    padding-top: 3px;
+    margin-right: 0px;
 }
 h3.pull-left.ng-binding {
   position: fixed;
@@ -536,7 +568,7 @@ h3.pull-left.ng-binding {
 }
 .parentInner {
   min-height: 20px;
-  max-height: 450px;
+  max-height: 448px;
   overflow: auto;
 }
 .hideEdit{
@@ -584,6 +616,11 @@ i.fa.fa-calendar {
     position: absolute;
     font-size: 15px;
     color: #2DB394;
+}
+i.fa.fa-exclamation-triangle {
+    padding: 0;
+    padding-right: 4px;
+    /* color: yellow; */
 }
 .ng-datepicker-input{
     font-family: inherit;
@@ -694,33 +731,79 @@ form.hideAdd{
   height: 100%;
 }
 .pageHeading {
+    cursor: pointer;
     position: fixed;
     bottom: 44px;
+    height: 45px;
+    width: 45px;
+    border-radius: 400px;
     padding: 2px 4px;
     color: #FFFFFF;
-    background-color: #527D73;
+    background-color: #55C7AD;
     right: 33px;
+    box-shadow: 0px 2px 4px #70948C;
     font-size: 18px !important;
-    text-shadow: 0px 0px 4px solid black;
 }
-.pageHeading span{
-      margin-left: 20px;
-  border-left: 1px solid white;
+.graphMenu {
+  width: 85px;
+  padding: 5px;
+  height: 200px;
+  position: absolute;
+  /* background-color: #67E2C6; */
+  margin: 5px 0px 0px -80px;
+  border-radius: 16px;
 }
+icon.graphIconOne {
+    width: 30px;
+    position: fixed;
+    height: 30px !important;
+    border-radius: 98px;
+    padding: 0px;
+    font-size: 12px;
+    background-color: #64DCC1;
+    margin: 1px;
+}
+icon.graphIconTwo {
+    position: fixed;
+    height: 30px;
+    margin-left: 35px;
+    background-color: #64DCC1;
+    width: 30px;
+    border-radius: 200px;
+}
+.graphIconTwo b.fa {
+    margin-top: 6px;
+    margin-left: 2px;
+}
+.pageHeading span {
+    margin-left: 10px;
+    font-weight: bold;
+    margin-top: 1px;
+    font-size: 21px;
+    /* padding-top: 54px; */
+    position: absolute;
+    /* background-color: red; */
+    /* border-left: 1px solid white; */
+}
+.graphIconOne b.fa {
+    margin-top: 7px;
+    margin-left: 1px;
+}
+
 .pageHeading b {
     font-weight: 100;
     font-size: 16px;
-}
-.pageHeading b{
   padding-right: 6px;
   padding-left: 6px;
+    margin: 11px 4px;
+    position: absolute;
   }
 .slideMenuBox .fa:hover {
   color: #ACE6D8;
 }
 .projectPage .btn-success  {
   margin: 6px 0px;
-  margin-left: 15px;
+  right: 15px;
 }
 .warningModal {
   color: #D64541;
@@ -736,8 +819,11 @@ form.hideAdd{
   width: 100%;
 }
 .sprintDiv {
-  margin-top: 91px;
+  margin-top: 85px;
   overflow: hidden;
+}
+.sprintPage .fa{
+  cursor: pointer;
 }
 .listHead {
   color: rgba(0, 0, 0, 0.56);
@@ -834,7 +920,7 @@ form.hideAdd{
   overflow: auto;
   overflow-x: hidden;
   /*float: left;*/
-  max-height: 500px;
+  max-height: 498px;
   min-height: 60px;
   background-color: rgb(241, 255, 252);
   border: 1px solid #36D7B7;
@@ -850,7 +936,7 @@ form.hideAdd{
 }
 .extendParent .parentInner {
   /* background-color: black; */
-  max-height: 367px;
+  max-height: 365px;
 }
 .list-wrapper{
   float:left;
@@ -879,9 +965,62 @@ form.hideAdd{
   margin-top: -10px;
 }
 .navbar-nav {
-  float: left;
-  margin-top: -4px;
-  /* margin: 0; */
+    float: left;
+    margin-top: -4px;
+    /* margin: 0; */
+    font-size: 18px;
+    margin-top: -7px;
+}
+.navbar-default .navbar-nav>li>a {
+    color: #527D73;
+}
+.navbar-default .navbar-nav>li>a:hover {
+    color: #639C8F;
+}
+.user {
+    cursor: pointer;
+    padding: 3px 12px;
+    margin-top: 11px;
+    color: #F4FBF9 !important;
+    background-color: #527D73;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 700;
+    /* box-shadow: inset 0px -3px 0px #B0E4D9; */
+}
+.user:hover {
+    background-color: #639C8F;
+}
+.user a {
+  color: #F4FBF9;
+  text-decoration: none;
+}
+.btn-group.open .dropdown-toggle {
+    -webkit-box-shadow: 0 0 0 black;
+    box-shadow: 0 0 0 black;
+}
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px 3px 10px;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    color: #527D73;
+    font-weight: 700;
+    white-space: nowrap;
+}
+.dropdown-menu .divider {
+    width: 192px;
+    margin-left: 13px;
+}
+.dropdown-menu small.ng-binding {
+    padding-left: 12px;
+}
+.dropdown-menu {
+    top: 30px;
+    left: -133px;
+    width: 220px;
+    overflow-x: hidden;
 }
 .top-header {
   z-index: 2000;
@@ -910,28 +1049,49 @@ h4 {
   margin-bottom: 3px;
   font-size: 21px;
   color: #2C5D51;
+  font-weight: normal;
 }
 h4.innerPage {
   margin-top: -32px;
   margin-bottom: 3px;
   font-size: 21px;
   color: #2C5D51;
+      border-top: 1px solid #DDEDE8;
 }
 h4.sprintPage {
     margin-top: 31px;
     margin-bottom: 3px;
     font-size: 21px;
+    padding-top: 8px;
     color: #2C5D51;
+    width: 100%;
     position: fixed;
+    border-top: 1px solid #DDEDE8;
 }
 h4 small {
-  color: grey;
-  margin-left: 10px;
-  font-weight: lighter;
+    color: grey;
+    margin-left: 10px;
+    font-weight: lighter;
+    font-size: 12px;
+}
+tiny {
+    font-size: 12px;
+}
+tiny.beta {
+    position: absolute;
+    font-size: 12px;
+    color: #B5B5B5;
+    /* background-color: #D60F0F; */
+    padding: 0px 3px;
+    line-height: 14px;
+    font-family: monospace;
+    border-radius: 4px;
+    margin-top: 3px;
 }
 small {
     color: #70948C;
     font-size: 13px;
+    font-weight: 100;
 }
 h4 i.fa{
     padding-left: 16px;
@@ -995,7 +1155,6 @@ h4 i.fa{
 }
 
 /*Activity Bar CSS*/
-
 .menu-bar {
   z-index: 200;
   width: 339px;
@@ -1087,15 +1246,21 @@ h4 i.fa{
   display: block;
   clear: both;
 }
-.activity-comment-content {
+.story-comment-content {
   padding: 5px 5px;
-  background-color: lightgrey;
+  background-color: rgba(191, 191, 191, 0.05);
   border-radius: 3px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, .23);
   overflow: hidden;
-  cursor: pointer;
+  /* cursor: pointer; */
   margin-top: 5px;
   word-break: break-all;
+  max-width: 87%;
+  color: #777;
+  margin-top: 15px;
+}
+.story-comment-username{
+  margin-bottom: 4px;
 }
 .activity-item-content {
   width: 80%;
@@ -1115,6 +1280,9 @@ h4 i.fa{
 .activity-label {
   position: relative;
   left: 10px;
+}
+.avatars-wrap{
+  margin-bottom: 20px;
 }
 .menu-bar-avatar {
   width: 30px;
@@ -1166,7 +1334,9 @@ h4 i.fa{
 .story-backBug {
   background-color: #EF4836 !Important;
 }
-
+.AlertBox .modal-footer {
+     border-top: 0px;
+}
 .story-inProgress
 {
 background-color: #9DEDDD !Important;
@@ -1213,6 +1383,13 @@ background-color: #9DEDDD !Important;
   padding-left: 0;
   margin-bottom: 10px;
   padding-right: 5px;
+  cursor: pointer;
+}
+.modal-members-list a{
+    text-decoration: none;
+}
+.modal-members-list i{
+  margin-top: 8px;
 }
 
 .SprintModal .list-group {
@@ -1539,6 +1716,12 @@ right: 84px;
 .autocomplete li.active .highlight {
   background: #666;
   color: #fff;
+}
+
+.tooltip-inner {
+    max-width: 700px;
+    /* If max-width does not work, try using width instead */
+    /*width: 350px;*/
 }
 .story-textarea{
   min-width: 95%;

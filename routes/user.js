@@ -46,7 +46,31 @@ router.post('/addProject', function(req, res, next) {
     res.send("false")
   }
 });
+router.post('/updateUser', function(req, res, next) {
+  var newUserDetails = {};
+  newUserDetails.firstName= req.body.firstName;
+  newUserDetails.lastName= req.body.lastName;
+  newUserDetails.email= req.body.email;
+  console.log("----------updateUser");
+  console.log(newUserDetails);
+  User.updateUser(req.user._id, newUserDetails, function(err, data) {
+    if (err)
+      res.send("false");
+    else {
+      res.send(data);
 
+    }
+  })
+});
+router.get('/getUserDetails', function(req, res, next) {
+  userDetails = {
+    firstName : req.user.firstName,
+    lastName : req.user.lastName,
+    email : req.user.email,
+    _id : req.user._id
+  };
+  res.send(userDetails);
+});
 router.get('/getUserId', function(req, res, next) {
   if (req.query.email) {
     User.getUserId(req.query.email, function(err, data) {

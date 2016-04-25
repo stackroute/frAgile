@@ -1,11 +1,4 @@
-/****
-TODO:
-1.Copy
-2.Label
-
-*****/
-
-fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','param','$window',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,param,$window){
+fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','Upload','param','$window',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,Upload,param,$window){
 var socket = Socket($scope);
 
   var storyContr = this;
@@ -15,12 +8,13 @@ var socket = Socket($scope);
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
         storyContr.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
   });
+
   storyContr.storyGrp=storyContr.complexDataObject.storyGrp;
 
   $scope.storyData = storyContr.storyData;
-  console.log(  $scope.storyData );
+  $scope.storyComment="";
 
-  storyContr.storyData.updatetime = moment(storyContr.storyData.lastUpdated).fromNow();
+  $scope.storyData.updatetime = moment($scope.storyData.lastUpdated).fromNow();
 
   //TODO:Check if these are required????
   var dataLoc = $location.search();
@@ -28,16 +22,17 @@ var socket = Socket($scope);
   var storyID = dataLoc.storyId;
 
   $scope.storyID = storyContr.storyData._id; //Used in loading activity for card.
+  $scope.sprintID =storyContr.complexDataObject.sprint._id;
 
-  $scope.roomName = "story:" + storyContr.storyData._id;
-  var emitData = {
-    'room': $scope.roomName
-  }
-  socket.emit('join:room', emitData);
+  $scope.roomName = "sprint:" + $scope.sprintID;
+  // var emitData = {
+  //   'room': $scope.roomName
+  // }
+  // socket.emit('join:room', emitData);
 
   $scope.model = {
     description: {
-      name: storyContr.storyData.description
+      name: $scope.storyData.description
     },
     selected: {}
   };
@@ -116,37 +111,74 @@ var socket = Socket($scope);
   }
 
   socket.on('story:attachmentAdded', function(data){
-    // data.attachmentList.timeStamp = moment()
-    storyContr.storyData.attachmentList = data.attachmentList;
+    console.log(data._id);
+    console.log($scope.storyData._id);
+    if(data._id == $scope.storyData._id){
+      // data.attachmentList.timeStamp = moment()
+      $scope.storyData.attachmentList = data.attachmentList;
 
-    angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
-          storyContr.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
-    });
+      angular.forEach($scope.storyData.attachmentList, function(value, key) {
+            $scope.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+      });
 
-    console.log('On socket: ', storyContr.storyData.attachmentList);
+      console.log('On socket: ', $scope.storyData.attachmentList);
+    }
+
   });
 
   socket.on('story:attachmentRemoved', function(data){
-    // data.attachmentList.timeStamp = moment()
-    storyContr.storyData.attachmentList = data.attachmentList;
+    console.log(data._id);
+    console.log($scope.storyData._id);
+    if(data._id == $scope.storyData._id){
+      // data.attachmentList.timeStamp = moment()
+      $scope.storyData.attachmentList = data.attachmentList;
 
-    angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
-          storyContr.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
-    });
+      angular.forEach($scope.storyData.attachmentList, function(value, key) {
+            $scope.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+      });
 
-    console.log('On socket: ', storyContr.storyData.attachmentList);
+      console.log('On socket: ', $scope.storyData.attachmentList);
+    }
+
   })
 
   $scope.addAttachment = function() {
-    modalService.open('sm', 'components/story/operations/addAttachment.view.html','MyCtrl',storyContr.storyData);
+    modalService.open('sm', 'components/story/operations/addAttachment.view.html','MyCtrl',$scope.storyData);
     //$uibModalInstance.close($scope.searchTerm);
   };
-  $scope.removeAttachment = function(storyId,attachmentId,file_name) {
-    console.log(storyId+"======="+attachmentId);
+  $scope.removeAttachment = function(storyId,attachmentId,file_name,name) {
     storyService.removeAttachment(storyId,attachmentId,file_name).success(function(data){
+
       data.room = $scope.roomName;
+      data.projectID = $scope.projectID;
+      data.type = name;
+
       socket.emit("story:removeAttachment", data);
     });
+  };
+  /***
+  author:Shrinivas
+  Function Name: submit
+  Function Description: This method is called by sub-Modal window of attachment. It will call the upload function which will take $scope.file as parameter which has details like file name, file path, file size etc..
+  Parameters:$scope.file
+  ***/
+  $scope.upload = function() {
+    if ($scope.form.file.$valid && $scope.file) {
+      Upload.upload({
+        url: '/story/addattachments',
+        data: {file: $scope.file,storyId:storyContr.storyData._id}
+      }).then(function (resp) {
+        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+        resp.data.room = $scope.roomName;
+        socket.emit('story:addAttachment', resp.data);
+        console.log(resp.data,">>>dismiss");
+      }, function (resp) {
+        console.log('Error status: ' + resp.status);
+      }, function (evt) {
+        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      });
+    }
   };
 
   /***
@@ -197,21 +229,29 @@ var socket = Socket($scope);
   $scope.deleteStory = function() {
   //Can use tool tip
     if ($window.confirm("Do you want to delete story?")){
+      $uibModalInstance.dismiss('cancel');
+
       var deleteFrom='List';
       if(storyContr.complexDataObject.currentPosition.listItemName != 'Backlog'|| storyContr.complexDataObject.currentPosition.listItemName != 'Buglist'){
         deleteFrom=storyContr.complexDataObject.currentPosition.listItemName;
       }
             socket.emit('sprint:deleteStory', {
+              'room': $scope.roomName,
               'storyId':$scope.storyData._id,
               'projectId':$stateParams.prId,
               'deleteFrom':deleteFrom,
-              'sprintId':storyContr.complexDataObject._id,
-              'Listid':storyContr.complexDataObject.currentPosition.listId
-
+              'sprintId': $scope.sprintID,
+              'Listid':storyContr.complexDataObject.currentPosition.listId,
+              'storyName':$scope.storyData.heading
             });
+
+
 
     }
   };
+
+
+
   //Not required at story level
   $scope.ok = function() {
     $uibModalInstance.dismiss('cancel');
@@ -227,31 +267,14 @@ var socket = Socket($scope);
   description:this function is used to update the story description
   **/
   $scope.saveDescription=function(){
-    console.log("save Description in contoller");
     $scope.model.description = angular.copy($scope.model.selected);
     //Post socket below is not required
-    storyService.saveStoryDescription(storyContr.storyData._id,$scope.model.description.name);
+    storyService.saveStoryDescription($scope.storyData._id,$scope.model.description.name);
 
     $scope.reset();
     $scope.set=false;
-    $scope.checklistGrp =storyContr.storyData.checklist;
+    $scope.checklistGrp =$scope.storyData.checklist;
 
-    // ///Socket Coding starts
-    // console.log("about to emit in client");
-    // story.emit('send:message', {
-    //   'room': storyContr.storyData._id,
-    //   'message':$scope.model.description.name
-    // });
-    //
-    // story.on('room:message', function(data) {
-    //   console.log('recieved messagef rom ', data.room, ' message: ', data.message);
-    //   //	$scope.pubMessages.push(data.message);
-    //   console.log("this is the message received:   "+data.message);
-    //   $scope.now = new Date();
-    //   //		$scope.$apply();
-    // });
-    //
-    // //Socket coding ends
   };
   //TODO Starts, push this to start of the file
 
@@ -268,15 +291,7 @@ var socket = Socket($scope);
       checked: false,
       creationDate:Date.now(),
     }
-    console.log({
 
-      'room': $scope.roomName,
-      'storyid': storyContr.storyData._id,
-      'checklistGrpId': todo._id,
-      'itemObj':itemObj,
-      'projectID' : $scope.projectID,
-      'text' : todo.todoText
-    });
     socket.emit('story:addChecklistItem', {
 
       'room': $scope.roomName,
@@ -286,6 +301,7 @@ var socket = Socket($scope);
       'projectID' : $scope.projectID,
       'text' : todo.todoText
     });
+
     todo.todoText = '';
 
   };
@@ -366,9 +382,39 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
       'heading' : heading
     });
   };
+  /***
+  authors:Sharan,Srinivas
+  Function Name: saveComment
+  Function Description: This method is used to add new comments to the story.
+  Parameters:None
+  ***/
+  $scope.saveComment = function() {
+//TODO:Add listner
+console.log($scope.storyData._id);
+  socket.emit('story:addComment', {
+      'room': $scope.roomName,
+      'storyId': $scope.storyData._id,
+      'text': $scope.storyComment
+    });
+    $scope.storyComment = "";
+  };
 
+  /***
+  authors:Sharan,Srinivas
+  Function Name: clearComment
+  Function Description: This method is used to clear the comment story textarea.
+  Parameters:None
+  ***/
+  $scope.clearComment=function(){
+      $scope.storyComment = "";
+  }
+//Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
+    console.log(data);
+    console.log($scope.storyData);
+    if(data._id == $scope.storyData._id){ //If the updated card is same as current opened card
       $scope.storyData = data;
+    }
   })
 
 }]);

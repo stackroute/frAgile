@@ -62,6 +62,11 @@ fragileApp.controller('activityController', function($scope, $http, Socket, acti
 
   socket.on('activityAdded', function(data) {
     activityService.parseData(data);
+    if($scope.storyID){
+      if(data.object._id == $scope.storyID || data.target._id == $scope.storyID  )
+      $scope.activities.unshift(data);
+    }
+    else
     $scope.activities.unshift(data);
 
   });

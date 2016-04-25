@@ -1,7 +1,6 @@
 fragileApp.factory('sprintService',['$http',function($http) {
 
   this.getStory = function(storyID) {
-      console.log("inside board service getstory");
       return  $http.get('/story?id='+storyID);//pass pass parameter in post
     };
 

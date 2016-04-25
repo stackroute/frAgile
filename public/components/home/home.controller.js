@@ -1,18 +1,31 @@
-fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'homeService', '$filter', function($scope, $state, $rootScope, homeService, $filter) {
+fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'homeService', '$filter','Socket', function($scope, $state, $rootScope, homeService, $filter,socket) {
 
   $scope.loadProjects = function() {
-
+    homeService.getUserDetails().success(function(response) {
+      $rootScope.user = response;
+      console.log(response);
+      $rootScope.user.fullName = $rootScope.user.firstName + " " + $rootScope.user.lastName;
+    });
     homeService.getUserProjects().success(function(response) {
       $rootScope.projects = response.projects
     });
+
+    $rootScope.refreshProjects = false;
     $rootScope.defaultDate = $filter('date')(Date.now(), "yyyy-MM-dd");
   };
-
-  homeService.getCurrentUser().success(function(response) {
-    $rootScope.currentUserID = response._id;
-    $rootScope.currentUserEmail = response.email;
-  })
-
+  $scope.setUserDetails = function() {
+    $scope.firstName = $rootScope.user.firstName;
+    $scope.lastName = $rootScope.user.lastName;
+    $rootScope.email = $rootScope.user.email;
+  }
+  $scope.updateProfile = function() {
+    homeService.updateProfile($scope.firstName, $scope.lastName, $scope.email).success(function(response) {
+      $rootScope.user.firstName = $scope.firstName;
+      $rootScope.user.lastName = $scope.lastName;
+      $rootScope.user.email = $rootScope.email;
+      $rootScope.user.fullName = $rootScope.user.firstName + " " + $rootScope.user.lastName;
+    })
+  }
   $rootScope.list = [{
     "group": "inProgress",
     "listName": "Picked",

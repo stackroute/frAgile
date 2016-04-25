@@ -1,6 +1,6 @@
 var fragileApp = angular.module('fragileApp');
 
-fragileApp.controller('menuController', function($scope, $http, Socket, activityService, $rootScope) {
+fragileApp.controller('menuController', function($scope, $http, Socket, activityService, $rootScope,$state) {
 
   var socket = Socket($scope);
 
@@ -65,6 +65,12 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
       if (userData._id == data._id)
         $rootScope.projMemberList.splice(index, 1);
     });
+
+    //Kick user out if he has been removed
+    if(userData._id == $scope.currentUserID){
+      alert("You were removed from this project, redirecting to home page")
+      $state.go('project');
+    }
   })
 
   $scope.removeMember = function(memberId) {

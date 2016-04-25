@@ -37,6 +37,17 @@ story.addMembers(storyId,memberId,function(err,data){
 })
 });
 
+router.post('/getMembersData',function(req,res,next){
+  var storyId=req.query.id;
+  story.getMembers(storyId,function(err,data){
+    if(err){
+      res.send(err);
+    }else{
+      console.log(data);
+      res.send(data.memberList);
+    }
+  })
+})
 router.post('/removemember', function(req, res, next) {
   var storyId= req.query.storyid.replace("/","");
   var memberId=req.query.memberid.replace("/","");
@@ -61,8 +72,8 @@ router.post('/addattachments', function(req, res, next) {
     index = old_path.lastIndexOf('/') + 1,
     file_name = old_path.substr(index),
     newfile_name=files.file.name.substring(0, (files.file.name.lastIndexOf('.'))),
-    folder_path=path.join(process.env.PWD, '/public/uploadfile/',storyId),
-    new_path = path.join(process.env.PWD, '/public/uploadfile/',storyId +"/"+ file_name + '.' + file_ext);
+    folder_path=path.join(process.env.PWD+ '/public/uploadfile/'+storyId),
+    new_path = path.join(process.env.PWD+ '/public/uploadfile/'+storyId +"/"+ file_name + '.' + file_ext);
 
 
     attachmentObj={
@@ -74,7 +85,7 @@ router.post('/addattachments', function(req, res, next) {
       path : '/uploadfile/'+storyId+"/"+ file_name+"."+file_ext
     };
     if(!fs.existsSync(folder_path)){
-      fs.mkdirSync(folder_path, function(err){
+      fs.mkdir(folder_path, function(err){
         fs.readFile(old_path, function(err, data) {
           fs.writeFile(new_path, data, function(err) {
             fs.unlink(old_path, function(err) {

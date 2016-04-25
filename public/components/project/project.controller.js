@@ -1,5 +1,5 @@
-fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket', '$filter', 'graphModalFactory',
-  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter,graphModalFactory) {
+fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket', '$filter', 'graphModalFactory','homeService',
+  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter, graphModalFactory,homeService) {
     // $scope.loadProjects = function() {
     //
     //   projectService.getUserProjects().success(function(response) {
@@ -9,6 +9,15 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
     //   $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
     // }
     var socket = Socket($scope);
+
+    //Temporary fix, make a better logic
+    if ($scope.refreshProjects) {
+      console.log("Refreshing project");
+      homeService.getUserProjects().success(function(response) {
+        $rootScope.projects = response.projects
+      });
+    }
+
 
     projectService.getCurrentUser().success(function(response) {
       socket.emit('join:room', {
@@ -30,6 +39,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       })
     })
 
+    $rootScope.inprojectRoom=true;
     // Opening Modal window for Release Chart
     $scope.openReleaseChart = function() {
       graphModalFactory.open('lg', './components/releaseChart/releaseChart.html', "Release Chart");
@@ -68,6 +78,25 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
         controllerAs: 'modalContr'
       });
     }
+    $scope.closeThis = function() {
+      $uibModalInstance.dismiss('cancel');
+    }
+    $scope.editProject = function(newProjectName, newProjectDetails, prId) {
+      console.log(newProjectName);
+      console.log(newProjectDetails);
+      console.log(prId);
+      if (newProjectName != "") {
+        socket.emit('project:editProject', {
+          'room': 'projectRoom',
+          'name': newProjectName,
+          'description': newProjectDetails,
+          "prId": prId
+        });
+        return true;
+      } else {
+        return false;
+      }
+    };
     $scope.editRelease = function(newReleaseName, newReleaseDetails, newReleaseDate, creationDate, prId, relId, oldName) {
       if (newReleaseDate != null && creationDate != null && newReleaseName != "") {
         var dt = new Date(newReleaseDate);
@@ -87,15 +116,21 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
         return false;
       }
     }
-    $scope.archiveFun = function(projectId, releaseId, projectName, releaseName) {
+    $scope.setReleaseToDelete = function(projectId, releaseId, projectName, releaseName) {
+      $scope.toDeleteProjectId = projectId;
+      $scope.toDeleteReleaseId = releaseId;
+      $scope.toDeleteProjectName = projectName;
+      $scope.toDeleteReleaseName = releaseName;
+    }
+    $scope.archiveFun = function() {
       // console.log("archiveFun" + rel)
       socket.emit('deleteRelease', {
         'room': 'projectRoom',
-        'activityRoom': 'activity:' + projectId,
-        'projectId': projectId,
-        'releaseId': releaseId,
-        'releaseName': releaseName,
-        'projectName': projectName
+        'activityRoom': 'activity:' + $scope.toDeleteProjectId,
+        'projectId': $scope.toDeleteProjectId,
+        'releaseId': $scope.toDeleteReleaseId,
+        'releaseName': $scope.toDeleteReleaseName,
+        'projectName': $scope.toDeleteProjectName
       });
     };
     $scope.editFun = function(rel) {
@@ -144,6 +179,33 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       $rootScope.projects.push(data);
     });
 
+    socket.on('project:projectEdited', function(newProject) {
+      console.log("----projectEdited----");
+      console.log(newProject);
+      $rootScope.projects.forEach(function(project, projectIndex) {
+        if (project._id == newProject._id) {
+          $rootScope.projects[projectIndex].name = newProject.name;
+          $rootScope.projects[projectIndex].description = newProject.description;
+        }
+      });
+    });
+    socket.on('project:releaseEdited', function(releaseData) {
+      console.log(releaseData);
+      console.log("--------------");
+      $rootScope.projects.forEach(function(item, itmIndex) {
+        if (item._id == releaseData.prId) {
+          item.release.forEach(function(rel, relIndex) {
+            if (rel._id == releaseData._id) {
+              console.log($rootScope.projects[itmIndex].release[relIndex]);
+              $rootScope.projects[itmIndex].release[relIndex].name = releaseData.name;
+              $rootScope.projects[itmIndex].release[relIndex].description = releaseData.description;
+              $rootScope.projects[itmIndex].release[relIndex].releaseDate = releaseData.releaseDate;
+            }
+          });
+        }
+
+      });
+    });
     // FIXME: Code duplicated in Menu controller. Can be fixed
     var dbIds;
     $scope.getAllUsers = function(projectID, projectName) {
