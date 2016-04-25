@@ -3,8 +3,11 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
 
   //TODO :Need to verified
   $scope.showProjectsAndReleasesGraph = function(){
-    $scope.getProjectAndReleaseData()
+    $scope.getProjectAndReleaseData();
   };
+  // $scope.showInitialReleaseChart = function(){
+  //   $scope.releaseChartData($scope.firstId);
+  // }
 
   $scope.loadData = function(aModalInstance) {
     $log.info("starts loading");
@@ -65,8 +68,8 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
         var temp = projDetails.projects[i];
 
         var s_Json = {};
-        s_Json['name'] = "Project";
-        s_Json['text'] = temp.name;
+        // s_Json['name'] = "Project";
+        s_Json['name'] = temp.name;
         s_Json['children'] = [];//Add Releases here
 
         dataJson['projName'] = temp.name;
@@ -79,8 +82,8 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
           obj['relId'] = temp.release[j]._id;
 
           var s_obj = {};
-          s_obj['name'] = "Release";
-          s_obj['text'] = temp.release[j].name;
+          // s_obj['name'] = "Release";
+          s_obj['name'] = temp.release[j].name;
           s_obj['size'] = relLen;
 
           dataJson['release'].push(obj);
@@ -94,6 +97,10 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
       $scope.projRelData = jdata;
       // Save the Sunburst Data.
       $scope.sunBurstdata = s_data;
+
+      $scope.firstId = projDetails.projects[0]._id;
+      // Default display the first project Release Deatails
+      $scope.releaseChartData($scope.firstId);
     });
   };
 

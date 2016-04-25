@@ -66,6 +66,7 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
         $rootScope.projMemberList.splice(index, 1);
     });
 
+
     //Kick user out if he has been removed
     if(userData._id == $scope.currentUserID){
       alert("You were removed from this project, redirecting to home page")

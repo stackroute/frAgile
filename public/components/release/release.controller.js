@@ -93,13 +93,9 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
     });
     releaseService.getSprints($stateParams.releaseID).success(function(response) {
         $scope.sprints = response[0].release[0].sprints;
-        console.log($scope.sprints);
-        console.log("?????");
-        console.log(response);
           // $rootScope.projects[projectKey].release[releaseKey].sprints = [];
           // $rootScope.projects[projectKey].release[releaseKey].sprints = response[0].release[0].sprints;
         });
-    console.log("22222222222222222222222222");
     // releaseService.getSprints($stateParams.releaseID).success(function(response) {
     //   $scope.sprints = response[0].release[0].sprints;
     //   console.log($scope.sprints);

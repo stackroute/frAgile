@@ -14,6 +14,10 @@ var socket = Socket($scope);
   $scope.storyData = storyContr.storyData;
   $scope.storyComment="";
 
+  $scope.storyData.memberList.forEach(function(data){
+    data.fullName = data.firstName + " " + data.lastName;
+  });
+
   $scope.storyData.updatetime = moment($scope.storyData.lastUpdated).fromNow();
 
   //TODO:Check if these are required????
@@ -100,13 +104,15 @@ var socket = Socket($scope);
   parameters:memberid
   description:function to remove member from story
   ***/
-  $scope.removeMember=function(memberId){
+  $scope.removeMember=function(memberId,fullName){
     //working,tested
     socket.emit('story:removeMembers', {
 
       'room': $scope.roomName,
       'storyid': storyContr.storyData._id,
-      'memberid': memberId
+      'memberid': memberId,
+      'fullName' : fullName,
+      'projectID' : $scope.projectID
     });
   }
 
@@ -170,6 +176,8 @@ var socket = Socket($scope);
       }).then(function (resp) {
         console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
         resp.data.room = $scope.roomName;
+        resp.data.projectID = $scope.projectID;
+        resp.data.type = resp.config.data.file.name;
         socket.emit('story:addAttachment', resp.data);
         console.log(resp.data,">>>dismiss");
       }, function (resp) {
@@ -295,7 +303,7 @@ var socket = Socket($scope);
     socket.emit('story:addChecklistItem', {
 
       'room': $scope.roomName,
-      'storyid': storyContr.storyData._id,
+      'storyid': $scope.storyData._id,
       'checklistGrpId': todo._id,
       'itemObj':itemObj,
       'projectID' : $scope.projectID,
@@ -320,7 +328,7 @@ $scope.removeTodoItem = function(listItem,checklistGrp,text) {
   socket.emit('story:removeChecklistItem', {
 
     'room': $scope.roomName,
-    'storyid': storyContr.storyData._id,
+    'storyid': $scope.storyData._id,
     'checklistGrpId': checklistGrp._id,
     'itemid':listItem._id,
     'checked':listItem.checked,
@@ -344,7 +352,7 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   socket.emit('story:updateChecklistItem', {
 
     'room': $scope.roomName,
-    'storyid': storyContr.storyData._id,
+    'storyid': $scope.storyData._id,
     'checklistGrpId': checklistGrp._id,
     'itemid':listItem._id,
     'checked':listItem.checked,
@@ -376,7 +384,7 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   socket.emit('story:removeChecklistGroup', {
 
       'room': $scope.roomName,
-      'storyid': $scope.storyDetails._id,
+      'storyid': $scope.storyData._id,
       'checklistGrpId': checklistGrpId,
       'projectID' : $scope.projectID,
       'heading' : heading
@@ -390,13 +398,13 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   ***/
   $scope.saveComment = function() {
 //TODO:Add listner
-console.log($scope.storyData._id);
   socket.emit('story:addComment', {
       'room': $scope.roomName,
       'storyId': $scope.storyData._id,
-      'text': $scope.storyComment
+      'text': $scope.storyComment,
+      'projectID' : $scope.projectID
     });
-    $scope.storyComment = "";
+      $scope.storyComment = "";
   };
 
   /***
@@ -410,9 +418,10 @@ console.log($scope.storyData._id);
   }
 //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
-    console.log(data);
-    console.log($scope.storyData);
     if(data._id == $scope.storyData._id){ //If the updated card is same as current opened card
+      data.memberList.forEach(function(storyItem){
+        storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
+      });
       $scope.storyData = data;
     }
   })

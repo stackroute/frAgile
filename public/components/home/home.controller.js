@@ -3,7 +3,7 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
   $scope.loadProjects = function() {
     homeService.getUserDetails().success(function(response) {
       $rootScope.user = response;
-      console.log(response);
+      $rootScope.currentUserID = response._id;
       $rootScope.user.fullName = $rootScope.user.firstName + " " + $rootScope.user.lastName;
     });
     homeService.getUserProjects().success(function(response) {

@@ -16,9 +16,9 @@ module.exports = function(socket, io, user) {
       if (!err) {
         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
           if (!err) {
-            var members={
-              _id:storyData._id,
-              memberList:doc.memberList
+            var members = {
+              _id: storyData._id,
+              memberList: doc.memberList
             }
             console.log("Im in add");
             console.log(members);
@@ -60,10 +60,10 @@ module.exports = function(socket, io, user) {
         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
           if (!err) {
             io.to(data.room).emit('story:dataModified', storyData);
-console.log("Im in remove");
-            var members={
-              _id:storyData._id,
-              memberList:doc.memberList
+            console.log("Im in remove");
+            var members = {
+              _id: storyData._id,
+              memberList: doc.memberList
             }
             io.to(data.room).emit('story:membersModified', members);
 
@@ -330,24 +330,52 @@ console.log("Im in remove");
     });
   });
   socket.on('story:addComment', function(data) {
-      console.log(user);
-      var commentsObj={};
-      commentsObj['text']=data.text;
-      commentsObj['commentedBy']=user._id;
-      commentsObj['userName']=user.fullName;;
-      commentsObj['commentedDate']=Date.now();
-      console.log(commentsObj);
-        Story.addComment(data.storyId, commentsObj, function(err, doc) {
-          if (!err) {
-              //Activity Code
+    var commentsObj = {};
+    commentsObj['text'] = data.text;
+    commentsObj['commentedBy'] = user._id;
+    commentsObj['userName'] = user.fullName;;
+    commentsObj['commentedDate'] = Date.now();
+    Story.addComment(data.storyId, commentsObj, function(err, storyData) {
+      if (!err) {
+        io.to(data.room).emit('story:dataModified', storyData);
+
+        var actData = {
+          room: "activity:" + data.projectID,
+          action: "commented",
+          projectID: data.projectID,
+          user: user,
+          target: {
+            name: storyData.heading,
+            type: "Story",
+            _id: data.storyId
           }
+        }
+        Activity.addEvent(actData, function(data) {
+          io.to(actData.room).emit('activityAdded', data);
         });
+      }
     });
-    socket.on('story:deleteComment', function(data) {
-        Story.deleteComment(data.storyId, data.commentId, index, function(err, doc) {
-          if (!err) {
-              //Activity Code
+  });
+  socket.on('story:deleteComment', function(data) {
+    Story.deleteComment(data.storyId, data.commentId, index, function(err, storyData) {
+      if (!err) {
+        io.to(data.room).emit('story:dataModified', storyData);
+
+        var actData = {
+          room: "activity:" + data.projectID,
+          action: "commented",
+          projectID: data.projectID,
+          user: user,
+          target: {
+            name: storyData.heading,
+            type: "Story",
+            _id: data.storyid
           }
+        }
+        Activity.addEvent(actData, function(data) {
+          io.to(actData.room).emit('activityAdded', data);
         });
+      }
     });
+  });
 }

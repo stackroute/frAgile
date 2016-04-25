@@ -52,7 +52,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
 
     var socket = Socket($scope);
 
-    $rootScope.projectID = $stateParams.prId //Used in activity. Remove once refresh issue is solved
+    $rootScope.projectID = $stateParams.prId //Used in activity.
 
     $scope.roomName = "sprint:" + $stateParams.sprintID
 
@@ -76,9 +76,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     });
 
     socket.on('sprint:storyDeleted', function(data) {
-      console.log("------------------ inside storyDeleted");
-      console.log(data);
-      console.log("----------------------");
       if (data.deleteFrom == "Backlog") {
         $scope.backBug.backlogs.stories.forEach(function(story, storyIndex) {
           console.log("--------------Inside For Each");
@@ -120,21 +117,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     };
     $scope.show = function(listId, bool) {
       return listId + bool;
-    };
-
-    //DEPRECATED
-    $scope.deleteStory = function(storyId, storyName, from, Listid, sprintId) {
-      socket.emit('sprint:deleteStory', {
-        'room': $scope.roomName,
-        'activityRoom': 'activity:' + $stateParams.prId,
-        'deleteFrom': from,
-        'storyId': storyId,
-        'projectId': $stateParams.prId,
-        'Listid': Listid,
-        'sprintId': sprintId,
-        'storyName': storyName,
-        'projectName': $scope.projectName
-      });
     };
 
     $scope.addStory = function(listId, storyDetails, id, listName) {
@@ -327,6 +309,18 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       socket.emit('addActivity', actData);
     });
 
+    //Handler to update story for all story changes
+      socket.on('story:dataModified', function(data) {
+        $scope.sprint.list.forEach(function(listItem,listKey){
+          //TODO: Get the list id to reduce unnecessary iterations
+          listItem.stories.forEach(function(storyItem,storyKey){
+            if(storyItem._id == data._id){
+              $scope.sprint.list[listKey].stories[storyKey] = data;
+            }
+          });
+        });
+      });
+
     $scope.scrollRight = function() {
       $location.hash('buglists');
       $anchorScroll();
@@ -345,7 +339,6 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     This will create\opens a uib modal instance for the story
     Parameters:storyId
     resolve:Sprint, Story,ProjectMembers
-    TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
     ***/
     $scope.showModal = function(storyID, storyGrp, listItemId, listItemName) {
         var currentPosition = {}
