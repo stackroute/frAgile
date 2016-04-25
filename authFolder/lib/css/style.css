@@ -56,7 +56,10 @@ h3 {
 }
 
 img { max-width: 100%; }
-
+img.logo {
+    width: 39px;
+    padding-right: 7px;
+}
 ::-moz-selection { background: #19b9e7; color: #fff; text-shadow: none; }
 ::selection { background: #19b9e7; color: #fff; text-shadow: none; }
 
@@ -212,8 +215,8 @@ hr {
   background-color: #668A81;
   height: 14%;
   border-top: 4px solid #516B64;
-  padding-top: 18px;
-  margin-top: -21px;
+  padding-top: 13px;
+    padding-bottom: 8px;
 }
 
 .middle-border {

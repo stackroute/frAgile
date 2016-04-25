@@ -12,6 +12,7 @@ var socket = Socket($scope);
   storyContr.storyGrp=storyContr.complexDataObject.storyGrp;
 
   $scope.storyData = storyContr.storyData;
+  $scope.storyComment="";
 
   $scope.storyData.updatetime = moment($scope.storyData.lastUpdated).fromNow();
 
@@ -358,7 +359,32 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
       'heading' : heading
     });
   };
+  /***
+  authors:Sharan,Srinivas
+  Function Name: saveComment
+  Function Description: This method is used to add new comments to the story.
+  Parameters:None
+  ***/
+  $scope.saveComment = function() {
+//TODO:Add listner
+console.log($scope.storyData._id);
+  socket.emit('story:addComment', {
+      'room': $scope.roomName,
+      'storyId': $scope.storyData._id,
+      'text': $scope.storyComment
+    });
+    $scope.storyComment = "";
+  };
 
+  /***
+  authors:Sharan,Srinivas
+  Function Name: clearComment
+  Function Description: This method is used to clear the comment story textarea.
+  Parameters:None
+  ***/
+  $scope.clearComment=function(){
+      $scope.storyComment = "";
+  }
 //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
     if(data._id == $scope.storyData._id){ //If the updated card is same as current opened card

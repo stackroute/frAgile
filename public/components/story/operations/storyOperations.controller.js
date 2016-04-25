@@ -1,5 +1,5 @@
 fragileApp.controller('storyOperationsController',['$scope','$rootScope','$stateParams','storyService','modalService','$uibModal','$uibModalInstance','$location','param','Socket',function($scope,$rootScope,$stateParams,storyService,modalService,$uibModal,$uibModalInstance,$location,param,Socket){
-var socket = Socket();
+var socket = Socket($scope);
   //TODO:need to check whether we need to get the "$scope.memberDetails" data directly from rootscope without resolving it in story Modal.   ---->Check
 
 
@@ -25,6 +25,13 @@ var socket = Socket();
     /*** Declaring variables required for addMembers,addLabels***/
     $scope.longDescLimit=25 ;
     $scope.checked = true;
+    $scope.membersData = [];
+    /** XHR request to fetch latest members details***/
+    console.log($scope.storyDetails._id);
+    storyService.getMembersData($scope.storyDetails._id).then(function(response) {
+      console.log(response);
+      $scope.membersData=response.data;
+    });
 
   }
 
@@ -155,7 +162,7 @@ var socket = Socket();
       'listId': $scope.storyMoveData.release.selectedList.group,
       'sprintId':$scope.storyMoveData.release.selectedSprints._id,
       'id':$scope.storyMoveData.release.selectedList._id,
-      'listName':$scope.moveTo.selectedOption.value 
+      'listName':$scope.moveTo.selectedOption.value
     });
     }
   }
@@ -336,14 +343,14 @@ var socket = Socket();
   $scope.addRemoveMembers=function(memberObj){
     //compare the memberObj with the memberlist in the story collection and check process accordingly.
     //TODO:checking if the member is already in the story.once the user is removed, it has to send add members request but it is not because initial story member list is brought using resolve. when parent gets updated then child is not . So add one more lisner in sub modal to update the list available with submodal
-    var userObj = $scope.storyDetails.memberList.filter(function ( obj ) {
-      return obj._id === memberObj._id;
-    })[0];
+    // var userObj = $scope.storyDetails.memberList.filter(function ( obj ) {
+    //   return obj._id === memberObj._id;
+    // })[0];
 
 
-    if (userObj == undefined) {
-      //Add members working,tested
-      socket.emit('story:addMembers', {
+    if ($scope.membersData.indexOf(memberObj._id) !=-1) {
+      //remove members working, tested
+      socket.emit('story:removeMembers', {
 
         'room': $scope.roomName,
         'storyid': $scope.storyDetails._id,
@@ -352,8 +359,8 @@ var socket = Socket();
         'fullName': memberObj.firstName + " " + memberObj.lastName
       });
     }else{
-      //remove members working, tested
-      socket.emit('story:removeMembers', {
+      //Add members working,tested
+      socket.emit('story:addMembers', {
 
         'room': $scope.roomName,
         'storyid': $scope.storyDetails._id,
@@ -411,6 +418,12 @@ $scope.roomName = "sprint:" + $scope.sprintID;
   ***/
   $scope.close = function() {
     $uibModalInstance.dismiss('cancel');
-  };
-
+  }
+  socket.on('story:membersModified', function(data) {
+    //Not Receiving any data
+      console.log(data);
+      if(data._id == $scope.storyDetails._id){ //If the updated card is same as current opened card
+        $scope.membersData = data.memberList;
+      }
+    })
 }]);

@@ -18,11 +18,14 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
     $scope.lastName = $rootScope.user.lastName;
     $rootScope.email = $rootScope.user.email;
   }
-  homeService.getCurrentUser().success(function(response) {
-    $rootScope.currentUserID = response._id;
-    $rootScope.currentUserEmail = response.email;
-  })
-
+  $scope.updateProfile = function() {
+    homeService.updateProfile($scope.firstName, $scope.lastName, $scope.email).success(function(response) {
+      $rootScope.user.firstName = $scope.firstName;
+      $rootScope.user.lastName = $scope.lastName;
+      $rootScope.user.email = $rootScope.email;
+      $rootScope.user.fullName = $rootScope.user.firstName + " " + $rootScope.user.lastName;
+    })
+  }
   $rootScope.list = [{
     "group": "inProgress",
     "listName": "Picked",

@@ -69,35 +69,50 @@
         <hr class="story-seperator">
         <div class="story-details clearfix">
           <div class="row">
-            <span class="pull-left story-left-head attachmentIcon"><i class="fa fa-paperclip" aria-hidden="true"></i></span>
+            <div class="pull-left story-left-head attachmentIcon"><i class="fa fa-paperclip" aria-hidden="true"></i></div>
             <div class="pull-left story-members">
-              <h3 class="story-sub-header">Attachments  <button class="btn btn-default btn-sm" ng-click="addAttachment()"><i class="fa fa-plus" aria-hidden="true"></i></button></h3>
+              <h3 class="story-sub-header">Attachments<span ng-click="divhovering=!divhovering" ><i class="fa fa-plus story-addbutton" aria-hidden="true"></i></span></h3>
+            </div>
+            <div class="col-sm-8"ng-show="divhovering">
+              <form name="form">
+                <div class="pull-left story-members attachments-wrap">
+                  <button class="btn btn-primary" ngf-select ng-model="file" ngf-max-size="10MB" name="file" ngf-pattern="'*/*'" ngf-accept="'*/*'"><i class="fa fa-folder-open-o" aria-hidden="true" ></i></button>
+                  <button class="btn btn-success" ng-click="upload();divhovering=!divhovering"><i class="fa fa-upload"></i></button>
+                  <label for="form-control">{{file.name}}</label>
+                  <div style='align:center'>  ( Note: Maximium limit to upload is 10MB)</div>
+                </div>
+              </form>
             </div>
           </div>
           <div class="pull-left story-members attachments-wrap">
-            <div class="story-attachments" ng-repeat="imagesPath in storyContr.storyData.attachmentList">
-              <a download="{{imagesPath.fileName}}" href="{{imagesPath.path}}" title="ImageName" class="attachmentdetails">
-                <span class="pull left  {{imagesPath.attachmentType}}"></span>
-                <div class="pull right">
-                  <div>{{ imagesPath.fileName | limitTo: 20 }}{{imagesPath.fileName.length > 20 ? '...' : ''}}</div>
-                  <div>Added: {{imagesPath.timeStamp}}</div>
-                  <a class="attachmentdelete" ng-click="removeAttachment(storyContr.storyData._id,imagesPath._id,imagesPath.path,imagesPath.fileName)">
-                    <i class="fa fa-trash-o"></i></a>
-                </div>
-              </a>
-            </div>
+            <div  class="list-group-item" ng-repeat="imagesPath in storyContr.storyData.attachmentList" title="{{imagesPath.fileName}}">
+              <ul class="list-group">
+                <a download="{{imagesPath.fileName}}" class="attachmentdetails" href="{{imagesPath.path}}" title="{{imagesPath.fileName}}">
+                  <span class=" col-sm-1 {{imagesPath.attachmentType}}" title="{{imagesPath.fileName}}"></span>
+                  <div>{{ imagesPath.fileName | limitTo: 50 }}{{imagesPath.fileName.length > 50 ? '...' : ''}}
+                  </div>
+                  <div>Added:{{imagesPath.timeStamp}}<a class="attachmentdelete" ng-click="removeAttachment(storyContr.storyData._id,imagesPath._id,imagesPath.path)">
+                    <i class="fa fa-trash-o" ></i>
+                  </div>
+                </a>
+                <!-- <a class="attachmentdelete" ng-click="removeAttachment(storyContr.storyData._id,imagesPath._id,imagesPath.path)">
+                <i class="fa fa-trash-o" ></i>
+              </a> -->
+            </ul>
           </div>
         </div>
-        <hr class="story-seperator">
-        <div class="story-details clearfix">
-          <span class="pull-left story-left-head"><i class="fa fa-list-ul" aria-hidden="true"></i></span>
-          <div class="pull-left story-members">
-            <h3 class="story-sub-header">Checklists  <button class="btn btn-default btn-sm" ng-click="addChecklist()"><i class="fa fa-plus" aria-hidden="true"></i></button></h3>
-            <div ng-repeat="todo in storyData.checklist">
-              <span class="checklist-header" ng-mouseenter="groupHovering=true" ng-mouseleave="groupHovering=false">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo._id,todo.checklistHeading)">
+      </a>
+    </div>
+          <hr class="story-seperator">
+          <div class="story-details clearfix">
+            <span class="pull-left story-left-head"><i class="fa fa-list-ul" aria-hidden="true"></i></span>
+            <div class="pull-left story-members">
+              <h3 class="story-sub-header">Checklists  <button class="btn btn-default btn-sm" ng-click="addChecklist()"><i class="fa fa-plus" aria-hidden="true"></i></button></h3>
+              <div ng-repeat="todo in storyData.checklist">
+                <span class="checklist-header" ng-mouseenter="groupHovering=true" ng-mouseleave="groupHovering=false">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo._id,todo.checklistHeading)">
                   <i class="fa fa-trash-o" ng-show="groupHovering"></i></a></small></span>
-
-                  <b class="progress-per">{{todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0}}%</b>
+                  <b class="progress-per">{{todo.items.length>0 ?((todo.checkedCount/todo.items.length*100)):0}}%</b>
+                  {{Math.floor((todo.checkedCount/todo.items.length*100))}}
                   <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar>
                   <li class="checklist-todos" ng-repeat="list in todo.items">
                     <input type="checkbox" ng-model="list.checked" ng-click="updateTodoItem(list,todo)">
@@ -120,20 +135,33 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <!-- <hr class="story-seperator">
+            <hr class="story-seperator">
             <div class="story-details clearfix">
               <span class="pull-left story-left-head"><i class="fa fa-comments" aria-hidden="true"></i></span>
               <div class="pull-left story-members">
                 <h3 class="story-sub-header">
                   Comments
                 </h3>
-                <textarea cols="50" placeholder="Enter Comments Here..." class="form-control"></textarea>
-                <a class="pull-right" ng-click="" ><i class="fa fa-share fa-3x" aria-hidden="true"></i></a>
+                <textarea cols="50" placeholder="Enter Comments Here..." class="form-control " ng-model="storyComment"></textarea>
+                <!-- <a class="pull-right btn btn-success" ng-click="" >Save</a> -->
+                <a class="btn btn-default btn-xs desc-btn pull-right"ng-click="clearComment()" ><i class="fa fa-close"></i></a>
+                <a class="btn btn-default btn-xs desc-btn pull-right" ng-click="saveComment()" ng-disabled="!storyComment.length>0"><i class="fa fa-check"></i></a>
               </div>
-            </div> -->
-        <!-- <div class="">
+              <div class="pull-left story-members">
+                <ul>
+                  <li ng-repeat="comment in storyData.comments" class="story-comment-content">
+                    <div class="story-comment-username">
+                      <b>{{comment.userName}}</b>
+                    </div>
+                    <span>{{comment.text}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="story-details clearfix">
+
+            </div>
+            <!-- <div class="">
             Label:
             <a ng-click="addLabel()"><i class="fa fa-plus" ></i></a>
           </div> -->

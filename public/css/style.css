@@ -3,8 +3,22 @@ a.attachmentdetails{
   left:10px;
   text-decoration: none;
 }
+.attachmentdetails{
+  margin-left:0px;
+}
 .attachmentIcon{
   margin-left:14px;
+}
+.attachedIcon{
+  margin-left:10px;
+}
+.story-addbutton{
+  padding-left:10px;
+  font-size:18px;
+}
+.attachments-wrap .list-group{
+  margin-bottom:0px;
+  margin-left:0px;
 }
 .jpg:before{
   content: "\f1c5";
@@ -12,7 +26,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #EF4836;
 }
 .jpeg:before{
@@ -21,7 +35,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #EF4836;
 }
 .png:before{
@@ -30,7 +44,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: BLUE;
 }
 .zip:before{
@@ -39,7 +53,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: black;
 }
 .xlsx:before{
@@ -48,7 +62,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #1E7145;
 }
 .xls:before{
@@ -57,7 +71,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #1E7145;
 }
 .pptx:before{
@@ -66,7 +80,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #D04525;
 }
 .ppt:before{
@@ -75,7 +89,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #D04525;
 }
 .doc:before{
@@ -84,7 +98,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #2B5797;
 }
 .docx:before{
@@ -93,7 +107,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #2B5797;
 }
 .txt:before{
@@ -102,7 +116,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 .mpeg:before{
@@ -111,7 +125,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 .mp4:before{
@@ -120,7 +134,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 .graphButton {
@@ -128,13 +142,16 @@ a.attachmentdetails{
   right: 1%;
   color: #527D73;
 }
+.attachmentdetails .col-sm-1{
+  padding-left:0px !important;
+}
 .pdf:before{
   content: "\f1c1";
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #EF4836;
 }
 .avi:before{
@@ -143,7 +160,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 
@@ -547,7 +564,7 @@ h3.pull-left.ng-binding {
 }
 .parentInner {
   min-height: 20px;
-  max-height: 450px;
+  max-height: 448px;
   overflow: auto;
 }
 .hideEdit{
@@ -595,6 +612,11 @@ i.fa.fa-calendar {
     position: absolute;
     font-size: 15px;
     color: #2DB394;
+}
+i.fa.fa-exclamation-triangle {
+    padding: 0;
+    padding-right: 4px;
+    /* color: yellow; */
 }
 .ng-datepicker-input{
     font-family: inherit;
@@ -747,7 +769,7 @@ icon.graphIconTwo {
 }
 .graphIconTwo b.fa {
     margin-top: 6px;
-    margin-left: 1px;
+    margin-left: 2px;
 }
 .pageHeading span {
     margin-left: 10px;
@@ -761,7 +783,7 @@ icon.graphIconTwo {
 }
 .graphIconOne b.fa {
     margin-top: 7px;
-    margin-left: 2px;
+    margin-left: 1px;
 }
 
 .pageHeading b {
@@ -793,7 +815,7 @@ icon.graphIconTwo {
   width: 100%;
 }
 .sprintDiv {
-  margin-top: 81px;
+  margin-top: 85px;
   overflow: hidden;
 }
 .sprintPage .fa{
@@ -894,7 +916,7 @@ icon.graphIconTwo {
   overflow: auto;
   overflow-x: hidden;
   /*float: left;*/
-  max-height: 500px;
+  max-height: 498px;
   min-height: 60px;
   background-color: rgb(241, 255, 252);
   border: 1px solid #36D7B7;
@@ -910,7 +932,7 @@ icon.graphIconTwo {
 }
 .extendParent .parentInner {
   /* background-color: black; */
-  max-height: 367px;
+  max-height: 365px;
 }
 .list-wrapper{
   float:left;
@@ -983,6 +1005,10 @@ icon.graphIconTwo {
     font-weight: 700;
     white-space: nowrap;
 }
+.dropdown-menu .divider {
+    width: 192px;
+    margin-left: 13px;
+}
 .dropdown-menu small.ng-binding {
     padding-left: 12px;
 }
@@ -1032,7 +1058,7 @@ h4.sprintPage {
     margin-top: 31px;
     margin-bottom: 3px;
     font-size: 21px;
-    padding-top: 4px;
+    padding-top: 8px;
     color: #2C5D51;
     width: 100%;
     position: fixed;
@@ -1045,6 +1071,17 @@ h4 small {
 }
 tiny {
     font-size: 12px;
+}
+tiny.beta {
+    position: absolute;
+    font-size: 12px;
+    color: #B5B5B5;
+    /* background-color: #D60F0F; */
+    padding: 0px 3px;
+    line-height: 14px;
+    font-family: monospace;
+    border-radius: 4px;
+    margin-top: 3px;
 }
 small {
     color: #70948C;
@@ -1204,15 +1241,21 @@ h4 i.fa{
   display: block;
   clear: both;
 }
-.activity-comment-content {
+.story-comment-content {
   padding: 5px 5px;
-  background-color: lightgrey;
+  background-color: rgba(191, 191, 191, 0.05);
   border-radius: 3px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, .23);
   overflow: hidden;
-  cursor: pointer;
+  /* cursor: pointer; */
   margin-top: 5px;
   word-break: break-all;
+  max-width: 87%;
+  color: #777;
+  margin-top: 15px;
+}
+.story-comment-username{
+  margin-bottom: 4px;
 }
 .activity-item-content {
   width: 80%;
@@ -1335,6 +1378,13 @@ background-color: #9DEDDD !Important;
   padding-left: 0;
   margin-bottom: 10px;
   padding-right: 5px;
+  cursor: pointer;
+}
+.modal-members-list a{
+    text-decoration: none;
+}
+.modal-members-list i{
+  margin-top: 8px;
 }
 
 .SprintModal .list-group {

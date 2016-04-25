@@ -112,11 +112,11 @@ Over View
     <div class="pageHeading" ng-click="showGraph=!showGraph">
       <span>...</span>
       <div class="graphMenu" ng-show="showGraph">
-        <icon class="graphIconOne">
-          <b class="fa fa-table" ng-click="openReleaseChart()"></b>
+        <icon class="graphIconOne" ng-click="openReleaseChart()">
+          <b class="fa fa-list-alt"></b>
         </icon>
-        <icon class="graphIconTwo">
-          <b class="fa fa-sun-o" ng-click="showOverGraph()"></b>
+        <icon class="graphIconTwo" ng-click="showOverGraph()">
+          <b class="fa fa-dot-circle-o"></b>
         </icon>
 
       </div>
@@ -169,7 +169,7 @@ Over View
     <div class="modal-content">
       <div class="modal-header story-backBug">
         <button type="button" class="close" data-dismiss="modal"><i class="fa fa-times-circle"></i></button>
-        <h4 class="modal-title">Warning</h4>
+        <h4 class="modal-title"><i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Warning</h4>
       </div>
       <div class="modal-body">
         Do you want to delete the Release?<br><br>
