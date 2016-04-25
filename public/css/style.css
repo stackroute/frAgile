@@ -192,7 +192,7 @@ h3 {
   width: 7px;
   height: 7px;
 }
-.parent ::-webkit-scrollbar {
+.parent ::-webkit-scrollbar,.activityouterdiv::-webkit-scrollbar {
   width: 4px;
   height: 4px;
   bottom: 20px;
@@ -1258,6 +1258,7 @@ h4 i.fa{
   /* cursor: pointer; */
   margin-top: 5px;
   word-break: break-all;
+min-width: 400px;
   color: #777;
   margin-top: 15px;
 }
@@ -1455,7 +1456,7 @@ background-color: #9DEDDD !Important;
   cursor: pointer;
   margin: 0;
   margin-bottom: 5px;
-  width: 212px;
+  width: 265px;
   min-height: 27px;
   padding: 5px;
 }
@@ -1477,13 +1478,35 @@ background-color: #9DEDDD !Important;
 /*This class is used for labels template display*/
 
 .story-label-template-selectable {
-  border-radius: 13px;
   cursor: pointer;
+    margin: 0;
+    margin-bottom: 5px;
+    width: 50px;
+    min-height: 18px;
+    padding: 0px 10px;
+    margin-top: 15px;
+    margin-left: 26px;
+}
+.story-label{
   margin: 0;
-  margin-bottom: 5px;
-  width: 50px;
-  min-height: 42px;
-  padding: 5px;
+    margin-bottom: 5px;
+    width: 40px;
+    min-height: 18px;
+    padding: 0px 10px;
+    margin-top: 15px;
+}
+.story-label-margin{
+      margin-left: 52px !Important;
+}
+.story-label-template-selectable-anchor{
+  text-decoration: none !Important;
+  cursor: pointer;
+}
+.story-label-selectable-list{
+  list-style: none;
+}
+.story-label-selectable-edit{
+  margin-top: 9px;
 }
 .story-active {
   padding-right: 32px

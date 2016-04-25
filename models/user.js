@@ -1,4 +1,5 @@
 var Project = require('../models/project.js');
+var templates = require('../models/template.js');
 
 var mongoose = require('mongoose'),
   userSchema = new mongoose.Schema({
@@ -139,7 +140,7 @@ userSchema.statics.getUserEmail = function(email, callback) {
 }
 
 userSchema.statics.getProjects = function(userID, callback) {
-  this.findById(userID).populate("projects").populate("release.0.sprints").exec(function(err, data) {
+  this.findById(userID).populate({path:"projects",populate:{path:"labelId"}}).exec(function(err, data) {
     if (err) callback(err)
     else callback(data);
   });

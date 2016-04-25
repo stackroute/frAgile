@@ -10,7 +10,16 @@ var socket = Socket($scope);
   });
 
   storyContr.storyGrp=storyContr.complexDataObject.storyGrp;
-
+  //Below code is to get labels data from project starts
+  $scope.storyTempData= [];
+  var respObj= $rootScope.projects.filter(function(item) { return item._id === $stateParams.prId; });
+  for (var i = 0; i < respObj[0].labelId.labelList.length; i++) {
+    if(storyContr.storyData.labelList.indexOf(respObj[0].labelId.labelList[i]._id)!=-1){
+      $scope.storyTempData.push(respObj[0].labelId.labelList[i]);
+    }
+  }
+  storyContr.storyData.labelList=$scope.storyTempData;//Overriding the old valuse
+  //Ends
   $scope.storyData = storyContr.storyData;
   $scope.storyComment="";
 
@@ -422,6 +431,16 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
       data.memberList.forEach(function(storyItem){
         storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
       });
+      ///
+      $scope.storyTempData= [];
+      var projObj= $rootScope.projects.filter(function(item) { return item._id === $stateParams.prId; });
+      for (var i = 0; i < projObj[0].labelId.labelList.length; i++) {
+        if(data.labelList.indexOf(projObj[0].labelId.labelList[i]._id)!=-1){
+          $scope.storyTempData.push(projObj[0].labelId.labelList[i]);
+        }
+      }
+      data.labelList=$scope.storyTempData;//Overriding the old valuse
+      ///
       $scope.storyData = data;
     }
   })

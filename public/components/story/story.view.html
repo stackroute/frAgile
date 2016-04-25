@@ -53,6 +53,20 @@
         <hr class="story-seperator">
 
         <div class="story-details clearfix">
+          <div class="pull-left story-left-head attachmentIcon"><i class="fa fa-bookmark" aria-hidden="true"></i></div>
+        <div class="pull-left story-members">
+          <h3 class="story-sub-header">Labels<span><i class="fa fa-plus story-addbutton" aria-hidden="true" ng-click="addLabel()"></i></span></h3>
+        </div>
+        <div class="pull-left story-members story-label-margin">
+          <span ng-repeat="listArray in storyData.labelList">
+            <span class="story-label-design story-label story-label-{{listArray.colorName}}">
+            </span>
+          </span>
+        </div>
+      </div>
+        <hr class="story-seperator">
+
+        <div class="story-details clearfix">
           <span class="pull-left story-left-head"><i class="fa fa-users" aria-hidden="true"></i></span>
           <div class="pull-left story-members">
             <h3 class="story-sub-header">Members<i class="fa fa-plus story-addbutton"ng-click="addMember()" aria-hidden="true"></i></h3>
