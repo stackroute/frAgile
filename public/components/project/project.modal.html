@@ -8,7 +8,7 @@
           <div class="form-group">
             <label for="inputName" class="col-sm-2 control-label">Name</label>
             <div class="col-sm-10">
-              <input type="text" class="form-control" id="inputName" placeholder="Name" ng-model = "newReleaseName">
+              <input type="text" class="form-control" id="inputName" placeholder="Name" ng-model = "newReleaseName" autofocus>
             </div>
           </div>
           <p class="warningModal" ng-hide = "warningModalName">
@@ -34,7 +34,7 @@
                 <input type="date" class="form-control" id="inputDate" value = "{{release.releaseDate | date:'yyyy-MM-dd'}}" ng-model = "newReleaseDate" >
           </div>
           </div>
-          <p class="warningModal" ng-hide = "warningModalDate">
+          <p class="warningModal pull-left" ng-hide = "warningModalDate">
             Please enter {{modalContr.addWhat}} end Date
           </p>
         </form>

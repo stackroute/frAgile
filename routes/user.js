@@ -63,7 +63,13 @@ router.post('/updateUser', function(req, res, next) {
   })
 });
 router.get('/getUserDetails', function(req, res, next) {
-  res.send(req.user);
+  userDetails = {
+    firstName : req.user.firstName,
+    lastName : req.user.lastName,
+    email : req.user.email,
+    _id : req.user._id
+  };
+  res.send(userDetails);
 });
 router.get('/getUserId', function(req, res, next) {
   if (req.query.email) {

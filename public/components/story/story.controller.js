@@ -1,4 +1,4 @@
-fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','param','$window',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,param,$window){
+fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','Upload','param','$window',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,Upload,param,$window){
 var socket = Socket($scope);
 
   var storyContr = this;
@@ -158,8 +158,33 @@ var socket = Socket($scope);
       data.type = name;
 
       socket.emit("story:removeAttachment", data);
-
     });
+  };
+  /***
+  author:Shrinivas
+  Function Name: submit
+  Function Description: This method is called by sub-Modal window of attachment. It will call the upload function which will take $scope.file as parameter which has details like file name, file path, file size etc..
+  Parameters:$scope.file
+  ***/
+  $scope.upload = function() {
+    if ($scope.form.file.$valid && $scope.file) {
+      Upload.upload({
+        url: '/story/addattachments',
+        data: {file: $scope.file,storyId:storyContr.storyData._id}
+      }).then(function (resp) {
+        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+        resp.data.room = $scope.roomName;
+        resp.data.projectID = $scope.projectID;
+        resp.data.type = resp.config.data.file.name;
+        socket.emit('story:addAttachment', resp.data);
+        console.log(resp.data,">>>dismiss");
+      }, function (resp) {
+        console.log('Error status: ' + resp.status);
+      }, function (evt) {
+        var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+      });
+    }
   };
 
   /***

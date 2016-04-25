@@ -30,7 +30,7 @@ Over View
         <i class="fa fa-user-plus" data-toggle="modal" data-target="#addMembersModal"  ng-click="getAllUsers(project._id,project.name)" aria-hidden="true"></i></h4>
         <small tooltip-placement="bottom"  uib-tooltip="{{project.description}}" >{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
           ...
-        </span></small>
+        </span></small><br>
 
           <div class="backgroundBlack" ng-class="{'showEdit':editProjectShow,'hideEdit':!editProjectShow}" ng-click = "editProjectShow=false">
 
