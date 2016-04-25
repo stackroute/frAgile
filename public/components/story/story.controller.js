@@ -14,6 +14,10 @@ var socket = Socket($scope);
   $scope.storyData = storyContr.storyData;
   $scope.storyComment="";
 
+  $scope.storyData.memberList.forEach(function(data){
+    data.fullName = data.firstName + " " + data.lastName;
+  });
+
   $scope.storyData.updatetime = moment($scope.storyData.lastUpdated).fromNow();
 
   //TODO:Check if these are required????
@@ -367,13 +371,13 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   ***/
   $scope.saveComment = function() {
 //TODO:Add listner
-console.log($scope.storyData._id);
   socket.emit('story:addComment', {
       'room': $scope.roomName,
       'storyId': $scope.storyData._id,
-      'text': $scope.storyComment
+      'text': $scope.storyComment,
+      'projectID' : $scope.projectID
     });
-    $scope.storyComment = "";
+      $scope.storyComment = "";
   };
 
   /***
@@ -388,6 +392,9 @@ console.log($scope.storyData._id);
 //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
     if(data._id == $scope.storyData._id){ //If the updated card is same as current opened card
+      data.memberList.forEach(function(storyItem){
+        storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
+      });
       $scope.storyData = data;
     }
   })
