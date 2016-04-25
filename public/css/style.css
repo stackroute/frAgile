@@ -1250,7 +1250,6 @@ h4 i.fa{
   /* cursor: pointer; */
   margin-top: 5px;
   word-break: break-all;
-  max-width: 87%;
   color: #777;
   margin-top: 15px;
 }
@@ -1550,6 +1549,7 @@ background-color: #9DEDDD !Important;
 .story-members {
   margin-left: 10px;
   margin-top: 7px;
+  max-width: 400px;
 }
 .checklist-header {
   font-size: 19px;
