@@ -13,6 +13,10 @@ fragileApp.factory('storyService',['$http',function($http) {
         return  $http.post('/story/addchecklistgroup?storyId='+storyId+'&checklistObj='+checklistObj);
       };
 
+      this.getMembersData = function(storyId){
+        return $http.post('/story/getMembersData?id='+storyId);
+      }
+
 /***
 author:sharan
 function:getStoryCopyMovementData

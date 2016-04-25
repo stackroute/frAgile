@@ -16,7 +16,15 @@ module.exports = function(socket, io, user) {
       if (!err) {
         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
           if (!err) {
+            var members={
+              _id:storyData._id,
+              memberList:doc.memberList
+            }
+            console.log("Im in add");
+            console.log(members);
+            io.to(data.room).emit('story:membersModified', members);
             io.to(data.room).emit('story:dataModified', storyData);
+
 
             var actData = {
               room: "activity:" + data.projectID,
@@ -52,6 +60,12 @@ module.exports = function(socket, io, user) {
         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
           if (!err) {
             io.to(data.room).emit('story:dataModified', storyData);
+console.log("Im in remove");
+            var members={
+              _id:storyData._id,
+              memberList:doc.memberList
+            }
+            io.to(data.room).emit('story:membersModified', members);
 
             var actData = {
               room: "activity:" + data.projectID,
