@@ -1,7 +1,7 @@
-fragileApp.controller('releaseGraphController', ['$scope','$rootScope','$uibModal','$http','$timeout','rgService','graphModalFactory',//'$uibModalInstance',
-function($scope,$rootScope,$uibModal,$http,$timeout,rgService,graphModalFactory) {
+fragileApp.controller('releaseGraphController', ['$scope','$rootScope','$uibModal','$http','$timeout','rgService','graphModalFactory','$stateParams',//'$uibModalInstance',
+function($scope,$rootScope,$uibModal,$http,$timeout,rgService,graphModalFactory,$stateParams) {
 
-  $scope.releaseChartData = function(projectID) {
+  $scope.releaseChartData = function(projectID,releaseID) {
     rgService.getReleaseGraph(projectID).success(function(graphDetails) {
 
       if(graphDetails === null){
@@ -17,32 +17,34 @@ function($scope,$rootScope,$uibModal,$http,$timeout,rgService,graphModalFactory)
 
       for(var i = 0 ,len = graphDetails.release.length; i < len ; i++) {
         //// Computation Code ----------->
-        for(var j=0,sprLen = graphDetails.release[i].sprints.length; j < sprLen ; j++){
-          var inProgressCount =0 ,completedCount = 0;
-          // var dataJson = {};
-          var inProg ={};
-          var compl={};
-          for(var k=0,lstLen = graphDetails.release[i].sprints[j].list.length; k < lstLen ; k++){
-            var temp = graphDetails.release[i].sprints[j].list[k];
-            if(temp.group == 'Releasable'){
-              completedCount += temp.stories.length;
+        if(graphDetails.release[i]._id === releaseID){
+          for(var j=0,sprLen = graphDetails.release[i].sprints.length; j < sprLen ; j++){
+            var inProgressCount =0 ,completedCount = 0;
+            // var dataJson = {};
+            var inProg ={};
+            var compl={};
+            for(var k=0,lstLen = graphDetails.release[i].sprints[j].list.length; k < lstLen ; k++){
+              var temp = graphDetails.release[i].sprints[j].list[k];
+              if(temp.group == 'Releasable'){
+                completedCount += temp.stories.length;
+              }
+              else if(temp.group == 'inProgress'){
+                inProgressCount += temp.stories.length;
+              }
             }
-            else if(temp.group == 'inProgress'){
-              inProgressCount += temp.stories.length;
-            }
+            // dataJson['name'] = graphDetails.data.release[i].sprints[j].name == null ? 'na' : graphDetails.data.release[i].sprints[j].name;
+            // dataJson['in Progress'] = inProgressCount;
+            // dataJson['completed'] = completedCount;
+            // jdata.push(dataJson);
+
+            inProg['label'] = graphDetails.release[i].sprints[j].name == null ? 'na' : graphDetails.release[i].sprints[j].name;
+            inProg['value'] = inProgressCount;
+
+            compl['label'] = graphDetails.release[i].sprints[j].name == null ? 'na' : graphDetails.release[i].sprints[j].name;
+            compl['value'] = completedCount;
+            jdataInProgress.push(inProg);
+            jdataCompleted.push(compl);
           }
-          // dataJson['name'] = graphDetails.data.release[i].sprints[j].name == null ? 'na' : graphDetails.data.release[i].sprints[j].name;
-          // dataJson['in Progress'] = inProgressCount;
-          // dataJson['completed'] = completedCount;
-          // jdata.push(dataJson);
-
-          inProg['label'] = graphDetails.release[i].sprints[j].name == null ? 'na' : graphDetails.release[i].sprints[j].name;
-          inProg['value'] = inProgressCount;
-
-          compl['label'] = graphDetails.release[i].sprints[j].name == null ? 'na' : graphDetails.release[i].sprints[j].name;
-          compl['value'] = completedCount;
-          jdataInProgress.push(inProg);
-          jdataCompleted.push(compl);
         }
       }
       var InProgressData = {};
@@ -57,16 +59,16 @@ function($scope,$rootScope,$uibModal,$http,$timeout,rgService,graphModalFactory)
       allData.push(completedData);
 
       $scope.data =allData;
-      console.log("----------releaseChartData----------"+JSON.stringify($scope.data));
+      // console.log("----------releaseChartData----------"+JSON.stringify($scope.data));
     });
   };
 
-// TODO - Add the project id here
-  $scope.releaseChartData($rootScope.projectID);
+  // TODO - Add the project id here
+  $scope.releaseChartData($rootScope.projectID,$stateParams.releaseID);
 
-//Options for Progress Chart
+  //Options for Progress Chart
 
-//Horizontal Bar chart
+  //Vertical Bar chart
 
   $scope.options = {
    chart: {
@@ -76,11 +78,11 @@ function($scope,$rootScope,$uibModal,$http,$timeout,rgService,graphModalFactory)
      y: function(d){return d.value;},
      showControls: false,
      grouped:false,
-     stacked:true,
+     stacked:false,
      showValues: true,
      duration: 500,
      xAxis: {
-       showMaxMin: false
+       showMaxMin: true
      },
      yAxis: {
        axisLabel: 'Stories',
@@ -88,6 +90,15 @@ function($scope,$rootScope,$uibModal,$http,$timeout,rgService,graphModalFactory)
          return d3.format(',')(d);
        }
      },
+   },
+   title: {
+     enable: true,
+     text: "",
+     className: "h4",
+     css: {
+       "width": "nullpx",
+       "textAlign": "center"
+     }
    },
    subtitle: {
        enable: true,
@@ -98,7 +109,7 @@ function($scope,$rootScope,$uibModal,$http,$timeout,rgService,graphModalFactory)
        }
    },
  };
-// Horizontal bar chart end
+  // Vertical bar chart end
 
 
 }]);

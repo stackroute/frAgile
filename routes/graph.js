@@ -55,7 +55,7 @@ router.get('/release', function(req, res) {
 // TODO: Need to get the maximum count among the sprints inside a single release.
 router.get('/cfd', function(req, res) {
   var projectId = req.query.id;
-  project.findOne({'_id': projectId},'release.sprints')
+  project.findOne({'_id': projectId},'release._id release.sprints')
   .populate("release.sprints", "name list.group list.stories")
   .exec(function(err , doc) {
     if (err) {

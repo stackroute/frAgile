@@ -40,8 +40,18 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
           color: d3.scale.category20c(),
           duration: 250
         },
+        title: {
+          enable: true,
+          text: "",
+          className: "h4",
+          css: {
+            "width": "nullpx",
+            "textAlign": "center"
+          }
+        },
         subtitle: {
           enable: true,
+          color : "black",
           text: 'This graph displays project and releases. Hover on the graphs to see which project you are working on and its associated release.',
           css: {
             'margin': '10px 13px 0px 7px'

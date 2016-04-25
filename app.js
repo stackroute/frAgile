@@ -13,7 +13,6 @@ var RedisStore = require('connect-redis')(session);
 var app = express();
 
 mongoose.connect('mongodb://localhost/frAgile');
-
 var routes = require('./routes/index');
 //var users = require('./routes/users');
 var user = require('./routes/user');
