@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 var RedisStore = require('connect-redis')(session);
 var app = express();
 
-mongoose.connect('mongodb://172.23.238.253/frAgile_dummy');
+mongoose.connect('mongodb://localhost/fragileDB');
 
 var routes = require('./routes/index');
 //var users = require('./routes/users');
