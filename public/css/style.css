@@ -847,7 +847,7 @@ icon.graphIconTwo {
   padding-bottom: 7px;
 }
 .backbug .child{
-  background-color: rgb(255, 109, 109);
+  background-color: #7BC2FF;
 }
 .Releasable .child{
   background-color: rgba(38, 166, 91, 0.56);
@@ -1334,8 +1334,11 @@ min-width: 400px;
   background-color: #5cb85c;
 }
 
-.story-backBug {
+.WarningModal {
   background-color: #EF4836 !Important;
+}
+.story-backBug {
+  background-color: rgb(94, 151, 200) !Important;
 }
 .AlertBox .modal-footer {
      border-top: 0px;
