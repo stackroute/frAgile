@@ -211,6 +211,9 @@ StorySchema.statics.removeAttachment = function(storyId, attachmentId, callback)
           attachmentList: {
             _id: attachmentId
           }
+        },
+        $inc: {
+          "indicators.attachmentsCount": -1
         }
       }, {
         new: true,
@@ -232,11 +235,7 @@ StorySchema.statics.removeAttachment = function(storyId, attachmentId, callback)
 TODO: Need to implement where the attachments will be stored
 in the disk**/
 StorySchema.statics.addAttachments = function(storyId, atachmentObj, callback) {
-  this.findOne({
-    "_id": storyId
-  }).exec(function(err, doc) {
-    console.log(doc);
-  }); //TODO: Update indicators count
+
   this.findByIdAndUpdate({
       "_id": storyId
     }, {
@@ -249,6 +248,9 @@ StorySchema.statics.addAttachments = function(storyId, atachmentObj, callback) {
           addedByUserId: atachmentObj['addedByUserId'],
           path: atachmentObj['path']
         }
+      },
+      $inc: {
+        "indicators.attachmentsCount": 1
       }
     }, {
       new: true,
@@ -302,6 +304,7 @@ StorySchema.statics.removeChecklistItem = function(storyId, checklistGrpId, item
   if (checked) {
     setIndicators["indicators.chklstItmsCnt"] = -1;
     setIndicators["indicators.chklstItmsChkdCnt"] = -1;
+    setIndicators["checklist.$.checkedCount"] = -1;
   } else {
     setIndicators["indicators.chklstItmsCnt"] = -1;
   }
