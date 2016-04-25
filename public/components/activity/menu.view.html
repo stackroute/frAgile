@@ -50,7 +50,7 @@
                 <div>
                   <form>
                     <autocomplete ng-model="addedUserEmail" data="dbUsers" attr-placeholder="Enter user email..."></autocomplete>
-                    <a ng-click="addMember()" type="submit" class="addLst"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                    <!-- <a ng-click="addMember()" type="submit" class="addLst"><i class="fa fa-plus" aria-hidden="true"></i></a> -->
 
                   </form>
 
@@ -62,6 +62,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success" ng-click="addMember()" >Add</button>
               </div>
             </div>
           </div>
