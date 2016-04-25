@@ -1587,6 +1587,7 @@ background-color: #9DEDDD !Important;
   list-style-type: none;
   font-size: 17px;
   margin-left: 10px;
+  word-wrap: break-word;
 }
 .add-todo {
   margin-left: 10px;

@@ -363,8 +363,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
                   sprint: $scope.sprint,
                   projMembers: $rootScope.memberList, //TODO:Check if this can be sent directly instead of resolve
                   storyGrp: storyGrp,
-              currentPosition: currentPosition,
-              labelTemplateData:$scope.labelTemplate
+              currentPosition: currentPosition
+              //labelTemplateData:$scope.labelTemplate
                 };
               }
             }

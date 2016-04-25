@@ -1,29 +1,31 @@
-fragileApp.controller('storyController',['$scope','$rootScope','$stateParams','storyService','modalService','sprintService','releaseService','$uibModal','$uibModalInstance','$location','Socket','Upload','param','$window',function($scope,$rootScope,$stateParams,storyService,modalService,sprintService,releaseService,$uibModal,$uibModalInstance,$location,Socket,Upload,param,$window){
-var socket = Socket($scope);
+fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window) {
+  var socket = Socket($scope);
 
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
-  storyContr.storyData=storyContr.complexDataObject.story.data;
+  storyContr.storyData = storyContr.complexDataObject.story.data;
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
-        storyContr.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+    storyContr.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
   });
 
-  storyContr.storyGrp=storyContr.complexDataObject.storyGrp;
+  storyContr.storyGrp = storyContr.complexDataObject.storyGrp;
   //Below code is to get labels data from project starts
-  $scope.storyTempData= [];
-  var respObj= $rootScope.projects.filter(function(item) { return item._id === $stateParams.prId; });
-  for (var i = 0; i < respObj[0].labelId.labelList.length; i++) {
-    if(storyContr.storyData.labelList.indexOf(respObj[0].labelId.labelList[i]._id)!=-1){
-      $scope.storyTempData.push(respObj[0].labelId.labelList[i]);
-    }
-  }
-  storyContr.storyData.labelList=$scope.storyTempData;//Overriding the old valuse
+  // $scope.storyTempData = [];
+  // var respObj = $rootScope.projects.filter(function(item) {
+  //   return item._id === $stateParams.prId;
+  // });
+  // for (var i = 0; i < respObj[0].labelId.labelList.length; i++) {
+  //   if (storyContr.storyData.labelList.indexOf(respObj[0].labelId.labelList[i]._id) != -1) {
+  //     $scope.storyTempData.push(respObj[0].labelId.labelList[i]);
+  //   }
+  // }
+  // storyContr.storyData.labelList = $scope.storyTempData; //Overriding the old valuse
   //Ends
   $scope.storyData = storyContr.storyData;
-  $scope.storyComment="";
+  $scope.storyComment = "";
 
-  $scope.storyData.memberList.forEach(function(data){
+  $scope.storyData.memberList.forEach(function(data) {
     data.fullName = data.firstName + " " + data.lastName;
   });
 
@@ -35,7 +37,7 @@ var socket = Socket($scope);
   var storyID = dataLoc.storyId;
 
   $scope.storyID = storyContr.storyData._id; //Used in loading activity for card.
-  $scope.sprintID =storyContr.complexDataObject.sprint._id;
+  $scope.sprintID = storyContr.complexDataObject.sprint._id;
 
   $scope.roomName = "sprint:" + $scope.sprintID;
   // var emitData = {
@@ -50,21 +52,21 @@ var socket = Socket($scope);
     selected: {}
   };
   // gets the template to ng-include for a table row / item
-  $scope.getTemplate = function () {
+  $scope.getTemplate = function() {
     if ($scope.set) return 'edit';
-    else{
-      $scope.set=false;
+    else {
+      $scope.set = false;
       return 'display';
     }
   };
-  $scope.editDescription = function (descriptions) {
-    $scope.set=true;
+  $scope.editDescription = function(descriptions) {
+    $scope.set = true;
     $scope.model.selected = angular.copy(descriptions);
   };
 
-  $scope.reset = function () {
+  $scope.reset = function() {
     $scope.model.selected = $scope.model.description;
-    $scope.set=false;
+    $scope.set = false;
   };
 
   //
@@ -83,7 +85,7 @@ var socket = Socket($scope);
   ***/
   //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
   $scope.addMember = function() {
-    modalService.open('sm', 'components/story/operations/addMember.view.html','storyOperationsController',storyContr.complexDataObject);
+    modalService.open('sm', 'components/story/operations/addMember.view.html', 'storyOperationsController', storyContr.complexDataObject);
   };
 
   /***
@@ -94,7 +96,7 @@ var socket = Socket($scope);
   Parametes: Modal-size,Template,Controller,Story&Sprint data.
   ***/
   $scope.addLabel = function() {
-    modalService.open('sm', 'components/story/operations/addLabel.view.html','storyOperationsController',storyContr.complexDataObject);
+    modalService.open('sm', 'components/story/operations/addLabel.view.html', 'storyOperationsController', storyContr.complexDataObject);
   };
 
   /***
@@ -103,7 +105,7 @@ var socket = Socket($scope);
   parameters:LabelObj
   description:This function is used to remove a label from the story.
   ***/
-  $scope.removeLabel = function(LabelObj){
+  $scope.removeLabel = function(LabelObj) {
 
   }
 
@@ -113,27 +115,27 @@ var socket = Socket($scope);
   parameters:memberid
   description:function to remove member from story
   ***/
-  $scope.removeMember=function(memberId,fullName){
+  $scope.removeMember = function(memberId, fullName) {
     //working,tested
     socket.emit('story:removeMembers', {
 
       'room': $scope.roomName,
       'storyid': storyContr.storyData._id,
       'memberid': memberId,
-      'fullName' : fullName,
-      'projectID' : $scope.projectID
+      'fullName': fullName,
+      'projectID': $scope.projectID
     });
   }
 
-  socket.on('story:attachmentAdded', function(data){
+  socket.on('story:attachmentAdded', function(data) {
     console.log(data._id);
     console.log($scope.storyData._id);
-    if(data._id == $scope.storyData._id){
+    if (data._id == $scope.storyData._id) {
       // data.attachmentList.timeStamp = moment()
       $scope.storyData.attachmentList = data.attachmentList;
 
       angular.forEach($scope.storyData.attachmentList, function(value, key) {
-            $scope.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+        $scope.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
       });
 
       console.log('On socket: ', $scope.storyData.attachmentList);
@@ -141,15 +143,15 @@ var socket = Socket($scope);
 
   });
 
-  socket.on('story:attachmentRemoved', function(data){
+  socket.on('story:attachmentRemoved', function(data) {
     console.log(data._id);
     console.log($scope.storyData._id);
-    if(data._id == $scope.storyData._id){
+    if (data._id == $scope.storyData._id) {
       // data.attachmentList.timeStamp = moment()
       $scope.storyData.attachmentList = data.attachmentList;
 
       angular.forEach($scope.storyData.attachmentList, function(value, key) {
-            $scope.storyData.attachmentList[key].timeStamp=moment(value.timeStamp).fromNow();
+        $scope.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
       });
 
       console.log('On socket: ', $scope.storyData.attachmentList);
@@ -158,11 +160,11 @@ var socket = Socket($scope);
   })
 
   $scope.addAttachment = function() {
-    modalService.open('sm', 'components/story/operations/addAttachment.view.html','MyCtrl',$scope.storyData);
+    modalService.open('sm', 'components/story/operations/addAttachment.view.html', 'MyCtrl', $scope.storyData);
     //$uibModalInstance.close($scope.searchTerm);
   };
-  $scope.removeAttachment = function(storyId,attachmentId,file_name,name) {
-    storyService.removeAttachment(storyId,attachmentId,file_name).success(function(data){
+  $scope.removeAttachment = function(storyId, attachmentId, file_name, name) {
+    storyService.removeAttachment(storyId, attachmentId, file_name).success(function(data) {
 
       data.room = $scope.roomName;
       data.projectID = $scope.projectID;
@@ -181,17 +183,20 @@ var socket = Socket($scope);
     if ($scope.form.file.$valid && $scope.file) {
       Upload.upload({
         url: '/story/addattachments',
-        data: {file: $scope.file,storyId:storyContr.storyData._id}
-      }).then(function (resp) {
+        data: {
+          file: $scope.file,
+          storyId: storyContr.storyData._id
+        }
+      }).then(function(resp) {
         console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
         resp.data.room = $scope.roomName;
         resp.data.projectID = $scope.projectID;
         resp.data.type = resp.config.data.file.name;
         socket.emit('story:addAttachment', resp.data);
-        console.log(resp.data,">>>dismiss");
-      }, function (resp) {
+        console.log(resp.data, ">>>dismiss");
+      }, function(resp) {
         console.log('Error status: ' + resp.status);
-      }, function (evt) {
+      }, function(evt) {
         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
         console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
       });
@@ -206,7 +211,7 @@ var socket = Socket($scope);
   Parametes: Modal-size,Template,Controller,Story data.
   ***/
   $scope.addChecklist = function() {
-    modalService.open('sm', 'components/story/operations/addChecklistGroup.view.html','storyOperationsController',storyContr.complexDataObject);
+    modalService.open('sm', 'components/story/operations/addChecklistGroup.view.html', 'storyOperationsController', storyContr.complexDataObject);
   };
 
   /***
@@ -216,21 +221,21 @@ var socket = Socket($scope);
   Parametes: Modal-size,Template,Controller,Story\Project data.
   ***/
   $scope.moveCopyStory = function(modalTemplate) {
-    storyContr.complexDataObject.storyMoveData={};
+    storyContr.complexDataObject.storyMoveData = {};
     storyService.getStoryCopyMovementData($stateParams.prId).then(function(response) {
 
       //Required to showcase the current position of story in move\copy modal
-      for(var rel=0;rel< response.data.release.length;rel++){
-        if(response.data.release[rel]._id == $stateParams.releaseID){
+      for (var rel = 0; rel < response.data.release.length; rel++) {
+        if (response.data.release[rel]._id == $stateParams.releaseID) {
           //TODO:this loop can be resused to give the non admin the rights to move/copy the story between lists of the same sprint.
-          response.data.release.selectedRelease=response.data.release[rel];
-          response.data.release.selectedSprints=storyContr.complexDataObject.sprint;
+          response.data.release.selectedRelease = response.data.release[rel];
+          response.data.release.selectedSprints = storyContr.complexDataObject.sprint;
           //Below for loop is required because duplicates were displayed in list dropdown if display directly
           for (var sprIndex = 0; sprIndex < response.data.release.selectedSprints.list.length; sprIndex++) {
             if (response.data.release.selectedSprints.list[sprIndex]._id == storyContr.complexDataObject.currentPosition.listId) {
               console.log("enter");
-              response.data.release.selectedList=response.data.release.selectedSprints.list[sprIndex];
-               storyContr.complexDataObject.currentPosition.sprintId=response.data.release.selectedSprints._id;
+              response.data.release.selectedList = response.data.release.selectedSprints.list[sprIndex];
+              storyContr.complexDataObject.currentPosition.sprintId = response.data.release.selectedSprints._id;
               break;
             }
           }
@@ -238,29 +243,29 @@ var socket = Socket($scope);
         }
 
       }
-      storyContr.complexDataObject.storyMoveData=response;
-      modalService.open('sm', modalTemplate,'storyOperationsController',storyContr.complexDataObject);
+      storyContr.complexDataObject.storyMoveData = response;
+      modalService.open('sm', modalTemplate, 'storyOperationsController', storyContr.complexDataObject);
     });;
 
   };
   $scope.deleteStory = function() {
-  //Can use tool tip
-    if ($window.confirm("Do you want to delete story?")){
+    //Can use tool tip
+    if ($window.confirm("Do you want to delete story?")) {
       $uibModalInstance.dismiss('cancel');
 
-      var deleteFrom='List';
-      if(storyContr.complexDataObject.currentPosition.listItemName != 'Backlog'|| storyContr.complexDataObject.currentPosition.listItemName != 'Buglist'){
-        deleteFrom=storyContr.complexDataObject.currentPosition.listItemName;
+      var deleteFrom = 'List';
+      if (storyContr.complexDataObject.currentPosition.listItemName != 'Backlog' || storyContr.complexDataObject.currentPosition.listItemName != 'Buglist') {
+        deleteFrom = storyContr.complexDataObject.currentPosition.listItemName;
       }
-            socket.emit('sprint:deleteStory', {
-              'room': $scope.roomName,
-              'storyId':$scope.storyData._id,
-              'projectId':$stateParams.prId,
-              'deleteFrom':deleteFrom,
-              'sprintId': $scope.sprintID,
-              'Listid':storyContr.complexDataObject.currentPosition.listId,
-              'storyName':$scope.storyData.heading
-            });
+      socket.emit('sprint:deleteStory', {
+        'room': $scope.roomName,
+        'storyId': $scope.storyData._id,
+        'projectId': $stateParams.prId,
+        'deleteFrom': deleteFrom,
+        'sprintId': $scope.sprintID,
+        'Listid': storyContr.complexDataObject.currentPosition.listId,
+        'storyName': $scope.storyData.heading
+      });
 
 
 
@@ -283,14 +288,14 @@ var socket = Socket($scope);
   parameters:none
   description:this function is used to update the story description
   **/
-  $scope.saveDescription=function(){
+  $scope.saveDescription = function() {
     $scope.model.description = angular.copy($scope.model.selected);
     //Post socket below is not required
-    storyService.saveStoryDescription($scope.storyData._id,$scope.model.description.name);
+    storyService.saveStoryDescription($scope.storyData._id, $scope.model.description.name);
 
     $scope.reset();
-    $scope.set=false;
-    $scope.checklistGrp =$scope.storyData.checklist;
+    $scope.set = false;
+    $scope.checklistGrp = $scope.storyData.checklist;
 
   };
   //TODO Starts, push this to start of the file
@@ -306,7 +311,7 @@ var socket = Socket($scope);
     var itemObj = {
       text: todo.todoText,
       checked: false,
-      creationDate:Date.now(),
+      creationDate: Date.now(),
     }
 
     socket.emit('story:addChecklistItem', {
@@ -314,61 +319,61 @@ var socket = Socket($scope);
       'room': $scope.roomName,
       'storyid': $scope.storyData._id,
       'checklistGrpId': todo._id,
-      'itemObj':itemObj,
-      'projectID' : $scope.projectID,
-      'text' : todo.todoText
+      'itemObj': itemObj,
+      'projectID': $scope.projectID,
+      'text': todo.todoText
     });
 
     todo.todoText = '';
 
   };
 
-/***
-authors:sharan
-function:removeTodoItem
-parameters:todo item,checklistId//Check once
-description:this fuction is used to add a new item to the checklist group.
-***/
-$scope.removeTodoItem = function(listItem,checklistGrp,text) {
-  console.log(checklistGrp)
-  console.log(listItem);
-  //todo.items.push({"text":todo.todoText,"done":false})
+  /***
+  authors:sharan
+  function:removeTodoItem
+  parameters:todo item,checklistId//Check once
+  description:this fuction is used to add a new item to the checklist group.
+  ***/
+  $scope.removeTodoItem = function(listItem, checklistGrp, text) {
+    console.log(checklistGrp)
+    console.log(listItem);
+    //todo.items.push({"text":todo.todoText,"done":false})
 
-  socket.emit('story:removeChecklistItem', {
+    socket.emit('story:removeChecklistItem', {
 
-    'room': $scope.roomName,
-    'storyid': $scope.storyData._id,
-    'checklistGrpId': checklistGrp._id,
-    'itemid':listItem._id,
-    'checked':listItem.checked,
-    'projectID' : $scope.projectID,
-    'text':text
-  });
+      'room': $scope.roomName,
+      'storyid': $scope.storyData._id,
+      'checklistGrpId': checklistGrp._id,
+      'itemid': listItem._id,
+      'checked': listItem.checked,
+      'projectID': $scope.projectID,
+      'text': text
+    });
 
-};
+  };
 
-/***
-authors:sharan
-function:updateTodoItem
-parameters:todo item,checklistId//Check once
-description:this fuction is used to add a new item to the checklist group.
-***/
-//TODO:Not working because of nth level
-$scope.updateTodoItem = function(listItem,checklistGrp) {
+  /***
+  authors:sharan
+  function:updateTodoItem
+  parameters:todo item,checklistId//Check once
+  description:this fuction is used to add a new item to the checklist group.
+  ***/
+  //TODO:Not working because of nth level
+  $scope.updateTodoItem = function(listItem, checklistGrp) {
 
-  //todo.items.push({"text":todo.todoText,"done":false})
+    //todo.items.push({"text":todo.todoText,"done":false})
 
-  socket.emit('story:updateChecklistItem', {
+    socket.emit('story:updateChecklistItem', {
 
-    'room': $scope.roomName,
-    'storyid': $scope.storyData._id,
-    'checklistGrpId': checklistGrp._id,
-    'itemid':listItem._id,
-    'checked':listItem.checked,
-    'text': listItem.text,
-    'projectID' : $scope.projectID
-  });
-};
+      'room': $scope.roomName,
+      'storyid': $scope.storyData._id,
+      'checklistGrpId': checklistGrp._id,
+      'itemid': listItem._id,
+      'checked': listItem.checked,
+      'text': listItem.text,
+      'projectID': $scope.projectID
+    });
+  };
 
   $scope.remaining = function(list, todo) {
 
@@ -378,7 +383,7 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
     angular.forEach(todo, function(list) {
       count += list.checked ? -1 : 1;
     });
-    todo.checked= count;
+    todo.checked = count;
   };
 
   /***
@@ -388,15 +393,15 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   Parameters:None
   TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
   ***/
-  $scope.removeChecklistGroup = function(checklistGrpId,heading) {
-//TODO:Add listner
-  socket.emit('story:removeChecklistGroup', {
+  $scope.removeChecklistGroup = function(checklistGrpId, heading) {
+    //TODO:Add listner
+    socket.emit('story:removeChecklistGroup', {
 
       'room': $scope.roomName,
       'storyid': $scope.storyData._id,
       'checklistGrpId': checklistGrpId,
-      'projectID' : $scope.projectID,
-      'heading' : heading
+      'projectID': $scope.projectID,
+      'heading': heading
     });
   };
   /***
@@ -406,14 +411,14 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   Parameters:None
   ***/
   $scope.saveComment = function() {
-//TODO:Add listner
-  socket.emit('story:addComment', {
+    //TODO:Add listner
+    socket.emit('story:addComment', {
       'room': $scope.roomName,
       'storyId': $scope.storyData._id,
       'text': $scope.storyComment,
-      'projectID' : $scope.projectID
+      'projectID': $scope.projectID
     });
-      $scope.storyComment = "";
+    $scope.storyComment = "";
   };
 
   /***
@@ -422,25 +427,27 @@ $scope.updateTodoItem = function(listItem,checklistGrp) {
   Function Description: This method is used to clear the comment story textarea.
   Parameters:None
   ***/
-  $scope.clearComment=function(){
+  $scope.clearComment = function() {
       $scope.storyComment = "";
-  }
-//Handler to update story for all story changes
+    }
+    //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
-    if(data._id == $scope.storyData._id){ //If the updated card is same as current opened card
-      data.memberList.forEach(function(storyItem){
+    if (data._id == $scope.storyData._id) { //If the updated card is same as current opened card
+      data.memberList.forEach(function(storyItem) {
         storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
       });
       ///
-      $scope.storyTempData= [];
-      var projObj= $rootScope.projects.filter(function(item) { return item._id === $stateParams.prId; });
-      for (var i = 0; i < projObj[0].labelId.labelList.length; i++) {
-        if(data.labelList.indexOf(projObj[0].labelId.labelList[i]._id)!=-1){
-          $scope.storyTempData.push(projObj[0].labelId.labelList[i]);
-        }
-      }
-      data.labelList=$scope.storyTempData;//Overriding the old valuse
-      ///
+      // $scope.storyTempData = [];
+      // var projObj = $rootScope.projects.filter(function(item) {
+      //   return item._id === $stateParams.prId;
+      // });
+      // for (var i = 0; i < projObj[0].labelId.labelList.length; i++) {
+      //   if (data.labelList.indexOf(projObj[0].labelId.labelList[i]._id) != -1) {
+      //     $scope.storyTempData.push(projObj[0].labelId.labelList[i]);
+      //   }
+      // }
+      // data.labelList = $scope.storyTempData; //Overriding the old valuse
+      // ///
       $scope.storyData = data;
     }
   })
