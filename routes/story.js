@@ -37,6 +37,17 @@ story.addMembers(storyId,memberId,function(err,data){
 })
 });
 
+router.post('/getMembersData',function(req,res,next){
+  var storyId=req.query.id;
+  story.getMembers(storyId,function(err,data){
+    if(err){
+      res.send(err);
+    }else{
+      console.log(data);
+      res.send(data.memberList);
+    }
+  })
+})
 router.post('/removemember', function(req, res, next) {
   var storyId= req.query.storyid.replace("/","");
   var memberId=req.query.memberid.replace("/","");
