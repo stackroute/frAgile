@@ -596,6 +596,11 @@ i.fa.fa-calendar {
     font-size: 15px;
     color: #2DB394;
 }
+i.fa.fa-exclamation-triangle {
+    padding: 0;
+    padding-right: 4px;
+    /* color: yellow; */
+}
 .ng-datepicker-input{
     font-family: inherit;
     font-size: inherit;
@@ -1049,6 +1054,17 @@ h4 small {
 }
 tiny {
     font-size: 12px;
+}
+tiny.beta {
+    position: absolute;
+    font-size: 12px;
+    color: #B5B5B5;
+    /* background-color: #D60F0F; */
+    padding: 0px 3px;
+    line-height: 14px;
+    font-family: monospace;
+    border-radius: 4px;
+    margin-top: 3px;
 }
 small {
     color: #70948C;

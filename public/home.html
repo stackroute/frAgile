@@ -59,7 +59,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand"><center><b ng-click ="goToProject()"><img src="img/logo.png" class="logo"></img>Limber</b></center></a>
+        <a class="navbar-brand"><center><b ng-click ="goToProject()"><img src="img/logo.png" class="logo"></img>limber</b><tiny class="beta">Beta</tiny></center></a>
 
       </div>
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -112,7 +112,7 @@
       <ul ng-repeat = "project in projects" class="projectNameTree">
         <li>{{project.name}}</li>
         <ul ng-repeat = "release in project.release" class="releaseNameTree">
-          <li ng-click="showTree=false" ui-sref="release({ prId : project._id, releaseID: release._id})">{{release.name}}</li>
+          <li ng-click="showTree = !showTree" ui-sref="release({ prId : project._id, releaseID: release._id})">{{release.name}}</li>
         </ul>
       </ul>
     </div>
