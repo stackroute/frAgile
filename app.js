@@ -12,8 +12,8 @@ var mongoose = require('mongoose');
 var RedisStore = require('connect-redis')(session);
 var app = express();
 
-mongoose.connect('mongodb://localhost/frAgile')
-//mongoose.connect('mongodb://172.23.238.253/frAgile_dummy');
+mongoose.connect('mongodb://172.23.238.253/frAgile_dummy');
+// mongoose.connect('mongodb://localhost/frAgile')
 
 
 var routes = require('./routes/index');
@@ -25,26 +25,21 @@ var project = require('./routes/project');
 var story = require('./routes/story');
 var graph = require('./routes/graph');
 var authenticationHandler = require('./routes/authenticationHandler')(passport);
-// app.use(session({
-//   store: new RedisStore({
-//     host: '172.23.238.253',
-//     port: 6379,
-//     db: 7
-//   }),
-//   secret:'fragile'
-// }));
 app.use(session({
-  // store: new RedisStore({
-  //   host: '172.23.238.253',
-  //   port: 6379,
-  //   db: 7
-  // }),
-  secret:'fragile',
-  key:'limber',
-  cookie:{maxAge : 360000000},
-  resave:false,
-  saveUninitialized:false
+  store: new RedisStore({
+    host: '172.23.238.253',
+    port: 6379,
+    db: 7
+  }),
+  secret:'fragile'
 }));
+// app.use(session({
+//   secret:'fragile',
+//   key:'limber',
+//   cookie:{maxAge : 360000000},
+//   resave:false,
+//   saveUninitialized:false
+// }));
 
 
 var initPassport = require('./passport-init');

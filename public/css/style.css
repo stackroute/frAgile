@@ -535,6 +535,7 @@ label {
     height: 25px;
     width: 60px;
     padding: 0px;
+    padding-top: 3px;
     margin-right: 0px;
 }
 h3.pull-left.ng-binding {
