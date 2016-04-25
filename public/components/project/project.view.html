@@ -136,7 +136,7 @@ Over View
             <div class="menu-bar-avatar" ng-repeat="member in projMemberList" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
               <div>
                 <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
-                <div ng-show="member.photo == undefined">
+                <div class="avatar-ng" ng-show="member.photo == undefined">
                   <ng-letter-avatar data="{{member.fullName}}" charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
                 </div>
                 &nbsp;
