@@ -240,7 +240,6 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
 
       if (userFound == false) {
         alert('User Not Found!');
-        $scope.addedUserEmail = "";
       } else {
         socket.emit('activity:addMember', {
           'room': 'activity:' + $scope.selectedProject,
@@ -249,7 +248,6 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
           'projectName': $scope.selectedProjectName
         });
 
-        $scope.addedUserEmail = "";
       }
     }
 

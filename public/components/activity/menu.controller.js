@@ -37,7 +37,6 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
 
       if (userFound == false) {
         alert('User Not Found!');
-        $scope.addedUserEmail = "";
       } else {
         socket.emit('activity:addMember', {
           'room': 'activity:' + $rootScope.projectID,
@@ -45,7 +44,6 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
           'memberList': [addedUserId],
           'projectName': $scope.projectName
         });
-        $scope.addedUserEmail = "";
       }
 
     }
