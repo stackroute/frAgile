@@ -47,12 +47,12 @@ function($scope,$rootScope,$uibModal,$http,$timeout,rgService,graphModalFactory)
       }
       var InProgressData = {};
       InProgressData['key'] = "In Progress";
-      InProgressData['color'] = "#1f77b4";
+      InProgressData['color'] = "#36D7B7";
       InProgressData['values'] = jdataInProgress;
       allData.push(InProgressData);
       var completedData = {};
       completedData['key'] = "Completed";
-      completedData['color'] = "#d62728";
+      completedData['color'] = "#26A65B";
       completedData['values'] = jdataCompleted;
       allData.push(completedData);
 
