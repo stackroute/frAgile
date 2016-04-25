@@ -214,7 +214,6 @@ i.fa{
 }
 .top-header .fa-bell, .top-header .fa-sign-out{
   font-size: 19px;
-color: #527D73;
 }
 /* Track */
 
@@ -641,7 +640,7 @@ form.showAddDetails{
   padding-top: 9px;
 }
 .backBugList form.showAddDetails, .backBugList form.showAddDetails {
-  background-color: #FFEFED;
+  background-color: #F0F8FF;
 }
 .crossBtn .fa {
   color: white;
@@ -733,7 +732,7 @@ form.hideAdd{
 .pageHeading {
     cursor: pointer;
     position: fixed;
-    bottom: 44px;
+    top: 47px;
     height: 45px;
     width: 45px;
     border-radius: 400px;
@@ -759,6 +758,8 @@ icon.graphIconOne {
     height: 30px !important;
     border-radius: 98px;
     padding: 0px;
+    top: 136px;
+    right: 38px;
     font-size: 12px;
     background-color: #64DCC1;
     margin: 1px;
@@ -766,7 +767,8 @@ icon.graphIconOne {
 icon.graphIconTwo {
     position: fixed;
     height: 30px;
-    margin-left: 35px;
+    top: 101px;
+    margin-left: 79px;
     background-color: #64DCC1;
     width: 30px;
     border-radius: 200px;
@@ -802,7 +804,7 @@ icon.graphIconTwo {
   color: #ACE6D8;
 }
 .projectPage .btn-success  {
-  margin: 6px 0px;
+  margin: 6px 87px;
   right: 15px;
 }
 .warningModal {
@@ -1112,10 +1114,11 @@ h4 i.fa{
   border-top: 11px solid #26A65B;
 }
 .backbug {
-  border: 1px solid #EF4836;
-  border-top: 11px solid #EF4836;
-  background-color: rgb(255, 239, 237);
+  border: 1px solid rgba(51, 122, 183, 0.88);
+  border-top: 11px solid rgba(51, 122, 183, 0.77);
+  background-color: #F0F8FF;
 }
+
 .hidden .crossBtn{
   color: red;
 }
