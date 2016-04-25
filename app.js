@@ -22,6 +22,7 @@ var sprint = require('./routes/sprint');
 var project = require('./routes/project');
 var story = require('./routes/story');
 var graph = require('./routes/graph');
+var template = require('./routes/template.js');
 var authenticationHandler = require('./routes/authenticationHandler')(passport);
 app.use(session({
   store: new RedisStore({
@@ -86,6 +87,7 @@ app.use('/project', project);
 app.use('/user', user);
 app.use('/story', story);
 app.use('/graph', graph);
+app.use('/template',template);
 // error handlers
 
 // development error handler

@@ -288,7 +288,7 @@ var socket = Socket($scope);
   $scope.createLabel=function(isCreate,labelData){
     if(isCreate){
       //TODO:call create template websocket passing $scope.labelTemplate
-      socket.emit('sprint:addNewLabel', {
+      socket.emit('story:addNewLabel', {
 
         'room': $scope.roomName,
         'labelid':$scope.labeltemplateId ,
