@@ -8,8 +8,9 @@
         </div>
       </div>
       <span class="activity-item-content">
-          <span class="activity-username" data-username={{act.userCreator._id}}>{{act.userCreator.fullName}}</span> {{act.action}} <a ng-if="act.object" class={{act.objectClass}} > {{act.object.name}}</a> {{act.preposition}}
-      <a class={{act.targetClass}}> {{act.target.name}}</a><span class="activity-time">{{act.timeAgo}} </span>
+        <span>  <span class="activity-username" data-username={{act.userCreator._id}}>{{act.userCreator.fullName}}</span> {{act.action}} <a ng-if="act.object" class={{act.objectClass}} > {{act.object.name}}</a> {{act.preposition}}
+      <a class={{act.targetClass}}> {{act.target.name}}</a></span>
+        <span class="activity-time">{{act.timeAgo}} </span>
       </span>
     </div>
   </div>

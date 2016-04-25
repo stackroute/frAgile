@@ -104,13 +104,15 @@ var socket = Socket($scope);
   parameters:memberid
   description:function to remove member from story
   ***/
-  $scope.removeMember=function(memberId){
+  $scope.removeMember=function(memberId,fullName){
     //working,tested
     socket.emit('story:removeMembers', {
 
       'room': $scope.roomName,
       'storyid': storyContr.storyData._id,
-      'memberid': memberId
+      'memberid': memberId,
+      'fullName' : fullName,
+      'projectID' : $scope.projectID
     });
   }
 

@@ -62,7 +62,7 @@
 
                 <ng-letter-avatar data={{member.fullName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
               </div>
-              <span class="remove-members fa fa-times" ng-hide="!hovering" ng-click="removeMember(member._id)"></span>
+              <span class="remove-members fa fa-times" ng-hide="!hovering" ng-click="removeMember(member._id,member.fullName)"></span>
             </div>
 
           </div>
