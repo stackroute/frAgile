@@ -3,8 +3,22 @@ a.attachmentdetails{
   left:10px;
   text-decoration: none;
 }
+.attachmentdetails{
+  margin-left:0px;
+}
 .attachmentIcon{
   margin-left:14px;
+}
+.attachedIcon{
+  margin-left:10px;
+}
+.story-addbutton{
+  padding-left:10px;
+  font-size:18px;
+}
+.attachments-wrap .list-group{
+  margin-bottom:0px;
+  margin-left:0px;
 }
 .jpg:before{
   content: "\f1c5";
@@ -12,7 +26,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #EF4836;
 }
 .jpeg:before{
@@ -21,7 +35,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #EF4836;
 }
 .png:before{
@@ -30,7 +44,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: BLUE;
 }
 .zip:before{
@@ -39,7 +53,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: black;
 }
 .xlsx:before{
@@ -48,7 +62,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #1E7145;
 }
 .xls:before{
@@ -57,7 +71,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #1E7145;
 }
 .pptx:before{
@@ -66,7 +80,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #D04525;
 }
 .ppt:before{
@@ -75,7 +89,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #D04525;
 }
 .doc:before{
@@ -84,7 +98,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #2B5797;
 }
 .docx:before{
@@ -93,7 +107,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #2B5797;
 }
 .txt:before{
@@ -102,7 +116,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 .mpeg:before{
@@ -111,7 +125,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 .mp4:before{
@@ -120,7 +134,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 .graphButton {
@@ -128,13 +142,16 @@ a.attachmentdetails{
   right: 1%;
   color: #527D73;
 }
+.attachmentdetails .col-sm-1{
+  padding-left:0px !important;
+}
 .pdf:before{
   content: "\f1c1";
   font-family: FontAwesome;
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #EF4836;
 }
 .avi:before{
@@ -143,7 +160,7 @@ a.attachmentdetails{
   font-style: normal;
   font-weight: normal;
   text-decoration: inherit;
-  font-size:55px;
+  font-size:26px;
   color: #7E3878;
 }
 
@@ -1208,15 +1225,21 @@ h4 i.fa{
   display: block;
   clear: both;
 }
-.activity-comment-content {
+.story-comment-content {
   padding: 5px 5px;
-  background-color: lightgrey;
+  background-color: rgba(191, 191, 191, 0.05);
   border-radius: 3px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, .23);
   overflow: hidden;
-  cursor: pointer;
+  /* cursor: pointer; */
   margin-top: 5px;
   word-break: break-all;
+  max-width: 87%;
+  color: #777;
+  margin-top: 15px;
+}
+.story-comment-username{
+  margin-bottom: 4px;
 }
 .activity-item-content {
   width: 80%;
@@ -1339,6 +1362,13 @@ background-color: #9DEDDD !Important;
   padding-left: 0;
   margin-bottom: 10px;
   padding-right: 5px;
+  cursor: pointer;
+}
+.modal-members-list a{
+    text-decoration: none;
+}
+.modal-members-list i{
+  margin-top: 8px;
 }
 
 .SprintModal .list-group {

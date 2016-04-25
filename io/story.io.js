@@ -329,5 +329,25 @@ console.log("Im in remove");
       io.to(actData.room).emit('activityAdded', data);
     });
   });
-
+  socket.on('story:addComment', function(data) {
+      console.log(user);
+      var commentsObj={};
+      commentsObj['text']=data.text;
+      commentsObj['commentedBy']=user._id;
+      commentsObj['userName']=user.fullName;;
+      commentsObj['commentedDate']=Date.now();
+      console.log(commentsObj);
+        Story.addComment(data.storyId, commentsObj, function(err, doc) {
+          if (!err) {
+              //Activity Code
+          }
+        });
+    });
+    socket.on('story:deleteComment', function(data) {
+        Story.deleteComment(data.storyId, data.commentId, index, function(err, doc) {
+          if (!err) {
+              //Activity Code
+          }
+        });
+    });
 }
