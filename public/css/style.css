@@ -6,6 +6,9 @@ a.attachmentdetails{
 .attachmentdetails{
   margin-left:0px;
 }
+.attachmentText{
+  color:black !important;
+}
 .attachmentIcon{
   margin-left:14px;
 }
