@@ -4,7 +4,7 @@ function($scope,$stateParams, $uibModal,sprFactory,$http,$timeout,sprService,gra
   $scope.sprintChartData = function(sprintID) {
     sprService.getSprintGraph(sprintID).success(function(graphDetails) {
 
-      console.log("sprintID = "+sprintID + "-----"+graphDetails);
+      // console.log("sprintID = "+sprintID + "-----"+graphDetails);
       if(graphDetails === null){
         console.log("no data recieved");
         return;
@@ -17,7 +17,7 @@ function($scope,$stateParams, $uibModal,sprFactory,$http,$timeout,sprService,gra
           obj['y'] = graphDetails.list[i].stories.length;
           jdata.push(obj);
         }
-        console.log(JSON.stringify(jdata));
+        // console.log(JSON.stringify(jdata));
       $scope.data = jdata;
     });
   }
@@ -43,6 +43,15 @@ $scope.options = {
                         left: 0
                     }
                 }
+            },
+            title: {
+              enable: true,
+              text: "",
+              className: "h4",
+              css: {
+                "width": "nullpx",
+                "textAlign": "center"
+              }
             },
             subtitle: {
                 enable: true,

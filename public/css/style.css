@@ -192,7 +192,7 @@ h3 {
   width: 7px;
   height: 7px;
 }
-.parent ::-webkit-scrollbar {
+.parent ::-webkit-scrollbar,.activityouterdiv::-webkit-scrollbar {
   width: 4px;
   height: 4px;
   bottom: 20px;
@@ -214,7 +214,6 @@ i.fa{
 }
 .top-header .fa-bell, .top-header .fa-sign-out{
   font-size: 19px;
-color: #527D73;
 }
 /* Track */
 
@@ -406,6 +405,7 @@ ul.sprintNameTree.ng-scope {
   margin-top: -4px;
   -webkit-box-shadow: inset 0 0px 0px rgba(0,0,0,0);
 }
+
 .close{
   opacity: .6;
   margin-top: -4px;
@@ -418,7 +418,6 @@ ul.sprintNameTree.ng-scope {
   width: 100%;
   z-index: 10;
 }
-
 
 
 .loadingScreen span {
@@ -641,7 +640,7 @@ form.showAddDetails{
   padding-top: 9px;
 }
 .backBugList form.showAddDetails, .backBugList form.showAddDetails {
-  background-color: #FFEFED;
+  background-color: #F0F8FF;
 }
 .crossBtn .fa {
   color: white;
@@ -733,7 +732,7 @@ form.hideAdd{
 .pageHeading {
     cursor: pointer;
     position: fixed;
-    bottom: 44px;
+    top: 47px;
     height: 45px;
     width: 45px;
     border-radius: 400px;
@@ -759,6 +758,8 @@ icon.graphIconOne {
     height: 30px !important;
     border-radius: 98px;
     padding: 0px;
+    top: 136px;
+    right: 38px;
     font-size: 12px;
     background-color: #64DCC1;
     margin: 1px;
@@ -766,7 +767,8 @@ icon.graphIconOne {
 icon.graphIconTwo {
     position: fixed;
     height: 30px;
-    margin-left: 35px;
+    top: 101px;
+    margin-left: 79px;
     background-color: #64DCC1;
     width: 30px;
     border-radius: 200px;
@@ -802,7 +804,7 @@ icon.graphIconTwo {
   color: #ACE6D8;
 }
 .projectPage .btn-success  {
-  margin: 6px 0px;
+  margin: 6px 87px;
   right: 15px;
 }
 .warningModal {
@@ -845,7 +847,7 @@ icon.graphIconTwo {
   padding-bottom: 7px;
 }
 .backbug .child{
-  background-color: rgb(255, 109, 109);
+  background-color: #7BC2FF;
 }
 .Releasable .child{
   background-color: rgba(38, 166, 91, 0.56);
@@ -1112,10 +1114,11 @@ h4 i.fa{
   border-top: 11px solid #26A65B;
 }
 .backbug {
-  border: 1px solid #EF4836;
-  border-top: 11px solid #EF4836;
-  background-color: rgb(255, 239, 237);
+  border: 1px solid rgba(51, 122, 183, 0.88);
+  border-top: 11px solid rgba(51, 122, 183, 0.77);
+  background-color: #F0F8FF;
 }
+
 .hidden .crossBtn{
   color: red;
 }
@@ -1255,6 +1258,7 @@ h4 i.fa{
   /* cursor: pointer; */
   margin-top: 5px;
   word-break: break-all;
+min-width: 400px;
   color: #777;
   margin-top: 15px;
 }
@@ -1330,8 +1334,11 @@ h4 i.fa{
   background-color: #5cb85c;
 }
 
-.story-backBug {
+.WarningModal {
   background-color: #EF4836 !Important;
+}
+.story-backBug {
+  background-color: rgb(94, 151, 200) !Important;
 }
 .AlertBox .modal-footer {
      border-top: 0px;
@@ -1452,7 +1459,7 @@ background-color: #9DEDDD !Important;
   cursor: pointer;
   margin: 0;
   margin-bottom: 5px;
-  width: 212px;
+  width: 265px;
   min-height: 27px;
   padding: 5px;
 }
@@ -1474,13 +1481,35 @@ background-color: #9DEDDD !Important;
 /*This class is used for labels template display*/
 
 .story-label-template-selectable {
-  border-radius: 13px;
   cursor: pointer;
+    margin: 0;
+    margin-bottom: 5px;
+    width: 50px;
+    min-height: 18px;
+    padding: 0px 10px;
+    margin-top: 15px;
+    margin-left: 26px;
+}
+.story-label{
   margin: 0;
-  margin-bottom: 5px;
-  width: 50px;
-  min-height: 42px;
-  padding: 5px;
+    margin-bottom: 5px;
+    width: 40px;
+    min-height: 18px;
+    padding: 0px 10px;
+    margin-top: 15px;
+}
+.story-label-margin{
+      margin-left: 52px !Important;
+}
+.story-label-template-selectable-anchor{
+  text-decoration: none !Important;
+  cursor: pointer;
+}
+.story-label-selectable-list{
+  list-style: none;
+}
+.story-label-selectable-edit{
+  margin-top: 9px;
 }
 .story-active {
   padding-right: 32px
@@ -1671,14 +1700,14 @@ right: 84px;
 
 .autocomplete input {
   padding:0.4em;
-  background-color: #e2e4e6;
+  background-color: #FFFFFF;
   border: 1px solid #cdd2d4;
   border-radius: 3px;
   display: block;
   margin-bottom: 9pt;
   min-height: 34px;
   /*padding: 7px;*/
-  width: 80%;
+  width: 100%;
   float: left;
   margin-right: 2px;
   box-sizing: border-box;

@@ -46,7 +46,7 @@ module.exports = function(socket, io, user) {
                 });
             }
             else{
-              io.to(data.room).emit('activity:addMemberFailed', "Adding user failed");
+              //io.to(data.room).emit('activity:addMemberFailed', "Adding user failed");
               socket.emit('project:addMemberFailed', "Adding user failed") //When user is added in project Page
             }
           });
@@ -62,7 +62,7 @@ module.exports = function(socket, io, user) {
         }); //For loop end
       }
       else {
-        io.to(data.room).emit('activity:addMemberFailed', "User already exists");
+        //io.to(data.room).emit('activity:addMemberFailed', "User already exists");
         socket.emit('project:addMemberFailed', "User already exists"); //When user is added in project Page
       }
     })

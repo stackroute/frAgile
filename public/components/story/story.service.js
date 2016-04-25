@@ -16,6 +16,9 @@ fragileApp.factory('storyService',['$http',function($http) {
       this.getMembersData = function(storyId){
         return $http.post('/story/getMembersData?id='+storyId);
       }
+      this.getLabelsData = function(storyId){
+        return $http.post('/story/getLabelsData?id='+storyId);
+      }
 
 /***
 author:sharan

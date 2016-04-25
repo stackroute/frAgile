@@ -20,6 +20,7 @@ var router = express.Router();
 var story = require('../models/story.js');
 var sprint = require('../models/sprint.js');
 var backlogsBuglist = require('../models/backlogBuglist.js');
+var Project = require('../models/project.js');
 var fs = require('fs'),
     list;
 
@@ -39,12 +40,23 @@ story.addMembers(storyId,memberId,function(err,data){
 
 router.post('/getMembersData',function(req,res,next){
   var storyId=req.query.id;
-  story.getMembers(storyId,function(err,data){
+  story.getStory(storyId,function(err,data){
     if(err){
       res.send(err);
     }else{
       console.log(data);
       res.send(data.memberList);
+    }
+  })
+})
+router.post('/getLabelsData',function(req,res,next){
+  var storyId=req.query.id;
+  story.getStory(storyId,function(err,data){
+    if(err){
+      res.send(err);
+    }else{
+      console.log(data);
+      res.send(data.labelList);
     }
   })
 })

@@ -11,7 +11,10 @@ fragileApp.factory('sprintService',['$http',function($http) {
   this.getBackBug = function(prId) {
     return  $http.get('/project/backLogsBugList/?projId='+prId);
   };
-
+  
+  this.getLabelMasterData=function(){
+    return $http.get('/template');
+  }
 /***
 author:sharan & Shrinivas
 function: getProjectMembers

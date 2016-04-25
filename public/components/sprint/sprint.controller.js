@@ -18,6 +18,10 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
         });
       });
 
+    sprintService.getLabelMasterData().then(function(labelMasterData){
+      $scope.labelTemplate=labelMasterData.data.labelList;
+    });
+
       $rootScope.inprojectRoom=false;
       $scope.longSprDescLimit = 130;
       sprintService.getBackBug($stateParams.prId).then(function(backBug) {
@@ -359,7 +363,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
                   sprint: $scope.sprint,
                   projMembers: $rootScope.memberList, //TODO:Check if this can be sent directly instead of resolve
                   storyGrp: storyGrp,
-                  currentPosition: currentPosition
+              currentPosition: currentPosition,
+              labelTemplateData:$scope.labelTemplate
                 };
               }
             }
