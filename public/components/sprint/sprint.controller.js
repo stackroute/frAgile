@@ -19,7 +19,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
       });
 
       $rootScope.inprojectRoom=false;
-
+      $scope.longSprDescLimit = 130;
       sprintService.getBackBug($stateParams.prId).then(function(backBug) {
         $scope.backBug = backBug.data;
       });

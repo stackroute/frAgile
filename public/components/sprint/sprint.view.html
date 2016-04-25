@@ -10,7 +10,9 @@
   <div>
     <div ng-style="{{topRowWidth}}">
 
-<h4 class="sprintPage"><b class="fa fa-pie-chart" ng-click="displaySprintGraph()"></b> {{sprint.name}}<small> {{sprint.description}}</small> <br/> <tiny>{{sprint.startDate|dateSuffix}}  - {{sprint.endDate |dateSuffix}}</tiny></h4>
+<h4 class="sprintPage"><b class="fa fa-pie-chart" ng-click="displaySprintGraph()"></b> {{sprint.name}}<small> {{sprint.description | limitTo:longSprDescLimit }}<span ng-hide="sprint.description.length < longSprDescLimit || sprint.description.length==undefined">
+  ...
+</span></small> <br/> <tiny>{{sprint.startDate|dateSuffix}}  - {{sprint.endDate |dateSuffix}}</tiny></h4>
 
       <div class="divToggle pull-left scrollBtn">
         <!-- <h3 class="toggleSprintText pull-left" ng-click="toggleScroll()">{{scrollBuglist}}</h3> -->

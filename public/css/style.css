@@ -1069,9 +1069,10 @@ h4.sprintPage {
     border-top: 1px solid #DDEDE8;
 }
 h4 small {
-  color: grey;
-  margin-left: 10px;
-  font-weight: lighter;
+    color: grey;
+    margin-left: 10px;
+    font-weight: lighter;
+    font-size: 12px;
 }
 tiny {
     font-size: 12px;
