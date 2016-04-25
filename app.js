@@ -12,10 +12,9 @@ var mongoose = require('mongoose');
 var RedisStore = require('connect-redis')(session);
 var app = express();
 
-
-mongoose.connect('mongodb://localhost/fragileDB');
+mongoose.connect('mongodb://172.23.238.253/frAgile_dummy');
+// mongoose.connect('mongodb://localhost/fragileDB');
 var db = mongoose.connection
-
 
 var routes = require('./routes/index');
 //var users = require('./routes/users');
@@ -108,6 +107,5 @@ app.use(function(err, req, res, next) {
     error: {}
  });
 });
-
 
 module.exports = app;
