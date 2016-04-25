@@ -41,7 +41,6 @@ app.use(session({
 //   saveUninitialized:false
 // }));
 
-
 var initPassport = require('./passport-init');
 initPassport(passport);
 
