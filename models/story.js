@@ -92,10 +92,7 @@ var StorySchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
-  labelList: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Sprint.labelSchema'
-  }]
+  labelList: [String]
 });
 
 //Code merge by sharan Starts:
@@ -142,7 +139,30 @@ StorySchema.statics.addMembers = function(storyId, membersId, callback) {
       }
     });
 }
-
+/*** addLabel function is used to assign the label to
+the story from the project label list.**/
+StorySchema.statics.addLabel = function(storyId,labelId, callback) {
+  this.findOneAndUpdate(
+      { "_id" : storyId },
+      { $push: { labelList : labelId
+        }
+      },
+      {
+         upsert: true,
+         new:true
+      }
+   )
+   .exec(function(err , doc) {
+     if (err) {
+       console.log(err);
+       callback(err, null);
+     }
+     else {
+console.log(doc);
+       callback(null, doc);
+     }
+   });
+}
 StorySchema.statics.addStory = function(story, callback) {
   this.create({
       'listId': story.listId,
@@ -196,7 +216,29 @@ StorySchema.statics.removeMembers = function(storyId, membersId, callback) {
       }
     });
 }
+/*** removeLabel function is used to remove the labels from
+the story.**/
+StorySchema.statics.removeLabel = function(storyId,labelId, callback) {
+  this.findOneAndUpdate(
+      { "_id" : storyId },
+    {$pull: {labelList:labelId}},
+    {
+      upsert: true,
+      new:true
+        }
 
+   )
+   .exec(function(err , doc) {
+     if (err) {
+       console.log(err);
+       callback(err, null);
+     }
+     else {
+       console.log(doc);
+       callback(null, doc);
+     }
+   });
+}
 /*** removeAttachment function is used to remove the the attachment
 (documents\images\etc) details from the story.
 TODO: Need to update the below code w.r.t deletion of files from memory
@@ -583,17 +625,16 @@ StorySchema.statics.deleteComment = function(storyId, commentId, callback) {
     });
 }
 
-StorySchema.statics.getMembers = function(storyId, callback) {
-  this.findOne({
-      "_id": storyId
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, doc);
-      }
-    });
+StorySchema.statics.getStory = function(storyId, callback) {
+  this.findOne({"_id":storyId})
+  .exec(function(err,doc){
+    if (err) {
+      callback(err, null);
+    }
+    else {
+      callback(null, doc);
+    }
+   });
 }
 
 var Story = mongoose.model('Story', StorySchema, 'Stories');

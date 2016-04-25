@@ -16,6 +16,7 @@ var projectSchema = new Schema({
   name: String,
   description: String,
   date: Date,
+  labelId:{type:Schema.ObjectId,ref:'Template'},
   ScrumMaster: [{
     type: Schema.ObjectId,
     ref: 'User'

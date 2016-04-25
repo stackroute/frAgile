@@ -4,9 +4,78 @@ var Project = require('../models/project.js');
 var Sprint = require('../models/sprint.js');
 var Story = require('../models/story.js');
 var BackLogsBugList = require('../models/backlogBuglist.js');
+var Template = require('../models/template.js')
 
 module.exports = function(socket, io, user) {
+socket.on('story:removeLabel', function(data) {
+  console.log("Received here remove label");
+  console.log(data);
+Story.removeLabel(data.storyid, data.labelid, function(err, storyData) {
+if (!err) {
+  io.to(data.room).emit('story:dataModified', storyData);
 
+  var actData = {
+    room: "activity:" + data.projectID,
+    action: "removed",
+    projectID: data.projectID,
+    user: user,
+    object: {
+      name: data.colorName,
+      type: "Sprint",
+      _id: data.storyid
+    },
+    target: {
+      name: storyData.heading,
+      type: "Story",
+      _id: data.storyid
+    }
+  }
+  Activity.addEvent(actData, function(data) {
+    io.to(actData.room).emit('activityAdded', data);
+  });
+}
+});
+})
+socket.on('story:addLabel', function(data) {
+  console.log("Received here add label");
+  console.log(data);
+  Story.addLabel(data.storyid, data.labelid, function(err, storyData) {
+if (!err) {
+  io.to(data.room).emit('story:dataModified', storyData);
+
+  var actData = {
+    room: "activity:" + data.projectID,
+    action: "marked",
+    projectID: data.projectID,
+    user: user,
+    target: {
+      name: data.colorName,
+      type: "Sprint",
+      _id: data.storyid
+    },
+    object: {
+      name: storyData.heading,
+      type: "Story",
+      _id: data.storyid
+    }
+  }
+  Activity.addEvent(actData, function(data) {
+    io.to(actData.room).emit('activityAdded', data);
+  });
+
+}
+  });
+})
+socket.on('story:addNewLabel', function(data) {
+  console.log("Received create label");
+  console.log(data);
+  Template.addNewLabel(data.labelid, data.labelObj, function(err, doc) {
+if (!err) {
+    data.labelObj._id = data.storyID
+    io.to(data.room).emit('story:labelsModified',data.labelObj);
+}
+  });
+})
 
   /***
   description:listner to add members to story

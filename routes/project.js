@@ -60,39 +60,58 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
+  Template.findMasterTemplate('Master',function(err,tempResponse){
+    if(err){
+      res.send(err);
+    }else{
+      var tempObj = {
+        'docType':'General',
+        //'projectId':data._id,
+        'labelList':tempResponse.labelList
+      }
+      Template.feedTemplate(tempObj,function(err,result){
+        if(err){
+          res.send(err);
+        }else {
+          console.log(result);
+          Project.create({
+            name: req.body.name,
+            description: req.body.desc,
+            labelId:result._id,
+            date: Date.now(),
+            memberList :[req.user._id]
+          }, function(err, data) {
+            if(err)
+            res.send(err);
+            else{
 
-Project.create({
-  name: req.body.name,
-  description: req.body.desc,
-  date: Date.now(),
-  memberList :[req.user._id]
-}, function(err, data) {
-  if(err)
-    res.send(err);
-    else{
+              var backBug = new backLogsBugList(
+                {
+                  projectId : data._id,
+                  backlogs: {
+                    listName: "Backlogs"
+                  },
+                  buglist: {
+                    listName: "BugLists"
+                  }
+                }
+              );
+              backBug.save(function(err, doc) {
+                if(err){
+                  res.send(err);
+                }
+                else {
+                      res.send(data);//comment this
+                }
+              });
 
-      var backBug = new backLogsBugList(
-      {
-        projectId : data._id,
-        backlogs: {
-          listName: "Backlogs"
-        },
-        buglist: {
-          listName: "BugLists"
+            }
+          });
         }
-      }
-    );
-    backBug.save(function(err, doc) {
-      if(err){
-        res.send(err);
-      }
-      else {
-        res.send(data);
-      }
-    });
+      });
+    }
+  });
 
-}
-});
 
 });
 

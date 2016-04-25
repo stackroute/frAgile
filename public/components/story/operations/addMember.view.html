@@ -5,7 +5,7 @@
 </div>
 <div class="modal-body" ng-init="initLoadMembers()">
   <div class="form-group">
-    <input type="text" ng-model="memberName" name="memberSearch" placeholder="Search Member" class="form-control">
+    <input type="text" ng-model="memberName" name="memberSearch" placeholder="Search Member" class="form-control" autofocus>
     <div id="modal-members">
       <ul class="modal-members-list">
         <li ng-click="addRemoveMembers(membersArray)" ng-repeat="membersArray in projMemberList |filter: memberName" class="list-group-item">

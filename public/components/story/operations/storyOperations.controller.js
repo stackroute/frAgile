@@ -43,10 +43,28 @@ var socket = Socket($scope);
   ***/
   $scope.initLabels = function(){
     $scope.sprintDetails= param.sprint; //required in labels
-    $scope.labelTemplate={};
+    console.log($rootScope.projects);
+    var respObj= $rootScope.projects.filter(function(item) { return item._id === $stateParams.prId; });
+    $scope.labelsData = respObj[0].labelId.labelList;
+    $scope.labeltemplateId = respObj[0].labelId._id;
+    console.log($scope.labelsData);
+
+    $scope.labelTemplateData= param.labelTemplateData;
+    console.log($scope.labelTemplate);
+
+        $scope.labelTemplate={};
     /*** Declaring variables required for addMembers,addLabels***/
     $scope.longDescLimit=25 ;
     $scope.checked = true;
+
+    $scope.storylabelsData = [];
+    $scope.selectedLabel=[];
+    /** XHR request to fetch latest members details***/
+    console.log($scope.storyDetails._id);
+    storyService.getLabelsData($scope.storyDetails._id).then(function(response) {
+      console.log(response);
+      $scope.storylabelsData=response.data;
+    });
   }
 
   /***
@@ -273,11 +291,17 @@ var socket = Socket($scope);
       socket.emit('sprint:addNewLabel', {
 
         'room': $scope.roomName,
-        'sprintid':$scope.sprintDetails._id ,
-        'labelObj': $scope.labelTemplate
+        'labelid':$scope.labeltemplateId ,
+        'labelObj': $scope.labelTemplate,
+        'storyID' : $scope.storyDetails._id
       });
       $scope.labelTemplate.text ="";
+      $scope.selectedLabel=[];
+
     }else {
+console.log(labelData);
+      $scope.selectedLabel=[];
+      $scope.selectedLabel.push(labelData.colorName);
       $scope.labelTemplate.colorName=labelData.colorName;
       $scope.labelTemplate.colorCode=labelData.colorCode;
     }
@@ -303,23 +327,35 @@ var socket = Socket($scope);
   //TODO:analyse whether we need to add the label or remove the label by comparing it with story label list array and change the tick mark in sub modal accordingly
   $scope.addRemoveLabel=function(labelObj){
     //pass labelobj._id to backend to add to the story,storyDetails using websocket
-    var operation = "remove";
-    var labelCheck = $scope.storyDetails.labelList.filter(function ( obj ) {
-      return obj._id === labelObj._id;
-    })[0];
-  if (labelCheck == undefined) {
-  operation = "add";
-  }
-    socket.emit('story:addRemoveLabel', {
+    //var operation = "remove";
+    // var labelCheck = $scope.storyDetails.labelList.filter(function ( obj ) {
+    //   return obj._id === labelObj._id;
+    // })[0];
+    console.log("dsrfdsdsfdsdsdsffds");
+    console.log(labelObj);
+  if ($scope.storylabelsData.indexOf(labelObj._id)!=-1) {
+    //remove members working, tested
+    socket.emit('story:removeLabel', {
 
       'room': $scope.roomName,
       'storyid': $scope.storyDetails._id,
-      'labelid':$scope.sprintDetails._id ,
-      'operation':operation
+      'labelid': labelObj._id,
+      'storyid' : $scope.storyDetails._id,
+      'projectID' : $scope.projectID,
+      'colorName' : labelObj.colorName
     });
+  }else{
+    //Add members working,tested
+    socket.emit('story:addLabel', {
 
-
-
+      'room': $scope.roomName,
+      'storyid': $scope.storyDetails._id,
+      'labelid': labelObj._id,
+      'storyid' : $scope.storyDetails._id,
+      'projectID' : $scope.projectID,
+      'colorName' : labelObj.colorName
+    });
+  }
 
   }
 
@@ -370,4 +406,18 @@ var socket = Socket($scope);
       });
     }
   }
+  socket.on('story:membersModified', function(data) {
+    //Not Receiving any data
+      console.log(data);
+      if(data._id == $scope.storyDetails._id){ //If the updated card is same as current opened card
+        $scope.membersData = data.memberList;
+      }
+    })
+  socket.on('story:labelsModified', function(data) {
+    //Not Receiving any data
+      console.log(data);
+      if(data._id == $scope.storyDetails._id){ //If the updated card is same as current opened card
+        $scope.labelsData.push(data.labelList);
+      }
+    })
 }]);
