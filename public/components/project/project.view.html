@@ -110,7 +110,7 @@ Over View
     </div>
 
     <div class="pageHeading" ng-click="showGraph=!showGraph">
-      <span>...</span>
+      <span tooltip-placement="bottom"  uib-tooltip="Analytics">...</span>
       <div class="graphMenu" ng-show="showGraph">
         <icon class="graphIconOne" ng-click="openReleaseChart()">
           <b class="fa fa-list-alt"></b>
@@ -146,7 +146,6 @@ Over View
           <div>
             <form>
               <autocomplete ng-model="addedUserEmail" data="dbUsers" attr-placeholder="Enter user email..."></autocomplete>
-              <a ng-click="addMember()" type="submit" class="addLst"><i class="fa fa-plus" aria-hidden="true"></i></a>
             </form>
 
             <!-- <input class="txt-add-members" id="txtAddMember" name="txtAddMember" type="text" placeholder="e.g. you@fragile.com" ng-model="members" required> -->
@@ -157,6 +156,7 @@ Over View
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        <button class="btn btn-success" ng-click="addMember()">Add</button>
         </div>
       </div>
     </div>
