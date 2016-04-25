@@ -66,13 +66,13 @@ var socket = Socket($scope);
     $scope.storyMoveData=param.storyMoveData.data;
     $scope.storyCurrentPosition=param.currentPosition;
     $scope.moveTo={};
-    $scope.moveTo.listType=[{name:'Backlog',Id:1,value:'backlogs'},{name:'Buglist',Id:2,value:'buglists'},{name:'Other',Id:3,value:''}]  ;
+    $scope.moveTo.listType=[{name:'Backlog',Id:1,value:'Backlogs'},{name:'Buglist',Id:2,value:'BugLists'},{name:'Other',Id:3,value:''}]  ;
     $scope.moveTo.selectedOption={};
     switch ($scope.storyCurrentPosition.listItemName) {
-      case "Backlog": $scope.moveTo.selectedOption={name:'Backlog',Id:1,value:'backlogs'};
+      case "Backlog": $scope.moveTo.selectedOption={name:'Backlog',Id:1,value:'Backlogs'};
       $scope.moveTo.checkDisabled=true;
       break;
-      case "Buglist": $scope.moveTo.selectedOption={name:'Buglist',Id:2,value:'buglists'};
+      case "Buglist": $scope.moveTo.selectedOption={name:'Buglist',Id:2,value:'BugLists'};
       $scope.moveTo.checkDisabled=true;
       break;
       default: $scope.moveTo.selectedOption={name:'Other',Id:3,value:''};
@@ -149,6 +149,7 @@ var socket = Socket($scope);
       'listName':$scope.moveTo.selectedOption.value,
       'listId':$scope.moveTo.selectedOption.value
     });
+
     }
     else{
       //TODO:below lines
