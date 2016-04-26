@@ -24,11 +24,11 @@ var graph = require('./routes/graph');
 var template = require('./routes/template.js');
 var authenticationHandler = require('./routes/authenticationHandler')(passport);
 app.use(session({
-  // store: new RedisStore({
-  //   host: '172.23.238.253',
-  //   port: 6379,
-  //   db: 7
-  // }),
+  store: new RedisStore({
+    host: '172.23.238.253',
+    port: 6379,
+    db: 7
+  }),
   secret:'fragile'
 }));
 // app.use(session({
