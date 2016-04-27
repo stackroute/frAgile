@@ -5,7 +5,7 @@ var Sprint = require('../models/sprint.js');
 var Story = require('../models/story.js');
 var BackLogsBugList = require('../models/backlogBuglist.js');
 
-module.exports = function(socket, io, user) {
+module.exports = function(socket, io) {
 
   socket.on('sprint:moveStory', function(data) {
 
@@ -190,7 +190,7 @@ module.exports = function(socket, io, user) {
             room: "activity:" + data.projectId,
             action: "removed",
             projectID: data.projectId,
-            user: user,
+            user: data.user,
             object: {
               name: data.storyName,
               type: "Story",
@@ -226,7 +226,7 @@ module.exports = function(socket, io, user) {
           room: data.activityRoom,
           action: "added",
           projectID: data.projectId,
-          user: user,
+          user: data.user,
           object: {
             name: data.heading,
             type: "Story",

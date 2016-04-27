@@ -9,11 +9,7 @@ var Story = require('../models/story.js');
 var BackLogsBugList = require('../models/backlogBuglist.js');
 
 io.on('connection', function(socket) {
-  var user = {
-    _id: app.userID,
-    fullName: app.fullName,
-    photo: app.photo
-  }
+
   socket.on('join:room', function(data) {
     //To make sure socket connects to one room only
     if (socket.lastRoom) {
@@ -33,11 +29,11 @@ io.on('connection', function(socket) {
     }
   });
 
-  require('../io/project.io.js')(socket, io, user);
-  require('../io/release.io.js')(socket, io, user);
-  require('../io/sprint.io.js')(socket, io, user);
-  require('../io/story.io.js')(socket, io, user);
-  require('../io/activity.io.js')(socket, io, user);
+  require('../io/project.io.js')(socket, io);
+  require('../io/release.io.js')(socket, io);
+  require('../io/sprint.io.js')(socket, io);
+  require('../io/story.io.js')(socket, io);
+  require('../io/activity.io.js')(socket, io);
 
 });
 

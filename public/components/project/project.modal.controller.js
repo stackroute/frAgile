@@ -41,7 +41,8 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
               name: data[0].name,
               type: "Project",
               _id: data[0]._id
-            }
+            },
+            user:$rootScope.userProfile
           }
           socket.emit('addActivity', data);
 
@@ -90,7 +91,8 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
         desc: $scope.newReleaseDesc,
         dt: $scope.newReleaseDate,
         userID:$scope.userID,
-        fullName:$scope.fullName
+        fullName:$scope.fullName,
+        'user':$rootScope.userProfile
       }
       socket.emit('project:addRelease', data);
 

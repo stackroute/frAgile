@@ -2,9 +2,15 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
 
   $scope.loadProjects = function() {
     homeService.getUserDetails().success(function(response) {
+      //TODO: Use single userProfile variable everywhere
       $rootScope.user = response;
       $rootScope.currentUserID = response._id;
       $rootScope.user.fullName = $rootScope.user.firstName + " " + $rootScope.user.lastName;
+      $rootScope.userProfile = {
+        _id: response._id,
+        fullName: $rootScope.user.firstName + " " + $rootScope.user.lastName,
+        photo: response.photo
+      }
     });
     homeService.getUserProjects().success(function(response) {
       $rootScope.projects = response.projects

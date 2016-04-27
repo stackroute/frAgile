@@ -128,7 +128,8 @@ var socket = Socket($scope);
       'projectID':$stateParams.prId,
       'storyId':$scope.storyDetails._id,
       'sprintId':$scope.storyCurrentPosition.sprintId,
-      'oldListId':$scope.storyCurrentPosition.listId
+      'oldListId':$scope.storyCurrentPosition.listId,
+      'user':$rootScope.userProfile
       });
         $uibModalInstance.dismiss('cancel');
     }
@@ -140,7 +141,8 @@ var socket = Socket($scope);
         'newListId': $scope.storyMoveData.release.selectedList._id,
         'storyId': $scope.storyDetails._id,
         'oldListId': $scope.storyCurrentPosition.listId,
-        'oldSprintId':$scope.storyCurrentPosition.sprintId
+        'oldSprintId':$scope.storyCurrentPosition.sprintId,
+        'user':$rootScope.userProfile
       });
       $uibModalInstance.dismiss('cancel');
     }
@@ -165,7 +167,8 @@ var socket = Socket($scope);
       'description': $scope.storyDetails.description ,
       'projectId':$stateParams.prId,
       'listName':$scope.moveTo.selectedOption.value,
-      'listId':$scope.moveTo.selectedOption.value
+      'listId':$scope.moveTo.selectedOption.value,
+      'user':$rootScope.userProfile
     });
 
     }
@@ -181,7 +184,8 @@ var socket = Socket($scope);
       'listId': $scope.storyMoveData.release.selectedList.group,
       'sprintId':$scope.storyMoveData.release.selectedSprints._id,
       'id':$scope.storyMoveData.release.selectedList._id,
-      'listName':$scope.moveTo.selectedOption.value
+      'listName':$scope.moveTo.selectedOption.value,
+      'user':$rootScope.userProfile
     });
     }
   }
@@ -272,7 +276,8 @@ var socket = Socket($scope);
       'room': $scope.roomName,
       'storyid': $scope.storyDetails._id,
       'checklistGrp': checklistGrp,
-      'projectID' : $scope.projectID
+      'projectID' : $scope.projectID,
+      'user':$rootScope.userProfile
     });
 
     $scope.todoText = '';
@@ -294,7 +299,8 @@ var socket = Socket($scope);
         'room': $scope.roomName,
         'labelid':$scope.labeltemplateId ,
         'labelObj': $scope.labelTemplate,
-        'storyID' : $scope.storyDetails._id
+        'storyID' : $scope.storyDetails._id,
+        'user':$rootScope.userProfile
       });
       $scope.labelTemplate.text ="";
       $scope.selectedLabel=[];
@@ -343,7 +349,8 @@ console.log(labelData);
       'labelid': labelObj._id,
       'storyid' : $scope.storyDetails._id,
       'projectID' : $scope.projectID,
-      'colorName' : labelObj.colorName
+      'colorName' : labelObj.colorName,
+      'user':$rootScope.userProfile
     });
   }else{
     //Add members working,tested
@@ -354,7 +361,8 @@ console.log(labelData);
       'labelid': labelObj._id,
       'storyid' : $scope.storyDetails._id,
       'projectID' : $scope.projectID,
-      'colorName' : labelObj.colorName
+      'colorName' : labelObj.colorName,
+      'user':$rootScope.userProfile
     });
   }
 
@@ -393,7 +401,8 @@ console.log(labelData);
         'storyid': $scope.storyDetails._id,
         'memberid': memberObj._id,
         'projectID' : $scope.projectID,
-        'fullName': memberObj.firstName + " " + memberObj.lastName
+        'fullName': memberObj.firstName + " " + memberObj.lastName,
+        'user':$rootScope.userProfile
       });
     }else{
       //Add members working,tested
@@ -403,7 +412,8 @@ console.log(labelData);
         'storyid': $scope.storyDetails._id,
         'memberid': memberObj._id,
         'projectID' : $scope.projectID,
-        'fullName': memberObj.firstName + " " + memberObj.lastName
+        'fullName': memberObj.firstName + " " + memberObj.lastName,
+        'user':$rootScope.userProfile
       });
     }
   }

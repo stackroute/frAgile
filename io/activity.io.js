@@ -5,10 +5,9 @@ var Sprint = require('../models/sprint.js');
 var Story = require('../models/story.js');
 var BackLogsBugList = require('../models/backlogBuglist.js');
 
-module.exports = function(socket, io, user) {
+module.exports = function(socket, io) {
 
   socket.on('addActivity', function(data) {
-    data.user = user;
     Activity.addEvent(data, function(actData) {
       io.to(data.room).emit('activityAdded', actData);
     });
@@ -29,7 +28,7 @@ module.exports = function(socket, io, user) {
                   room: 'activity:' +data.projectId,
                   action: "added",
                   projectID: data.projectId,
-                  user: user,
+                  user: data.user,
                   object: {
                     name: userData[0].firstName +  " " + userData[0].lastName,
                     type: "User",
@@ -81,7 +80,7 @@ module.exports = function(socket, io, user) {
               room: data.room,
               action: "removed",
               projectID: data.projectId,
-              user: user,
+              user: data.user,
               object: {
                 name: userData[0].firstName + " " + userData[0].lastName,
                 type: "User",

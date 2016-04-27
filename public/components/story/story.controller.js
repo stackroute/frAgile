@@ -123,7 +123,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
       'storyid': storyContr.storyData._id,
       'memberid': memberId,
       'fullName': fullName,
-      'projectID': $scope.projectID
+      'projectID': $scope.projectID,
+      'user':$rootScope.userProfile
     });
   }
 
@@ -169,6 +170,7 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
       data.room = $scope.roomName;
       data.projectID = $scope.projectID;
       data.type = name;
+      data.user = $rootScope.userProfile;
 
       socket.emit("story:removeAttachment", data);
     });
@@ -192,6 +194,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
         resp.data.room = $scope.roomName;
         resp.data.projectID = $scope.projectID;
         resp.data.type = resp.config.data.file.name;
+        resp.data.user = $rootScope.userProfile
+
         socket.emit('story:addAttachment', resp.data);
         console.log(resp.data, ">>>dismiss");
       }, function(resp) {
@@ -264,7 +268,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
         'deleteFrom': deleteFrom,
         'sprintId': $scope.sprintID,
         'Listid': storyContr.complexDataObject.currentPosition.listId,
-        'storyName': $scope.storyData.heading
+        'storyName': $scope.storyData.heading,
+        'user':$rootScope.userProfile
       });
 
 
@@ -321,7 +326,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
       'checklistGrpId': todo._id,
       'itemObj': itemObj,
       'projectID': $scope.projectID,
-      'text': todo.todoText
+      'text': todo.todoText,
+      'user':$rootScope.userProfile
     });
 
     todo.todoText = '';
@@ -347,7 +353,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
       'itemid': listItem._id,
       'checked': listItem.checked,
       'projectID': $scope.projectID,
-      'text': text
+      'text': text,
+      'user':$rootScope.userProfile
     });
 
   };
@@ -371,7 +378,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
       'itemid': listItem._id,
       'checked': listItem.checked,
       'text': listItem.text,
-      'projectID': $scope.projectID
+      'projectID': $scope.projectID,
+      'user':$rootScope.userProfile
     });
   };
 
@@ -401,7 +409,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
       'storyid': $scope.storyData._id,
       'checklistGrpId': checklistGrpId,
       'projectID': $scope.projectID,
-      'heading': heading
+      'heading': heading,
+      'user':$rootScope.userProfile
     });
   };
   /***
@@ -416,7 +425,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
       'room': $scope.roomName,
       'storyId': $scope.storyData._id,
       'text': $scope.storyComment,
-      'projectID': $scope.projectID
+      'projectID': $scope.projectID,
+      'user':$rootScope.userProfile
     });
     $scope.storyComment = "";
   };

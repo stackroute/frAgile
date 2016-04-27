@@ -42,7 +42,8 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
           'room': 'activity:' + $rootScope.projectID,
           'projectId': $rootScope.projectID,
           'memberList': [addedUserId],
-          'projectName': $scope.projectName
+          'projectName': $scope.projectName,
+          'user':$rootScope.userProfile
         });
       }
 
@@ -77,7 +78,8 @@ fragileApp.controller('menuController', function($scope, $http, Socket, activity
     socket.emit('activity:removeMember', {
       'room': 'activity:' + $rootScope.projectID,
       'projectId': $rootScope.projectID,
-      'memberId': memberId
+      'memberId': memberId,
+      'user':$rootScope.userProfile
     });
 
   }

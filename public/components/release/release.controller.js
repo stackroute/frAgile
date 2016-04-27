@@ -69,7 +69,8 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
         "startDate": newSprintStartDate,
         "endDate": newSprintEndDate,
         "oldName": oldName,
-        "projectID" : $stateParams.prId
+        "projectID" : $stateParams.prId,
+        'user':$rootScope.userProfile
       });
       return true;
     }
@@ -128,7 +129,8 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
       'releaseId': $scope.releaseId,
       'sprintId': $scope.sprintId,
       'releaseName':$scope.relName,
-      'sprintName' : $scope.sprName
+      'sprintName' : $scope.sprName,
+      'user':$rootScope.userProfile
     });
   };
 

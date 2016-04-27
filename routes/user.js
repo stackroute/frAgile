@@ -67,7 +67,8 @@ router.get('/getUserDetails', function(req, res, next) {
     firstName : req.user.firstName,
     lastName : req.user.lastName,
     email : req.user.email,
-    _id : req.user._id
+    _id : req.user._id,
+    photo: req.user.photo
   };
   res.send(userDetails);
 });

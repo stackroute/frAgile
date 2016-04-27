@@ -137,7 +137,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
           'description': "",
           'listId': listId,
           'id': id,
-          'listName': listName
+          'listName': listName,
+          'user':$rootScope.userProfile
         }
         socket.emit('sprint:addStory', emitData);
         $scope.storyDetails = "";
@@ -166,7 +167,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
           'sprintId': $stateParams.sprintID,
           'oldListId': divBeingDragged[0].id,
           'newListId': angular.element(event.target)[0].id,
-          'storyId': elemBeingDragged[0].id
+          'storyId': elemBeingDragged[0].id,
+          'user':$rootScope.userProfile
         }
         if (divBeingDragged[0].id == "backlogs" || divBeingDragged[0].id == "buglists")
           socket.emit('sprint:moveFromBackbugStory', emitData)
@@ -188,7 +190,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
           'sprintId': $stateParams.sprintID,
           'oldListId': divBeingDragged[0].id,
           'newListId': angular.element(event.target)[0].id,
-          'storyId': elemBeingDragged[0].id
+          'storyId': elemBeingDragged[0].id,
+          'user':$rootScope.userProfile
         });
       }
 
@@ -308,7 +311,8 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
           name: listName,
           type: "List",
           _id: data.story._id
-        }
+        },
+        user:$rootScope.userProfile
       }
       socket.emit('addActivity', actData);
     });

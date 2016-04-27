@@ -9,7 +9,6 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
     //   $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
     // }
     var socket = Socket($scope);
-
     //Temporary fix, make a better logic
     if ($scope.refreshProjects) {
       console.log("Refreshing project");
@@ -90,7 +89,8 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
           'room': 'projectRoom',
           'name': newProjectName,
           'description': newProjectDetails,
-          "prId": prId
+          "prId": prId,
+          'user':$rootScope.userProfile
         });
         return true;
       } else {
@@ -109,7 +109,8 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
           "description": newReleaseDetails,
           "creationDate": crDt,
           "releaseDate": dt,
-          "oldReleaseName": oldName
+          "oldReleaseName": oldName,
+          'user':$rootScope.userProfile
         });
         return true;
       } else {
@@ -130,7 +131,8 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
         'projectId': $scope.toDeleteProjectId,
         'releaseId': $scope.toDeleteReleaseId,
         'releaseName': $scope.toDeleteReleaseName,
-        'projectName': $scope.toDeleteProjectName
+        'projectName': $scope.toDeleteProjectName,
+        'user':$rootScope.userProfile
       });
     };
     $scope.editFun = function(rel) {
@@ -245,7 +247,8 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
           'room': 'activity:' + $scope.selectedProject,
           'projectId': $scope.selectedProject,
           'memberList': [addedUserId],
-          'projectName': $scope.selectedProjectName
+          'projectName': $scope.selectedProjectName,
+          'user':$rootScope.userProfile
         });
 
       }

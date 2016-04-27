@@ -56,7 +56,8 @@ fragileApp.controller('modalReleaseController', ['$scope', '$rootScope', 'releas
         'endDate': $scope.endDate,
         'startDate': $scope.startDate,
         'desc': $scope.newSprintDesc,
-        'list': $scope.listArray
+        'list': $scope.listArray,
+        'user':$rootScope.userProfile
       });
       $uibModalInstance.dismiss('cancel');
     }

@@ -5,7 +5,7 @@ var Sprint = require('../models/sprint.js');
 var Story = require('../models/story.js');
 var BackLogsBugList = require('../models/backlogBuglist.js');
 
-module.exports = function(socket, io, user) {
+module.exports = function(socket, io) {
   socket.on('project:addRelease', function(data) {
     release = {
       name: data.name,
@@ -26,7 +26,7 @@ module.exports = function(socket, io, user) {
           room: "activity:" + data.projectID,
           action: "added",
           projectID: data.projectID,
-          user: user,
+          user: data.user,
           object: {
             name: data.name,
             type: "Release",
@@ -85,7 +85,7 @@ module.exports = function(socket, io, user) {
           room: "activity:" + data.projectId,
           action: "changed",
           projectID: data.projectId,
-          user: user,
+          user: data.user,
           object: {
             name: data.oldReleaseName,
             type: "Release",
@@ -121,7 +121,7 @@ module.exports = function(socket, io, user) {
           room: data.activityRoom,
           action: "deleted",
           projectID: data.projectId,
-          user: user,
+          user: data.user,
           object: {
             name: data.releaseName,
             type: "Release",

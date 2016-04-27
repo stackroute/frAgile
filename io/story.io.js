@@ -6,7 +6,7 @@ var Story = require('../models/story.js');
 var BackLogsBugList = require('../models/backlogBuglist.js');
 var Template = require('../models/template.js')
 
-module.exports = function(socket, io, user) {
+module.exports = function(socket, io) {
 socket.on('story:removeLabel', function(data) {
   console.log("Received here remove label");
   console.log(data);
@@ -18,7 +18,7 @@ if (!err) {
     room: "activity:" + data.projectID,
     action: "removed",
     projectID: data.projectID,
-    user: user,
+    user: data.user,
     object: {
       name: data.colorName,
       type: "Sprint",
@@ -47,7 +47,7 @@ if (!err) {
     room: "activity:" + data.projectID,
     action: "marked",
     projectID: data.projectID,
-    user: user,
+    user: data.user,
     target: {
       name: data.colorName,
       type: "Sprint",
@@ -99,7 +99,7 @@ if (!err) {
               room: "activity:" + data.projectID,
               action: "added",
               projectID: data.projectID,
-              user: user,
+              user: data.user,
               object: {
                 name: data.fullName,
                 type: "User",
@@ -140,7 +140,7 @@ if (!err) {
               room: "activity:" + data.projectID,
               action: "removed",
               projectID: data.projectID,
-              user: user,
+              user: data.user,
               object: {
                 name: data.fullName,
                 type: "User",
@@ -175,7 +175,7 @@ if (!err) {
               room: "activity:" + data.projectID,
               action: "added",
               projectID: data.projectID,
-              user: user,
+              user: data.user,
               object: {
                 name: data.checklistGrp.checklistHeading,
                 type: "Story",
@@ -215,7 +215,7 @@ if (!err) {
                 room: "activity:" + data.projectID,
                 action: "added",
                 projectID: data.projectID,
-                user: user,
+                user: data.user,
                 object: {
                   name: data.text,
                   type: "Story",
@@ -250,7 +250,7 @@ if (!err) {
                 room: "activity:" + data.projectID,
                 action: "added",
                 projectID: data.projectID,
-                user: user,
+                user: data.user,
                 object: {
                   name: data.text,
                   type: "Story",
@@ -285,7 +285,7 @@ if (!err) {
                 room: "activity:" + data.projectID,
                 action: "removed",
                 projectID: data.projectID,
-                user: user,
+                user: data.user,
                 object: {
                   name: data.heading,
                   type: "Story",
@@ -329,7 +329,7 @@ if (!err) {
                   room: "activity:" + data.projectID,
                   action: data.checked == true ? "completed" : "unchecked",
                   projectID: data.projectID,
-                  user: user,
+                  user: data.user,
                   object: {
                     name: data.text,
                     type: "Story",
@@ -358,7 +358,7 @@ if (!err) {
       room: "activity:" + data.projectID,
       action: "attached",
       projectID: data.projectID,
-      user: user,
+      user: data.user,
       object: {
         name: data.type,
         type: "Story",
@@ -382,7 +382,7 @@ if (!err) {
       room: "activity:" + data.projectID,
       action: "removed",
       projectID: data.projectID,
-      user: user,
+      user: data.user,
       object: {
         name: data.type,
         type: "Story",
@@ -412,7 +412,7 @@ if (!err) {
           room: "activity:" + data.projectID,
           action: "commented",
           projectID: data.projectID,
-          user: user,
+          user: data.user,
           target: {
             name: storyData.heading,
             type: "Story",
@@ -434,7 +434,7 @@ if (!err) {
           room: "activity:" + data.projectID,
           action: "commented",
           projectID: data.projectID,
-          user: user,
+          user: data.user,
           target: {
             name: storyData.heading,
             type: "Story",
