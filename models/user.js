@@ -158,8 +158,8 @@ userSchema.statics.getProjects = function(userID, callback) {
 
 
 //cards code
-userSchema.statics.getCards = function(storyId, callback) {
-  this.findById(userID).populate({path:"assignedStories"}).exec(function(err, data) {
+userSchema.statics.getCards = function(UserId, callback) {
+return  this.findById(UserId).exec(function(err, data) {
     if (err) callback(err)
     else callback(data);
   });
