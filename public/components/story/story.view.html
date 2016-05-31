@@ -132,7 +132,7 @@
             <li class="checklist-todos" ng-repeat="list in todo.items">
               <input type="checkbox" ng-model="list.checked" ng-click="updateTodoItem(list,todo)">
 
-              <span class="done-{{list.checked}}" ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{list.text}}
+              <span class="done-{{list.checked}}" editable-text="list.text" ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{list.text}}
 
                 <a ng-click="removeTodoItem(list,todo,list.text)"  ng-show="itemHovering">
 

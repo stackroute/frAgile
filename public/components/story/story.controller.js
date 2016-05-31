@@ -1,3 +1,7 @@
+fragileApp.run(function(editableOptions) {
+  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});
+
 fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window) {
   var socket = Socket($scope);
 
