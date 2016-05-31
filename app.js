@@ -63,11 +63,12 @@ app.use(function(req, res, next) {
   //console.log("**************** checking for authentication ************ ");
   if (req.isAuthenticated())
   {
+	console.log("req"+req);
     return next();
   }
   else
   {
-
+console.log("resp");
     return res.redirect('/index.html');
   }
 });

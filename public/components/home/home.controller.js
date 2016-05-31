@@ -58,4 +58,8 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
   }
   $state.go('project');
   //To check user logged in or not  business logic goes here....
+  $scope.goToCards = function() {
+    $state.go('cards');  //defined in cards.routes.js
+  }
+
 }]);

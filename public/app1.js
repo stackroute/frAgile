@@ -1,5 +1,11 @@
 
-var fragileApp = angular.module('fragileApp',['ui.router','ngLetterAvatar','ui.bootstrap','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3','jkuri.datepicker']);
+var fragileApp = angular.module('fragileApp',['xeditable','ui.router','ngLetterAvatar','ui.bootstrap','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3','jkuri.datepicker']);
+
+// fragileApp.run(function(editableOptions,editableThemes) {
+//   editableOptions.theme = 'bs3';
+// editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit">Save</button><button class="btn btn-danger" ng-click="fetchMembersForChecklist()">...</button>';
+//  // bootstrap3 theme. Can be also 'bs2', 'default'
+// });
 
 fragileApp.filter('dateSuffix', function($filter) {
  var suffixes = ["th", "st", "nd", "rd"];

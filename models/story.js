@@ -640,5 +640,14 @@ StorySchema.statics.getStory = function(storyId, callback) {
    });
 }
 
+//edited for cards
+StorySchema.statics.getStories = function(StoryIdArr, callback) {
+//find stories
+}
+
+
+
+
+
 var Story = mongoose.model('Story', StorySchema, 'Stories');
 module.exports = Story;

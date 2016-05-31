@@ -1,5 +1,13 @@
+fragileApp.run(function(editableOptions,editableThemes) {
+  editableOptions.theme = 'bs3';
+editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" id="updateTodoItem(todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="fetchMembersForChecklist()">...</button>';
+ // bootstrap3 theme. Can be also 'bs2', 'default'
+});
+
 fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window) {
   var socket = Socket($scope);
+
+
 
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
@@ -461,5 +469,15 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
       $scope.storyData = data;
     }
   })
+
+// $scope.fetchMembersForChecklist=function(){
+// $scope.checkListMembers=$rootScope.membersData;
+// }
+
+
+
+$scope.fetchMembersForChecklist = function() {
+  modalService.open('sm', 'components/story/operations/addMemberItem.view.html', 'storyOperationsController', storyContr.complexDataObject);
+};
 
 }]);

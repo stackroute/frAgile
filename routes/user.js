@@ -95,4 +95,14 @@ router.get('/getUsers', function(req, res, next){
   }
 })
 
+router.get('/cards',function(req,res,next){
+  if (req.user._id) {
+    User.getCards(req.user._id, function(data) {
+      res.send(data);
+    })
+  } else {
+    res.end()
+  }
+});
+
 module.exports = router;

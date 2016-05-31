@@ -8,5 +8,5 @@ module.exports = {
 		'clientID':"245231146533-90modcq7ilo8186arqj00tsrccp2qmki.apps.googleusercontent.com" ,
 		'clientSecret':"izowirUs3TSuKOzNabB0wAnL",
 		'callbackURL': 'http://limber.stackroute.in/auth/google/callback'
-	}
+}
 }

@@ -1763,3 +1763,9 @@ right: 84px;
   margin-right: 20px;
   word-wrap: break-word;
 }
+
+
+/*x-editable*/
+.editable-wrap .editable-input {
+    display: block;
+}

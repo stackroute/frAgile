@@ -2,32 +2,42 @@ var Project = require('../models/project.js');
 var templates = require('../models/template.js');
 
 var mongoose = require('mongoose'),
-  userSchema = new mongoose.Schema({
-    firstName: String,
-    lastName: String,
-    createdDate: Date,
-    updatedDate: Date,
-    password: String,
+userSchema = new mongoose.Schema({
+  firstName: String,
+  lastName: String,
+  createdDate: Date,
+  updatedDate: Date,
+  password: String,
+  email: String,
+  initials: String,
+  photo: String,
+  projects: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Project'
+  }],
+  facebook: {
+    id: String,
+    token: String,
     email: String,
-    initials: String,
-    photo: String,
-    projects: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Project'
-    }],
-    facebook: {
-      id: String,
-      token: String,
-      email: String,
-      name: String
-    },
-    google: {
-      id: String,
-      token: String,
-      email: String,
-      name: String
-    }
-  });
+    name: String
+  },
+  google: {
+    id: String,
+    token: String,
+    email: String,
+    name: String
+  },
+  assignedStories: [{
+    projectId:String,
+    projectName:String,
+    releaseId:String,
+    releaseName:String,
+    sprintId:String,
+    releaseName:String,
+    storyId:String,
+    storyName:String
+  }]
+});
 
 userSchema.statics.addUser = function(userDetails, callback) {
   this.create({
@@ -50,24 +60,24 @@ userSchema.statics.updateUser = function(userId, newUserDetails, callback) {
   console.log("-" + userId + "-");
   console.log(newUserDetails);
   this.findOneAndUpdate({
-      "_id": userId
-    }, {
-      $set: {
-        firstName: newUserDetails.firstName,
-        lastName: newUserDetails.lastName,
-        email: newUserDetails.email
-      }
-    }, {
-      upsert: true
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        console.log(err);
-        callback(err, null);
-      } else {
-        callback(null, doc);
-      }
-    });
+    "_id": userId
+  }, {
+    $set: {
+      firstName: newUserDetails.firstName,
+      lastName: newUserDetails.lastName,
+      email: newUserDetails.email
+    }
+  }, {
+    upsert: true
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
 }
 userSchema.statics.addProjectToUser = function(userID, projectID, callback) {
   this.findByIdAndUpdate(userID, {
@@ -87,7 +97,7 @@ userSchema.statics.addProjectToUser = function(userID, projectID, callback) {
         "_id": projectID
       }).populate("release").exec(function(err, data) {
         if (err)
-          callback(err, null);
+        callback(err, null);
         else {
           callback(null, data);
         }
@@ -145,4 +155,15 @@ userSchema.statics.getProjects = function(userID, callback) {
     else callback(data);
   });
 }
+
+
+//cards code
+userSchema.statics.getCards = function(storyId, callback) {
+  this.findById(userID).populate({path:"assignedStories"}).exec(function(err, data) {
+    if (err) callback(err)
+    else callback(data);
+  });
+
+}
+
 module.exports = mongoose.model('User', userSchema, 'Users');;

@@ -378,4 +378,14 @@ function deleteFromSprint(sprintId, listId, storyId) {
     }
   });
 }
+
+router.get('/getStories',function(req,res,next){
+  if (req.storyIdArr) {
+    story.getStories(req.storyIdArr, function(data) {
+      res.send(data);
+    })
+  } else {
+    res.end()
+  }
+});
 module.exports = router;

@@ -59,7 +59,7 @@ if (nv) {
       }
       else{
       $http.post('/auth/register', $scope.user1).success(function(data){
-        console.log(data);
+        console.log("in register uth");
         if(data.error) {
           $scope.registerErrorMsg = data.error;
         // $window.location.href = '/index.html';
