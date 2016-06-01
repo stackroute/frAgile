@@ -1,5 +1,6 @@
-fragileApp.run(function(editableOptions) {
-  editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+fragileApp.run(function(editableOptions,editableThemes) {  editableOptions.theme = 'bs3';
+editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" id="updateTodoItem(todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist()">...</button>'; 
+// bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
 fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window) {
@@ -8,6 +9,7 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
+  console.log(storyContr.complexDataObject);
   storyContr.storyData = storyContr.complexDataObject.story.data;
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
     storyContr.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
@@ -28,7 +30,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   //Ends
   $scope.storyData = storyContr.storyData;
   $scope.storyComment = "";
-
+  $rootScope.storyMember=$scope.storyData.memberList;
+  console.log($rootScope.storyMember+"in story member");
   $scope.storyData.memberList.forEach(function(data) {
     data.fullName = data.firstName + " " + data.lastName;
   });
@@ -90,6 +93,20 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
   $scope.addMember = function() {
     modalService.open('sm', 'components/story/operations/addMember.view.html', 'storyOperationsController', storyContr.complexDataObject);
+  };
+
+  /***
+  author:nitish
+  function:addMember to check list
+  parameters:none
+  description:This function is used to add members to checklist
+  ***/
+  //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
+  $scope.myuser=[{member:"NK"},{member:"MK"},{member:"KK"}];
+
+  $scope.addMemberToChecklist = function() {
+
+    modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.html', 'storyOperationsController', storyContr.complexDataObject);
   };
 
   /***

@@ -64,6 +64,11 @@
           </span>
         </div>
       </div> -->
+      <!--neo test <div class="mynewDiv" class="well">
+        <ul>
+          <li ng-repeat='mem in myuser'> {{mem.member}}</li>
+        </ul>
+      </div> -->
         <hr class="story-seperator">
 
         <div class="story-details clearfix">
@@ -144,10 +149,10 @@
               
             
           </li>
-            <form name="addChecklistItem" novalidate ng-submit="addChecklistItem.$valid && addTodoItem(todo)">
+            <form name="addChecklistItem" novalidate ng-submit="addChecklistItem.$valid && addTodoItem(todo)"><!-- neo member to checklist-->
               <input type="text" ng-model="todo.todoText" required class="form-control add-todo" size="40"
               placeholder="Add New Todo" ></input>
-              <button  class="btn btn-default btn-xs check-item-btn" ng-click="addMember()"><i class="fa fa-users"></i></button>
+              <span  class="btn btn-default btn-xs check-item-btn" ng-click="addMemberToChecklist()"><i class="fa fa-users"></i></span>
               <button class="btn btn-default btn-xs check-item-btn" type="submit"><i class="fa fa-plus" aria-hidden="true" >
               </i></button>
             </form>

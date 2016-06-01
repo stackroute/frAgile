@@ -12,7 +12,7 @@ var socket = Socket($scope);
   /***Received the data from resolve functionality of uibModal***/
   $scope.storyDetails= param.story.data;
   $scope.roomName = "sprint:" + param.sprint._id;
-
+console.log($rootScope.storyMember);
   /***
   author:Sharan
   function:initLoadMembers

@@ -71,6 +71,8 @@ var StorySchema = new Schema({
     items: [{
       text: String,
       checked: Boolean,
+      assignedMember:[{ type: Schema.Types.ObjectId,
+        ref: 'User'}],
       createdBy: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -631,6 +633,7 @@ StorySchema.statics.deleteComment = function(storyId, commentId, callback) {
 StorySchema.statics.getStory = function(storyId, callback) {
   this.findOne({"_id":storyId})
   .exec(function(err,doc){
+    console.log(doc+"in ");
     if (err) {
       callback(err, null);
     }
