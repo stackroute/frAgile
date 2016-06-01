@@ -130,21 +130,26 @@
             {{Math.floor((todo.checkedCount/todo.items.length*100))}}
             <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar>
             <li class="checklist-todos" ng-repeat="list in todo.items">
-              <input type="checkbox" ng-model="list.checked" ng-click="updateTodoItem(list,todo)">
 
-              <span class="done-{{list.checked}}" editable-text="list.text" ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{list.text}}
+              <input type="checkbox" ng-model="list.checked" ng-click="updateTodoItem(list,todo)">
+        
+              <span class="done-{{list.checked}} " editable-text="list.text" ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{list.text}}
 
                 <a ng-click="removeTodoItem(list,todo,list.text)"  ng-show="itemHovering">
 
                   <i class="fa fa-minus-circle" ></i>
-                </a>
-              </span>
-
-            </li>
-            <form>
-              <input type="text" ng-model="todo.todoText" class="form-control add-todo" size="40"
+                </a> 
+<!--                 <span class="option option-menu" ng-show="itemHovering" ng-click="addMember()" >...</span>
+ -->              </span>
+              
+            
+          </li>
+            <form name="addChecklistItem" novalidate ng-submit="addChecklistItem.$valid && addTodoItem(todo)">
+              <input type="text" ng-model="todo.todoText" required class="form-control add-todo" size="40"
               placeholder="Add New Todo" ></input>
-              <button type="submit" class="btn btn-default btn-xs check-item-btn" ng-click="addTodoItem(todo)" ><i class="fa fa-plus" aria-hidden="true"></i></button>
+              <button  class="btn btn-default btn-xs check-item-btn" ng-click="addMember()"><i class="fa fa-users"></i></button>
+              <button class="btn btn-default btn-xs check-item-btn" type="submit"><i class="fa fa-plus" aria-hidden="true" >
+              </i></button>
             </form>
             <hr class="story-seperator checklist-seperator">
           </div>
