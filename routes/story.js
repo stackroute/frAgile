@@ -380,8 +380,11 @@ function deleteFromSprint(sprintId, listId, storyId) {
 }
 
 router.get('/getStories',function(req,res,next){
-  if (req.storyIdArr) {
-    story.getStories(req.storyIdArr, function(data) {
+console.log(req.query.id);
+  if (req.query.id) {
+
+    story.getStories(req.query.id, function(err,data) {
+console.log(data);
       res.send(data);
     })
   } else {

@@ -2,20 +2,75 @@
   <div class="showNewCards" ng-show = "cards.length == 0">
     <center>All your Stories at one place</center>
   </div>
+<h1 ng-hide="cards.length==0" align="center">Your Stories</h1>
+  <div ng-repeat="(key,value) in cards.assignedStories|groupBy:'sprintId' " ng-init="count=0">
+<br>
+<div style="clear:both">
+{{value[0].projectName}} | {{value[0].releaseName}} | {{value[0].sprintName}}
 
-<div ng-repeat="card in cards" >
-{{card.projectId}}
-  <div class="story_Name">
-    {{story.heading}}
-  </div>
-
-  <div class="storyAttributes">
-    <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
-    <span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{story.indicators.commentCount}}</span>
-    <span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{story.indicators.attachmentsCount}}</span>
-    <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{story.indicators.chklstItmsChkdCnt}} / {{story.indicators.chklstItmsCnt}}</span>
-  </div>
+  <div ng-repeat="val in value" >
+<div class="boxStory">
+    {{val.storyName}}
+    <div class="storyAttributes">
+      <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+      <span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{obj.indicators.commentCount}}</span>
+      <span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{obj.indicators.attachmentsCount}}</span>
+      <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{obj.indicators.chklstItmsChkdCnt}} / {{obj.story.indicators.chklstItmsCnt}}</span>
+      <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{}}</span>
+    </div>
+</div>
 </div>
 
+<hr style="clear:both">
+</div>
 
+<br>
+    <!-- <div ng-repeat="storyId in " ng-show="story_Id==story._id">
+          matched
+    </div>
+  <! </div> -->
+
+<!-- <div class="box">{{card.storyId}}</div> -->
+
+      <!-- <h4 class="boxheading"><a href="#"> {{card.projectName}} </a>| <a href="">{{card.releaseName}} </a>| <a>{{card.sprintName}}</h4></a>
+      <div ng-repeat="obj in stories" >
+        <div class="box">
+          <h5>  {{obj.heading}} </h5>
+          <div class="storyAttributes">
+            <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+            <span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{obj.indicators.commentCount}}</span>
+            <span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{obj.indicators.attachmentsCount}}</span>
+            <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{obj.indicators.chklstItmsChkdCnt}} / {{obj.story.indicators.chklstItmsCnt}}</span>
+            <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{}}</span>
+          </div>
+
+
+        </div>
+      </div> -->
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- <div ng-repeat="card in cards" >
+  {{card.projectName}}
+  <div class="story_Name" ng-show="{{}}">
+  {{story.heading}}
+</div> -->
+<!-- <div class="storyAttributes">
+<span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+<span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{story.indicators.commentCount}}</span>
+<span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{story.indicators.attachmentsCount}}</span>
+<span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{story.indicators.chklstItmsChkdCnt}} / {{story.indicators.chklstItmsCnt}}</span>
+</div> -->
 </div>

@@ -641,10 +641,26 @@ StorySchema.statics.getStory = function(storyId, callback) {
 }
 
 //edited for cards
-StorySchema.statics.getStories = function(StoryIdArr, callback) {
+// StorySchema.statics.getStories = function(StoryIdArr, callback) {
 //find stories
-}
+var storyList=[];
+StorySchema.statics.getStories= function(storyIdAdd,callback){
 
+console.log(storyIdAdd+"in model");
+   return this.find({
+     "_id":{
+       $in: storyIdAdd
+     }
+   })
+   .exec(function(err, doc) {
+     console.log(doc);
+     if (err) {
+       callback(err, null);
+     } else {
+       callback(null, doc);
+     }
+});
+}
 
 
 

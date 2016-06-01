@@ -1,4 +1,4 @@
-angular.module('fragileApp').factory('cardsService', ['$http', 'Socket',function($http,Socket) {
+fragileApp.factory('cardsService', ['$http', 'Socket',function($http,Socket) {
 
 
   return {
@@ -6,12 +6,17 @@ angular.module('fragileApp').factory('cardsService', ['$http', 'Socket',function
       var url = '/user/cards' ;
       return $http.get(url);
     },
-    getUserStories: function(storyIdArr) {
+    getUserStories: function(storyIdArr)
+    {
+  
+      return  $http({
+        method: 'GET',
+        url: '/story/getStories',
+        params: {
+          id: storyIdArr //convert array into comma separated values
+        }})
+      }
 
-      var url ='/story/getStories';
-      return $http.get(url);
+
     }
-  }
-
-
-}]);
+  }]);

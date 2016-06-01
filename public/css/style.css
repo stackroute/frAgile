@@ -1769,3 +1769,28 @@ right: 84px;
 .editable-wrap .editable-input {
     display: block;
 }
+
+
+.boxStory {
+  cursor: pointer;
+  margin: 10px;
+align-items: center;
+  width: 270px;
+  height: auto;
+padding: 10px;
+  border-radius: 3px;
+  background-color: rgba(82, 125, 115, 0.81);
+  padding: 5px 5px 5px 10px;
+  line-height: 25px;
+  color: #E5FFF9;
+float: left;
+}
+.boxStory:hover {
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+}
+.boxHeadingStory {
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: bold;
+}

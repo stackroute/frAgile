@@ -1,5 +1,5 @@
 
-var fragileApp = angular.module('fragileApp',['xeditable','ui.router','ngLetterAvatar','ui.bootstrap','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3','jkuri.datepicker']);
+var fragileApp = angular.module('fragileApp',['angular.filter','xeditable','ui.router','ngLetterAvatar','ui.bootstrap','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3','jkuri.datepicker']);
 
 // fragileApp.run(function(editableOptions,editableThemes) {
 //   editableOptions.theme = 'bs3';

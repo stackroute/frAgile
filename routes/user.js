@@ -95,8 +95,7 @@ router.get('/getUsers', function(req, res, next){
   }
 })
 
-router.get('/cards',function(req,res,next){
-  if (req.user._id) {
+router.get('/cards',function(req,res,next){  if (req.user._id) {
 console.log(req.user._id+"  user id");
     User.getCards(req.user._id, function(data) {
       res.send(data);
