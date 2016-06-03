@@ -1,4 +1,4 @@
-fragileApp.factory('storyService',['$http',function($http) {
+ fragileApp.factory('storyService',['$http',function($http) {
 
     this.getStoryDetails = function() {
       return  $http.get('/story');

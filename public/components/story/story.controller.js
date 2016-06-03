@@ -1,5 +1,6 @@
 fragileApp.run(function(editableOptions,editableThemes) {  editableOptions.theme = 'bs3';
-editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" id="updateTodoItem(todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist()">...</button>'; 
+ 
+editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" id="updateTodoItem(todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>'; 
 // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
@@ -9,11 +10,15 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
-  console.log(storyContr.complexDataObject);
-  storyContr.storyData = storyContr.complexDataObject.story.data;
+  storyContr.storyData = storyContr.complexDataObject.story.data;//getting story data
+       // console.log("Point one: "+param);
+
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
     storyContr.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
+
   });
+
+ 
 
   storyContr.storyGrp = storyContr.complexDataObject.storyGrp;
   //Below code is to get labels data from project starts
@@ -30,8 +35,17 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   //Ends
   $scope.storyData = storyContr.storyData;
   $scope.storyComment = "";
+
   $rootScope.storyMember=$scope.storyData.memberList;
-  console.log($rootScope.storyMember+"in story member");
+  //neo aassignedMember
+  // $scope.storyData.checklist.items.assignedMember;
+  // $scope.storyData.checklist.items.assignedMember.push("Test member");
+  //console.log( $scope.storyData.checklist.items.assignedMember[0],"Check member")
+  $rootScope.showme=$scope.storyData.checklist[0].items[0].assignedMember[0];
+  // console.log("point two: ",$scope.storyData.checklist);
+  // console.log($scope.showme,"in story member");
+
+
   $scope.storyData.memberList.forEach(function(data) {
     data.fullName = data.firstName + " " + data.lastName;
   });
@@ -104,9 +118,15 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
   $scope.myuser=[{member:"NK"},{member:"MK"},{member:"KK"}];
 
-  $scope.addMemberToChecklist = function() {
-
-    modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.html', 'storyOperationsController', storyContr.complexDataObject);
+  $scope.addMemberToChecklist = function(listItem) {
+    console.log(listItem,"in add mem: ",listItem.assignedMember);
+    // $rootScope.listItem=listItem;  
+    data = {
+      listItem: listItem,
+     // members: storyData.assignedMember 
+      members:$scope.storyData.memberList
+    };
+    modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.html', 'addMemberToChecklistController', data);
   };
 
   /***
@@ -334,11 +354,18 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   ***/
   $scope.addTodoItem = function(todo) {
     //todo.items.push({"text":todo.todoText,"done":false})
+    var assignedMember=[];
+    //console.log("inside story controller"+$rootScope.itemMember.fullName);
+    //assignedMember.push($rootScope.itemMember);
     var itemObj = {
       text: todo.todoText,
       checked: false,
       creationDate: Date.now(),
-    }
+      assignedMember:assignedMember
+     
+    };
+
+
 
     socket.emit('story:addChecklistItem', {
 
@@ -387,6 +414,12 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   description:this fuction is used to add a new item to the checklist group.
   ***/
   //TODO:Not working because of nth level
+   //to update list item
+  $scope.updateListItem=function(list,todo){
+  console.log("Modified item: ",list);
+  $scope.updateTodoItem(list,todo);
+  }
+
   $scope.updateTodoItem = function(listItem, checklistGrp) {
 
     //todo.items.push({"text":todo.todoText,"done":false})

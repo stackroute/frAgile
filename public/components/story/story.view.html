@@ -134,13 +134,13 @@
             <b class="progress-per">{{todo.items.length>0 ?((todo.checkedCount/todo.items.length*100)):0}}%</b>
             {{Math.floor((todo.checkedCount/todo.items.length*100))}}
             <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar>
-            <li class="checklist-todos" ng-repeat="list in todo.items">
+            <li class="checklist-todos" ng-repeat="listItem in todo.items">
 
-              <input type="checkbox" ng-model="list.checked" ng-click="updateTodoItem(list,todo)">
+              <input type="checkbox" ng-model="listItem.checked" ng-click="updateTodoItem(listItem,todo)">
         
-              <span class="done-{{list.checked}} " editable-text="list.text" ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{list.text}}
+              <span class="done-{{listItem.checked}} " editable-text="listItem.text" onaftersave="updateListItem(listItem,todo)" ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{listItem.text}}
 
-                <a ng-click="removeTodoItem(list,todo,list.text)"  ng-show="itemHovering">
+                <a ng-click="removeTodoItem(listItem,todo,listItem.text)"  ng-show="itemHovering">
 
                   <i class="fa fa-minus-circle" ></i>
                 </a> 
