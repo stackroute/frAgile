@@ -13,6 +13,8 @@ var socket = Socket($scope);
   $scope.storyDetails= param.story.data;
   $scope.roomName = "sprint:" + param.sprint._id;
 
+
+
   /***
   author:Sharan
   function:initLoadMembers
@@ -21,6 +23,8 @@ var socket = Socket($scope);
   ***/
   $scope.initLoadMembers = function(){
     //$scope.memberDetails= param.projMembers;
+
+
 
     /*** Declaring variables required for addMembers,addLabels***/
     $scope.longDescLimit=25 ;

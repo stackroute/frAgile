@@ -1,8 +1,13 @@
 fragileApp.controller('cardsController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'cardsService', 'Socket', '$filter', 'graphModalFactory','homeService',function($scope, $state, $rootScope, $stateParams, $uibModal, cardsService, Socket, $filter, graphModalFactory,homeService) {
 
   var socket = Socket($scope);
+  $rootScope.inprojectRoom=false;
+
+
+
   $scope.loadCards=function(){
 //$scope.cards={};
+$scope.stories=[];
      cardsService.getUserCards().success(function(response) {
       $rootScope.cards = response.assignedStories;
       console.log($rootScope.cards);
@@ -16,10 +21,38 @@ fragileApp.controller('cardsController', ['$scope', '$state', '$rootScope', '$st
        cardsService.getUserStories(storyIdArr).success(function(response){
          $scope.stories=response;
 console.log($scope.stories);
+var emitData={
+'room' :$rootScope.currentUserID
+};
+console.log(emitData);
+socket.emit('join:room', emitData);
+
+
+socket.on('story:memberRemoved',function(data){
+console.log("you are removed");
+})
       })
      });
 
 }
+
+
+socket.on('story:memberAssigned',function(data){
+$scope.stories=[];
+$scope.stories.push(data);
+//console.log(data.length);
+console.log("you are added");
+console.log($scope.stories);
+
+})
+
+socket.on('story:memberRemoved',function(data)
+{
+  $scope.stories = $filter('filter')($scope.stories, {_id: !data._id})
+
+});
+
+
 $scope.gotoProject=function(){
 $state.go('project');
 }
