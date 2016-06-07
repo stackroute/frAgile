@@ -353,6 +353,9 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
     ***/
     $scope.showModal = function(storyID, storyGrp, listItemId, listItemName) {
         var currentPosition = {}
+  console.log(storyGrp+"storygroup");
+  console.log(listItemId+"listItemId");
+console.log(listItemName+"listItemName");
         currentPosition.listId = listItemId;
         currentPosition.listItemName = listItemName;
 
@@ -360,7 +363,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
           var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: '/components/story/story.view.html',
-            url : '/sprint/:prId/:releaseID/:sprintID/:storyID',
+          //  url : '/sprint/:prId/:releaseID/:sprintID/:storyID',
             controller: 'storyController',
             controllerAs: 'storyContr',
             size: 'lg',
@@ -369,7 +372,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
                 return {
                   story: story,
                   sprint: $scope.sprint,
-                  projMembers: $rootScope.memberList, //TODO:Check if this can be sent directly instead of resolve
+                  projMembers: $rootScope.projMemberList, //TODO:Check if this can be sent directly instead of resolve
                   storyGrp: storyGrp,
               currentPosition: currentPosition
               //labelTemplateData:$scope.labelTemplate
@@ -380,6 +383,7 @@ fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams
 
           modalInstance.result.then(function(selectedItem) {
             $scope.selected = selectedItem;
+console.log($scope.selected);
           }, function() {
           });
 

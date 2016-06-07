@@ -2,15 +2,15 @@
   <div class="showNewCards" ng-show = "cards.length == 0">
     <center>All your Stories at one place</center>
   </div>
-  <!-- <h1 ng-hide="cards.length==0" align="center">Your Stories</h1>
+  <h1 ng-hide="cards.length==0" align="center">Your Stories</h1>
   <div ng-repeat="(key,value) in cards|groupBy:'sprintId' " ng-init="count=0">
     <br>
     <div style="clear:both">
       <a ng-click="gotoProject()">{{value[0].projectName}} </a>| <a ui-sref="release({ prId : value[0].projectId, releaseID: value[0].releaseId})">{{value[0].releaseName}}</a> | <a ui-sref="sprint({ prId : value[0].projectId, releaseID: value[0].releaseId,sprintID: value[0].sprintId})">{{value[0].sprintName}}</a>
       <div ng-repeat="val in value" ng-hide >
- -->
-        <div ng-repeat="story in stories"  >
-          <div class="boxStory" ng-click="">
+
+        <div ng-repeat="story in stories" ng-show="val.storyId==story._id" >
+          <div class="boxStory" ui-sref="sprint.story({ prId : value[0].projectId, releaseID: value[0].releaseId,sprintID: value[0].sprintId,storyID:story._id})">
             {{story.heading}}
             <div class="storyAttributes">
               <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>

@@ -239,6 +239,7 @@ console.log(doc);
       if (!err) {
         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
           if (!err) {
+console.log(data);
             io.to(data.room).emit('story:dataModified', storyData);
 
             var actData = {

@@ -12,6 +12,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
+console.log("----------");
+  console.log(param);
   storyContr.storyData = storyContr.complexDataObject.story.data;
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
     storyContr.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
