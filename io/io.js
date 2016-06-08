@@ -19,7 +19,7 @@ io.on('connection', function(socket) {
     socket.join(data.room);
     socket.lastRoom = data.room;
 
-    //Socket can only be connected to one activity room
+    // activity room
     if (data.activityRoom) {
       if (socket.activityRoom) {
         socket.leave(socket.activityRoom);
