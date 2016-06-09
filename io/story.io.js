@@ -234,14 +234,15 @@ console.log(doc);
     data.itemObj.createdBy = user._id;
     // data.itemObj.createdBy="570395a239dc5fbac028505c";
     // data.itemObj.creatorName="user.fullName";
-
+console.log(data);
     Story.addChecklistItem(data.storyid, data.checklistGrpId, data.itemObj, function(err, doc) {
       if (!err) {
         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
           if (!err) {
 console.log(data);
             io.to(data.room).emit('story:dataModified', storyData);
-
+console.log("room");
+console.log(data.room);
             var actData = {
               room: "activity:" + data.projectID,
               action: "added",

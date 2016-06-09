@@ -1,9 +1,11 @@
 fragileApp.config(function($stateProvider,$urlRouterProvider){
   var currentPosition={};
   $stateProvider
-  .state('sprint.story',{
-    url : '/:storyID',
+  .state('cards.story',{
+    url : ':sprintID/:storyID',
     onEnter: function($stateParams, $state, $uibModal,sprintService,$rootScope) {
+
+console.log($stateParams);
       sprintService.getSprints($stateParams.sprintID).then(function(sprintObj){
         sprintService.getStory($stateParams.storyID).then(function(storyObj){
 
@@ -24,7 +26,8 @@ fragileApp.config(function($stateProvider,$urlRouterProvider){
 
             templateUrl: '/components/story/story.view.html',
             controller: 'storyController',
-
+            controllerAs: 'storyContr',
+            animation:'true',
             size: 'lg',
             resolve: {
               param: function(sprintService) {
@@ -43,11 +46,10 @@ fragileApp.config(function($stateProvider,$urlRouterProvider){
 
           });
           modalInstance.result.then(function () {
-alert("in modal result");
-                $state.go('sprint');
+
+                $state.go('cards',{},{reload:true});
             }, function () {
-alert("in modal result");
-                $state.go('sprint');
+                $state.go('cards',{},{reload:true});
          });
         });
 

@@ -13,9 +13,11 @@ io.on('connection', function(socket) {
   socket.on('join:room', function(data) {
     //To make sure socket connects to one room only
     if (socket.lastRoom) {
+  console.log("leaving room"+socket.lastRoom);
       socket.leave(socket.lastRoom);
       socket.lastRoom = null;
     }
+  console.log("joining "+data.room);
     socket.join(data.room);
     socket.lastRoom = data.room;
 

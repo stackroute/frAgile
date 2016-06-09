@@ -7,8 +7,8 @@ editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" i
 fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window) {
   var socket = Socket($scope);
 
-
-
+console.log(socket.room);
+console.log(socket);
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
@@ -48,12 +48,16 @@ console.log("----------");
 
   $scope.storyID = storyContr.storyData._id; //Used in loading activity for card.
   $scope.sprintID = storyContr.complexDataObject.sprint._id;
-
+  var emitData=  {
+    'room': "sprint:" + $scope.sprintID
+  };
+console.log(sprintService.currentRoom);
+if(!sprintService.currentRoom.room){
+console.log("joining room"+emitData);
+  socket.emit('join:room', emitData);
+}
   $scope.roomName = "sprint:" + $scope.sprintID;
-  // var emitData = {
-  //   'room': $scope.roomName
-  // }
-  // socket.emit('join:room', emitData);
+
 
   $scope.model = {
     description: {

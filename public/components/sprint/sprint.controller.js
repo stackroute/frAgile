@@ -1,7 +1,7 @@
 fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'Socket', '$uibModal', '$location', '$anchorScroll', 'graphModalFactory',
   function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibModal, $location, $anchorScroll, graphModalFactory) {
 
-
+sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
   $scope.getSprints = function() {
 
       $scope.addToBacklog = false;
@@ -361,6 +361,7 @@ console.log(listItemName+"listItemName");
 
         sprintService.getStory(storyID).then(function(story) {
           var modalInstance = $uibModal.open({
+
             animation: $scope.animationsEnabled,
             templateUrl: '/components/story/story.view.html',
           //  url : '/sprint/:prId/:releaseID/:sprintID/:storyID',

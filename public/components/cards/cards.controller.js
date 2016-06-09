@@ -1,11 +1,22 @@
-fragileApp.controller('cardsController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'cardsService', 'Socket', '$filter', 'graphModalFactory','homeService',function($scope, $state, $rootScope, $stateParams, $uibModal, cardsService, Socket, $filter, graphModalFactory,homeService) {
+fragileApp.controller('cardsController', ['$scope', '$state','sprintService', '$rootScope', '$stateParams', '$uibModal', 'cardsService', 'Socket', '$filter', 'graphModalFactory','homeService',function($scope, $state,sprintService, $rootScope, $stateParams, $uibModal, cardsService, Socket, $filter, graphModalFactory,homeService) {
 
   var socket = Socket($scope);
   $rootScope.inprojectRoom=false;
 
 
 
+
+console.log($stateParams);
   $scope.loadCards=function(){
+
+  sprintService.currentRoom={};
+
+    var emitData={
+    'room' :$rootScope.currentUserID
+    };
+    console.log(emitData);
+    socket.emit('join:room', emitData);
+
 //$scope.cards={};
 $scope.stories=[];
      cardsService.getUserCards().success(function(response) {
@@ -21,11 +32,7 @@ $scope.stories=[];
        cardsService.getUserStories(storyIdArr).success(function(response){
          $scope.stories=response;
 console.log($scope.stories);
-var emitData={
-'room' :$rootScope.currentUserID
-};
-console.log(emitData);
-socket.emit('join:room', emitData);
+
 
 
 socket.on('story:memberRemoved',function(data){

@@ -2,7 +2,7 @@
   <div class="showNewCards" ng-show = "cards.length == 0">
     <center>All your Stories at one place</center>
   </div>
-  <h1 ng-hide="cards.length==0" align="center">Your Stories</h1>
+  <h1 ng-hide="cards.length==0" align="center">My Stories</h1>
   <div ng-repeat="(key,value) in cards|groupBy:'sprintId' " ng-init="count=0">
     <br>
     <div style="clear:both">
@@ -10,14 +10,24 @@
       <div ng-repeat="val in value" ng-hide >
 
         <div ng-repeat="story in stories" ng-show="val.storyId==story._id" >
-          <div class="boxStory" ui-sref="sprint.story({ prId : value[0].projectId, releaseID: value[0].releaseId,sprintID: value[0].sprintId,storyID:story._id})">
+          <div class="boxStory" ui-sref=".story({sprintID: value[0].sprintId,storyID:story._id})">
             {{story.heading}}
             <div class="storyAttributes">
               <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
               <span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{story.indicators.commentCount}}</span>
               <span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{story.indicators.attachmentsCount}}</span>
+
               <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{story.indicators.chklstItmsChkdCnt}} / {{story.indicators.chklstItmsCnt}}</span>
-              <!-- <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{}}</span> -->
+              <span ng-hide="story.memberList!==undefined">
+                <div>
+                  <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
+                  <div class="avatar-ng" ng-show="member.photo == undefined">
+                    <ng-letter-avatar data="{{member.fullName}}" charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+                  </div>
+                  &nbsp;
+                </div>
+              </span>
+
             </div>
           </div>
         </div>
@@ -25,14 +35,14 @@
 
       <!-- <hr style="clear:both"> -->
 
+      <!-- </div>
+
+      <br>
+
+    </div> -->
     <!-- </div>
 
-    <br>
-
-  </div> -->
-<!-- </div>
-
-</div>
+  </div>
 
 
 
@@ -41,15 +51,15 @@
 
 
 
-<button ng-click="loadCards()"></button> -->
+  <button ng-click="loadCards()"></button> -->
 
 
 
 
-<!-- <div ng-repeat="card in cards" >
-{{card.projectName}}
-<div class="story_Name" ng-show="{{}}">
-{{story.heading}}
+  <!-- <div ng-repeat="card in cards" >
+  {{card.projectName}}
+  <div class="story_Name" ng-show="{{}}">
+  {{story.heading}}
 </div> -->
 <!-- <div class="storyAttributes">
 <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>

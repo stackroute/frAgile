@@ -1,5 +1,7 @@
 fragileApp.factory('sprintService',['$http',function($http) {
 
+this.currentRoom={};
+
   this.getStory = function(storyID) {
       return  $http.get('/story?id='+storyID);//pass pass parameter in post
     };
@@ -11,7 +13,7 @@ fragileApp.factory('sprintService',['$http',function($http) {
   this.getBackBug = function(prId) {
     return  $http.get('/project/backLogsBugList/?projId='+prId);
   };
-  
+
   this.getLabelMasterData=function(){
     return $http.get('/template');
   }
