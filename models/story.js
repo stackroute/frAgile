@@ -116,6 +116,14 @@ StorySchema.statics.findStory = function(storyId, callback) {
         }
       });
   }
+
+  //neo
+//   StorySchema.statics.addRemoveMembersList=function(checklistItem)
+// {
+//   }
+
+//   );
+// }
   /*** addMembers function is used to assign the members to
   the story from the project members list.**/
 StorySchema.statics.addMembers = function(storyId, membersId, callback) {
@@ -384,6 +392,8 @@ parameters:checklistItemId
 description:This function returns the index of the checklistitem
 ***/
 StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
+    
+
     this.findOne({
       "checklist.items._id": itemId
     }, {
@@ -397,6 +407,7 @@ StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
         })
       })
     });
+
   }
   /***
   authors:sharan

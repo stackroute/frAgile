@@ -134,7 +134,7 @@
             <b class="progress-per">{{todo.items.length>0 ?((todo.checkedCount/todo.items.length*100)):0}}%</b>
             {{Math.floor((todo.checkedCount/todo.items.length*100))}}
             <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar>
-            <li class="checklist-todos" ng-repeat="listItem in todo.items">
+                     <li class="checklist-todos" ng-repeat="listItem in todo.items">
 
               <input type="checkbox" ng-model="listItem.checked" ng-click="updateTodoItem(listItem,todo)">
         

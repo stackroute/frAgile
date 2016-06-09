@@ -35,9 +35,21 @@
           {{membersArray.fullName}}
          </li>
       </ul>
+     
     </div>
+
+
   </div>
+
 </div>
+    
+    <div ng-init="initLoadMembersOfItem()">
+      <ul>
+        <li ng-repeat="member in assignedMember">{{member.firstName}}</li>
+
+      </ul>
+
+    </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="cancel()">Done</button>
 </div>
