@@ -3,8 +3,9 @@ fragileApp.config(function($stateProvider,$urlRouterProvider){
   $stateProvider
   .state('cards.story',{
     url : ':sprintID/:storyID',
+    params:{prId:null},
     onEnter: function($stateParams, $state, $uibModal,sprintService,$rootScope) {
-
+console.log("param:");
 console.log($stateParams);
       sprintService.getSprints($stateParams.sprintID).then(function(sprintObj){
         sprintService.getStory($stateParams.storyID).then(function(storyObj){
@@ -27,12 +28,15 @@ console.log($stateParams);
             templateUrl: '/components/story/story.view.html',
             controller: 'storyController',
             controllerAs: 'storyContr',
+
             animation:'true',
+
             size: 'lg',
             resolve: {
-              param: function(sprintService) {
+              param: function() {
 
                 return{
+                  projectId:$stateParams.prId,
                   story: storyObj,
                   sprint: sprintObj.data,
                   projMembers: $rootScope.projMemberList, //TODO:Check if this can be sent directly instead of resolve
@@ -46,7 +50,6 @@ console.log($stateParams);
 
           });
           modalInstance.result.then(function () {
-
                 $state.go('cards',{},{reload:true});
             }, function () {
                 $state.go('cards',{},{reload:true});

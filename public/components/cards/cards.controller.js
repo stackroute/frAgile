@@ -21,7 +21,7 @@ console.log($stateParams);
 $scope.stories=[];
      cardsService.getUserCards().success(function(response) {
       $rootScope.cards = response.assignedStories;
-      console.log($rootScope.cards);
+      console.log(response);
        var storyIdArr=[];
       var i=0;
        $rootScope.cards.forEach(function(item){
@@ -63,6 +63,9 @@ socket.on('story:memberRemoved',function(data)
 $scope.gotoProject=function(){
 $state.go('project');
 }
+// $scope.goToStory=function(param){
+//   $state.go('.story',param);
+// }
 $scope.goToSprint=function(params,story){
 $state.go('sprint',params).then(function(){
 //$rootScope.showModal(story._id, listItem.group,listItem._id,listItem.listName);\

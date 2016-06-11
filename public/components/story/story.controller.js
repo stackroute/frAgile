@@ -49,12 +49,18 @@ console.log("----------");
   $scope.storyID = storyContr.storyData._id; //Used in loading activity for card.
   $scope.sprintID = storyContr.complexDataObject.sprint._id;
   var emitData=  {
-    'room': "sprint:" + $scope.sprintID
-  };
+    'room': "sprint:" + $scope.sprintID,
+    'activityRoom': "activity:"+storyContr.complexDataObject.projectId
+  }
+  // if (!$scope.activityRoom || $scope.activityRoom != ('activity:' + $stateParams.prId)) { //Join an activity room if not already     joined || Change room if navigated from other project.
+  //   $rootScope.activityRoom = 'activity:' + $stateParams.prId;
+  //   emitData["activityRoom"] = 'activity:' + $stateParams.prId;
+  // }
 console.log(sprintService.currentRoom);
 if(!sprintService.currentRoom.room){
 console.log("joining room"+emitData);
   socket.emit('join:room', emitData);
+  
 }
   $scope.roomName = "sprint:" + $scope.sprintID;
 
