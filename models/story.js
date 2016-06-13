@@ -71,6 +71,8 @@ var StorySchema = new Schema({
     items: [{
       text: String,
       checked: Boolean,
+      assignedMember:[{ type: Schema.Types.ObjectId,
+        ref: 'User'}],
       createdBy: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -114,6 +116,14 @@ StorySchema.statics.findStory = function(storyId, callback) {
         }
       });
   }
+
+  //neo
+//   StorySchema.statics.addRemoveMembersList=function(checklistItem)
+// {
+//   }
+
+//   );
+// }
   /*** addMembers function is used to assign the members to
   the story from the project members list.**/
 StorySchema.statics.addMembers = function(storyId, membersId, callback) {
@@ -382,6 +392,8 @@ parameters:checklistItemId
 description:This function returns the index of the checklistitem
 ***/
 StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
+    
+
     this.findOne({
       "checklist.items._id": itemId
     }, {
@@ -395,6 +407,7 @@ StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
         })
       })
     });
+
   }
   /***
   authors:sharan
@@ -631,6 +644,7 @@ StorySchema.statics.deleteComment = function(storyId, commentId, callback) {
 StorySchema.statics.getStory = function(storyId, callback) {
   this.findOne({"_id":storyId})
   .exec(function(err,doc){
+    console.log(doc+"in ");
     if (err) {
       callback(err, null);
     }

@@ -25,7 +25,7 @@ var template = require('./routes/template.js');
 var authenticationHandler = require('./routes/authenticationHandler')(passport);
 app.use(session({
   store: new RedisStore({
-    host: '172.23.238.253',
+    host: '127.0.0.1',
     port: 6379,
     db: 7
   }),

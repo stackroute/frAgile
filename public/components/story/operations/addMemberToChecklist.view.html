@@ -1,0 +1,59 @@
+<!-- new work -->
+<!-- <div class="modal-header">
+    <button type="button" class="close" ng-click="cancel()"><i class="fa fa-times-circle"></i></button>
+  <h4 class="modal-title">Member(s) added to checklist item</h4>
+</div>
+    <div class="modal-body">
+      <p>my Model body: {{nitList}}</p>
+      <label for="">
+        <input ng-model="searchText"></input>
+      </label>
+      <ul class="modal-members-list" class="list-group">
+      <li class="list-group-item" ng-repeat="mem in memberList">  {{mem.firstname}}</li>
+      </ul>
+
+    </div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="cancel()">Done</button>
+</div> -->
+
+<!-- end of new work -->
+
+<!-- <script type="text/ng-template"  id="addMember.html"> -->
+<div class="modal-header">
+
+    <button type="button" class="close" ng-click="cancel()"><i class="fa fa-times-circle"></i></button>
+  <h3 class="modal-title">Member(s) added to checklist item </h3>
+  
+</div>
+<div class="modal-body" ng-init="initLoadMembersOfStory()">
+  <div class="form-group">
+    <input type="text" ng-model="memberName" name="memberSearch" placeholder="Search Member" class="form-control" autofocus>
+    <div id="modal-members">
+      <ul class="modal-members-list">
+        <li ng-click="addRemoveMembersList(membersArray)" ng-hide="!memberName" ng-repeat="membersArray in storyMember |filter: memberName" class="list-group-item">
+          {{membersArray.fullName}}
+         </li>
+      </ul>
+     
+    </div>
+
+
+  </div>
+
+</div>
+    
+    <div ng-init="initLoadMembersOfItem()">
+      <ul>
+        <li ng-repeat="member in assignedMember">{{member.firstName}}</li>
+
+      </ul>
+
+    </div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="cancel()">Done</button>
+</div>
+<!-- </script> -->
+
+
+<!-- new work -->

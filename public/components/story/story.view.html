@@ -64,6 +64,11 @@
           </span>
         </div>
       </div> -->
+      <!--neo test <div class="mynewDiv" class="well">
+        <ul>
+          <li ng-repeat='mem in myuser'> {{mem.member}}</li>
+        </ul>
+      </div> -->
         <hr class="story-seperator">
 
         <div class="story-details clearfix">
@@ -129,22 +134,27 @@
             <b class="progress-per">{{todo.items.length>0 ?((todo.checkedCount/todo.items.length*100)):0}}%</b>
             {{Math.floor((todo.checkedCount/todo.items.length*100))}}
             <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar>
-            <li class="checklist-todos" ng-repeat="list in todo.items">
-              <input type="checkbox" ng-model="list.checked" ng-click="updateTodoItem(list,todo)">
+                     <li class="checklist-todos" ng-repeat="listItem in todo.items">
 
-              <span class="done-{{list.checked}}" ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{list.text}}
+              <input type="checkbox" ng-model="listItem.checked" ng-click="updateTodoItem(listItem,todo)">
+        
+              <span class="done-{{listItem.checked}} " editable-text="listItem.text" onaftersave="updateListItem(listItem,todo)" ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{listItem.text}}
 
-                <a ng-click="removeTodoItem(list,todo,list.text)"  ng-show="itemHovering">
+                <a ng-click="removeTodoItem(listItem,todo,listItem.text)"  ng-show="itemHovering">
 
                   <i class="fa fa-minus-circle" ></i>
-                </a>
-              </span>
-
-            </li>
-            <form>
-              <input type="text" ng-model="todo.todoText" class="form-control add-todo" size="40"
+                </a> 
+<!--                 <span class="option option-menu" ng-show="itemHovering" ng-click="addMember()" >...</span>
+ -->              </span>
+              
+            
+          </li>
+            <form name="addChecklistItem" novalidate ng-submit="addChecklistItem.$valid && addTodoItem(todo)"><!-- neo member to checklist-->
+              <input type="text" ng-model="todo.todoText" required class="form-control add-todo" size="40"
               placeholder="Add New Todo" ></input>
-              <button type="submit" class="btn btn-default btn-xs check-item-btn" ng-click="addTodoItem(todo)" ><i class="fa fa-plus" aria-hidden="true"></i></button>
+              <span  class="btn btn-default btn-xs check-item-btn" ng-click="addMemberToChecklist()"><i class="fa fa-users"></i></span>
+              <button class="btn btn-default btn-xs check-item-btn" type="submit"><i class="fa fa-plus" aria-hidden="true" >
+              </i></button>
             </form>
             <hr class="story-seperator checklist-seperator">
           </div>

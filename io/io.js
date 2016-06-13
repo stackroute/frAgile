@@ -11,6 +11,7 @@ var BackLogsBugList = require('../models/backlogBuglist.js');
 io.on('connection', function(socket) {
 
   socket.on('join:room', function(data) {
+    console.log(" Joining room :",data);
     //To make sure socket connects to one room only
     if (socket.lastRoom) {
       socket.leave(socket.lastRoom);

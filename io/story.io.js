@@ -305,8 +305,29 @@ if (!err) {
         }
       })
     })
+    //start new
+    socket.on('story:addRemoveMembersListItem',function(data){
+      console.log(data.roomName);
+      io.to(data.roomName).emit('memberAdded',data);
+      console.log("Data member in server: ",data.memberObj);
+    });
+    //end new
+    //start
+    //neo
+    socket.on('story:addRemoveMembersList',function(data)
+    {
+      //console.log("My list:",data);
+    //Story.addRemoveMembersList(data,function(err,index){
+
+      socket.emit('pushMemberToItem',data.assignedMember);
+      //console.log("my data members: ",data.assignedMember);
+
+      
+    });
+    //end
     /****
     description:listner to update item to checklist group in a story
+
     ****/
   socket.on('story:updateChecklistItem', function(data) {
 
@@ -316,8 +337,10 @@ if (!err) {
     //     io.to(data.room).emit('story:checklistItemUpdated', doc);
     //   }
     // })
+
+
     Story.getCheckItemIndex(data.itemid, function(err, index) {
-      if (index != -1)
+      if (index !=-1)
         Story.updateChecklistItem(data.storyid, data.checklistGrpId, data.itemid, data.checked, index, function(err, doc) {
           if (!err) {
             //user.userID

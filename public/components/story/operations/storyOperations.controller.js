@@ -1,5 +1,6 @@
 fragileApp.controller('storyOperationsController',['$scope','$rootScope','$stateParams','storyService','modalService','$uibModal','$uibModalInstance','$location','param','Socket',function($scope,$rootScope,$stateParams,storyService,modalService,$uibModal,$uibModalInstance,$location,param,Socket){
 var socket = Socket($scope);
+console.log(" story controler param:",param);
   //TODO:need to check whether we need to get the "$scope.memberDetails" data directly from rootscope without resolving it in story Modal.   ---->Check
 
 
@@ -8,11 +9,28 @@ var socket = Socket($scope);
 
   //TODO:Add dismisal for all sub modal --->Added cancel, call it from modals
 
-
+  $scope.membersList=[
+   {
+     "id": 1,
+     "firstname": "Samiksha",
+     "emailaddress": "ashwini@123.com"
+   },
+   {
+     "id": 2,
+     "firstname": "Samyuktha",
+     "emailaddress": "ashwini@123.com"
+   },
+   {
+     "firstname": "fhjf",
+     "emailaddress": "hvhvh",
+     "id": 3
+   }
+ ];
+ $scope.nitList="What up nitish";
   /***Received the data from resolve functionality of uibModal***/
   $scope.storyDetails= param.story.data;
   $scope.roomName = "sprint:" + param.sprint._id;
-
+console.log($rootScope.storyMember);
   /***
   author:Sharan
   function:initLoadMembers
@@ -32,6 +50,25 @@ var socket = Socket($scope);
       console.log(response);
       $scope.membersData=response.data;
     });
+
+  }
+
+    //neo list item member fetch
+    $scope.initLoadMembersList = function(){
+    //$scope.memberDetails= param.projMembers;
+
+    /*** Declaring variables required for addMembers,addLabels***/
+    $scope.longDescLimit=25 ;
+    $scope.checked = true;
+    $scope.membersData = [];
+    /** XHR request to fetch latest members details***/
+    console.log($scope.storyDetails._id);
+    // $scope.membersData=$scope.assMember;
+
+    // storyService.getMembersData($scope.storyDetails._id).then(function(response) {
+    //   console.log(response);
+    //   $scope.membersData=response.data;
+    // });
 
   }
 
@@ -378,6 +415,9 @@ console.log(labelData);
     $scope.checked=!$scope.checked;
   }
 
+
+
+
   /***
   authors:sharan,srinivas
   function:addRemoveMembers
@@ -416,7 +456,9 @@ console.log(labelData);
         'user':$rootScope.userProfile
       });
     }
-  }
+  }//addremoveMemmber ends
+
+
   socket.on('story:membersModified', function(data) {
     //Not Receiving any data
       console.log(data);

@@ -1,13 +1,24 @@
+fragileApp.run(function(editableOptions,editableThemes) {  editableOptions.theme = 'bs3';
+ 
+editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" on-click="updateTodoItem(listItem,todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>'; 
+// bootstrap3 theme. Can be also 'bs2', 'default'
+});
+
 fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window) {
   var socket = Socket($scope);
 
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
-  storyContr.storyData = storyContr.complexDataObject.story.data;
+  storyContr.storyData = storyContr.complexDataObject.story.data;//getting story data
+       // console.log("Point one: "+param);
+
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
     storyContr.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
+
   });
+
+ 
 
   storyContr.storyGrp = storyContr.complexDataObject.storyGrp;
   //Below code is to get labels data from project starts
@@ -24,6 +35,16 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   //Ends
   $scope.storyData = storyContr.storyData;
   $scope.storyComment = "";
+
+  // $rootScope.storyMember=$scope.storyData.memberList;
+  //neo aassignedMember
+  // $scope.storyData.checklist.items.assignedMember;
+  // $scope.storyData.checklist.items.assignedMember.push("Test member");
+  //console.log( $scope.storyData.checklist.items.assignedMember[0],"Check member")
+  $rootScope.showme=$scope.storyData.checklist[0].items[0].assignedMember[0];
+  // console.log("point two: ",$scope.storyData.checklist);
+  // console.log($scope.showme,"in story member");
+
 
   $scope.storyData.memberList.forEach(function(data) {
     data.fullName = data.firstName + " " + data.lastName;
@@ -87,6 +108,45 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   $scope.addMember = function() {
     modalService.open('sm', 'components/story/operations/addMember.view.html', 'storyOperationsController', storyContr.complexDataObject);
   };
+
+  /***
+  author:nitish
+  function:addMember to check list
+  parameters:none
+  description:This function is used to add members to checklist
+  ***/
+  //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
+  $scope.myuser=[{member:"NK"},{member:"MK"},{member:"KK"}];
+
+    //start 
+      $scope.assignedMember={};//temp assinged member 
+      socket.on('memberAdded',function(data){
+        
+          console.log("assignedMember data in main controller: ",data);
+
+            $scope.assignedMember=(data.memberObj);
+         
+       });
+  //ends
+
+  $scope.addMemberToChecklist = function(listItem) {
+    //socket.emit("join:room",{"room":"checklist:"+lis})
+    console.log(listItem,"in add mem: ",listItem.assignedMember);
+    // $rootScope.listItem=listItem;  
+    listItem.assignedMember.push($scope.assignedMember);
+  console.log("assignedMember data in main controller (list item): ",listItem.assignedMember);
+
+    data = {
+      
+      listItem: listItem,
+     // members: storyData.assignedMember 
+       roomName:$scope.roomName,
+      members:$scope.storyData.memberList
+    };
+    modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.html', 'addMemberToChecklistController', data);
+  };
+
+
 
   /***
   author:Sharan
@@ -313,11 +373,18 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   ***/
   $scope.addTodoItem = function(todo) {
     //todo.items.push({"text":todo.todoText,"done":false})
+    var assignedMember=[];
+    //console.log("inside story controller"+$rootScope.itemMember.fullName);
+    //assignedMember.push($rootScope.itemMember);
     var itemObj = {
       text: todo.todoText,
       checked: false,
       creationDate: Date.now(),
-    }
+      assignedMember:assignedMember
+     
+    };
+
+
 
     socket.emit('story:addChecklistItem', {
 
@@ -366,10 +433,16 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   description:this fuction is used to add a new item to the checklist group.
   ***/
   //TODO:Not working because of nth level
+   //to update list item
+  $scope.updateListItem=function(listItem,checklistGrp){
+  console.log("Modified item: ",listItem);
+  $scope.updateTodoItem(listItem,checklistGrp);
+  }
+
   $scope.updateTodoItem = function(listItem, checklistGrp) {
 
     //todo.items.push({"text":todo.todoText,"done":false})
-
+    console.log("In list item : ",listItem)
     socket.emit('story:updateChecklistItem', {
 
       'room': $scope.roomName,
