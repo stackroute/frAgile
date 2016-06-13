@@ -307,7 +307,8 @@ if (!err) {
     })
     //start new
     socket.on('story:addRemoveMembersListItem',function(data){
-      console.log(data.roomName);
+     // console.log(data.roomName);
+      console.log("memberObj ==>",data.memberObj);
       io.to(data.roomName).emit('memberAdded',data);
       console.log("Data member in server: ",data.memberObj);
     });
@@ -331,14 +332,14 @@ if (!err) {
     ****/
   socket.on('story:updateChecklistItem', function(data) {
 
+
     // Story.updateChecklistItem(data.storyid,data.checklistGrpId,data.itemid,data.checked, function(err, doc) {
     //   if (!err) {
     //     //user.userID
     //     io.to(data.room).emit('story:checklistItemUpdated', doc);
     //   }
     // })
-
-
+   // 
     Story.getCheckItemIndex(data.itemid, function(err, index) {
       if (index !=-1)
         Story.updateChecklistItem(data.storyid, data.checklistGrpId, data.itemid, data.checked, index, function(err, doc) {
@@ -373,6 +374,7 @@ if (!err) {
         })
     })
   })
+
 
   socket.on('story:addAttachment', function(data) {
     io.to(data.room).emit('story:attachmentAdded', data);

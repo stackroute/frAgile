@@ -1,12 +1,12 @@
 fragileApp.run(function(editableOptions,editableThemes) {  editableOptions.theme = 'bs3';
  
-editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" on-click="updateTodoItem(listItem,todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>'; 
+editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" ng-click="updateTodoItem(listItem,todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>'; 
 // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
 fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window) {
   var socket = Socket($scope);
-
+var localData={};
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
@@ -21,29 +21,11 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
  
 
   storyContr.storyGrp = storyContr.complexDataObject.storyGrp;
-  //Below code is to get labels data from project starts
-  // $scope.storyTempData = [];
-  // var respObj = $rootScope.projects.filter(function(item) {
-  //   return item._id === $stateParams.prId;
-  // });
-  // for (var i = 0; i < respObj[0].labelId.labelList.length; i++) {
-  //   if (storyContr.storyData.labelList.indexOf(respObj[0].labelId.labelList[i]._id) != -1) {
-  //     $scope.storyTempData.push(respObj[0].labelId.labelList[i]);
-  //   }
-  // }
-  // storyContr.storyData.labelList = $scope.storyTempData; //Overriding the old valuse
+ 
   //Ends
   $scope.storyData = storyContr.storyData;
   $scope.storyComment = "";
 
-  // $rootScope.storyMember=$scope.storyData.memberList;
-  //neo aassignedMember
-  // $scope.storyData.checklist.items.assignedMember;
-  // $scope.storyData.checklist.items.assignedMember.push("Test member");
-  //console.log( $scope.storyData.checklist.items.assignedMember[0],"Check member")
-  $rootScope.showme=$scope.storyData.checklist[0].items[0].assignedMember[0];
-  // console.log("point two: ",$scope.storyData.checklist);
-  // console.log($scope.showme,"in story member");
 
 
   $scope.storyData.memberList.forEach(function(data) {
@@ -90,14 +72,7 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
     $scope.set = false;
   };
 
-  //
-  // $scope.getStory = function() {
-  //   console.log("inside");
-  //   $scope.description = "edited";
-  //   storyService.getStoryDetails().then(function(storyDetails) {
-  //
-  //   });
-  // };
+
   /***
   author:sharan
   function:addMember
@@ -109,6 +84,9 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
     modalService.open('sm', 'components/story/operations/addMember.view.html', 'storyOperationsController', storyContr.complexDataObject);
   };
 
+var flag=0;
+localData=[];
+$scope.memberArray=[];
   /***
   author:nitish
   function:addMember to check list
@@ -119,23 +97,89 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   $scope.myuser=[{member:"NK"},{member:"MK"},{member:"KK"}];
 
     //start 
-      $scope.assignedMember={};//temp assinged member 
+      $scope.assignedMember=[];//temp assinged member 
       socket.on('memberAdded',function(data){
         
-          console.log("assignedMember data in main controller: ",data);
+            var count=0;
+             console.log("data member -->",data.memberObj);
+            $scope.memberArray.filter(function(obj)
+            {
 
-            $scope.assignedMember=(data.memberObj);
-         
+              if(obj.itemId == data.listItem._id)
+              {
+                var array=obj["arrayOfMembers"];
+                console.log("what this array contains",array);
+
+                var check=array.filter(function(arrayObj)
+                {
+                  return arrayObj._id==data.memberObj._id;
+                });
+                if(check.length==0)
+                {
+                  $scope.memberArray[count]["arrayOfMembers"].push(data.memberObj);
+                  console.log("new member added -->",$scope.memberArray);
+                }
+              }
+              count++;
+            })
+          // console.log("after member added",data.listItem.assignedMember);
+          //   flag=1;
+          // localData=data;
+          //console.log("member added into array ",data.listItem.assignedMember,data.listItem._id);
        });
   //ends
+  
+  $scope.addMemberObj=function(itemId)
+  {
+    var check=$scope.memberArray.filter(function(obj)
+    {
+      return itemId==obj.itemId;
+    });
+    if(check.length==0)
+    {
+    obj={};
+    obj["itemId"]=itemId;
+    obj["arrayOfMembers"]=[];
+    $scope.memberArray.push(obj);
+    console.log("memberArray ",$scope.memberArray);
+    }
+    
+  }
 
   $scope.addMemberToChecklist = function(listItem) {
     //socket.emit("join:room",{"room":"checklist:"+lis})
     console.log(listItem,"in add mem: ",listItem.assignedMember);
-    // $rootScope.listItem=listItem;  
-    listItem.assignedMember.push($scope.assignedMember);
-  console.log("assignedMember data in main controller (list item): ",listItem.assignedMember);
+    // // $rootScope.listItem=listItem;  
+    // listItem.assignedMember=[];
+    // var result=$scope.memberArray.filter(function(obj)
+    //     {
+    //       return listItem._id==obj.itemId;
+    //     }
+    //   )
 
+    // listItem.assignedMember=listItem.assignedMember.concat(result["arrayOfMembers"]);
+    // console.log("localData ",localData.length);
+    // if(flag>0)
+    // {
+    // if(listItem._id == localData.listItem._id)
+    // console.log("listItem assignedMember",listItem.assignedMember);
+    // console.log("localData assignedMember",localData.listItem.assignedMember);
+    // listItem.assignedMember=listItem.assignedMember.concat(localData.listItem.assignedMember);
+    // }
+
+
+  // console.log("assignedMember data in main controller (list item): ",listItem.assignedMember);
+    //neo
+    $scope.memberArray.filter(function(obj)
+    {
+      if(obj.itemId==listItem._id)
+      {
+        listItem.assignedMember=[];
+        listItem.assignedMember=listItem.assignedMember.concat(obj["arrayOfMembers"]);
+      }
+    })
+
+    console.log("assignedMember list: ",listItem.assignedMember);
     data = {
       
       listItem: listItem,
@@ -434,10 +478,10 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   ***/
   //TODO:Not working because of nth level
    //to update list item
-  $scope.updateListItem=function(listItem,checklistGrp){
-  console.log("Modified item: ",listItem);
-  $scope.updateTodoItem(listItem,checklistGrp);
-  }
+  // $scope.updateListItem=function(listItem,checklistGrp){
+  // console.log("Modified item: ",listItem);
+  // $scope.updateTodoItem(listItem,checklistGrp);
+  // }
 
   $scope.updateTodoItem = function(listItem, checklistGrp) {
 
@@ -515,6 +559,7 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
     }
     //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
+    console.log("testing data --->",data);
     if (data._id == $scope.storyData._id) { //If the updated card is same as current opened card
       data.memberList.forEach(function(storyItem) {
         storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
