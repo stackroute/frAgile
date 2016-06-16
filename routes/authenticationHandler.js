@@ -30,11 +30,11 @@ module.exports = function(passport){
     console.log("Request Body.",req.body);
     next();
   });
+
 	router.post('/register', passport.authenticate('sign-up', {
 		successRedirect: '/auth/success',
 		failureRedirect: '/auth/regfailure'
 	}));
-
 
   router.get('/logout', function(req, res) {
           req.logout();

@@ -161,6 +161,15 @@ res.send(data);
 })
 });
 
+
+router.get('/addMemberToChecklist',function(req,res,next)
+{
+story.addMemberToChecklist(req,function(err,data)
+{
+  console.log("im in story router");
+});
+});
+
 router.get('/addchecklistgroup', function(req, res, next) {
   //TODO:Get the below obj dynamically from request. Update indicators dynamically
 

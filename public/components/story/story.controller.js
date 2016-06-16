@@ -1,6 +1,6 @@
 fragileApp.run(function(editableOptions,editableThemes) {  editableOptions.theme = 'bs3';
- 
-editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" ng-click="updateTodoItem(listItem,todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>'; 
+
+editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" ng-click="updateTodoItem(listItem,todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>';
 // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
@@ -18,10 +18,10 @@ var localData={};
 
   });
 
- 
+
 
   storyContr.storyGrp = storyContr.complexDataObject.storyGrp;
- 
+
   //Ends
   $scope.storyData = storyContr.storyData;
   $scope.storyComment = "";
@@ -96,10 +96,10 @@ $scope.memberArray=[];
   //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
   $scope.myuser=[{member:"NK"},{member:"MK"},{member:"KK"}];
 
-    //start 
-      $scope.assignedMember=[];//temp assinged member 
+    //start
+      $scope.assignedMember=[];//temp assinged member
       socket.on('memberAdded',function(data){
-        
+
             var count=0;
              console.log("data member -->",data.memberObj);
             $scope.memberArray.filter(function(obj)
@@ -128,7 +128,7 @@ $scope.memberArray=[];
           //console.log("member added into array ",data.listItem.assignedMember,data.listItem._id);
        });
   //ends
-  
+
   $scope.addMemberObj=function(itemId)
   {
     var check=$scope.memberArray.filter(function(obj)
@@ -143,29 +143,12 @@ $scope.memberArray=[];
     $scope.memberArray.push(obj);
     console.log("memberArray ",$scope.memberArray);
     }
-    
+
   }
 
   $scope.addMemberToChecklist = function(listItem) {
     //socket.emit("join:room",{"room":"checklist:"+lis})
     console.log(listItem,"in add mem: ",listItem.assignedMember);
-    // // $rootScope.listItem=listItem;  
-    // listItem.assignedMember=[];
-    // var result=$scope.memberArray.filter(function(obj)
-    //     {
-    //       return listItem._id==obj.itemId;
-    //     }
-    //   )
-
-    // listItem.assignedMember=listItem.assignedMember.concat(result["arrayOfMembers"]);
-    // console.log("localData ",localData.length);
-    // if(flag>0)
-    // {
-    // if(listItem._id == localData.listItem._id)
-    // console.log("listItem assignedMember",listItem.assignedMember);
-    // console.log("localData assignedMember",localData.listItem.assignedMember);
-    // listItem.assignedMember=listItem.assignedMember.concat(localData.listItem.assignedMember);
-    // }
 
 
   // console.log("assignedMember data in main controller (list item): ",listItem.assignedMember);
@@ -180,14 +163,28 @@ $scope.memberArray=[];
     })
 
     console.log("assignedMember list: ",listItem.assignedMember);
+    var checkListId;
+$scope.storyData.checklist.filter(function(checkList)
+{
+checkList.items.filter(function(item)
+{
+if(item._id==listItem._id)
+    checkListId=checkList._id;
+});
+});
+console.log("checklist id --->",checkListId);
     data = {
-      
-      listItem: listItem,
-     // members: storyData.assignedMember 
+
+      listItem:listItem,
+     //members: storyData.assignedMember
        roomName:$scope.roomName,
-      members:$scope.storyData.memberList
+      members:$scope.storyData.memberList,
+      storyId:$scope.storyData._id,
+      checkListId:checkListId
     };
-    modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.html', 'addMemberToChecklistController', data);
+
+modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.html', 'addMemberToChecklistController', data);
+
   };
 
 
@@ -425,7 +422,7 @@ $scope.memberArray=[];
       checked: false,
       creationDate: Date.now(),
       assignedMember:assignedMember
-     
+
     };
 
 

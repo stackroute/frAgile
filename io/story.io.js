@@ -308,7 +308,12 @@ if (!err) {
     //start new
     socket.on('story:addRemoveMembersListItem',function(data){
      // console.log(data.roomName);
-      console.log("memberObj ==>",data.memberObj);
+     Story.addMemberToChecklist(data,function(err,doc)
+   {
+     console.log("im in story.io");
+   })
+     console.log("i have reached here");
+      console.log("item details ==>",data.storyId,data.checkListId);
       io.to(data.roomName).emit('memberAdded',data);
       console.log("Data member in server: ",data.memberObj);
     });
@@ -323,7 +328,7 @@ if (!err) {
       socket.emit('pushMemberToItem',data.assignedMember);
       //console.log("my data members: ",data.assignedMember);
 
-      
+
     });
     //end
     /****
@@ -339,7 +344,7 @@ if (!err) {
     //     io.to(data.room).emit('story:checklistItemUpdated', doc);
     //   }
     // })
-   // 
+   //
     Story.getCheckItemIndex(data.itemid, function(err, index) {
       if (index !=-1)
         Story.updateChecklistItem(data.storyid, data.checklistGrpId, data.itemid, data.checked, index, function(err, doc) {

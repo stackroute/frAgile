@@ -41,8 +41,8 @@ if (nv) {
     };
     $scope.passportLogin = function(){
       console.log("In passportLogin");
-      $http.post('/auth/login', $scope.user).success(function(data){
-        console.log(data);
+      $http.post('/auth/login',$scope.user).success(function(data){
+        console.log("user details",data);
         if(data.error) {
           $scope.logInErrorMsg = data.error;
           //$window.location.href = '/index.html';
@@ -63,7 +63,8 @@ if (nv) {
         if(data.error) {
           $scope.registerErrorMsg = data.error;
         // $window.location.href = '/index.html';
-        } else{
+        } else
+        {
          $window.location.href = '/home.html';
          }
 

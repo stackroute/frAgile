@@ -112,6 +112,7 @@ StorySchema.statics.findStory = function(storyId, callback) {
           callback(err, null);
         } else {
           //console.log("doc"+doc);
+          //console.log(JSON.stringify(doc));
           callback(null, doc);
         }
       });
@@ -341,7 +342,6 @@ StorySchema.statics.addChecklistItem = function(storyId, checklistGrpId, itemObj
         callback(err, null);
       } else {
         callback(null, doc);
-
       }
     });
 }
@@ -392,7 +392,7 @@ parameters:checklistItemId
 description:This function returns the index of the checklistitem
 ***/
 StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
-    
+
 
     this.findOne({
       "checklist.items._id": itemId
@@ -448,12 +448,57 @@ StorySchema.statics.updateChecklistItem = function(storyId, checklistGrpId, item
   }
   /////
 
+
+StorySchema.statics.addMemberToChecklist=function(data,callback)
+{
+//console.log("im in story model -->",data);
+console.log("im in model");
+
+console.log("----------printig story-------------");
+this.findOne({
+  "_id": data.storyId
+}).exec(function(err, story) {
+  story.checklist.filter(function(checkList)
+  {
+    if(checkList._id==data.checkListId)
+  checkList.items.filter(function(item)
+{
+  if(item._id==data.listItem._id)
+
+    item.assignedMember.push(data.memberObj);
+});
+  });
+story.save();
+});
+// this.findOneAndUpdate({
+//     "_id": data.storyId,
+//     "checklist._id": data.checkListId,
+//     "items._id":data.listItem._id
+//   }, {
+//     $push: {
+//       "checklist.items.assignedMember": data.memberObj._id
+//     },
+//   }, {
+//     upsert: true
+//   })
+//   .exec(function(err, doc) {
+//     console.log(doc);
+//     if (err) {
+//       console.log(err);
+//       callback(err, null);
+//     } else {
+//       callback(null, doc);
+//     }
+//   });
+}
+
+
+
 /***
 addChecklistGroup function is to add new checklist group to the story.
 ***/
 
 StorySchema.statics.addChecklistGroup = function(storyId, checklistObj, callback) {
-
   this.findOneAndUpdate({
       "_id": storyId
     }, {
