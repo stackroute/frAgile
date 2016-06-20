@@ -23,6 +23,8 @@ var localData={};
   storyContr.storyGrp = storyContr.complexDataObject.storyGrp;
 
   //Ends
+
+
   $scope.storyData = storyContr.storyData;
   $scope.storyComment = "";
 
@@ -100,27 +102,13 @@ $scope.memberArray=[];
       $scope.assignedMember=[];//temp assinged member
       socket.on('memberAdded',function(data){
 
-            var count=0;
-             console.log("data member -->",data.memberObj);
             $scope.memberArray.filter(function(obj)
             {
 
               if(obj.itemId == data.listItem._id)
               {
-                var array=obj["arrayOfMembers"];
-                console.log("what this array contains",array);
-
-                var check=array.filter(function(arrayObj)
-                {
-                  return arrayObj._id==data.memberObj._id;
-                });
-                if(check.length==0)
-                {
-                  $scope.memberArray[count]["arrayOfMembers"].push(data.memberObj);
-                  console.log("new member added -->",$scope.memberArray);
-                }
+                obj["arrayOfMembers"]=data.assignedMember;
               }
-              count++;
             })
           // console.log("after member added",data.listItem.assignedMember);
           //   flag=1;
@@ -129,22 +117,38 @@ $scope.memberArray=[];
        });
   //ends
 
-  $scope.addMemberObj=function(itemId)
-  {
-    var check=$scope.memberArray.filter(function(obj)
-    {
-      return itemId==obj.itemId;
-    });
-    if(check.length==0)
-    {
-    obj={};
-    obj["itemId"]=itemId;
-    obj["arrayOfMembers"]=[];
-    $scope.memberArray.push(obj);
-    console.log("memberArray ",$scope.memberArray);
-    }
 
-  }
+$scope.storyData.checklist.filter(function(checkList)
+{
+  checkList.items.filter(function(item)
+{
+  obj={};
+  obj["itemId"]=item._id;
+  obj["arrayOfMembers"]=item.assignedMember;
+  $scope.memberArray.push(obj);
+});
+});
+
+console.log("newly created array",JSON.stringify($scope.memberArray));
+
+  // $scope.addMemberObj=function(itemId)
+  // {
+  //   var check=$scope.memberArray.filter(function(obj)
+  //   {
+  //     return itemId==obj.itemId;
+  //   });
+  //   if(check.length==0)
+  //   {
+  //
+  //   obj={};
+  //   obj["itemId"]=itemId;
+  //   obj["arrayOfMembers"]=[];
+  //   $scope.memberArray.push(obj);
+  //   console.log("memberArray ",$scope.memberArray);
+  //
+  //   }
+  //
+  // }
 
   $scope.addMemberToChecklist = function(listItem) {
     //socket.emit("join:room",{"room":"checklist:"+lis})
@@ -157,8 +161,7 @@ $scope.memberArray=[];
     {
       if(obj.itemId==listItem._id)
       {
-        listItem.assignedMember=[];
-        listItem.assignedMember=listItem.assignedMember.concat(obj["arrayOfMembers"]);
+        listItem.assignedMember=obj.arrayOfMembers;
       }
     })
 
@@ -180,7 +183,8 @@ console.log("checklist id --->",checkListId);
        roomName:$scope.roomName,
       members:$scope.storyData.memberList,
       storyId:$scope.storyData._id,
-      checkListId:checkListId
+      checkListId:checkListId,
+      memberArray:$scope.memberArray
     };
 
 modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.html', 'addMemberToChecklistController', data);

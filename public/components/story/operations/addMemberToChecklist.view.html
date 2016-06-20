@@ -11,24 +11,25 @@
       <ul class="modal-members-list">
         <li ng-click="addRemoveMembersList(membersArray)" ng-hide="!memberName" ng-repeat="membersArray in storyMember |filter: memberName" class="list-group-item">
           {{membersArray.fullName}}
+          <i class="fa fa-check pull-right" ng-show = "assignedMemberIndex.indexOf(membersArray._id)!=-1"></i>
          </li>
       </ul>
-
     </div>
-
-
   </div>
-
+  <h3 ng-show="assignedMember.length==0">No members are assigned <br> <hr></h3>
+  <h3 ng-show="assignedMember.length>0">assigned Memebers<br> <hr></h3>
 </div>
-
-    <div ng-init="initLoadMembersOfItem()">
-      <ul>
-
-        <li ng-repeat="member in assignedMember">{{member.firstName}}</li>
-
+<div class="modal-body">
+<div id="modal-members">
+  <ul class="modal-members-list">
+        <li class="list-group-item" ng-repeat="member in assignedMember">{{member.firstName +" "+ member.lastName}}
+        <a class="btn btn-danger pull-right" ng-click="addRemoveMembersList(member)">
+        <i class="fa fa-trash-o pull-right" class="list-group-item" title="Delete" aria-hidden="true"></i>
+    <span class="sr-only">Delete</span>
+    </a></li>
       </ul>
-
     </div>
+  </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="cancel()">Done</button>
 </div>

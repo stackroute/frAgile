@@ -3,16 +3,25 @@ fragileApp.controller('addMemberToChecklistController',['$scope','$rootScope','$
 
 
 $scope.assignedMember=[];
+$scope.assignedMemberIndex=[];
 $scope.currentItemId=param.listItem._id;
 
-  $scope.initLoadMembersOfItem=function(){
-    $scope.assignedMember=$scope.assignedMember.concat(param.listItem.assignedMember);
-    console.log("yahoooooooo,: ",param.listItem.assignedMember);
-  }//end of load member Item
+  // $scope.initLoadMembersOfItem=function(){
+  //   $scope.assignedMember=$scope.assignedMember.concat(param.listItem.assignedMember);
+  //   $scope.assignedMember.filter(function(member)
+  // {
+  // $scope.assignedMemberIndex.push(member._id);
+  // });
+  //   console.log("yahoooooooo,: ",$scope.assignedMemberIndex);
+  // }//end of load member Item
 
 	$scope.initLoadMembersOfStory = function(){
     //$scope.memberDetails= param.projMembers;
-
+    $scope.assignedMember=param.listItem.assignedMember;
+    $scope.assignedMember.filter(function(member)
+    {
+    $scope.assignedMemberIndex.push(member._id);
+    });
     /*** Declaring variables required for addMembers,addLabels***/
     $scope.longDescLimit=25 ;
     $scope.checked = true;
@@ -21,23 +30,23 @@ $scope.currentItemId=param.listItem._id;
     /** XHR request to fetch latest members details***/
     //console.log($scope.storyDetails._id);
     $scope.storyMember=param.members;
-
+console.log("story members --->",$scope.storyMember);
   }//end of init load member
 
   $scope.addRemoveMembersList=function(memberObj){
        // param.listItem.assignedMember.push(memberObj);
-        var result=param.listItem.assignedMember.filter(function(obj)
-      {
-        return obj._id==memobj._id;
-      })
-      var operation;
-      if(result.length==0)
-        operation="add";
-      else
-        operation="delete";
-          socket.emit('story:addRemoveMembersListItem',{"operation":operation,"storyId":param.storyId,"checkListId":param.checkListId,"roomName":param.roomName,"memberObj":memberObj,"listItem":param.listItem});
-
-          console.log("i have reached",param.storyId,param.checkListId);
+       var index=$scope.assignedMemberIndex.indexOf(memberObj._id);
+       if(index!=-1)
+       {
+         $scope.assignedMember.splice(index,1);
+         $scope.assignedMemberIndex.splice(index,1);
+         console.log("array",$scope.assignedMember,"indexArray",$scope.assignedMemberIndex);
+       }
+       else {
+         $scope.assignedMember.push(memberObj);
+         $scope.assignedMemberIndex.push(memberObj._id);
+       }
+        socket.emit('story:addRemoveMembersListItem',{"indexArray":$scope.assignedMemberIndex,"assignedMember":$scope.assignedMember,"storyId":param.storyId,"checkListId":param.checkListId,"roomName":param.roomName,"memberObj":memberObj,"listItem":param.listItem});
 
   }//addRemoveMembersList
 
@@ -49,17 +58,11 @@ $scope.currentItemId=param.listItem._id;
    //
         socket.on('memberAdded',function(data){
         console.log("event recieved --->",data.memberObj);
-
-        var check=$scope.assignedMember.filter(function(obj)
+        if($scope.currentItemId==data.listItem._id)
         {
-            return obj._id==data.memberObj._id;
-        });
-
-        if(check.length==0)
-        {
-          $scope.assignedMember.push(data.memberObj);
+          $scope.assignedMember=data.assignedMember;
+          $scope.assignedMemberIndex=data.indexArray;
         }
-
        });
 
 	}]);//end of main app

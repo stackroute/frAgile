@@ -101,11 +101,12 @@ var StorySchema = new Schema({
 /***this function is to fetch the story details from the collection
 based on the storyID passed***/
 StorySchema.statics.findStory = function(storyId, callback) {
-    //console.log("inside model find story");
+    console.log("inside model find story");
     this.findOne({
         "_id": storyId
       })
       .populate('memberList', 'firstName lastName')
+      .populate("checklist.items.assignedMember")
       .exec(function(err, doc) {
         if (err) {
           //console.log("err"+err);
@@ -113,6 +114,7 @@ StorySchema.statics.findStory = function(storyId, callback) {
         } else {
           //console.log("doc"+doc);
           //console.log(JSON.stringify(doc));
+          console.log("inside story model ----->",doc);
           callback(null, doc);
         }
       });
@@ -452,7 +454,7 @@ StorySchema.statics.updateChecklistItem = function(storyId, checklistGrpId, item
 StorySchema.statics.addMemberToChecklist=function(data,callback)
 {
 //console.log("im in story model -->",data);
-console.log("im in model");
+
 
 console.log("----------printig story-------------");
 this.findOne({
@@ -464,8 +466,9 @@ this.findOne({
   checkList.items.filter(function(item)
 {
   if(item._id==data.listItem._id)
-
-    item.assignedMember.push(data.memberObj);
+    {
+      item.assignedMember=data.assignedMember;
+    }
 });
   });
 story.save();

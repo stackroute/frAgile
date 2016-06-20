@@ -345,7 +345,9 @@ if (!err) {
     //   }
     // })
    //
-    Story.getCheckItemIndex(data.itemid, function(err, index) {
+
+
+   Story.getCheckItemIndex(data.itemid, function(err, index) {
       if (index !=-1)
         Story.updateChecklistItem(data.storyid, data.checklistGrpId, data.itemid, data.checked, index, function(err, doc) {
           if (!err) {
