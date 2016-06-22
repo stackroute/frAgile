@@ -143,11 +143,13 @@
 
                   <i class="fa fa-minus-circle" ></i>
                 </a>
-<!--                 <span class="option option-menu" ng-show="itemHovering" ng-click="addMember()" >...</span>
- -->              </span>
-
-
+<!--                 <span class="option option-menu" ng-show="itemHovering" ng-click="addMember()" >...</span>             </span>-->
+                  <!-- component
+                  <task></task> -->
           </li>
+
+
+
             <form name="addChecklistItem" novalidate ng-submit="addChecklistItem.$valid && addTodoItem(todo)"><!-- neo member to checklist-->
               <input type="text" ng-model="todo.todoText" required class="form-control add-todo" size="40"
               placeholder="Add New Todo" ></input>
@@ -159,6 +161,9 @@
           </div>
         </div>
       </div>
+
+      <checklistgroup checklistgroup="storyData.checklist"></checklistgroup>
+      <br>
       <hr class="story-seperator">
       <div class="story-details clearfix">
         <span class="pull-left story-left-head"><i class="fa fa-comments" aria-hidden="true"></i></span>

@@ -166,7 +166,7 @@ router.get('/addMemberToChecklist',function(req,res,next)
 {
 story.addMemberToChecklist(req,function(err,data)
 {
-  console.log("im in story router");
+  console.log("im in stor");
 });
 });
 

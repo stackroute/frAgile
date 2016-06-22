@@ -1,0 +1,37 @@
+<div flex-xs flex-gt-xs="30" >
+ <md-card   md-theme-watch >
+<
+ <md-card-title id="card">
+ <md-toolbar style="background-color: #a4f5d7;">
+ <span class="md-subhead" class="editStyle" editable-text="$ctrl.taskobj.text$ctrl.taskobj.text">{{$ctrl.taskobj.text}}</span>
+</md-toolbar>
+</md-card-title >
+
+<div layout="row" style="margin: 0 2 0 2">
+
+
+ <md-card-actions layout="row" layout-align="end center" >
+ <md-checkbox class="md-raised" ng-model="$ctrl.task.text" aria-label="Checkbox 1">
+</md-checkbox>
+<md-button class="md-raised " ng-disabled='true'>2day</md-button>
+
+<span class="dueDate">Due-Date</span>  <div   class="datepickerdemoBasicUsage">
+<form name="myForm">
+<md-datepicker name="dateField" ng-model="myDate" md-placeholder="Enter date"required md-min-date="minDate" md-max-date="maxDate">
+</md-datepicker>
+<!-- <div class="validation-messages" ng-messages="myForm.dateField.$error">
+ <div ng-message="valid">The entered value is not a date!</div>
+ <div ng-message="required">This date is required!</div>
+ <div ng-message="mindate">Date is too early!</div>
+ <div ng-message="maxdate">Date is too late!</div>
+ <div ng-message="filtered">Only weekends are allowed!</div>
+</div> -->
+</form>
+</div>
+
+</md-card-actions>
+</div>
+
+</md-card>
+
+</div>

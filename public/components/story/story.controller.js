@@ -565,6 +565,7 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
       data.memberList.forEach(function(storyItem) {
         storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
       });
+
       ///
       // $scope.storyTempData = [];
       // var projObj = $rootScope.projects.filter(function(item) {
@@ -576,9 +577,63 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
       //   }
       // }
       // data.labelList = $scope.storyTempData; //Overriding the old valuse
-      // ///
-      $scope.storyData = data;
+      // $
     }
+    $scope.storyData = data;
   })
+}])
 
-}]);
+.component('task',
+{
+  bindings:
+  {
+    taskobj:'<',
+    onSave:'&'
+  },
+  controller:itemController,
+  templateUrl:"components/story/task.html"
+})
+.component('checklist',{
+  bindings:{
+    checklist:'<'
+  },
+  controller:checkListController,
+  templateUrl:"components/story/checkList.html"
+})
+.component('checklistgroup',{
+  bindings:{
+    checklistgroup:'<'
+  },
+  controller:checkListGroupController,
+  templateUrl:"components/story/checkListGroup.html"
+})
+function itemController($scope,Socket)
+{
+
+var socket=Socket($scope);
+var ctrl=this;
+
+ctrl.onSave=function(itemObject)
+{
+  socket.emit("story:editItem",itemObject);
+}
+
+ctrl.addViewMembers=function(itemId)
+{
+
+}
+
+ctrl.taskComplete=function(itemObject)
+{
+
+}
+
+};
+function checkListController()
+{
+
+}
+function checkListGroupController()
+{
+
+}

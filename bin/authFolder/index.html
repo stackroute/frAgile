@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <title>Limber</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="lib/css/form-elements.css">
+    <link rel="stylesheet" href="lib/css/style.css">
+
+
+    <title>Limber</title>
+  </head>
+  <body ng-app="Limber" ng-controller="authController">
+
+    <div class="top-content">
+
+        <div class="inner-bg">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2 text" style="margin-top: -64px;">
+                        <h1><img src="lib/img/logo.png" class="logo"><strong>limber</strong></h1>
+                        <div class="description">
+                          <p>
+                            <h3><i><soft>Manage your projects in a better way</soft><i></h3>
+                          </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-5" style="margin-top:-31px;">
+
+                      <div class="form-box">
+                        <div class="form-top">
+                          <div class="form-top-left">
+                            <h3>Login</h3>
+
+                          </div>
+
+                          <div class="form-top-right">
+                            <i class="fa fa-key"></i>
+                          </div>
+                          <p>Enter email and password to log on:</p>
+                            <div id="errorDiv" class="alert alert-danger" role="alert" style="margin-top:10px;padding: 7px; display:none;">
+		                          <button type="button" class="close" ng-click="logInErrorMsg=''" aria-label="Close" style="margin-top: -3px;right:0;"><span aria-hidden="true">&times;</span></button>
+		                           {{logInErrorMsg}}
+	                             </div>
+                          </div>
+                          <div class="form-bottom">
+                        <form ng-submit="passportLogin()">
+                          <div class="form-group">
+                            <label class="sr-only" for="form-email">Email</label>
+                              <input type="text" name="form-username"  ng-model="user.email" placeholder="Email..." class="form-username form-control" id="form-email" required>
+                            </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-password">Password</label>
+                              <input type="password" name="form-password" ng-model="user.password" placeholder="Password..." class="form-password form-control" id="form-password" required>
+                            </div>
+                            <div><a href="#" style="text-decoration:none;margin-top:-12px;">Forgot Password?</a></div>
+                            <button type="submit"  class="btn">Sign in!</button>
+                        </form>
+                      </div>
+                    </div>
+                    <hr style="margin-top: 17px;margin-bottom: 43px;">
+                  <div class="social-login">
+                        <div class="social-login-buttons" style="margin-top: -27px;">
+                          <a href="/auth/facebook" class="btn btn-link-1 btn-link-1-facebook" >
+                            <i class="fa fa-facebook"></i> Facebook
+                          </a>
+
+                          <a href="/auth/google" class="btn btn-link-1 btn-link-1-google-plus" >
+                            <i class="fa fa-google-plus"></i> Google Plus
+                          </a>
+                        </div>
+                   </div>
+
+                    </div>
+
+                    <div class="col-sm-1 middle-border"></div>
+                    <div class="col-sm-1"></div>
+
+                    <div class="col-sm-5" style="margin-top:-35px;">
+
+                      <div class="form-box">
+                        <div class="form-top">
+                          <div class="form-top-left">
+                            <h3>Sign up</h3>
+
+                          </div>
+                          <div class="form-top-right">
+                            <i class="fa fa-pencil"></i>
+                          </div>
+                          <p>Fill in the form below to get instant access:</p>
+                          <div id="regDiv" class="alert alert-danger" role="alert" style="margin-top:10px;padding: 7px; display:none;">
+                          <button type="button" class="close" ng-click="registerErrorMsg=''" aria-label="Close" style="margin-top: -3px;right:0;"><span aria-hidden="true">&times;</span></button>
+                           {{registerErrorMsg}}
+                           </div>
+                          </div>
+                          <div class="form-bottom">
+                        <form ng-submit="register()" class="registration-form">
+                          <div class="form-group">
+                            <label class="sr-only" for="form-first-name">First name</label>
+                              <input type="text" name="form-first-name" placeholder="First name..." ng-model="user1.firstName" class="form-first-name form-control" id="form-first-name">
+                            </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-last-name">Last name</label>
+                              <input type="text" name="form-last-name" placeholder="Last name..." ng-model="user1.lastName" class="form-last-name form-control" id="form-last-name">
+                            </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-email">Email</label>
+                              <input type="text" name="form-email" placeholder="Email..." ng-model="user1.email" class="form-email form-control" id="form-email" required>
+                            </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-password">Password</label>
+                              <input type="password" name="form-password" placeholder="Password..." ng-model="user1.password" class="form-email form-control" id="form-password" required>
+                            </div>
+                            <div class="form-group">
+                              <label class="sr-only" for="form-password">Confirm Password</label>
+                              <input type="password" name="form-password" placeholder="Confirm Password..." ng-model="user1.confirmpassword" class="form-email form-control" id="form-password" required>
+                            </div>
+                            <div id="passDiv" class="alert alert-danger" role="alert" style="margin-top:10px;padding: 7px; display:none;">
+                            <button type="button" class="close" ng-click="passwordError=''" aria-label="Close" style="margin-top: -3px;right:0;"><span aria-hidden="true">&times;</span></button>
+                             {{passwordError}}
+                             </div>
+                            <button type="submit" class="btn" >Sign me up!</button>
+                        </form>
+                      </div>
+                      </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <i class="fa fa-copyright" aria-hidden="true"></i> Limber Team</br>
+
+    </footer>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.17/angular-ui-router.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.min.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.5.js"></script>
+    <script src="lib/js/jquery-1.11.1.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/js/jquery.backstretch.min.js"></script>
+    <script src="lib/js/scripts.js"></script>
+    <!-- <script type="text/javascript" src='lib/angular.min.js'></script>
+    <script type="text/javascript" src='lib/angular-route.min.js'></script>
+    <script type="text/javascript" src="lib/angular-cookies.min.js"></script> -->
+    <script src="app.js"></script>
+    <script type="text/javascript" src='login/routeProvider.js'></script>
+    <script src="/login/authController.js"></script>
+
+    <!-- Bootstrap JS -->
+
+      <!--
+Angular material
+    -->
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+    
+  </body>
+</html>
