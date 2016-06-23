@@ -31,6 +31,7 @@ module.exports = function(socket, io) {
           }
         }
         Activity.addEvent(actData, function(data) {
+console.log(data);
           io.to(actData.room).emit('activityAdded', data);
         });
       }
@@ -87,7 +88,7 @@ module.exports = function(socket, io) {
       //edited for cards page
 console.log(data.memberid+ "new member added");
 console.log(doc);
-      io.to(data.memberid).emit('story:memberAssigned',doc);
+      // io.to(data.memberid).emit('story:memberAssigned',doc);
 
 
       if (!err) {
@@ -126,6 +127,8 @@ console.log(doc);
               }
             }
             Activity.addEvent(actData, function(data) {
+console.log("on add members in activity"+actData.room);
+console.log(data);
               io.to(actData.room).emit('activityAdded', data);
             });
           }
@@ -134,9 +137,13 @@ console.log(doc);
     })
 
 //Updating the user schema ehen a member is added for cards
-// User.addAssignedStories(data.storyid, data.memberid, function(err, doc) {
-//
-//  })
+User.addAssignedStories(data, function(err, doc) {
+console.log("------doc after adding members------");
+console.log(doc[0].assignedStories);
+  io.to(data.memberid).emit('story:memberAssigned',doc);
+ })
+
+
 
 
 
@@ -150,7 +157,7 @@ console.log(doc);
     Story.removeMembers(data.storyid, data.memberid, function(err, doc) {
 
       //edited for cards page
-                  io.to(data.memberid).emit('story:memberRemoved',data);
+                  // io.to(data.memberid).emit('story:memberRemoved',data);
 
       if (!err) {
         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
@@ -189,6 +196,10 @@ console.log(doc);
         });
       }
     })
+
+User.removeAssignedStories(data.memberid,data.storyid, function(err, doc) {
+io.to(data.memberid).emit('story:memberRemoved',doc);
+})
   })
 
   /****
@@ -260,6 +271,7 @@ console.log(data.room);
               }
             }
             Activity.addEvent(actData, function(data) {
+console.log(data+"activity checklist todo");
               io.to(actData.room).emit('activityAdded', data);
             });
           }
@@ -426,15 +438,20 @@ console.log(data.room);
         _id: data._id
       }
     }
+
+
     Activity.addEvent(actData, function(data) {
       io.to(actData.room).emit('activityAdded', data);
     });
   });
   socket.on('story:addComment', function(data) {
+
+
     var commentsObj = {};
     commentsObj['text'] = data.text;
     commentsObj['commentedBy'] = user._id;
-    commentsObj['userName'] = user.fullName;;
+    commentsObj['userName'] = data.user.fullName;
+
     commentsObj['commentedDate'] = Date.now();
     Story.addComment(data.storyId, commentsObj, function(err, storyData) {
       if (!err) {

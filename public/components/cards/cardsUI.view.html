@@ -1,0 +1,59 @@
+
+<div class="gridListdemoBasicUsage" class='' layout="row" layout-wrap>
+
+    <md-card  ng-repeat="item in $ctrl.list.items"  md-theme-watch md-theme="{{ showDarkTheme ? 'dark-green' : 'light-blue' }}"  style="width: 300px;">
+
+      <md-card-title id="card" >
+        <md-toolbar style="background-color: #a4f5d7;">
+          <span class="md-subhead" class="editStyle" editable-text="item.text">{{item.text}}</span>
+        </md-toolbar>
+      </md-card-title >
+
+      <div layout="row" style="margin: 0 2 0 2">
+
+
+        <md-card-actions layout="row" layout-align="end center" >
+          <md-checkbox class="md-raised" ng-model="showDarkTheme"   aria-label="Checkbox 1">
+          </md-checkbox>
+          <md-button class="md-raised " ng-disabled='true'>{{item.creationDate}}</md-button>
+
+          <span class="dueDate">Due-Date</span>  <div   class="datepickerdemoBasicUsage">
+            <form name="myForm">
+              <md-datepicker name="dateField" ng-model="myDate" ng-init="setDueDate(item.dueDate)"  md-placeholder="Enter date"required md-min-date="minDate" md-max-date="maxDate">
+              </md-datepicker>
+              <div class="validation-messages" ng-messages="myForm.dateField.$error">
+                <div ng-message="valid">The entered value is not a date!</div>
+                <div ng-message="required">This date is required!</div>
+                <div ng-message="mindate">Date is too early!</div>
+                <div ng-message="maxdate">Date is too late!</div>
+                <div ng-message="filtered">Only weekends are allowed!</div>
+              </div>
+            </form>
+          </div>
+
+        </md-card-actions>
+      </div>
+
+    </md-card>
+
+</div>
+
+
+<style>
+.editable-click, a.editable-click {
+    text-decoration: none;
+    color: #428bca;
+    border-bottom: 0px;
+}
+.gridListdemoBasicUsage md-grid-list {
+  margin: 8px;
+}
+
+.gridListdemoBasicUsage .gray {
+  background: #f5f5f5;
+}
+
+.gridListdemoBasicUsage md-grid-tile {
+  transition: all 400ms ease-out 50ms;
+}
+</style>

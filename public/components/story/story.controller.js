@@ -1,19 +1,22 @@
 fragileApp.run(function(editableOptions,editableThemes) {
   editableOptions.theme = 'bs3';
-editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" id="updateTodoItem(todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="fetchMembersForChecklist()">...</button>';
- // bootstrap3 theme. Can be also 'bs2', 'default'
+  editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" id="updateTodoItem(todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="fetchMembersForChecklist()">...</button>';
+  // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
 fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window) {
   var socket = Socket($scope);
 
-console.log(socket.room);
-console.log(socket);
+  console.log(socket.room);
+  console.log(socket);
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
-console.log("----------");
+  console.log("----------");
   console.log(param);
+  console.log($stateParams);
+  $scope.projectID=$stateParams.prId;
+  console.log($scope.projectID);
   storyContr.storyData = storyContr.complexDataObject.story.data;
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
     storyContr.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
@@ -35,6 +38,9 @@ console.log("----------");
   $scope.storyData = storyContr.storyData;
   $scope.storyComment = "";
 
+  console.log($scope.storyData);
+
+
   $scope.storyData.memberList.forEach(function(data) {
     data.fullName = data.firstName + " " + data.lastName;
   });
@@ -52,16 +58,17 @@ console.log("----------");
     'room': "sprint:" + $scope.sprintID,
     'activityRoom': "activity:"+storyContr.complexDataObject.projectId
   }
+
   // if (!$scope.activityRoom || $scope.activityRoom != ('activity:' + $stateParams.prId)) { //Join an activity room if not already     joined || Change room if navigated from other project.
   //   $rootScope.activityRoom = 'activity:' + $stateParams.prId;
   //   emitData["activityRoom"] = 'activity:' + $stateParams.prId;
   // }
-console.log(sprintService.currentRoom);
-if(!sprintService.currentRoom.room){
-console.log("joining room"+emitData);
-  socket.emit('join:room', emitData);
-  
-}
+  console.log(sprintService.currentRoom);
+  if(!sprintService.currentRoom.room){
+    console.log("joining room"+emitData);
+    socket.emit('join:room', emitData);
+
+  }
   $scope.roomName = "sprint:" + $scope.sprintID;
 
 
@@ -337,6 +344,7 @@ console.log("joining room"+emitData);
       text: todo.todoText,
       checked: false,
       creationDate: Date.now(),
+      dueDate:todo.todoDueDate
     }
 
     socket.emit('story:addChecklistItem', {
@@ -347,7 +355,8 @@ console.log("joining room"+emitData);
       'itemObj': itemObj,
       'projectID': $scope.projectID,
       'text': todo.todoText,
-      'user':$rootScope.userProfile
+      'user':$rootScope.userProfile,
+      'dueDate':todo.todoDueDate
     });
 
     todo.todoText = '';
@@ -458,9 +467,9 @@ console.log("joining room"+emitData);
   Parameters:None
   ***/
   $scope.clearComment = function() {
-      $scope.storyComment = "";
-    }
-    //Handler to update story for all story changes
+    $scope.storyComment = "";
+  }
+  //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
     if (data._id == $scope.storyData._id) { //If the updated card is same as current opened card
       data.memberList.forEach(function(storyItem) {
@@ -482,14 +491,14 @@ console.log("joining room"+emitData);
     }
   })
 
-// $scope.fetchMembersForChecklist=function(){
-// $scope.checkListMembers=$rootScope.membersData;
-// }
+  // $scope.fetchMembersForChecklist=function(){
+  // $scope.checkListMembers=$rootScope.membersData;
+  // }
 
 
 
-$scope.fetchMembersForChecklist = function() {
-  modalService.open('sm', 'components/story/operations/addMemberItem.view.html', 'storyOperationsController', storyContr.complexDataObject);
-};
+  $scope.fetchMembersForChecklist = function() {
+    modalService.open('sm', 'components/story/operations/addMemberItem.view.html', 'storyOperationsController', storyContr.complexDataObject);
+  };
 
 }]);

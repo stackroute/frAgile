@@ -89,14 +89,17 @@ router.get('/getUserId', function(req, res, next) {
 router.get('/getUsers', function(req, res, next){
   if(req.query.email){
     User.getUserEmail(req.query.email, function(err, data){
+console.log(err);
       if(!err){
+console.log("-----in getting cards from user model------");
+console.log(data);
         res.send(data);}
     })
   }
 })
 
 router.get('/cards',function(req,res,next){  if (req.user._id) {
-console.log(req.user._id+"  user id");
+console.log(req.user._id+"  user id in user routes");
     User.getCards(req.user._id, function(data) {
       res.send(data);
     })

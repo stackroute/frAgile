@@ -1,4 +1,5 @@
 var Project = require('../models/project.js');
+var Stories= require('../models/story.js');
 var templates = require('../models/template.js');
 
 var mongoose = require('mongoose'),
@@ -29,13 +30,12 @@ userSchema = new mongoose.Schema({
   },
   assignedStories: [{
     projectId:String,
-    projectName:String,
     releaseId:String,
-    releaseName:String,
     sprintId:String,
-    releaseName:String,
-    storyId:String,
-    storyName:String
+    stories: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Story'
+    }
   }]
 });
 
@@ -159,11 +159,64 @@ userSchema.statics.getProjects = function(userID, callback) {
 
 //cards code
 userSchema.statics.getCards = function(UserId, callback) {
-return  this.findById(UserId).exec(function(err, data) {
+  return  this.find({
+    "_id": UserId
+  }).populate("assignedStories.stories").exec(function(err, data) {
+console.log("I reached user model");
+console.log(data);
     if (err) callback(err)
     else callback(data);
   });
 
 }
 
-module.exports = mongoose.model('User', userSchema, 'Users');;
+
+userSchema.statics.addAssignedStories = function(dataObj, callback) {
+  this.findByIdAndUpdate(dataObj.memberid, {
+
+    $push:{'assignedStories':{
+      projectId:dataObj.projectID,
+      releaseId:dataObj.releaseId,
+      sprintId:dataObj.sprintId,
+      stories:dataObj.storyid
+    }}},
+    {
+      safe: true, upsert: true
+    }, function(err, data) {
+      console.log("I am in adding members to story model");
+      if (err) callback(err, null)
+      else {
+
+        console.log(dataObj.memberid);
+        //To send back added project data
+        this.find({
+          "_id": dataObj.memberid
+        }).populate("assignedStories.stories").exec(function(err, data) {
+          if (err){
+            console.log(err);
+            callback(err, null);}
+            else {
+              console.log(data);
+              callback(null, data);
+            }
+          })
+        };
+      })
+    }
+
+    userSchema.statics.removeAssignedStories = function(userID, storyID, callback) {
+      this.findByIdAndUpdate(userID, {
+          $pull:
+          {'assignedStories':{'stories':storyID}},
+
+      }, {
+        new: true
+      }, function(err, data) {
+        if (err) callback(err)
+        else callback(data);
+      })
+    }
+
+
+
+    module.exports = mongoose.model('User', userSchema, 'Users');;

@@ -23,9 +23,11 @@ io.on('connection', function(socket) {
 
     //Socket can only be connected to one activity room
     if (data.activityRoom) {
+console.log("leaving activity room"+socket.activityRoom);
       if (socket.activityRoom) {
         socket.leave(socket.activityRoom);
       }
+console.log("joining activity "+data.activityRoom);
       socket.join(data.activityRoom);
       socket.activityRoom = data.activityRoom;
     }

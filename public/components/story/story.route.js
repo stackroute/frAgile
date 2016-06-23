@@ -1,7 +1,7 @@
 fragileApp.config(function($stateProvider,$urlRouterProvider){
   var currentPosition={};
   $stateProvider
-  .state('cards.story',{
+  .state('cardsPage.story',{
     url : ':sprintID/:storyID',
     params:{prId:null},
     onEnter: function($stateParams, $state, $uibModal,sprintService,$rootScope) {
@@ -50,10 +50,13 @@ console.log($stateParams);
 
           });
           modalInstance.result.then(function () {
-                $state.go('cards',{},{reload:true});
+
+
+                $state.go('cardsPage',{},{reload:true});
             }, function () {
-                $state.go('cards',{},{reload:true});
+                $state.go('cardsPage',{},{reload:true});
          });
+
         });
 
 

@@ -61,5 +61,8 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
   $scope.goToCards = function() {
     $state.go('cards');  //defined in cards.routes.js
   }
+  $scope.goToCardsPage = function() {
+    $state.go('cardsPage');  //defined in cards.routes.js
+  }
 
 }]);

@@ -1,0 +1,63 @@
+<div class = "cardsPage container" ng-init="loadCards()">
+  <div class="showNewCards" ng-show = "cards.length == 0">
+    <center>All your Stories at one place</center>
+  </div>
+
+  <div class="row ">
+    <div class="col-sm-6 form-group">
+      <div class="input-group" id="DateDemo">
+        <input type='text' id='weeklyDatePicker' placeholder="Select Week" class="form-control" value=getDate()/>
+      </div>
+      <button ng-click="applyFilter()">Apply</button>
+    </div>
+    <input type="text" model="startDate" id="startDate" style="display:none"><input type="text" model="endDate" id="endDate" style="display:none">
+  </div>
+
+  <h1 ng-hide="cards.length==0" align="center">My Stories</h1>
+  <div ng-repeat="card in cards" ng-init="count=0" >
+
+<div ng-init="getNames(card)">
+    <a ng-click="gotoProject()">{{projectName}} </a>| <a ui-sref="release({ prId : card.projectId, releaseID: card.releaseId})">{{card.releaseId}}</a> | <a ui-sref="sprint({ prId : card.projectId, releaseID: card.releaseId,sprintID: card.sprintId})">{{sprintName}}</a> |
+<a ui-sref=".story({sprintID: card.sprintId, storyID:card.stories._id,prId:card.projectId})">{{card.stories.heading}}</a>
+</div>
+      <div ng-repeat="checkListGrp in card.stories.checklist">
+{{checkListGrp.checklistHeading}}
+        <my-cards list="checkListGrp"></my-cards>
+      </div>
+
+  </div><!-- cards  div ends here-->
+
+
+  <script>
+  $("#weeklyDatePicker").datepicker({
+    format: 'dd/mm/yyyy',
+    autoclose: false,
+    todayBtn: "linked",
+    pickerPosition: "bottom-left"
+  });
+
+
+  $("#weeklyDatePicker").datepicker().change(function() {
+    var d = $(this).datepicker('getDate');
+    $(this).val(formatDatePickerDisplay(d))
+  }) /* trigger change to update display on page load*/
+  .change()
+
+
+  function formatDatePickerDisplay(d) {
+    if (!d) {
+      return '';
+    }
+    var currDate = moment(d),
+    sunday = moment(currDate).day(0).format('DD-MM-YYYY'),
+    saturday = moment(currDate).day(6).format('DD-MM-YYYY');
+    $('#startDate').val(sunday);
+    $('#endDate').val(saturday);
+    return sunday + ' - ' + saturday;
+
+  }
+
+  </script>
+
+
+</div>

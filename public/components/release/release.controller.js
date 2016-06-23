@@ -55,6 +55,7 @@ function($scope, $rootScope, $stateParams, $state, releaseService, $uibModal, So
       $state.go('project');
   }
   $scope.editSprint = function(newSprintName,newSprintDetails,newSprintStartDate,newSprintEndDate,sprId,oldName) {
+console.log(newSprintStartDate);
     if (newSprintStartDate != "") {
       // console.log("newSprintStartDate is not null it is -" + newSprintStartDate +"-");
     }

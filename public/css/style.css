@@ -1794,3 +1794,67 @@ float: left;
   font-size: 13px;
   font-weight: bold;
 }
+
+/*for cards calendar*/
+.datepicker-days tr:hover {
+    background-color: #808080;
+}
+
+
+
+/*material*/
+/*md-card.md-light-blue-theme {
+    background-color: #36d7b7;
+}*/
+md-card{
+overflow: hidden;
+}
+md-checkbox.md-icon{
+    background-color: : #555;
+}
+.parent1 {
+
+
+     border: 0px; */
+     border-top: 0px;
+    border-radius: 0px;
+    width: 272px;
+    margin: 3px;
+     padding-bottom: 17px; */
+}
+.layout-fill {
+background-color: rgba(162, 222, 208, 0.12)
+}
+
+
+#myBox{
+  {
+    background-color: lightgrey;
+
+    padding: 25px;
+    border: 25px solid navy;
+    margin: 25px;
+}
+}
+.editStyle{
+      text-decoration: none;
+    color: white;
+    border-bottom: dashed 0px #428bca;
+}
+  /*for date picker*/
+  .datepickerdemoBasicUsage {
+  /** Demo styles for mdCalendar. */ }
+  .datepickerdemoBasicUsage md-content {
+    padding-bottom: 200px; }
+  .datepickerdemoBasicUsage .validation-messages {
+    font-size: 11px;
+    color: darkred;
+    margin: 2px 0 10px 25px; }
+    .dueDate{
+       font-size: 14px;
+    color: darkred;
+    border-radius: 5px ;
+    text-align: center;
+    margin-left: 5px ;
+    background-color: yellow;
+    }

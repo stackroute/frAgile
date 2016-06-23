@@ -1,5 +1,5 @@
 fragileApp.controller('storyOperationsController',['$scope','$rootScope','$stateParams','storyService','modalService','$uibModal','$uibModalInstance','$location','param','Socket',function($scope,$rootScope,$stateParams,storyService,modalService,$uibModal,$uibModalInstance,$location,param,Socket){
-var socket = Socket($scope);
+  var socket = Socket($scope);
   //TODO:need to check whether we need to get the "$scope.memberDetails" data directly from rootscope without resolving it in story Modal.   ---->Check
 
 
@@ -8,7 +8,7 @@ var socket = Socket($scope);
 
   //TODO:Add dismisal for all sub modal --->Added cancel, call it from modals
 
-
+  console.log($stateParams);
   /***Received the data from resolve functionality of uibModal***/
   $scope.storyDetails= param.story.data;
   $scope.roomName = "sprint:" + param.sprint._id;
@@ -56,7 +56,7 @@ var socket = Socket($scope);
     $scope.labelTemplateData= param.labelTemplateData;
     console.log($scope.labelTemplate);
 
-        $scope.labelTemplate={};
+    $scope.labelTemplate={};
     /*** Declaring variables required for addMembers,addLabels***/
     $scope.longDescLimit=25 ;
     $scope.checked = true;
@@ -126,19 +126,19 @@ var socket = Socket($scope);
 
     if($scope.moveTo.selectedOption.name != "Other"){
       socket.emit('sprint:moveToBackbugStory',{
-      'room': $scope.roomName,
-      'activityRoom': 'activity:' + $scope.projectID,
-      'newListId':$scope.moveTo.selectedOption.value,
-      'projectID':$stateParams.prId,
-      'storyId':$scope.storyDetails._id,
-      'sprintId':$scope.storyCurrentPosition.sprintId,
-      'oldListId':$scope.storyCurrentPosition.listId,
-      'user':$rootScope.userProfile
+        'room': $scope.roomName,
+        'activityRoom': 'activity:' + $scope.projectID,
+        'newListId':$scope.moveTo.selectedOption.value,
+        'projectID':$stateParams.prId,
+        'storyId':$scope.storyDetails._id,
+        'sprintId':$scope.storyCurrentPosition.sprintId,
+        'oldListId':$scope.storyCurrentPosition.listId,
+        'user':$rootScope.userProfile
       });
-        $uibModalInstance.dismiss('cancel');
+      $uibModalInstance.dismiss('cancel');
     }
     else{
-    socket.emit('sprint:moveStory', {
+      socket.emit('sprint:moveStory', {
         'room': $scope.roomName,
         'activityRoom': 'activity:' + $scope.projectID,
         'sprintId': $scope.storyMoveData.release.selectedSprints._id,
@@ -159,38 +159,38 @@ var socket = Socket($scope);
   description:This function is used to create dupilcate of the current story to spcified destination
   ***/
   $scope.copyStory=function(){
-//check, not working backlog,buglist,not reflecting back in list
+    //check, not working backlog,buglist,not reflecting back in list
     if($scope.moveTo.selectedOption.name != "Other"){
       //trigger websocket to move to backlog
       socket.emit('sprint:addStory', {
-      'room': $scope.roomName,
-      'activityRoom': 'activity:' + $scope.projectID,
-      'heading':$scope.storyDetails.heading ,
-      'addTo': $scope.moveTo.selectedOption.value,
-      'storyStatus':'' ,
-      'description': $scope.storyDetails.description ,
-      'projectId':$stateParams.prId,
-      'listName':$scope.moveTo.selectedOption.value,
-      'listId':$scope.moveTo.selectedOption.value,
-      'user':$rootScope.userProfile
-    });
+        'room': $scope.roomName,
+        'activityRoom': 'activity:' + $scope.projectID,
+        'heading':$scope.storyDetails.heading ,
+        'addTo': $scope.moveTo.selectedOption.value,
+        'storyStatus':'' ,
+        'description': $scope.storyDetails.description ,
+        'projectId':$stateParams.prId,
+        'listName':$scope.moveTo.selectedOption.value,
+        'listId':$scope.moveTo.selectedOption.value,
+        'user':$rootScope.userProfile
+      });
 
     }
     else{
       //TODO:below lines
       socket.emit('sprint:addStory', {
-      'room': $scope.roomName,
-      'activityRoom': 'activity:' + $scope.projectID,
-      'heading': $scope.storyDetails.heading,
-      'addTo': $scope.moveTo.selectedOption.value,
-      'storyStatus': '',
-      'description': $scope.storyDetails.description,
-      'listId': $scope.storyMoveData.release.selectedList.group,
-      'sprintId':$scope.storyMoveData.release.selectedSprints._id,
-      'id':$scope.storyMoveData.release.selectedList._id,
-      'listName':$scope.moveTo.selectedOption.value,
-      'user':$rootScope.userProfile
-    });
+        'room': $scope.roomName,
+        'activityRoom': 'activity:' + $scope.projectID,
+        'heading': $scope.storyDetails.heading,
+        'addTo': $scope.moveTo.selectedOption.value,
+        'storyStatus': '',
+        'description': $scope.storyDetails.description,
+        'listId': $scope.storyMoveData.release.selectedList.group,
+        'sprintId':$scope.storyMoveData.release.selectedSprints._id,
+        'id':$scope.storyMoveData.release.selectedList._id,
+        'listName':$scope.moveTo.selectedOption.value,
+        'user':$rootScope.userProfile
+      });
     }
   }
 
@@ -310,7 +310,7 @@ var socket = Socket($scope);
       $scope.selectedLabel=[];
 
     }else {
-console.log(labelData);
+      console.log(labelData);
       $scope.selectedLabel=[];
       $scope.selectedLabel.push(labelData.colorName);
       $scope.labelTemplate.colorName=labelData.colorName;
@@ -344,31 +344,31 @@ console.log(labelData);
     // })[0];
     console.log("dsrfdsdsfdsdsdsffds");
     console.log(labelObj);
-  if ($scope.storylabelsData.indexOf(labelObj._id)!=-1) {
-    //remove members working, tested
-    socket.emit('story:removeLabel', {
+    if ($scope.storylabelsData.indexOf(labelObj._id)!=-1) {
+      //remove members working, tested
+      socket.emit('story:removeLabel', {
 
-      'room': $scope.roomName,
-      'storyid': $scope.storyDetails._id,
-      'labelid': labelObj._id,
-      'storyid' : $scope.storyDetails._id,
-      'projectID' : $scope.projectID,
-      'colorName' : labelObj.colorName,
-      'user':$rootScope.userProfile
-    });
-  }else{
-    //Add members working,tested
-    socket.emit('story:addLabel', {
+        'room': $scope.roomName,
+        'storyid': $scope.storyDetails._id,
+        'labelid': labelObj._id,
+        'storyid' : $scope.storyDetails._id,
+        'projectID' : $scope.projectID,
+        'colorName' : labelObj.colorName,
+        'user':$rootScope.userProfile
+      });
+    }else{
+      //Add members working,tested
+      socket.emit('story:addLabel', {
 
-      'room': $scope.roomName,
-      'storyid': $scope.storyDetails._id,
-      'labelid': labelObj._id,
-      'storyid' : $scope.storyDetails._id,
-      'projectID' : $scope.projectID,
-      'colorName' : labelObj.colorName,
-      'user':$rootScope.userProfile
-    });
-  }
+        'room': $scope.roomName,
+        'storyid': $scope.storyDetails._id,
+        'labelid': labelObj._id,
+        'storyid' : $scope.storyDetails._id,
+        'projectID' : $scope.projectID,
+        'colorName' : labelObj.colorName,
+        'user':$rootScope.userProfile
+      });
+    }
 
   }
 
@@ -417,22 +417,24 @@ console.log(labelData);
         'memberid': memberObj._id,
         'projectID' : $scope.projectID,
         'fullName': memberObj.firstName + " " + memberObj.lastName,
-        'user':$rootScope.userProfile
+        'user':$rootScope.userProfile,
+        'sprintId':param.sprint._id,
+        'releaseId':$stateParams.releaseID
       });
     }
   }
   socket.on('story:membersModified', function(data) {
     //Not Receiving any data
-      console.log(data);
-      if(data._id == $scope.storyDetails._id){ //If the updated card is same as current opened card
-        $scope.membersData = data.memberList;
-      }
-    })
+    console.log(data);
+    if(data._id == $scope.storyDetails._id){ //If the updated card is same as current opened card
+      $scope.membersData = data.memberList;
+    }
+  })
   socket.on('story:labelsModified', function(data) {
     //Not Receiving any data
-      console.log(data);
-      if(data._id == $scope.storyDetails._id){ //If the updated card is same as current opened card
-        $scope.labelsData.push(data.labelList);
-      }
-    })
+    console.log(data);
+    if(data._id == $scope.storyDetails._id){ //If the updated card is same as current opened card
+      $scope.labelsData.push(data.labelList);
+    }
+  })
 }]);

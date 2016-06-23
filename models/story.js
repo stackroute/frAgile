@@ -76,7 +76,8 @@ var StorySchema = new Schema({
         ref: 'User'
       },
       creationDate: Date,
-      creatorName: String
+      creatorName: String,
+      dueDate:Date
     }]
   }],
   comments: [{

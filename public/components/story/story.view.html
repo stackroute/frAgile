@@ -124,47 +124,16 @@
   <div class="pull-left story-members">
     <h3 class="story-sub-header">Checklists  <i class="fa fa-plus story-addbutton" ng-click="addChecklist()" aria-hidden="true"></i></h3>
     <div ng-repeat="todo in storyData.checklist">
-      <span class="checklist-header" ng-mouseenter="groupHovering=true" ng-mouseleave="groupHovering=false">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo._id,todo.checklistHeading)">
+      <!-- <span class="checklist-header" ng-mouseenter="groupHovering=true" ng-mouseleave="groupHovering=false">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo._id,todo.checklistHeading)">
         <i class="fa fa-trash-o" ng-show="groupHovering"></i></a></small></span>
         <b class="progress-per">{{todo.items.length>0 ?((todo.checkedCount/todo.items.length*100)):0}}%</b>
         {{Math.floor((todo.checkedCount/todo.items.length*100))}}
-        <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar>
-
-
-
-        <!-- checklist items are added here -->
-
-        <!-- trial for adding members -->
-        <!-- <li class="checklist-todos" ng-repeat="list in todo.items">
-          <input type="checkbox" ng-model="list.checked" ng-click="updateTodoItem(list,todo)" >
-
-          <span ng-include="getTemplateItem(model.contacts)">
-          </span>
-          <script type="text/ng-template" id="display">
-            <div class="done-{{list.checked}}" ng-click="editDescription(model.description)" ng-mouseenter="itemHovering=true"  ng-mouseleave="itemHovering=false">{{list.text}}
-              <a ng-click="removeTodoItem(list,todo,list.text)"  ng-show="itemHovering">
-                <i class="fa fa-minus-circle" ></i>
-              </a>
-              <span ng-hide="list.text.length>0">
-                <h3 class="story-sub-header">Edit Item</h3>
-              </span>
-            </div>
-          </script>
-          <script type="text/ng-template" id="edit">
-            <span><textarea class="story-textarea form-control"   ng-model="model.selected.name" class="form-control" placeholder="{{list.text}}" autofocus></textarea></span>
-            <span class="pull-right edit-description">
-              <a class="btn btn-default btn-xs desc-btn" ng-click="saveDescription()" ><i class="fa fa-check"></i></a>
-              <a class="btn btn-default btn-xs desc-btn"ng-click="reset()" ><i class="fa fa-close"></i></a>
-            </span>
-          </script> -->
+        <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar> -->
 
 
 
 
-
-
-          <!-- my trial for adding members ends here -->
-
+<my-cards list="todo"></my-cards>
 
 
           <li class="checklist-todos" ng-repeat="list in todo.items">
@@ -181,7 +150,8 @@
           </li>
           <form>
             <input type="text" ng-model="todo.todoText" class="form-control add-todo" size="40"
-            placeholder="Add New Todo" ></input>
+            placeholder="Add New Todo" ></input><br>
+<input type="Date" ng-model="todo.todoDueDate">Due Date</input>
             <button type="submit" class="btn btn-default btn-xs check-item-btn" ng-click="addTodoItem(todo)" ><i class="fa fa-plus" aria-hidden="true"></i></button>
           </form>
           <hr class="story-seperator checklist-seperator">
