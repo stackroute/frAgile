@@ -84,11 +84,13 @@ var localData={};
   //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
   $scope.addMember = function() {
     modalService.open('sm', 'components/story/operations/addMember.view.html', 'storyOperationsController', storyContr.complexDataObject);
+    console.log("complexDataObject --->",storyContr.complexDataObject);
   };
 
 var flag=0;
 localData=[];
 $scope.memberArray=[];
+$scope.memberArrayIndex=[];
   /***
   author:nitish
   function:addMember to check list
@@ -102,14 +104,20 @@ $scope.memberArray=[];
       $scope.assignedMember=[];//temp assinged member
       socket.on('memberAdded',function(data){
 
-            $scope.memberArray.filter(function(obj)
-            {
-
-              if(obj.itemId == data.listItem._id)
-              {
-                obj["arrayOfMembers"]=data.assignedMember;
-              }
-            })
+          if($scope.memberArrayIndex.indexOf(obj.itemId)!=-1)
+          {
+            // modifying memberArray after member added to/deleted from an item.
+            $scope.memberArray[$scope.memberArrayIndex.indexOf(obj.itemId)]["arrayOfMembers"]=data.assignedMember;
+          }
+            // $scope.memberArray.filter(function(obj)
+            // {
+            //   if(obj.itemId == data.listItem._id)
+            //   {
+            //     $scope.memberArray[memberArrayIndex.indexOf(obj.itemId)]["arrayOfMembers"]=data.assignedMember;
+            //     console.log("im in contrller to add member",memberArray,memberArrayIndex);
+            //     //obj["arrayOfMembers"]=data.assignedMember;
+            //   }
+            // })
           // console.log("after member added",data.listItem.assignedMember);
           //   flag=1;
           // localData=data;
@@ -117,7 +125,11 @@ $scope.memberArray=[];
        });
   //ends
 
-
+//while loading the story page,setting memberArray with itemids and assignedMember
+$scope.fetchMemberDetails=function()
+{
+  $scope.memberArray=[];
+  $scope.memberArrayIndex=[];
 $scope.storyData.checklist.filter(function(checkList)
 {
   checkList.items.filter(function(item)
@@ -125,9 +137,13 @@ $scope.storyData.checklist.filter(function(checkList)
   obj={};
   obj["itemId"]=item._id;
   obj["arrayOfMembers"]=item.assignedMember;
+  $scope.memberArrayIndex.push(item._id);
   $scope.memberArray.push(obj);
 });
 });
+console.log("memberarray after item added",$scope.memberArray);
+console.log("memberarrayindex after item added",$scope.memberArrayIndex);
+}
 
 console.log("newly created array",JSON.stringify($scope.memberArray));
 
@@ -155,15 +171,7 @@ console.log("newly created array",JSON.stringify($scope.memberArray));
     console.log(listItem,"in add mem: ",listItem.assignedMember);
 
 
-  // console.log("assignedMember data in main controller (list item): ",listItem.assignedMember);
-    //neo
-    $scope.memberArray.filter(function(obj)
-    {
-      if(obj.itemId==listItem._id)
-      {
-        listItem.assignedMember=obj.arrayOfMembers;
-      }
-    })
+    listItem.assignedMember=$scope.memberArray[$scope.memberArrayIndex.indexOf(listItem._id)]["arrayOfMembers"];
 
     console.log("assignedMember list: ",listItem.assignedMember);
     var checkListId;
@@ -176,6 +184,7 @@ if(item._id==listItem._id)
 });
 });
 console.log("checklist id --->",checkListId);
+console.log("memberList --->",$scope.storyData.memberList);
     data = {
 
       listItem:listItem,
@@ -426,7 +435,6 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
       checked: false,
       creationDate: Date.now(),
       assignedMember:assignedMember
-
     };
 
 
@@ -456,7 +464,7 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
     console.log(checklistGrp)
     console.log(listItem);
     //todo.items.push({"text":todo.todoText,"done":false})
-
+    console.log("inside the remove method--->");
     socket.emit('story:removeChecklistItem', {
 
       'room': $scope.roomName,
@@ -479,10 +487,11 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   ***/
   //TODO:Not working because of nth level
    //to update list item
-  // $scope.updateListItem=function(listItem,checklistGrp){
-  // console.log("Modified item: ",listItem);
+  $scope.updateListItem=function(listItem,checklistGrp){
+  console.log("Modified item: ",listItem);
   // $scope.updateTodoItem(listItem,checklistGrp);
-  // }
+
+  }
 
   $scope.updateTodoItem = function(listItem, checklistGrp) {
 
@@ -560,27 +569,26 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
     }
     //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
-    console.log("testing data --->",data);
-    if (data._id == $scope.storyData._id) { //If the updated card is same as current opened card
-      data.memberList.forEach(function(storyItem) {
-        storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
-      });
 
-      ///
-      // $scope.storyTempData = [];
-      // var projObj = $rootScope.projects.filter(function(item) {
-      //   return item._id === $stateParams.prId;
-      // });
-      // for (var i = 0; i < projObj[0].labelId.labelList.length; i++) {
-      //   if (data.labelList.indexOf(projObj[0].labelId.labelList[i]._id) != -1) {
-      //     $scope.storyTempData.push(projObj[0].labelId.labelList[i]);
-      //   }
-      // }
-      // data.labelList = $scope.storyTempData; //Overriding the old valuse
-      // $
+      socket.emit("story:findStory",{"storyId":$scope.storyData._id,"roomName":$scope.roomName});
+      socket.on("story:getStory",function(story)
+    {
+      if(story._id==$scope.storyData._id)
+      {
+        story.memberList.forEach(function(storyItem) {
+          storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
+          $scope.storyData = story;
+          $scope.fetchMemberDetails();
+        })
     }
-    $scope.storyData = data;
-  })
+  });
+
+      console.log("im here to modify");
+        // this is to set memberArray after item added/deleted.
+      ///
+
+    })
+
 }])
 
 .component('task',
@@ -602,7 +610,8 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
 })
 .component('checklistgroup',{
   bindings:{
-    checklistgroup:'<'
+    checklistgroup:'<',
+    storyid:'<'
   },
   controller:checkListGroupController,
   templateUrl:"components/story/checkListGroup.html"

@@ -45,6 +45,7 @@ router.post('/getMembersData',function(req,res,next){
       res.send(err);
     }else{
       console.log(data);
+      console.log("---------------------in story model to check---------");
       res.send(data.memberList);
     }
   })
@@ -212,7 +213,6 @@ story.updateLabelList(storyId,labelListId,operation,function(err,data){
 res.send(data);
 });
 });
-
 
 
 //ends

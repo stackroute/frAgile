@@ -137,11 +137,11 @@
 
               <input type="checkbox" ng-model="listItem.checked" ng-click="updateTodoItem(listItem,todo)">
 
-              <span class="done-{{listItem.checked}} " editable-text="listItem.text" onaftersave="updateListItem(listItem,todo)" ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{listItem.text}}
+              <span class="done-{{listItem.checked}} " editable-text="listItem.text" onaftersave="updateTodoItem(listItem,todo)" ng-mouseenter="itemHovering=true" ng-mouseleave="itemHovering=false">{{listItem.text}}
 
                 <a ng-click="removeTodoItem(listItem,todo,listItem.text)"  ng-show="itemHovering">
 
-                  <i class="fa fa-minus-circle" ></i>
+                  <i class="fa fa-minus-circle"></i>
                 </a>
 <!--                 <span class="option option-menu" ng-show="itemHovering" ng-click="addMember()" >...</span>             </span>-->
                   <!-- component
@@ -162,7 +162,7 @@
         </div>
       </div>
 
-      <checklistgroup checklistgroup="storyData.checklist"></checklistgroup>
+      <checklistgroup checklistgroup="storyData.checklist" storyid="storyData._id"></checklistgroup>
       <br>
       <hr class="story-seperator">
       <div class="story-details clearfix">

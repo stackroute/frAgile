@@ -348,6 +348,34 @@ StorySchema.statics.addChecklistItem = function(storyId, checklistGrpId, itemObj
     });
 }
 
+///
+StorySchema.statics.removeItem=function(storyId, checklistGrpId, itemId, checked, callback)
+{
+  this.findOne({
+    "_id":storyId
+  }).exec(function(err,data)
+{
+data.indicators.chklstItmsCnt--;
+
+data.checklist.filter(function(checkList)
+{
+  if(checkList._id==checklistGrpId)
+checkList.items.filter(function(item)
+{
+  if(item._id==itemId)
+  {
+    if(checked)
+    {
+      data.indicators.chklstItmsChkdCnt=data.indicators.chklstItmsChkdCnt-- < 0 ? 0 : data.indicators.chklstItmsChkdCnt--;
+      checkList.checkedCount=checkList.checkedCount-- < 0 ? 0 : checkList.checkedCount--;
+    }
+  }
+});
+});
+data.save();
+})
+}
+
 /***
 authors:sharan,srinivas
 function:removeChecklistItem
@@ -444,6 +472,7 @@ StorySchema.statics.updateChecklistItem = function(storyId, checklistGrpId, item
         if (err) {
           callback(err, null);
         } else {
+          console.log("checking item --------------->",doc);
           callback(null, doc);
         }
       });
@@ -451,17 +480,62 @@ StorySchema.statics.updateChecklistItem = function(storyId, checklistGrpId, item
   /////
 
 
+// StorySchema.statics.storyUpdateCheckListItem=function(data,callback)
+// {
+//   var memberList=[];
+//   this.findOne(
+//     {
+//     "_id":data.storyid
+//     })
+//     .populate('memberList', 'firstName lastName')
+//     .exec(function(err,doc)
+//   {
+//     memberList=doc.memberList;
+//   });
+//
+//
+//   this.findOne(
+//     {
+//     "_id":data.storyid
+//     })
+//     .exec(function(err,story)
+//   {
+//     story.checklist.filter(function(checklist)
+//     {
+//       if(checklist._id==data.checklistGrpId)
+//       {
+//         checklist.items.filter(function(item)
+//       {
+//         if(item._id==data.itemid)
+//         {
+//           item.checked=data.checked;
+//           if(data.checked)
+//           checklist.count++;
+//           else {
+//               checklist.count--;
+//               checklist.count=checklist.count < 0 ? 0 : checklist.count;
+//           }
+//         }
+//       })
+//       }
+//     })
+//     story.save();
+//     story.memberList=memberList;
+//   });
+// }
+
 StorySchema.statics.addMemberToChecklist=function(data,callback)
 {
 //console.log("im in story model -->",data);
 
-
 console.log("----------printig story-------------");
+
 this.findOne({
   "_id": data.storyId
 }).exec(function(err, story) {
   story.checklist.filter(function(checkList)
   {
+
     if(checkList._id==data.checkListId)
   checkList.items.filter(function(item)
 {
@@ -472,27 +546,8 @@ this.findOne({
 });
   });
 story.save();
+console.log("after storing into database--->");
 });
-// this.findOneAndUpdate({
-//     "_id": data.storyId,
-//     "checklist._id": data.checkListId,
-//     "items._id":data.listItem._id
-//   }, {
-//     $push: {
-//       "checklist.items.assignedMember": data.memberObj._id
-//     },
-//   }, {
-//     upsert: true
-//   })
-//   .exec(function(err, doc) {
-//     console.log(doc);
-//     if (err) {
-//       console.log(err);
-//       callback(err, null);
-//     } else {
-//       callback(null, doc);
-//     }
-//   });
 }
 
 

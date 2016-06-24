@@ -5,7 +5,7 @@ fragileApp.controller('addMemberToChecklistController',['$scope','$rootScope','$
 $scope.assignedMember=[];
 $scope.assignedMemberIndex=[];
 $scope.currentItemId=param.listItem._id;
-
+$scope.title=param.listItem.text;
   // $scope.initLoadMembersOfItem=function(){
   //   $scope.assignedMember=$scope.assignedMember.concat(param.listItem.assignedMember);
   //   $scope.assignedMember.filter(function(member)
@@ -30,6 +30,17 @@ $scope.currentItemId=param.listItem._id;
     /** XHR request to fetch latest members details***/
     //console.log($scope.storyDetails._id);
     $scope.storyMember=param.members;
+
+    socket.on("story:membersModifiedOnItem",function(data)
+    {
+    if(param.storyId==data.storyId)
+    {
+      console.log("before remove-->",$scope.storyMember);
+      $scope.storyMember=data.memberList;
+      console.log("after remove===>",$scope.storyMember);
+    }
+  });
+  
 console.log("story members --->",$scope.storyMember);
   }//end of init load member
 
@@ -37,7 +48,7 @@ console.log("story members --->",$scope.storyMember);
        // param.listItem.assignedMember.push(memberObj);
        var index=$scope.assignedMemberIndex.indexOf(memberObj._id);
        if(index!=-1)
-       {
+       {console.log("im inside");
          $scope.assignedMember.splice(index,1);
          $scope.assignedMemberIndex.splice(index,1);
          console.log("array",$scope.assignedMember,"indexArray",$scope.assignedMemberIndex);
@@ -46,8 +57,8 @@ console.log("story members --->",$scope.storyMember);
          $scope.assignedMember.push(memberObj);
          $scope.assignedMemberIndex.push(memberObj._id);
        }
+       console.log("assigned member array after 1 added/removed",$scope.assignedMember);
         socket.emit('story:addRemoveMembersListItem',{"indexArray":$scope.assignedMemberIndex,"assignedMember":$scope.assignedMember,"storyId":param.storyId,"checkListId":param.checkListId,"roomName":param.roomName,"memberObj":memberObj,"listItem":param.listItem});
-
   }//addRemoveMembersList
 
     $scope.cancel=function(){
@@ -61,6 +72,7 @@ console.log("story members --->",$scope.storyMember);
         if($scope.currentItemId==data.listItem._id)
         {
           $scope.assignedMember=data.assignedMember;
+          console.log("im in itemmodel to modify",$scope.assignedMember);
           $scope.assignedMemberIndex=data.indexArray;
         }
        });

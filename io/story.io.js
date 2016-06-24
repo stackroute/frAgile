@@ -91,7 +91,8 @@ if (!err) {
             }
             console.log("Im in add");
             console.log(members);
-            io.to(data.room).emit('story:membersModified', members);
+            io.to(data.room).emit('story:membersModified',members);
+            io.to(data.room).emit('story:membersModifiedOnItem',{"storyId":storyData._id,"memberList":storyData.memberList});
             io.to(data.room).emit('story:dataModified', storyData);
 
 
@@ -200,8 +201,8 @@ if (!err) {
   description:listner to addnew item to checklist group in a story
   ****/
   socket.on('story:addChecklistItem', function(data) {
-      data.itemObj.creatorName = user.fullName;
-      data.itemObj.createdBy = user._id;
+      data.itemObj.creatorName = data.user.fullName;
+      data.itemObj.createdBy = data.user._id;
       // data.itemObj.createdBy="570395a239dc5fbac028505c";
       // data.itemObj.creatorName="user.fullName";
 
@@ -238,6 +239,40 @@ if (!err) {
     /****
     description:listner to remove item to checklist group in a story
     ****/
+    // socket.on('story:removeChecklistItem', function(data) {
+    //     Story.removeItem(data.storyid, data.checklistGrpId, data.itemid, data.checked, function(err, doc) {
+    //       if (!err) {
+    //         //user.userID
+    //         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+    //           if (!err) {
+    //             io.to(data.room).emit('story:dataModified', storyData);
+    //
+    //             var actData = {
+    //               room: "activity:" + data.projectID,
+    //               action: "added",
+    //               projectID: data.projectID,
+    //               user: data.user,
+    //               object: {
+    //                 name: data.text,
+    //                 type: "Story",
+    //                 _id: data.checklistGrpId
+    //               },
+    //               target: {
+    //                 name: storyData.heading,
+    //                 type: "Story",
+    //                 _id: data.storyid
+    //               }
+    //             }
+    //             Activity.addEvent(actData, function(data) {
+    //               io.to(actData.room).emit('activityAdded', data);
+    //             });
+    //           }
+    //         });
+    //       }
+    //     })
+    //   })
+
+
   socket.on('story:removeChecklistItem', function(data) {
       Story.removeChecklistItem(data.storyid, data.checklistGrpId, data.itemid, data.checked, function(err, doc) {
         if (!err) {
@@ -270,6 +305,7 @@ if (!err) {
         }
       })
     })
+
     /****
     description:listner to remove item to checklist group in a story
     ****/
@@ -305,17 +341,29 @@ if (!err) {
         }
       })
     })
+
+//get a story based on storyid after an item added or removed in checklist to update the memberarray in storyController
+  socket.on("story:findStory",function(data)
+  {
+    Story.findStory(data.storyId,function(err,doc)
+  {
+    io.to(data.roomName).emit('story:getStory',doc);
+  });
+  });
+
+
     //start new
     socket.on('story:addRemoveMembersListItem',function(data){
-     // console.log(data.roomName);
+      console.log("i received something----->",data.assignedMember);
+    console.log("assignedMember array --->",data.assignedMember);
      Story.addMemberToChecklist(data,function(err,doc)
    {
      console.log("im in story.io");
-   })
-     console.log("i have reached here");
+     console.log("i have reached here",doc);
       console.log("item details ==>",data.storyId,data.checkListId);
-      io.to(data.roomName).emit('memberAdded',data);
       console.log("Data member in server: ",data.memberObj);
+      })
+      io.to(data.roomName).emit('memberAdded',data);
     });
     //end new
     //start
@@ -338,6 +386,7 @@ if (!err) {
   socket.on('story:updateChecklistItem', function(data) {
 
 
+console.log("im coming insdie", data);
     // Story.updateChecklistItem(data.storyid,data.checklistGrpId,data.itemid,data.checked, function(err, doc) {
     //   if (!err) {
     //     //user.userID
@@ -346,6 +395,10 @@ if (!err) {
     // })
    //
 
+// Story.storyUpdateCheckListItem(data,function(err,story)
+// {
+//
+// });
 
    Story.getCheckItemIndex(data.itemid, function(err, index) {
       if (index !=-1)
