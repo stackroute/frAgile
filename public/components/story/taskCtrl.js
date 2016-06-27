@@ -37,12 +37,14 @@ function mycardCtrl ($scope) {
       $scope.myDate.getMonth() + 2,
       $scope.myDate.getDate());
 
-
-    ctrl.addMemberComp=function()
+    function alertMe(){
+      alert("This is a alert");
+    }
+    this.addMemberComp=function(obj)
     { 
       console.log("hoooollalla");
       // console.log("its worfnekiu",obj);
-      //   addMember(obj);
+        ctrl.addMember(obj)
     }
         
         }
