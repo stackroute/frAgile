@@ -434,6 +434,7 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
       text: todo.todoText,
       checked: false,
       creationDate: Date.now(),
+      dueDate:Date.now(),
       assignedMember:assignedMember
     };
 
@@ -591,58 +592,58 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
 
 }])
 
-.component('task',
-{
-  bindings:
-  {
-    taskobj:'<',
-    onSave:'&'
-  },
-  controller:itemController,
-  templateUrl:"components/story/task.html"
-})
-.component('checklist',{
-  bindings:{
-    checklist:'<'
-  },
-  controller:checkListController,
-  templateUrl:"components/story/checkList.html"
-})
-.component('checklistgroup',{
-  bindings:{
-    checklistgroup:'<',
-    storyid:'<'
-  },
-  controller:checkListGroupController,
-  templateUrl:"components/story/checkListGroup.html"
-})
-function itemController($scope,Socket)
-{
+// .component('task',
+// {
+//   bindings:
+//   {
+//     taskobj:'<',
+//     onSave:'&'
+//   },
+//   controller:itemController,
+//   templateUrl:"components/story/task.html"
+// })
+// .component('checklist',{
+//   bindings:{
+//     checklist:'<'
+//   },
+//   controller:checkListController,
+//   templateUrl:"components/story/checkList.html"
+// })
+// .component('checklistgroup',{
+//   bindings:{
+//     checklistgroup:'<',
+//     storyid:'<'
+//   },
+//   controller:checkListGroupController,
+//   templateUrl:"components/story/checkListGroup.html"
+// })
+// function itemController($scope,Socket)
+// {
 
-var socket=Socket($scope);
-var ctrl=this;
+// var socket=Socket($scope);
+// var ctrl=this;
 
-ctrl.onSave=function(itemObject)
-{
-  socket.emit("story:editItem",itemObject);
-}
+// ctrl.onSave=function(itemObject)
+// {
+//   socket.emit("story:editItem",itemObject);
+// }
 
-ctrl.addViewMembers=function(itemId)
-{
+// ctrl.addViewMembers=function(itemId)
+// {
 
-}
+// }
 
-ctrl.taskComplete=function(itemObject)
-{
+// ctrl.taskComplete=function(itemObject)
+// {
 
-}
+// }
 
-};
-function checkListController()
-{
+// };
+// function checkListController()
+// {
 
-}
-function checkListGroupController()
-{
+// }
+// function checkListGroupController()
+// {
 
-}
+// }

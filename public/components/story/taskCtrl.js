@@ -1,0 +1,59 @@
+//refered from https://jsfiddle.net/toddmotto/xqauz9aa/?utm_source=website&utm_medium=embed&utm_campaign=xqauz9aa 
+//var app=angular.module('Todo', ['ngMaterial','ngMessages',"xeditable"])
+  fragileApp.controller('mainCtrl', function ($scope) {
+   
+  })
+
+        .component('mycard', {
+        bindings: {
+          task: '<',
+          addMember:'&'
+
+        },
+        controller: mycardCtrl,
+        templateUrl:'components/story/task.html'
+
+    });
+
+//end of angular
+
+ app.run(function(editableOptions,editableThemes) {  editableOptions.theme = 'bs3';  
+    
+      editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" ng-click="updateTodoItem(listItem,todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>'; 
+    // bootstrap3 theme. Can be also 'bs2', 'default'
+    });
+
+function mycardCtrl ($scope) {
+
+  var ctrl=this;
+  console.log("hello",this.task.dueDate);
+   $scope.myDate = new Date(this.task.dueDate);
+  $scope.minDate = new Date(
+      $scope.myDate.getFullYear(),
+      $scope.myDate.getMonth() - 2,
+      $scope.myDate.getDate());
+  $scope.maxDate = new Date(
+      $scope.myDate.getFullYear(),
+      $scope.myDate.getMonth() + 2,
+      $scope.myDate.getDate());
+
+
+    ctrl.addMemberComp=function()
+    { 
+      console.log("hoooollalla");
+      // console.log("its worfnekiu",obj);
+      //   addMember(obj);
+    }
+        
+        }
+//end of task
+
+
+
+
+
+
+
+
+
+

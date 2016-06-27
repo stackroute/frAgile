@@ -78,6 +78,7 @@ var StorySchema = new Schema({
         ref: 'User'
       },
       creationDate: Date,
+      dueDate: Date,
       creatorName: String
     }]
   }],

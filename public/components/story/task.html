@@ -1,36 +1,61 @@
-<div layout="row" layout-wrap>
- <md-card   md-theme-watch >
- <md-card-title id="card">
- <md-toolbar style="background-color: #a4f5d7;">
- <span class="md-subhead" class="editStyle" editable-text="$ctrl.taskobj.text">{{$ctrl.taskobj.text}}</span>
-</md-toolbar>
-</md-card-title >
+<!-- start -->
+<div layout="row" layout-wrap> <!-- may have to remove -->
+	<md-content class="" layout-xs="column" layout="row" layout-wrap>
 
-<div layout="row" style="margin: 0 2 0 2">
+		<md-card ng-init="editme=false">
+			<md-card-content layout="row"  >
+
+				<md-card-actions layout="column">
+					<md-checkbox class="md-icon-button" ng-model="$ctrl.task.checked"data-toggle="tooltip" title="Mark as Done" >
+					</md-checkbox>
+					<md-button class="md-fab md-mini  md-raised md-hue-2"  ng-click="showDiv = !showDiv" data-toggle="tooltip" title="Edit Task" >
+						<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+					</md-button>
+					<md-button class="md-fab md-mini  md-raised md-hue-2 md-save" data-toggle="tooltip" title="Delete task">
+						<i class="fa fa-trash-o" aria-hidden="true"></i>		            
+					</md-button>
+				</md-card-actions>
+					<md-toolbar style="margin-right: 0;margin-left: 5px; max-width: 280px; min-width: 100px; border-radius:5px; background-color:rgb(106,249,161)">
+				<div  >
+					
+					<b ng-click="showDiv = !showDiv" ng-hide="showDiv" style="color:gray">{{$ctrl.task.text}}</b>
+					 <md-input-container ng-show="showDiv" >
+				        <label style="margin-top:10px; border-radius: 5px ; background-color:yellow">Task</label>
+				        <input ng-model="$ctrl.task.text">
+				      </md-input-container> 
+
+			</div>
+			<div class=" pull-right" data-toggle="tooltip" title="Due Date" style="text-align:right; margin-top:50px;border-radius:0 0 5px 5px; background-color:gray">{{$ctrl.task.dueDate}}</div>
+
+			</md-toolbar>
+		</md-card-content>
+		<md-divider  layout="row" >
+			<div ng-repeat="member in $ctrl.task.assignedMember">
+			  <div class="avatar-wrapper" ng-show="member.photo == undefined">
+              <ng-letter-avatar data={{member.firstName+member.lastName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+            </div>
+	       </div>
+
+		</md-divider>
+		<md-divider layout="row"  ng-show="showDiv" >
+
+			<md-datepicker data-toggle="tooltip" title="Due Date" ng-model="myDate" md-placeholder="Enter date"
+			md-min-date="minDate" md-max-date="maxDate"
+			md-date-filter=""></md-datepicker>
+
+			<md-button class="md-fab md-mini md-primary md-hue-2" data-toggle="tooltip" title="Assign Member" ng-click="addMemberComp()">
+			<i class="fa fa-users" aria-hidden="true"></i>     
+			</md-button>
+
+			<md-button class="md-fab md-mini  md-raised md-hue-2 md-raised md-warn" data-toggle="tooltip" title="Save">
+			<i class="fa fa-floppy-o" aria-hidden="true"></i>     
+			</md-button>
+
+			<md-button class="md-fab md-mini  md-raised md-hue-2" data-toggle="tooltip" title="Cancel" ><i class="fa fa-times" aria-hidden="true"></i></md-button>
+		</md-divider>
+
+	</md-card>
 
 
- <md-card-actions layout="row" layout-align="end center" >
- <md-checkbox class="md-raised" ng-model="$ctrl.task.text" aria-label="Checkbox 1">
-</md-checkbox>
-<md-button class="md-raised " ng-disabled='true'>2day</md-button>
-
-<span class="dueDate">Due-Date</span>  <div   class="datepickerdemoBasicUsage">
-<form name="myForm">
-<md-datepicker name="dateField" ng-model="myDate" md-placeholder="Enter date"required md-min-date="minDate" md-max-date="maxDate">
-</md-datepicker>
-<!-- <div class="validation-messages" ng-messages="myForm.dateField.$error">
- <div ng-message="valid">The entered value is not a date!</div>
- <div ng-message="required">This date is required!</div>
- <div ng-message="mindate">Date is too early!</div>
- <div ng-message="maxdate">Date is too late!</div>
- <div ng-message="filtered">Only weekends are allowed!</div>
-</div> -->
-</form>
-</div>
-
-</md-card-actions>
-</div>
-
-</md-card>
-
+</md-content>
 </div>
