@@ -73,43 +73,43 @@ var StorySchema = new Schema({
       checked: Boolean,
       assignedMember:[{ type: Schema.Types.ObjectId,
         ref: 'User'}],
-      createdBy: {
+        createdBy: {
+          type: Schema.Types.ObjectId,
+          ref: 'User'
+        },
+        creationDate: Date,
+        dueDate: Date,
+        creatorName: String
+      }]
+    }],
+    comments: [{
+      text: String,
+      commentedBy: {
         type: Schema.Types.ObjectId,
         ref: 'User'
       },
-      creationDate: Date,
-      dueDate: Date,
-      creatorName: String
-    }]
-  }],
-  comments: [{
-    text: String,
-    commentedBy: {
+      userName: String,
+      commentedData: Date
+    }],
+    memberList: [{
       type: Schema.Types.ObjectId,
       ref: 'User'
-    },
-    userName: String,
-    commentedData: Date
-  }],
-  memberList: [{
-    type: Schema.Types.ObjectId,
-    ref: 'User'
-  }],
-  labelList: [String]
-});
+    }],
+    labelList: [String]
+  });
 
 //Code merge by sharan Starts:
 /***this function is to fetch the story details from the collection
 based on the storyID passed***/
 StorySchema.statics.findStory = function(storyId, callback) {
-    console.log("inside model find story");
-    this.findOne({
-        "_id": storyId
-      })
-      .populate('memberList', 'firstName lastName')
-      .populate("checklist.items.assignedMember")
-      .exec(function(err, doc) {
-        if (err) {
+  console.log("inside model find story");
+  this.findOne({
+    "_id": storyId
+  })
+  .populate('memberList', 'firstName lastName')
+  .populate("checklist.items.assignedMember")
+  .exec(function(err, doc) {
+    if (err) {
           //console.log("err"+err);
           callback(err, null);
         } else {
@@ -119,7 +119,7 @@ StorySchema.statics.findStory = function(storyId, callback) {
           callback(null, doc);
         }
       });
-  }
+}
 
   //neo
 //   StorySchema.statics.addRemoveMembersList=function(checklistItem)
@@ -130,56 +130,56 @@ StorySchema.statics.findStory = function(storyId, callback) {
 // }
   /*** addMembers function is used to assign the members to
   the story from the project members list.**/
-StorySchema.statics.addMembers = function(storyId, membersId, callback) {
-  console.log("im inside story model addMembers");
+  StorySchema.statics.addMembers = function(storyId, membersId, callback) {
+    console.log("im inside story model addMembers");
   //Find was written only for reference
   //  this.findOne({"_id":storyId}).exec(function(err,doc){ console.log(doc);});
   this.findOneAndUpdate({
-      "_id": storyId
-    }, {
-      $addToSet: {
-        memberList: membersId
-      }
-    }, {
-      upsert: true,
-      new: true
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
+    "_id": storyId
+  }, {
+    $addToSet: {
+      memberList: membersId
+    }
+  }, {
+    upsert: true,
+    new: true
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
 
-        callback(null, doc);
-      }
-    });
+      callback(null, doc);
+    }
+  });
 }
 /*** addLabel function is used to assign the label to
 the story from the project label list.**/
 StorySchema.statics.addLabel = function(storyId,labelId, callback) {
   this.findOneAndUpdate(
-      { "_id" : storyId },
-      { $push: { labelList : labelId
-        }
-      },
-      {
-         upsert: true,
-         new:true
-      }
-   )
-   .exec(function(err , doc) {
-     if (err) {
-       console.log(err);
-       callback(err, null);
-     }
-     else {
-console.log(doc);
-       callback(null, doc);
-     }
-   });
+    { "_id" : storyId },
+    { $push: { labelList : labelId
+    }
+  },
+  {
+   upsert: true,
+   new:true
+ }
+ )
+  .exec(function(err , doc) {
+   if (err) {
+     console.log(err);
+     callback(err, null);
+   }
+   else {
+    console.log(doc);
+    callback(null, doc);
+  }
+});
 }
 StorySchema.statics.addStory = function(story, callback) {
   this.create({
-      'listId': story.listId,
+    'listId': story.listId,
       //storyCreatorId: {type:Schema.Types.ObjectId,ref:'User'},
       'storyStatus': story.storyStatus,
       'heading': story.heading,
@@ -211,47 +211,47 @@ StorySchema.statics.addStory = function(story, callback) {
 the story.**/
 StorySchema.statics.removeMembers = function(storyId, membersId, callback) {
   this.findOneAndUpdate({
-        "_id": storyId
-      }, {
-        $pull: {
-          memberList: membersId
-        }
-      }, {
-        upsert: true,
-        new: true
-      }
+    "_id": storyId
+  }, {
+    $pull: {
+      memberList: membersId
+    }
+  }, {
+    upsert: true,
+    new: true
+  }
 
-    )
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, doc);
-      }
-    });
+  )
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
 }
 /*** removeLabel function is used to remove the labels from
 the story.**/
 StorySchema.statics.removeLabel = function(storyId,labelId, callback) {
   this.findOneAndUpdate(
-      { "_id" : storyId },
+    { "_id" : storyId },
     {$pull: {labelList:labelId}},
     {
       upsert: true,
       new:true
-        }
+    }
 
-   )
-   .exec(function(err , doc) {
-     if (err) {
-       console.log(err);
-       callback(err, null);
-     }
-     else {
-       console.log(doc);
-       callback(null, doc);
-     }
-   });
+    )
+  .exec(function(err , doc) {
+   if (err) {
+     console.log(err);
+     callback(err, null);
+   }
+   else {
+     console.log(doc);
+     callback(null, doc);
+   }
+ });
 }
 /*** removeAttachment function is used to remove the the attachment
 (documents\images\etc) details from the story.
@@ -259,31 +259,31 @@ TODO: Need to update the below code w.r.t deletion of files from memory
 where atachments are stored**/
 StorySchema.statics.removeAttachment = function(storyId, attachmentId, callback) {
   this.findByIdAndUpdate({
-        "_id": storyId
-      },
+    "_id": storyId
+  },
 
-      {
-        $pull: {
-          attachmentList: {
-            _id: attachmentId
-          }
-        },
-        $inc: {
-          "indicators.attachmentsCount": -1
-        }
-      }, {
-        new: true,
-        upsert: true
+  {
+    $pull: {
+      attachmentList: {
+        _id: attachmentId
       }
+    },
+    $inc: {
+      "indicators.attachmentsCount": -1
+    }
+  }, {
+    new: true,
+    upsert: true
+  }
 
-    )
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, doc);
-      }
-    });
+  )
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
 }
 
 /*** addAttachments function is used to add the the attachment
@@ -293,32 +293,32 @@ in the disk**/
 StorySchema.statics.addAttachments = function(storyId, atachmentObj, callback) {
 
   this.findByIdAndUpdate({
-      "_id": storyId
-    }, {
-      $push: {
-        attachmentList: {
-          fileName: atachmentObj['fileName'],
-          timeStamp: atachmentObj['timeStamp'],
-          attachmentType: atachmentObj['attachmentType'],
-          addedByUserName: atachmentObj['addedByUserName'],
-          addedByUserId: atachmentObj['addedByUserId'],
-          path: atachmentObj['path']
-        }
-      },
-      $inc: {
-        "indicators.attachmentsCount": 1
+    "_id": storyId
+  }, {
+    $push: {
+      attachmentList: {
+        fileName: atachmentObj['fileName'],
+        timeStamp: atachmentObj['timeStamp'],
+        attachmentType: atachmentObj['attachmentType'],
+        addedByUserName: atachmentObj['addedByUserName'],
+        addedByUserId: atachmentObj['addedByUserId'],
+        path: atachmentObj['path']
       }
-    }, {
-      new: true,
-      upsert: true
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, doc);
-      }
-    });
+    },
+    $inc: {
+      "indicators.attachmentsCount": 1
+    }
+  }, {
+    new: true,
+    upsert: true
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
 }
 
 /***
@@ -328,25 +328,25 @@ checklist item in each group.
 StorySchema.statics.addChecklistItem = function(storyId, checklistGrpId, itemObj, callback) {
   //TODO: write function to delete particular item or check particular item
   this.update({
-      "_id": storyId,
-      "checklist._id": checklistGrpId
-    }, {
-      $push: {
-        "checklist.$.items": itemObj
-      },
-      $inc: {
-        "indicators.chklstItmsCnt": 1
-      }
-    }, {
-      upsert: true
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, doc);
-      }
-    });
+    "_id": storyId,
+    "checklist._id": checklistGrpId
+  }, {
+    $push: {
+      "checklist.$.items": itemObj
+    },
+    $inc: {
+      "indicators.chklstItmsCnt": 1
+    }
+  }, {
+    upsert: true
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
 }
 
 ///
@@ -355,26 +355,26 @@ StorySchema.statics.removeItem=function(storyId, checklistGrpId, itemId, checked
   this.findOne({
     "_id":storyId
   }).exec(function(err,data)
-{
-data.indicators.chklstItmsCnt--;
-
-data.checklist.filter(function(checkList)
-{
-  if(checkList._id==checklistGrpId)
-checkList.items.filter(function(item)
-{
-  if(item._id==itemId)
   {
-    if(checked)
+    data.indicators.chklstItmsCnt--;
+
+    data.checklist.filter(function(checkList)
     {
-      data.indicators.chklstItmsChkdCnt=data.indicators.chklstItmsChkdCnt-- < 0 ? 0 : data.indicators.chklstItmsChkdCnt--;
-      checkList.checkedCount=checkList.checkedCount-- < 0 ? 0 : checkList.checkedCount--;
-    }
-  }
-});
-});
-data.save();
-})
+      if(checkList._id==checklistGrpId)
+        checkList.items.filter(function(item)
+        {
+          if(item._id==itemId)
+          {
+            if(checked)
+            {
+              data.indicators.chklstItmsChkdCnt=data.indicators.chklstItmsChkdCnt-- < 0 ? 0 : data.indicators.chklstItmsChkdCnt--;
+              checkList.checkedCount=checkList.checkedCount-- < 0 ? 0 : checkList.checkedCount--;
+            }
+          }
+        });
+    });
+    data.save();
+  })
 }
 
 /***
@@ -393,27 +393,27 @@ StorySchema.statics.removeChecklistItem = function(storyId, checklistGrpId, item
   }
 
   this.update({
-      "_id": storyId,
-      "checklist._id": checklistGrpId
-    }, {
-      $pull: {
-        "checklist.$.items": {
-          "_id": itemId
-        }
-      },
-      $inc: setIndicators
-    }, {
-      upsert: true
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        console.log(err);
-        callback(err, null);
-      } else {
-        console.log(doc);
-        callback(null, doc);
+    "_id": storyId,
+    "checklist._id": checklistGrpId
+  }, {
+    $pull: {
+      "checklist.$.items": {
+        "_id": itemId
       }
-    });
+    },
+    $inc: setIndicators
+  }, {
+    upsert: true
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    } else {
+      console.log(doc);
+      callback(null, doc);
+    }
+  });
 }
 
 /***
@@ -425,28 +425,28 @@ description:This function returns the index of the checklistitem
 StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
 
 
-    this.findOne({
-      "checklist.items._id": itemId
-    }, {
-      "checklist.$": 1
-    }).exec(function(err, doc) {
-      doc.checklist.forEach(function(data) {
-        data.items.forEach(function(checkItems, index) {
-          if (checkItems.id == itemId) {
-            callback(null, index);
-          }
-        })
+  this.findOne({
+    "checklist.items._id": itemId
+  }, {
+    "checklist.$": 1
+  }).exec(function(err, doc) {
+    doc.checklist.forEach(function(data) {
+      data.items.forEach(function(checkItems, index) {
+        if (checkItems.id == itemId) {
+          callback(null, index);
+        }
       })
-    });
+    })
+  });
 
-  }
+}
   /***
   authors:sharan
   function:updateChecklistItem
   parameters:storyId,checklistGrpId,itemId,item-index
   description: UpdateChecklistItem function is to update particular checklist item in each group.
   ***/
-StorySchema.statics.updateChecklistItem = function(storyId, checklistGrpId, itemId, checked, index, callback) {
+  StorySchema.statics.updateChecklistItem = function(storyId, checklistGrpId, itemId, checked, index, callback) {
 
 
     var setter = {};
@@ -462,21 +462,21 @@ StorySchema.statics.updateChecklistItem = function(storyId, checklistGrpId, item
       setIndicators["checklist.$.checkedCount"] = -1;
     }
     this.update({
-        "checklist.items._id": itemId
-      }, {
-        $set: setter,
-        $inc: setIndicators
-      }, {
-        upsert: true
-      })
-      .exec(function(err, doc) {
-        if (err) {
-          callback(err, null);
-        } else {
-          console.log("checking item --------------->",doc);
-          callback(null, doc);
-        }
-      });
+      "checklist.items._id": itemId
+    }, {
+      $set: setter,
+      $inc: setIndicators
+    }, {
+      upsert: true
+    })
+    .exec(function(err, doc) {
+      if (err) {
+        callback(err, null);
+      } else {
+        console.log("checking item --------------->",doc);
+        callback(null, doc);
+      }
+    });
   }
   /////
 
@@ -532,22 +532,33 @@ StorySchema.statics.addMemberToChecklist=function(data,callback)
 console.log("----------printig story-------------");
 
 this.findOne({
-  "_id": data.storyId
+ "_id": data.storyId
 }).exec(function(err, story) {
-  story.checklist.filter(function(checkList)
-  {
+ story.checklist.filter(function(checkList)
+ {
 
-    if(checkList._id==data.checkListId)
-  checkList.items.filter(function(item)
-{
-  if(item._id==data.listItem._id)
-    {
-      item.assignedMember=data.assignedMember;
-    }
-});
-  });
-story.save();
-console.log("after storing into database--->");
+   if(checkList._id==data.checkListId)
+     checkList.items.filter(function(item)
+     {
+       if(item._id==data.listItem._id)
+       {
+         item.assignedMember=data.assignedMember;
+       }
+     });
+ });
+ story.save(function(err,doc){
+   if(!err){
+     Story.findStory(doc._id,function(err,storyData){
+       if(!err){
+         callback(null,storyData);
+       }
+       else {
+         callback(err,null);
+       }
+     })
+   }
+   else callback(err,null)
+ });
 });
 }
 
@@ -559,26 +570,26 @@ addChecklistGroup function is to add new checklist group to the story.
 
 StorySchema.statics.addChecklistGroup = function(storyId, checklistObj, callback) {
   this.findOneAndUpdate({
-      "_id": storyId
-    }, {
-      $push: {
-        checklist: {
-          checklistHeading: checklistObj['checklistHeading'],
-          checkedCount: checklistObj['checkedCount'],
-          items: checklistObj['items']
-        }
+    "_id": storyId
+  }, {
+    $push: {
+      checklist: {
+        checklistHeading: checklistObj['checklistHeading'],
+        checkedCount: checklistObj['checkedCount'],
+        items: checklistObj['items']
       }
-    }, {
-      upsert: true,
-      new: true
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, doc);
-      }
-    });
+    }
+  }, {
+    upsert: true,
+    new: true
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
 }
 
 /***
@@ -587,21 +598,21 @@ removeChecklistGroup function is to remove checklist group from the story.
 StorySchema.statics.removeChecklistGroup = function(storyId, checklistgroupId, callback) {
   //TODO: write function to delete particular item or check particular item
   this.update({
-      "_id": storyId
-    }, {
-      $pull: {
-        checklist: {
-          _id: checklistgroupId
-        }
+    "_id": storyId
+  }, {
+    $pull: {
+      checklist: {
+        _id: checklistgroupId
       }
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, doc);
-      }
-    });
+    }
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
 }
 
 
@@ -611,41 +622,41 @@ updateLabelList function is used to Add and Delete a label reference in a story.
 StorySchema.statics.updateLabelList = function(storyId, labelListId, operation, callback) {
   switch (operation) {
     case "add":
-      this.update({
-          "_id": storyId
-        }, {
-          $push: {
-            labelList: labelListId
-          }
-        }, {
-          upsert: true
-        })
-        .exec(function(err, doc) {
-          if (err) {
-            callback(err, null);
-          } else {
-            callback(null, doc);
-          }
-        });
-      break;
+    this.update({
+      "_id": storyId
+    }, {
+      $push: {
+        labelList: labelListId
+      }
+    }, {
+      upsert: true
+    })
+    .exec(function(err, doc) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+    break;
     case "remove":
-      this.update({
-          "_id": storyId
-        }, {
-          $pull: {
-            labelList: {
-              $in: [labelListId]
-            }
-          }
-        })
-        .exec(function(err, doc) {
-          if (err) {
-            callback(err, null);
-          } else {
-            callback(null, doc);
-          }
-        });
-      break;
+    this.update({
+      "_id": storyId
+    }, {
+      $pull: {
+        labelList: {
+          $in: [labelListId]
+        }
+      }
+    })
+    .exec(function(err, doc) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+    break;
   }
 }
 
@@ -658,16 +669,16 @@ Need to relook into this based on future implementation.
 StorySchema.statics.deleteStory = function(storyId, callback) {
   console.log("-------------------------------deleting Story: " + storyId);
   this.remove({
-      "_id": storyId
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
-        console.log("-------------------------Deleted Story");
-        callback(null, doc);
-      }
-    });
+    "_id": storyId
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      console.log("-------------------------Deleted Story");
+      callback(null, doc);
+    }
+  });
 }
 
 StorySchema.statics.saveDescription = function(storyId, Desc, callback) {
@@ -698,25 +709,25 @@ StorySchema.statics.addComment = function(storyId, commentsObj, callback) {
   console.log("add comments" + storyId);
   console.log(commentsObj);
   this.findOneAndUpdate({
-      "_id": storyId
-    }, {
-      $push: {
-        "comments": commentsObj
+    "_id": storyId
+  }, {
+    $push: {
+      "comments": commentsObj
 
-      }
-    }, {
-      upsert: true,
-      new: true
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        console.log(err);
-        callback(err, null);
-      } else {
-        console.log(doc);
-        callback(null, doc);
-      }
-    });
+    }
+  }, {
+    upsert: true,
+    new: true
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      console.log(err);
+      callback(err, null);
+    } else {
+      console.log(doc);
+      callback(null, doc);
+    }
+  });
 }
 
 /***
@@ -726,23 +737,23 @@ deleteComment function is to add new comments to the story.
 StorySchema.statics.deleteComment = function(storyId, commentId, callback) {
 
   this.findOneAndUpdate({
-      "_id": storyId
-    }, {
-      $pull: {
-        comments: {
-          _id: commentId
-        }
+    "_id": storyId
+  }, {
+    $pull: {
+      comments: {
+        _id: commentId
       }
-    }, {
-      new: true
-    })
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, doc);
-      }
-    });
+    }
+  }, {
+    new: true
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
 }
 
 StorySchema.statics.getStory = function(storyId, callback) {
@@ -755,7 +766,7 @@ StorySchema.statics.getStory = function(storyId, callback) {
     else {
       callback(null, doc);
     }
-   });
+  });
 }
 
 var Story = mongoose.model('Story', StorySchema, 'Stories');

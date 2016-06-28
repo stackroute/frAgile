@@ -7,7 +7,8 @@
         .component('mycard', {
         bindings: {
           task: '<',
-          addMember:'&'
+          addMember:'&',
+          removeTask:'&'
 
         },
         controller: mycardCtrl,
@@ -24,7 +25,11 @@
     });
 
 function mycardCtrl ($scope) {
-
+    $scope.date = moment();
+    var aFunction = function(){
+     var newDate = moment(this.task.dueDate);
+     $scope.date = newDate;
+}
   var ctrl=this;
   console.log("hello",this.task.dueDate);
    $scope.myDate = new Date(this.task.dueDate);
@@ -37,17 +42,16 @@ function mycardCtrl ($scope) {
       $scope.myDate.getMonth() + 2,
       $scope.myDate.getDate());
 
-    function alertMe(){
-      alert("This is a alert");
-    }
     this.addMemberComp=function(obj)
     { 
-      console.log("hoooollalla");
-      // console.log("its worfnekiu",obj);
+      // console.log("hoooollalla");
+      // // console.log("its worfnekiu",obj);
         ctrl.addMember(obj)
     }
-        
-        }
+    this.removeTaskComp=function(obj){
+      ctrl.removeTask(obj);
+    }
+  }
 //end of task
 
 

@@ -356,14 +356,12 @@ if (!err) {
     socket.on('story:addRemoveMembersListItem',function(data){
       console.log("i received something----->",data.assignedMember);
     console.log("assignedMember array --->",data.assignedMember);
+    io.to(data.roomName).emit('memberAdded',data);
      Story.addMemberToChecklist(data,function(err,doc)
    {
-     console.log("im in story.io");
-     console.log("i have reached here",doc);
-      console.log("item details ==>",data.storyId,data.checkListId);
-      console.log("Data member in server: ",data.memberObj);
+    io.to(data.roomName).emit("story:getStory",doc);
       })
-      io.to(data.roomName).emit('memberAdded',data);
+      
     });
     //end new
     //start

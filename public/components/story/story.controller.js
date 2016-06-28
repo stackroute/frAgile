@@ -101,28 +101,28 @@ $scope.memberArrayIndex=[];
   $scope.myuser=[{member:"NK"},{member:"MK"},{member:"KK"}];
 
     //start
-      $scope.assignedMember=[];//temp assinged member
-      socket.on('memberAdded',function(data){
+      // $scope.assignedMember=[];//temp assinged member
+      // socket.on('memberAdded',function(data){
 
-          if($scope.memberArrayIndex.indexOf(obj.itemId)!=-1)
-          {
-            // modifying memberArray after member added to/deleted from an item.
-            $scope.memberArray[$scope.memberArrayIndex.indexOf(obj.itemId)]["arrayOfMembers"]=data.assignedMember;
-          }
-            // $scope.memberArray.filter(function(obj)
-            // {
-            //   if(obj.itemId == data.listItem._id)
-            //   {
-            //     $scope.memberArray[memberArrayIndex.indexOf(obj.itemId)]["arrayOfMembers"]=data.assignedMember;
-            //     console.log("im in contrller to add member",memberArray,memberArrayIndex);
-            //     //obj["arrayOfMembers"]=data.assignedMember;
-            //   }
-            // })
-          // console.log("after member added",data.listItem.assignedMember);
-          //   flag=1;
-          // localData=data;
-          //console.log("member added into array ",data.listItem.assignedMember,data.listItem._id);
-       });
+      //     if($scope.memberArrayIndex.indexOf(obj.itemId)!=-1)
+      //     {
+      //       // modifying memberArray after member added to/deleted from an item.
+      //       $scope.memberArray[$scope.memberArrayIndex.indexOf(obj.itemId)]["arrayOfMembers"]=data.assignedMember;
+      //     }
+      //       // $scope.memberArray.filter(function(obj)
+      //       // {
+      //       //   if(obj.itemId == data.listItem._id)
+      //       //   {
+      //       //     $scope.memberArray[memberArrayIndex.indexOf(obj.itemId)]["arrayOfMembers"]=data.assignedMember;
+      //       //     console.log("im in contrller to add member",memberArray,memberArrayIndex);
+      //       //     //obj["arrayOfMembers"]=data.assignedMember;
+      //       //   }
+      //       // })
+      //     // console.log("after member added",data.listItem.assignedMember);
+      //     //   flag=1;
+      //     // localData=data;
+      //     //console.log("member added into array ",data.listItem.assignedMember,data.listItem._id);
+      //  });
   //ends
 
 //while loading the story page,setting memberArray with itemids and assignedMember
@@ -510,7 +510,11 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
       'user':$rootScope.userProfile
     });
   };
-
+        $scope.mydueDate = moment();//for datepicker
+        var aFunction = function(){
+             var newDate = moment(timestamp);
+             $scope.mydueDate = newDate;
+        }
   $scope.remaining = function(list, todo) {
 
     //Todo need to update this function
@@ -571,24 +575,28 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
     //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
 
+      if(data._id==$scope.storyData._id)
       socket.emit("story:findStory",{"storyId":$scope.storyData._id,"roomName":$scope.roomName});
-      socket.on("story:getStory",function(story)
-    {
-      if(story._id==$scope.storyData._id)
-      {
-        story.memberList.forEach(function(storyItem) {
-          storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
-          $scope.storyData = story;
-          $scope.fetchMemberDetails();
-        })
-    }
-  });
+      
 
       console.log("im here to modify");
         // this is to set memberArray after item added/deleted.
       ///
 
     })
+
+
+  socket.on("story:getStory",function(story)
+    {
+      if(story._id==$scope.storyData._id)
+      {
+        story.memberList.forEach(function(storyItem) {
+          storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
+        })
+        $scope.storyData = story;
+          $scope.fetchMemberDetails();
+    }
+  });
 
 }])
 
