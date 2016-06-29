@@ -497,19 +497,20 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   $scope.updateTodoItem = function(listItem, checklistGrp) {
 
     //todo.items.push({"text":todo.todoText,"done":false})
-    console.log("In list item : ",listItem)
+    alert("its working");
     socket.emit('story:updateChecklistItem', {
-
-      'room': $scope.roomName,
-      'storyid': $scope.storyData._id,
-      'checklistGrpId': checklistGrp._id,
+       'room': $scope.roomName,
+       'storyid': $scope.storyData._id,
+       'checklistGrpId': checklistGrp._id,
       'itemid': listItem._id,
       'checked': listItem.checked,
       'text': listItem.text,
+      'dueDate':listItem.dueDate,
       'projectID': $scope.projectID,
       'user':$rootScope.userProfile
     });
   };
+
         $scope.mydueDate = moment();//for datepicker
         var aFunction = function(){
              var newDate = moment(timestamp);
@@ -533,16 +534,23 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   Parameters:None
   TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
   ***/
-  $scope.removeChecklistGroup = function(checklistGrpId, heading) {
+  $scope.removeChecklistGroup = function(checklist, heading) {
     //TODO:Add listner
+    var checkedCount=0;
+    checklist.items.filter(function(item)
+  {
+    if(item.checked)
+      checkedCount++;
+  });
     socket.emit('story:removeChecklistGroup', {
-
       'room': $scope.roomName,
       'storyid': $scope.storyData._id,
-      'checklistGrpId': checklistGrpId,
+      'checklistGrpId': checklist._id,
       'projectID': $scope.projectID,
       'heading': heading,
-      'user':$rootScope.userProfile
+      'user':$rootScope.userProfile,
+      'checkedCount':checkedCount,
+      'itemsLength':checklist.items.length
     });
   };
   /***
@@ -574,10 +582,9 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
     }
     //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
-
       if(data._id==$scope.storyData._id)
       socket.emit("story:findStory",{"storyId":$scope.storyData._id,"roomName":$scope.roomName});
-      
+
 
       console.log("im here to modify");
         // this is to set memberArray after item added/deleted.

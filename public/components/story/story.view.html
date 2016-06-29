@@ -128,12 +128,13 @@
       <div class="pull-left story-members">
         <h3 class="story-sub-header">Checklists  <i class="fa fa-plus story-addbutton" ng-click="addChecklist()" aria-hidden="true"></i></h3>
         <div ng-repeat="todo in storyData.checklist">
-          <span class="checklist-header" ng-mouseenter="groupHovering=true" ng-mouseleave="groupHovering=false">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo._id,todo.checklistHeading)">
+          <span class="checklist-header" ng-mouseenter="groupHovering=true" ng-mouseleave="groupHovering=false">{{todo.checklistHeading}} <small><a ng-click="removeChecklistGroup(todo,todo.checklistHeading)">
             <i class="fa fa-trash-o" ng-show="groupHovering"></i></a></small></span>
+            checked count{{todo.checkedCount +" "+todo.items.length}}
             <b class="progress-per">{{todo.items.length>0 ?((todo.checkedCount/todo.items.length*100)):0}}%</b>
             {{Math.floor((todo.checkedCount/todo.items.length*100))}}
             <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar>
-                     <mycard ng-repeat="task in todo.items" add-member="addMemberToChecklist(task)" remove-task="removeTodoItem(task,todo,task.text)" task="task"></mycard>
+                     <mycard ng-repeat="task in todo.items" check-list-id="todo._id" add-member="addMemberToChecklist(task)" edit-task="updateTodoItem(task,todo)" remove-task="removeTodoItem(task,todo,task.text)" task="task"></mycard>
 
                      <li class="checklist-todos" ng-repeat="listItem in todo.items" ng-init="addMemberObj(listItem._id)">
 
@@ -165,11 +166,11 @@
                 </md-datepicker> -->
 
                   <md-button class="md-fab md-mini md-primary md-hue-2" data-toggle="tooltip" title="Assign Member" ng-click="addMemberToChecklist(todo);">
-                  <i class="fa fa-users" aria-hidden="true"></i>     
+                  <i class="fa fa-users" aria-hidden="true"></i>
                   </md-button>
 
                   <md-button class="md-fab md-mini  md-raised md-hue-2 md-raised md-warn" data-toggle="tooltip" title="Save" type="submit">
-                  <i class="fa fa-floppy-o" aria-hidden="true"></i>     
+                  <i class="fa fa-floppy-o" aria-hidden="true"></i>
                   </md-button>
                   </md-divider>
               </form>

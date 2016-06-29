@@ -334,10 +334,11 @@ StorySchema.statics.addChecklistItem = function(storyId, checklistGrpId, itemObj
     $push: {
       "checklist.$.items": itemObj
     },
-    $inc: {
+    $inc:{
       "indicators.chklstItmsCnt": 1
     }
-  }, {
+  },
+  {
     upsert: true
   })
   .exec(function(err, doc) {
@@ -423,7 +424,6 @@ parameters:checklistItemId
 description:This function returns the index of the checklistitem
 ***/
 StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
-
 
   this.findOne({
     "checklist.items._id": itemId
@@ -595,8 +595,11 @@ StorySchema.statics.addChecklistGroup = function(storyId, checklistObj, callback
 /***
 removeChecklistGroup function is to remove checklist group from the story.
 ***/
-StorySchema.statics.removeChecklistGroup = function(storyId, checklistgroupId, callback) {
+StorySchema.statics.removeChecklistGroup = function(storyId, checklistgroupId,checkedCount,itemsLength,callback) {
   //TODO: write function to delete particular item or check particular item
+  var setIndicators={};
+  setIndicators['indicators.chklstItmsCnt']= -1*itemsLength;
+  setIndicators['indicators.chklstItmsChkdCnt']=-1*checkedCount;
   this.update({
     "_id": storyId
   }, {
@@ -604,8 +607,10 @@ StorySchema.statics.removeChecklistGroup = function(storyId, checklistgroupId, c
       checklist: {
         _id: checklistgroupId
       }
-    }
-  })
+    },
+    $inc:setIndicators
+  }
+)
   .exec(function(err, doc) {
     if (err) {
       callback(err, null);

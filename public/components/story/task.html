@@ -12,20 +12,20 @@
 						<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 					</md-button>
 					<md-button class="md-fab md-mini  md-raised md-hue-2 md-save" data-toggle="tooltip" ng-click="$ctrl.removeTaskComp(task)" title="Delete task">
-						<i class="fa fa-trash-o" aria-hidden="true"></i>		            
+						<i class="fa fa-trash-o" aria-hidden="true"></i>
 					</md-button>
 				</md-card-actions>
 					<md-toolbar style="margin-right: 0;margin-left: 5px; max-width: 280px; min-width: 100px; border-radius:5px; background-color:rgb(106,249,161)">
 				<div  >
-					
+
 					<b ng-click="showDiv = !showDiv" ng-hide="showDiv" style="color:gray">{{$ctrl.task.text}}</b>
 					 <md-input-container ng-show="showDiv" >
 				        <label style="margin-top:10px; border-radius: 5px ; background-color:yellow">Task</label>
 				        <input ng-model="$ctrl.task.text">
-				      </md-input-container> 
+				      </md-input-container>
 
 			</div>
-			<div class=" pull-right" data-toggle="tooltip" title="Due Date" style="text-align:right; margin-top:50px;border-radius:0 0 5px 5px; background-color:gray" ng-model="">	{{$ctrl.task.dueDate  | date:"dd/MM/yyyy 'at' h:mma"}} </div>
+			<div class=" pull-right" data-toggle="tooltip" title="Due Date" style="text-align:right; margin-top:50px;border-radius:0 0 5px 5px; background-color:gray">	{{$ctrl.task.dueDate  | date:"dd/MM/yyyy 'at' h:mma"}} </div>
 
 			</md-toolbar>
 		</md-card-content>
@@ -46,11 +46,11 @@
 			md-date-filter=""></md-datepicker> -->
 
 			<md-button class="md-fab md-mini md-primary md-hue-2" data-toggle="tooltip" title="Assign Member" ng-click="$ctrl.addMemberComp(task);">
-			<i class="fa fa-users" aria-hidden="true"></i>     
+			<i class="fa fa-users" aria-hidden="true"></i>
 			</md-button>
 
-			<md-button class="md-fab md-mini  md-raised md-hue-2 md-raised md-warn" data-toggle="tooltip" title="Save">
-			<i class="fa fa-floppy-o" aria-hidden="true"></i>     
+			<md-button class="md-fab md-mini  md-raised md-hue-2 md-raised md-warn" ng-click="$ctrl.editTaskComp(task,checkListId)"data-toggle="tooltip" title="Save">
+			<i class="fa fa-floppy-o" aria-hidden="true"></i>
 			</md-button>
 
 			<md-button class="md-fab md-mini  md-raised md-hue-2" data-toggle="tooltip" title="Cancel"  ng-click="showDiv = !showDiv" ><i class="fa fa-times" aria-hidden="true"></i></md-button>

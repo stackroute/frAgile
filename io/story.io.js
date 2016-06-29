@@ -310,7 +310,7 @@ if (!err) {
     description:listner to remove item to checklist group in a story
     ****/
   socket.on('story:removeChecklistGroup', function(data) {
-      Story.removeChecklistGroup(data.storyid, data.checklistGrpId, function(err, doc) {
+      Story.removeChecklistGroup(data.storyid, data.checklistGrpId,data.checkedCount,data.itemsLength,function(err, doc) {
         if (!err) {
           //user.userID
           Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
@@ -361,7 +361,6 @@ if (!err) {
    {
     io.to(data.roomName).emit("story:getStory",doc);
       })
-      
     });
     //end new
     //start
@@ -370,10 +369,8 @@ if (!err) {
     {
       //console.log("My list:",data);
     //Story.addRemoveMembersList(data,function(err,index){
-
       socket.emit('pushMemberToItem',data.assignedMember);
       //console.log("my data members: ",data.assignedMember);
-
 
     });
     //end
