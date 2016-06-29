@@ -1,0 +1,23 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" ng-click="cancel()">&times;</button>
+  <h4 class="modal-title">View Issues for linked Repository</h4>
+</div>
+<div class="modal-body">
+
+  <div class="form-group" ng-if="issues.length!=0">
+    <h3>selected. <h3>
+  <div ng-repeat="issue in selected">
+    <label>
+      <input id={{issue.id}} type="checkbox" name="" value="{{issue.id}}" ng-click="toggleSelection(issue)" >
+      {{issue.title}}
+
+    </label><br/>
+
+  </div>
+</div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="cancel()">Close</button>
+  <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="createStory()" >Create Story</button>
+
+</div>
