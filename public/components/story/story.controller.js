@@ -230,7 +230,24 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   ***/
   $scope.removeMember = function(memberId, fullName) {
     //working,tested
-    socket.emit('story:removeMembers', {
+    var numberOfTasks=0;
+    var message='';
+    $scope.memberArray.filter(function(obj)
+  {
+    obj.arrayOfMembers.filter(function(member)
+  {
+    if(member._id==memberId)
+    numberOfTasks++;
+  })
+  })
+  if(numberOfTasks>0)
+  message=fullName.toUpperCase()+' '+"has been assigned to"+' '+numberOfTasks+' '+"tasks"+'\n'+"you wanna remove";
+  else
+  message="are you sure?";
+
+  var result=confirm(message)
+  if(result)
+  socket.emit('story:removeMembers', {
 
       'room': $scope.roomName,
       'storyid': storyContr.storyData._id,

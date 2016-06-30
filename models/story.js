@@ -213,10 +213,6 @@ the story.**/
 //modifying removing member
 StorySchema.statics.removeMembers = function(storyId, memberId, callback)
 {
-//console.log("im in story model -->",data);
-
-console.log("----------printig story-------------");
-
 this.findOne({
  "_id": storyId
 }).exec(function(err, story) {
@@ -255,7 +251,6 @@ StorySchema.statics.removeLabel = function(storyId,labelId, callback) {
       upsert: true,
       new:true
     }
-
     )
   .exec(function(err , doc) {
    if (err) {
