@@ -53,12 +53,6 @@ function mycardCtrl ($scope) {
     this.removeTaskComp=function(obj){
       ctrl.removeTask(obj);
     }
-    // this.editTaskComp=function(checkListId,taskObject)
-    // {
-    //   console.log("after update",checkListId,taskObject);
-    //   ctrl.updateTodoItem(taskObject,{"_id":checkListId});
-
-    // }
     this.updateTodoItemComp=function(task){
       console.log("in component",task);
       ctrl.updateTodo(task);

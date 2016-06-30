@@ -125,15 +125,13 @@ if (!err) {
   description:listner to remove members from story
   ****/
   socket.on('story:removeMembers', function(data) {
-    Story.removeMembers(data.storyid, data.memberid, function(err, doc) {
-      if (!err) {
-        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+    Story.removeMembers(data.storyid, data.memberid, function(err, storyData) {
           if (!err) {
             io.to(data.room).emit('story:dataModified', storyData);
             console.log("Im in remove");
             var members = {
               _id: storyData._id,
-              memberList: doc.memberList
+              memberList: storyData.memberList
             }
             io.to(data.room).emit('story:membersModified', members);
 
@@ -156,8 +154,6 @@ if (!err) {
             Activity.addEvent(actData, function(data) {
               io.to(actData.room).emit('activityAdded', data);
             });
-          }
-        });
       }
     })
   })
@@ -378,7 +374,7 @@ if (!err) {
     description:listner to update item to checklist group in a story
 
     ****/
-    
+
   socket.on('story:updateChecklistItem', function(data) {
 
 

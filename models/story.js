@@ -209,27 +209,42 @@ StorySchema.statics.addStory = function(story, callback) {
 
 /*** removeMembers function is used to remove the members from
 the story.**/
-StorySchema.statics.removeMembers = function(storyId, membersId, callback) {
-  this.findOneAndUpdate({
-    "_id": storyId
-  }, {
-    $pull: {
-      memberList: membersId
-    }
-  }, {
-    upsert: true,
-    new: true
-  }
 
-  )
-  .exec(function(err, doc) {
-    if (err) {
-      callback(err, null);
-    } else {
-      callback(null, doc);
-    }
-  });
+//modifying removing member
+StorySchema.statics.removeMembers = function(storyId, memberId, callback)
+{
+//console.log("im in story model -->",data);
+
+console.log("----------printig story-------------");
+
+this.findOne({
+ "_id": storyId
+}).exec(function(err, story) {
+story.memberList.splice(story.memberList.indexOf(memberId),1);
+ story.checklist.filter(function(checkList)
+ {
+     checkList.items.filter(function(item)
+     {
+       if(item.assignedMember.indexOf(memberId)!=-1)
+       item.assignedMember.splice(item.assignedMember.indexOf(memberId),1);
+     });
+ });
+ story.save(function(err,doc){
+   if(!err){
+     Story.findStory(doc._id,function(err,storyData){
+       if(!err){
+         callback(null,storyData);
+       }
+       else {
+         callback(err,null);
+       }
+     })
+   }
+   else callback(err,null)
+ });
+});
 }
+
 /*** removeLabel function is used to remove the labels from
 the story.**/
 StorySchema.statics.removeLabel = function(storyId,labelId, callback) {

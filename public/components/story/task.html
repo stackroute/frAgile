@@ -1,4 +1,5 @@
 <!-- start -->
+
 <div layout="row" layout-wrap> <!-- may have to remove -->
 	<md-content class="" layout-xs="column" layout="row" layout-wrap>
 
@@ -20,7 +21,7 @@
 					<md-toolbar style="margin-right: 0;margin-left: 5px; max-width: 280px; min-width: 280px; border-radius:5px; background-color:rgb(106,249,161)">
 				<div  >
 
-					
+
 					<span class="md-headline" ng-click="showDiv = !showDiv" ng-hide="showDiv" style="color:gray">{{$ctrl.task.text}}</span>
 					 <md-input-container ng-show="showDiv" >
 				        <label style="margin-top:10px; border-radius: 5px ; background-color:rgb(106,249,161)">Task</label>
@@ -34,9 +35,9 @@
 			</md-toolbar>
 		</md-card-content>
 		<md-divider  layout="row" >
-			<div ng-repeat="member in $ctrl.task.assignedMember">
+			<div ng-repeat="member in $ctrl.task.assignedMember" ng-init="fullName=member.firstName+' '+member.lastName">
 			  <div class="avatar-wrapper" ng-show="member.photo == undefined">
-              <ng-letter-avatar data={{member.firstName+member.lastName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px" ></ng-letter-avatar>
+              <ng-letter-avatar data ={{fullName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px" ></ng-letter-avatar>
             </div>
 	       </div>
 
