@@ -7,10 +7,11 @@
         .component('mycard', {
         bindings: {
           checkListId:'<',
-          task: '<',
+          task:'<',
           addMember:'&',
           removeTask:'&',
-          editTask:'&'
+          editTask:'&',
+          updateTodo:'&'
 
         },
         controller: mycardCtrl,
@@ -20,11 +21,11 @@
 
 //end of angular
 
- app.run(function(editableOptions,editableThemes) {  editableOptions.theme = 'bs3';
+ // app.run(function(editableOptions,editableThemes) {  editableOptions.theme = 'bs3';
 
-      editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" ng-click="updateTodoItem(listItem,todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>';
-    // bootstrap3 theme. Can be also 'bs2', 'default'
-    });
+ //      editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" ng-click="updateTodoItem(listItem,todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>';
+ //    // bootstrap3 theme. Can be also 'bs2', 'default'
+ //    });
 
 function mycardCtrl ($scope) {
     $scope.date = moment();
@@ -53,11 +54,15 @@ function mycardCtrl ($scope) {
     this.removeTaskComp=function(obj){
       ctrl.removeTask(obj);
     }
-    this.editTaskComp=function(checkListId,taskObject)
-    {
-      console.log("after update",checkListId,taskObject);
-      ctrl.updateTodoItem(taskObject,{"_id":checkListId});
+    // this.editTaskComp=function(checkListId,taskObject)
+    // {
+    //   console.log("after update",checkListId,taskObject);
+    //   ctrl.updateTodoItem(taskObject,{"_id":checkListId});
 
+    // }
+    this.updateTodoItemComp=function(task,checkListId){
+      console.log("in component",task,checkListId);
+      ctrl.updateTodo(task,checkListId);
     }
   }
 //end of task

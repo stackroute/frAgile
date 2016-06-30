@@ -378,6 +378,7 @@ if (!err) {
     description:listner to update item to checklist group in a story
 
     ****/
+    
   socket.on('story:updateChecklistItem', function(data) {
 
 

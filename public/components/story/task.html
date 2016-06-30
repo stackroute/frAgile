@@ -6,40 +6,44 @@
 			<md-card-content layout="row"  >
 
 				<md-card-actions layout="column">
-					<md-checkbox class="md-icon-button" ng-model="$ctrl.task.checked"data-toggle="tooltip" title="Mark as Done" >
+					<md-checkbox class="md-icon-button" ng-model="$ctrl.task.checked"
+					data-toggle="tooltip" title="Mark as Done" ng-click="$ctrl.updateTodoItemComp($ctrl.task,$ctrl.checkListId)" >
 					</md-checkbox>
 					<md-button class="md-fab md-mini  md-raised md-hue-2"  ng-click="showDiv = !showDiv" data-toggle="tooltip" title="Edit Task" >
 						<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 					</md-button>
+
 					<md-button class="md-fab md-mini  md-raised md-hue-2 md-save" data-toggle="tooltip" ng-click="$ctrl.removeTaskComp(task)" title="Delete task">
 						<i class="fa fa-trash-o" aria-hidden="true"></i>
 					</md-button>
 				</md-card-actions>
-					<md-toolbar style="margin-right: 0;margin-left: 5px; max-width: 280px; min-width: 100px; border-radius:5px; background-color:rgb(106,249,161)">
+					<md-toolbar style="margin-right: 0;margin-left: 5px; max-width: 280px; min-width: 280px; border-radius:5px; background-color:rgb(106,249,161)">
 				<div  >
 
-					<b ng-click="showDiv = !showDiv" ng-hide="showDiv" style="color:gray">{{$ctrl.task.text}}</b>
+					
+					<span class="md-headline" ng-click="showDiv = !showDiv" ng-hide="showDiv" style="color:gray">{{$ctrl.task.text}}</span>
 					 <md-input-container ng-show="showDiv" >
-				        <label style="margin-top:10px; border-radius: 5px ; background-color:yellow">Task</label>
+				        <label style="margin-top:10px; border-radius: 5px ; background-color:rgb(106,249,161)">Task</label>
 				        <input ng-model="$ctrl.task.text">
 				      </md-input-container>
 
 			</div>
-			<div class=" pull-right" data-toggle="tooltip" title="Due Date" style="text-align:right; margin-top:50px;border-radius:0 0 5px 5px; background-color:gray">	{{$ctrl.task.dueDate  | date:"dd/MM/yyyy 'at' h:mma"}} </div>
+
+			<div class=" pull-right" data-toggle="tooltip" title="Due Date" style="text-align:right; margin-top:90px;border-radius:0 0 5px 5px; background-color:gray" >	<span>Due Date:</span>{{$ctrl.task.dueDate  | date:"dd/MM/yyyy"}} </div>
 
 			</md-toolbar>
 		</md-card-content>
 		<md-divider  layout="row" >
 			<div ng-repeat="member in $ctrl.task.assignedMember">
 			  <div class="avatar-wrapper" ng-show="member.photo == undefined">
-              <ng-letter-avatar data={{member.firstName+member.lastName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+              <ng-letter-avatar data={{member.firstName+member.lastName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px" ></ng-letter-avatar>
             </div>
 	       </div>
 
 		</md-divider>
 		<md-divider layout="row"  ng-show="showDiv" >
 
-			<input type="date" data-toggle="tooltip" title="Due Date" class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="inputDate" ng-model="myDate" date-parser="dd.MM.yyyy" aria-invalid="false">
+			<input type="date" data-toggle="tooltip" title="Due Date" class="form-control ng-pristine ng-untouched ng-valid ng-empty" id="inputDate" ng-model="myDate" date-parser="dd.MM.yyyy" aria-invalid="false" >
 
 			<!-- <md-datepicker data-toggle="tooltip" title="Due Date" ng-model="myDate" md-placeholder="Enter date"
 			md-min-date="minDate" md-max-date="maxDate"
@@ -60,4 +64,5 @@
 
 
 </md-content>
+{{$ctrl.task|json}}
 </div>

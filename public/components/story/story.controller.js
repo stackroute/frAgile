@@ -87,6 +87,32 @@ var localData={};
     console.log("complexDataObject --->",storyContr.complexDataObject);
   };
 
+  //for toggling the selection of member while creating new task
+  $scope.toggleMember=function(newMember,task){
+    var result=0;
+    var index=0;
+    var hold=0;
+    task.assignedMember.filter(function(obj)
+      {
+          if(obj._id==newMember._id)
+          {
+              result=1;
+              hold=index;
+          }
+            index++;
+      });
+    if(result==1)
+    {
+      task.assignedMember.splice(hold,1);
+    }
+    else
+    {
+      task.assignedMember.push(newMember);
+    }
+
+    }
+  //for toggling the selection of member while creating new task Ends
+
 var flag=0;
 localData=[];
 $scope.memberArray=[];
@@ -97,33 +123,6 @@ $scope.memberArrayIndex=[];
   parameters:none
   description:This function is used to add members to checklist
   ***/
-  //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
-  $scope.myuser=[{member:"NK"},{member:"MK"},{member:"KK"}];
-
-    //start
-      // $scope.assignedMember=[];//temp assinged member
-      // socket.on('memberAdded',function(data){
-
-      //     if($scope.memberArrayIndex.indexOf(obj.itemId)!=-1)
-      //     {
-      //       // modifying memberArray after member added to/deleted from an item.
-      //       $scope.memberArray[$scope.memberArrayIndex.indexOf(obj.itemId)]["arrayOfMembers"]=data.assignedMember;
-      //     }
-      //       // $scope.memberArray.filter(function(obj)
-      //       // {
-      //       //   if(obj.itemId == data.listItem._id)
-      //       //   {
-      //       //     $scope.memberArray[memberArrayIndex.indexOf(obj.itemId)]["arrayOfMembers"]=data.assignedMember;
-      //       //     console.log("im in contrller to add member",memberArray,memberArrayIndex);
-      //       //     //obj["arrayOfMembers"]=data.assignedMember;
-      //       //   }
-      //       // })
-      //     // console.log("after member added",data.listItem.assignedMember);
-      //     //   flag=1;
-      //     // localData=data;
-      //     //console.log("member added into array ",data.listItem.assignedMember,data.listItem._id);
-      //  });
-  //ends
 
 //while loading the story page,setting memberArray with itemids and assignedMember
 $scope.fetchMemberDetails=function()
@@ -434,8 +433,8 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
       text: todo.todoText,
       checked: false,
       creationDate: Date.now(),
-      dueDate:Date.now(),
-      assignedMember:assignedMember
+      dueDate:todo.dueDate,
+      assignedMember:todo.assignedMember
     };
 
 
@@ -494,14 +493,15 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
 
   }
 
-  $scope.updateTodoItem = function(listItem, checklistGrp) {
+  $scope.updateTodoItem = function(listItem, checkListId) {
 
     //todo.items.push({"text":todo.todoText,"done":false})
-    alert("its working");
+ 
+  console.log("in controller",listItem.checked,"after");
     socket.emit('story:updateChecklistItem', {
        'room': $scope.roomName,
        'storyid': $scope.storyData._id,
-       'checklistGrpId': checklistGrp._id,
+       'checklistGrpId': checkListId,
       'itemid': listItem._id,
       'checked': listItem.checked,
       'text': listItem.text,
