@@ -461,7 +461,7 @@ StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
   parameters:storyId,checklistGrpId,itemId,item-index
   description: UpdateChecklistItem function is to update particular checklist item in each group.
   ***/
-  StorySchema.statics.updateChecklistItem = function(storyId, checklistGrpId, itemId, checked, index, callback) {
+  StorySchema.statics.updateChecklistItem = function(storyId, checklistGrpId,operation,itemId, checked,text,dueDate, index, callback) {
 
 
     var setter = {};
@@ -469,12 +469,19 @@ StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
 
     //setter index is required because we cant iterate and set values directly 3 levels down using $ operator in MongoDB
     setter["checklist.$.items." + index + ".checked"] = checked;
+    setter["checklist.$.items." + index + ".text"]=text;
+    setter["checklist.$.items." + index + ".dueDate"]=dueDate;
+    console.log("operation value -------------->",operation);
+    if(operation==='check')
+    {
+      console.log("im inside check");
     if (checked) {
       setIndicators["indicators.chklstItmsChkdCnt"] = 1;
       setIndicators["checklist.$.checkedCount"] = 1;
     } else {
       setIndicators["indicators.chklstItmsChkdCnt"] = -1;
       setIndicators["checklist.$.checkedCount"] = -1;
+    }
     }
     this.update({
       "checklist.items._id": itemId

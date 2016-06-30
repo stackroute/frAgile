@@ -394,7 +394,7 @@ console.log("im coming insdie", data);
 
    Story.getCheckItemIndex(data.itemid, function(err, index) {
       if (index !=-1)
-        Story.updateChecklistItem(data.storyid, data.checklistGrpId, data.itemid, data.checked, index, function(err, doc) {
+        Story.updateChecklistItem(data.storyid, data.checklistGrpId,data.operation,data.itemid, data.checked,data.text,data.dueDate, index, function(err, doc) {
           if (!err) {
             //user.userID
             Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {

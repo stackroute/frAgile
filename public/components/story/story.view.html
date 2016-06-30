@@ -135,7 +135,7 @@
             {{Math.floor((todo.checkedCount/todo.items.length*100))}}
             <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar>
 
-            <mycard ng-repeat="task in todo.items" add-member="addMemberToChecklist(task)" remove-task="removeTodoItem(task,todo,task.text)" check-list-id="todo._id" update-todo="updateTodoItem(task,todo)" task="task"></mycard>
+            <mycard ng-repeat="task in todo.items" add-member="addMemberToChecklist(task)" remove-task="removeTodoItem(task,todo,task.text)" check-list-id="todo._id" item-operation="operation" update-todo="updateTodoItem(task,todo,operation)" task="task" checklistid="todo._id"></mycard>
              <!-- add new task -->
            <!--   <li class="checklist-todos" ng-repeat="listItem in todo.items" ng-init="addMemberObj(listItem._id)">
 

@@ -6,7 +6,9 @@
 
         .component('mycard', {
         bindings: {
+          itemOperation:'<',
           task:'<',
+          checklistid:'<',
           addMember:'&',
           removeTask:'&',
           editTask:'&',
@@ -53,9 +55,15 @@ function mycardCtrl ($scope) {
     this.removeTaskComp=function(obj){
       ctrl.removeTask(obj);
     }
-    this.updateTodoItemComp=function(task){
-      console.log("in component",task);
-      ctrl.updateTodo(task);
+    var op=ctrl.itemOperation;
+    this.updateTodoItemComp=function(task,checklistid,operation){
+      ctrl.itemOperation=operation;
+      ctrl.checklistid=checklistid;
+      console.log("check date    ",$scope.myDate)
+      if($scope.myDate!=null && $scope.myDate==undefined)
+        task.dueDate=$scope.myDate;
+      console.log("in component",ctrl.checklistid,ctrl.itemOperation);
+      ctrl.updateTodo({task:task,todo:checklistid,operation:operation});
     }
   }
 //end of task
