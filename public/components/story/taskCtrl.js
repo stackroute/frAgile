@@ -59,10 +59,8 @@ function mycardCtrl ($scope) {
     this.updateTodoItemComp=function(task,checklistid,operation){
       ctrl.itemOperation=operation;
       ctrl.checklistid=checklistid;
-      console.log("check date    ",$scope.myDate)
-      if($scope.myDate!=null && $scope.myDate==undefined)
+      if($scope.myDate!=null && $scope.myDate!=undefined)
         task.dueDate=$scope.myDate;
-      console.log("in component",ctrl.checklistid,ctrl.itemOperation);
       ctrl.updateTodo({task:task,todo:checklistid,operation:operation});
     }
   }

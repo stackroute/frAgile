@@ -456,45 +456,88 @@ StorySchema.statics.getCheckItemIndex = function(itemId, callback) {
   parameters:storyId,checklistGrpId,itemId,item-index
   description: UpdateChecklistItem function is to update particular checklist item in each group.
   ***/
-  StorySchema.statics.updateChecklistItem = function(storyId, checklistGrpId,operation,itemId, checked,text,dueDate, index, callback) {
+  StorySchema.statics.updateChecklistItem = function(storyId,checklistGrpId,operation,itemId, checked,text,dueDate,callback) {
 
-
-    var setter = {};
-    var setIndicators = {};
-
-    //setter index is required because we cant iterate and set values directly 3 levels down using $ operator in MongoDB
-    setter["checklist.$.items." + index + ".checked"] = checked;
-    setter["checklist.$.items." + index + ".text"]=text;
-    setter["checklist.$.items." + index + ".dueDate"]=dueDate;
-    console.log("operation value -------------->",operation);
-    if(operation==='check')
+      this.findOne({
+          "_id":storyId
+      }).exec(function(err,story)
     {
-      console.log("im inside check");
-    if (checked) {
-      setIndicators["indicators.chklstItmsChkdCnt"] = 1;
-      setIndicators["checklist.$.checkedCount"] = 1;
-    } else {
-      setIndicators["indicators.chklstItmsChkdCnt"] = -1;
-      setIndicators["checklist.$.checkedCount"] = -1;
-    }
-    }
-    this.update({
-      "checklist.items._id": itemId
-    }, {
-      $set: setter,
-      $inc: setIndicators
-    }, {
-      upsert: true
+      story.checklist.filter(function(checklist)
+    {
+      checklist.items.filter(function(item)
+    {
+      if(item._id==itemId)
+      {
+        if(operation=='check')
+            {
+              if (checked) {
+                story.indicators.chklstItmsChkdCnt++;
+                checklist.checkedCount++;
+              } else {
+                story.indicators.chklstItmsChkdCnt--;
+                checklist.checkedCount--;
+              }
+            }
+            item.text=text;
+            item.dueDate=dueDate;
+            item.checked=checked;
+          }
+      })
     })
-    .exec(function(err, doc) {
-      if (err) {
-        callback(err, null);
-      } else {
-        console.log("checking item --------------->",doc);
-        callback(null, doc);
+    story.save(function(err,doc){
+      if(!err){
+        Story.findStory(doc._id,function(err,storyData){
+          if(!err){
+            callback(null,storyData);
+          }
+          else {
+            callback(err,null);
+          }
+        })
       }
+      else callback(err,null)
     });
+    })
   }
+
+  //   var setter = {};
+  //   var setIndicators = {};
+  //
+  //   //setter index is required because we cant iterate and set values directly 3 levels down using $ operator in MongoDB
+  //   setter["checklist.$.items." + index + ".checked"] = checked;
+  //   setter["checklist.$.items." + index + ".text"]=text;
+  //   setter["checklist.$.items." + index + ".dueDate"]=dueDate;
+  //   console.log("operation value -------------->",operation);
+  //   console.log("text value------------------->",text);
+  //   console.log("text value------------------->",dueDate);
+  //   if(operation=='check')
+  //   {
+  //     console.log("im inside check");
+  //   if (checked) {
+  //     setIndicators["indicators.chklstItmsChkdCnt"] = 1;
+  //     setIndicators["checklist.$.checkedCount"] = 1;
+  //   } else {
+  //     setIndicators["indicators.chklstItmsChkdCnt"] = -1;
+  //     setIndicators["checklist.$.checkedCount"] = -1;
+  //   }
+  //   }
+  //   this.update({
+  //     "checklist.items._id": itemId
+  //   }, {
+  //     $set: setter,
+  //     $inc: setIndicators
+  //   }, {
+  //     upsert: true
+  //   })
+  //   .exec(function(err, doc) {
+  //     if (err) {
+  //       callback(err, null);
+  //     } else {
+  //       console.log("checking item --------------->",doc);
+  //       callback(null, doc);
+  //     }
+  //   });
+  // }
   /////
 
 

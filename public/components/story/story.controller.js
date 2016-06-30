@@ -1,8 +1,8 @@
-// fragileApp.run(function(editableOptions,editableThemes) {  editableOptions.theme = 'bs3';
+fragileApp.run(function(editableOptions,editableThemes) {  editableOptions.theme = 'bs3';
 
-// editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" ng-click="updateTodoItem(listItem,todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>';
-// // bootstrap3 theme. Can be also 'bs2', 'default'
-// });
+editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" ng-click="updateTodoItem(listItem,todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="addMemberToChecklist(listItem)">...</button>';
+// bootstrap3 theme. Can be also 'bs2', 'default'
+});
 
 fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window) {
   var socket = Socket($scope);
@@ -510,20 +510,19 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
 
   }
 
-$scope.operation='';
   $scope.updateTodoItem = function(listItem, checkListId,operation) {
 
     //todo.items.push({"text":todo.todoText,"done":false})
-
-console.log("in controller",listItem,"operation: ",operation);
+console.log("new data",listItem.text,listItem.dueDate);
+console.log("in controller",listItem.checked);
     socket.emit('story:updateChecklistItem', {
        'room': $scope.roomName,
        'storyid': $scope.storyData._id,
        'checklistGrpId': checkListId,
       'itemid': listItem._id,
       'checked': listItem.checked,
-      'text': listItem.text,
       'operation':operation,
+      'text': listItem.text,
       'dueDate':listItem.dueDate,
       'projectID': $scope.projectID,
       'user':$rootScope.userProfile

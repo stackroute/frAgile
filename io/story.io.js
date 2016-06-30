@@ -376,30 +376,9 @@ if (!err) {
     ****/
 
   socket.on('story:updateChecklistItem', function(data) {
-
-
-console.log("im coming insdie", data);
-    // Story.updateChecklistItem(data.storyid,data.checklistGrpId,data.itemid,data.checked, function(err, doc) {
-    //   if (!err) {
-    //     //user.userID
-    //     io.to(data.room).emit('story:checklistItemUpdated', doc);
-    //   }
-    // })
-   //
-
-// Story.storyUpdateCheckListItem(data,function(err,story)
-// {
-//
-// });
-
-   Story.getCheckItemIndex(data.itemid, function(err, index) {
-      if (index !=-1)
-        Story.updateChecklistItem(data.storyid, data.checklistGrpId,data.operation,data.itemid, data.checked,data.text,data.dueDate, index, function(err, doc) {
+        Story.updateChecklistItem(data.storyid, data.checklistGrpId,data.operation,data.itemid,data.checked,data.text,data.dueDate,function(err, doc) {
           if (!err) {
-            //user.userID
-            Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
-              if (!err) {
-                io.to(data.room).emit('story:dataModified', storyData);
+                io.to(data.room).emit('story:dataModified', doc);
 
                 var actData = {
                   room: "activity:" + data.projectID,
@@ -412,7 +391,7 @@ console.log("im coming insdie", data);
                     _id: data.checklistGrpId
                   },
                   target: {
-                    name: storyData.heading,
+                    name: doc.heading,
                     type: "Story",
                     _id: data.storyid
                   }
@@ -421,9 +400,6 @@ console.log("im coming insdie", data);
                   io.to(actData.room).emit('activityAdded', data);
                 });
               }
-            });
-          }
-        })
     })
   })
 

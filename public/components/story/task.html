@@ -35,7 +35,7 @@
 			<div ng-repeat="member in $ctrl.task.assignedMember" ng-init="fullName=member.firstName+' '+member.lastName">
 			  <div class="avatar-wrapper" ng-show="member.photo == undefined">
 
-              <ng-letter-avatar data={{member.firstName+member.lastName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px" ></ng-letter-avatar>
+              <ng-letter-avatar data={{fullName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px" ></ng-letter-avatar>
 
             </div>
 	       </div>
@@ -53,7 +53,7 @@
 			<i class="fa fa-users" aria-hidden="true"></i>
 			</md-button>
 
-			<md-button class="md-fab md-mini  md-raised md-hue-2 md-raised md-warn" ng-click="$ctrl.updateTodoItemComp($ctrl.task,'edit'); showDiv = !showDiv" data-toggle="tooltip" title="Save">
+			<md-button class="md-fab md-mini  md-raised md-hue-2 md-raised md-warn" ng-click="$ctrl.updateTodoItemComp($ctrl.task,$checklistid,'edit'); showDiv = !showDiv" data-toggle="tooltip" title="Save">
 			<i class="fa fa-floppy-o" aria-hidden="true"></i>
 			</md-button>
 
