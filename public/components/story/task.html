@@ -7,7 +7,7 @@
 
 				<md-card-actions layout="column">
 					<md-checkbox class="md-icon-button" ng-model="$ctrl.task.checked"
-					data-toggle="tooltip" title="Mark as Done" ng-click="$ctrl.updateTodoItemComp($ctrl.task,$ctrl.checkListId)" >
+					data-toggle="tooltip" title="Mark as Done" ng-change="$ctrl.updateTodoItemComp(task)" >
 					</md-checkbox>
 					<md-button class="md-fab md-mini  md-raised md-hue-2"  ng-click="showDiv = !showDiv" data-toggle="tooltip" title="Edit Task" >
 						<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
@@ -53,7 +53,7 @@
 			<i class="fa fa-users" aria-hidden="true"></i>
 			</md-button>
 
-			<md-button class="md-fab md-mini  md-raised md-hue-2 md-raised md-warn" ng-click="$ctrl.editTaskComp(task,checkListId)"data-toggle="tooltip" title="Save">
+			<md-button class="md-fab md-mini  md-raised md-hue-2 md-raised md-warn" ng-click="$ctrl.editTaskComp(task,checkListId)" data-toggle="tooltip" title="Save">
 			<i class="fa fa-floppy-o" aria-hidden="true"></i>
 			</md-button>
 
@@ -64,5 +64,4 @@
 
 
 </md-content>
-{{$ctrl.task|json}}
 </div>

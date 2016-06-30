@@ -6,7 +6,6 @@
 
         .component('mycard', {
         bindings: {
-          checkListId:'<',
           task:'<',
           addMember:'&',
           removeTask:'&',
@@ -60,9 +59,9 @@ function mycardCtrl ($scope) {
     //   ctrl.updateTodoItem(taskObject,{"_id":checkListId});
 
     // }
-    this.updateTodoItemComp=function(task,checkListId){
-      console.log("in component",task,checkListId);
-      ctrl.updateTodo(task,checkListId);
+    this.updateTodoItemComp=function(task){
+      console.log("in component",task);
+      ctrl.updateTodo(task);
     }
   }
 //end of task

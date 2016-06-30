@@ -496,7 +496,13 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   $scope.updateTodoItem = function(listItem, checkListId) {
 
     //todo.items.push({"text":todo.todoText,"done":false})
- 
+      // if(listItem.checked){
+      //   listItem.checked=!listItem.checked;
+      // }else
+      // {
+      //   listItem.checked=!listItem.checked;
+
+      // }
   console.log("in controller",listItem.checked,"after");
     socket.emit('story:updateChecklistItem', {
        'room': $scope.roomName,

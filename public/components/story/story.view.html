@@ -135,9 +135,9 @@
             {{Math.floor((todo.checkedCount/todo.items.length*100))}}
             <uib-progressbar animate="false" value="todo.items.length>0 ?(todo.checkedCount/todo.items.length*100):0" type="success"></uib-progressbar>
 
-            <mycard ng-repeat="task in todo.items" add-member="addMemberToChecklist(task)" remove-task="removeTodoItem(task,todo,task.text)" check-list-id="todo._id" update-todo="updateTodoItem(task,todo._id)" task="task"></mycard>
+            <mycard ng-repeat="task in todo.items" add-member="addMemberToChecklist(task)" remove-task="removeTodoItem(task,todo,task.text)" check-list-id="todo._id" update-todo="updateTodoItem(task,todo)" task="task"></mycard>
              <!-- add new task -->
-             <li class="checklist-todos" ng-repeat="listItem in todo.items" ng-init="addMemberObj(listItem._id)">
+           <!--   <li class="checklist-todos" ng-repeat="listItem in todo.items" ng-init="addMemberObj(listItem._id)">
 
              <input type="checkbox" ng-model="listItem.checked" ng-click="updateTodoItem(listItem,todo)">
 
@@ -147,10 +147,8 @@
 
                  <i class="fa fa-minus-circle"></i>
                </a></span>
-<!--                 <span class="option option-menu" ng-show="itemHovering" ng-click="addMember()" >...</span>             </span>-->
-                 <!-- component
-                 <task></task> -->
-         </li>
+
+         </li> -->
               <md-card>
 
                 <form name="addChecklistItem" novalidate ng-submit="addChecklistItem.$valid && addTodoItem(todo)">
@@ -161,7 +159,16 @@
                       <div ng-message="required">This is required!</div>
                     </div>
                   </md-input-container>
-               
+                    <span layout="row">
+                          <div class="menu-bar-avatar" ng-repeat="member in todo.assignedMember" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
+                          <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
+                          <div ng-show="member.photo == undefined">
+
+                            <ng-letter-avatar data={{member.fullName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+                          </div>
+                          <span class="remove-members fa fa-times" ng-hide="!hovering" ng-click="toggleMember(member,todo)"></span>
+                        </div>
+                    </span>
                      <div layout="column">
                        <md-input-container>
                          <label>Assign Member</label>
@@ -169,9 +176,9 @@
                        </md-input-container>
 
                        <md-list ng-init="todo.assignedMember=[]">
-                         <md-list-item class="md-1-line md-long-text" ng-hide="!newmemberName" ng-repeat="member in storyData.memberList | filter:newmemberName" ng-click="null">{{member.fullName}} 
-                          <md-checkbox class="md-secondary" ng-model="memberStatus" ng-click="toggleMember(member,todo)"></md-checkbox>
-
+                         <md-list-item class="md-1-line md-long-text" ng-hide="!newmemberName" ng-repeat="member in storyData.memberList | filter:newmemberName"  ng-click="toggleMember(member,todo)">{{member.fullName}} 
+                          <!-- <md-checkbox class="md-secondary" ng-model="memberStatus" ng-change="toggleMember(member,todo)"></md-checkbox>
+ -->
 
                          </md-list-item>
                        </md-list>
