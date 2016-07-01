@@ -23,7 +23,8 @@ var backlogsBuglist = require('../models/backlogBuglist.js');
 var Project = require('../models/project.js');
 var fs = require('fs'),
     list;
-
+var queue= require('../redis/queue.js');
+var GithubRepo = require('../models/githubRepo.js')
 /* GET home page. */
 //Merged by Sharan Starts
 router.post('/addmember', function(req, res, next) {
@@ -226,6 +227,31 @@ router.get('/', function(req, res, next) {
 router.post('/saveStoryDescription', function(req, res, next) {
   var storyId= req.query.id;
   var desc=req.query.desc;
+  var github_profile=req.body;
+  console.log(github_profile);
+
+  story.findIssue(storyId,function(err,storyData){
+    console.log("story",storyData);
+    if(!err){
+    GithubRepo.getRepo(storyData.projectId,function(err,repoData){
+      if(!err && repoData){
+        if(storyData.issueNumber){
+          var issue={}
+          issue.message={
+            'body':desc
+          }
+          issue.repo_details=repoData;
+          issue.github_profile=github_profile;
+          issue.issueNumber=storyData.issueNumber;
+          console.log("issue",issue);
+          queue.editStory.add(issue);
+    }
+  }
+})
+  }
+  })
+
+
   story.saveDescription(storyId,desc, function(err,doc){
     if(err){
       return(err);

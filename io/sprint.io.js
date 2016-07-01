@@ -4,11 +4,52 @@ var Project = require('../models/project.js');
 var Sprint = require('../models/sprint.js');
 var Story = require('../models/story.js');
 var BackLogsBugList = require('../models/backlogBuglist.js');
+var queue= require('../redis/queue.js');
+var GithubRepo = require('../models/githubRepo.js');
+var api_calls = require('../routes/github-api.js');
 
 module.exports = function(socket, io) {
 
   socket.on('sprint:moveStory', function(data) {
+    Story.findIssue(data.storyId,function(err,storyData){
+      console.log("story",storyData);
 
+      if(!err){
+        var issue={};
+      GithubRepo.getRepo(data.projectID,function(err,repoData){
+        if(!err && repoData){
+          console.log("Repo data",repoData);
+          if(storyData.issueNumber){
+            if(data.newListName==="Releasable"){
+              issue.message={
+                'labels':["Releasable"],
+                'state':"closed"
+              }
+            }
+            else
+            if(data.newListName==="buglists"){
+              issue.message={
+                'labels':["Bug"],
+                'state': "open"
+              }
+            }
+            else
+            {
+            issue.message={
+              'labels':[data.newListName],
+              'state': "open"
+            }
+          }
+            issue.repo_details=repoData;
+            issue.github_profile=data.github_profile;
+            issue.issueNumber=storyData.issueNumber;
+            console.log("issue",issue);
+            queue.editStory.add(issue);
+          }
+        }
+      })
+    }
+  })
     //Adding story in new list, then deleting from old list
 
     Sprint.addStory(data.sprintId, data.newListId, data.storyId, function(err, addStoryData) {
@@ -49,6 +90,46 @@ module.exports = function(socket, io) {
 
   socket.on('sprint:moveToBackbugStory', function(data) {
     //Adding story in new list, then deleting from old list
+    console.log("Moving From Backlog",data);
+    Story.findIssue(data.storyId,function(err,storyData){
+      console.log("story",storyData);
+
+      if(!err){
+        var issue={};
+      GithubRepo.getRepo(data.projectID,function(err,repoData){
+        if(!err && repoData){
+          console.log("Repo data",repoData);
+          if(storyData.issueNumber){
+            if(data.newListName==="Releasable"){
+              issue.message={
+                'labels':["Releasable"],
+                'state':"closed"
+              }
+            }
+            else
+            if(data.newListName==="buglists"){
+              issue.message={
+                'labels':["Bug"],
+                'state': "open"
+              }
+            }
+            else
+            {
+            issue.message={
+              'labels':[data.newListName],
+              'state': "open"
+            }
+          }
+            issue.repo_details=repoData;
+            issue.github_profile=data.github_profile;
+            issue.issueNumber=storyData.issueNumber;
+            console.log("issue",issue);
+            queue.editStory.add(issue);
+          }
+        }
+      })
+    }
+  })
     if (data.newListId == "backlogs") {
 
       BackLogsBugList.addStoryBacklog(data.projectID, data.storyId, function(err, addStoryData) {
@@ -106,6 +187,46 @@ module.exports = function(socket, io) {
   });
 
   socket.on('sprint:moveFromBackbugStory', function(data) {
+    console.log("Moving From Backlog",data);
+    Story.findIssue(data.storyId,function(err,storyData){
+      console.log("story",storyData);
+
+      if(!err){
+        var issue={};
+      GithubRepo.getRepo(data.projectID,function(err,repoData){
+        if(!err && repoData){
+          console.log("Repo data",repoData);
+          if(storyData.issueNumber){
+            if(data.newListName==="Releasable"){
+              issue.message={
+                'labels':["Releasable"],
+                'state':"closed"
+              }
+            }
+            else
+            if(data.newListName==="buglists"){
+              issue.message={
+                'labels':["Bug"],
+                'state': "open"
+              }
+            }
+            else
+            {
+            issue.message={
+              'labels':[data.newListName],
+              'state': "open"
+            }
+          }
+            issue.repo_details=repoData;
+            issue.github_profile=data.github_profile;
+            issue.issueNumber=storyData.issueNumber;
+            console.log("issue",issue);
+            queue.editStory.add(issue);
+          }
+        }
+      })
+    }
+  })
     if (data.oldListId == "backlogs") {
 
       Sprint.addStory(data.sprintId, data.newListId, data.storyId, function(err, addStoryData) {
@@ -212,85 +333,127 @@ module.exports = function(socket, io) {
   });
 
   socket.on('sprint:addStory', function(data) {
+    console.log(data);
     var story = {
       heading: data.heading,
       addTo: data.addTo,
       storyStatus: data.storyStatus,
       heading: data.heading,
       description: data.description,
-      listId: data.listId
+      listId: data.listId,
+
+      projectId:data.projectId
     }
-    Story.addStory(story, function(err, storyData) {
-      if (!err) {
-        var actData = {
-          room: data.activityRoom,
-          action: "added",
-          projectID: data.projectId,
-          user: data.user,
-          object: {
-            name: data.heading,
-            type: "Story",
-            _id: ""
+    console.log(story);
+    if(data.github_profile){
+      var issue={}
+      issue.message={
+        'title': data.heading,
+        'labels':[data.listId]
+      }
+      issue.github_profile=data.github_profile;
+      GithubRepo.getRepo(data.projectId,function(err,repoData){
+        if(!err && repoData){
+        issue.repo_details=repoData;
+        console.log(issue);
+        var options={
+          url:"https://api.github.com/repos/"+repoData.owner+"/"+repoData.name+"/issues?access_token="+data.github_profile.token,
+          headers:{
+            "content-type":'application/json',
+            "User-Agent":'Limber'
           },
-          target: {
-            name: data.listName,
-            type: "List",
-            _id: data.id
+          json:issue.message
+        };
+        api_calls.postIssue(options,function(error,response,body){
+          if(response.statusCode===201 && !error){
+            console.log(body);
+            story.issueNumber=body.number;
+            saveStory(data,story);
           }
+
+        })
+
+      }
+      else saveStory(data,story);
+    })
+    }
+    else saveStory(data,story);
+
+
+
+
+})
+
+function saveStory(data,story){
+  Story.addStory(story, function(err, storyData) {
+    if (!err) {
+      var actData = {
+        room: data.activityRoom,
+        action: "added",
+        projectID: data.projectId,
+        user: data.user,
+        object: {
+          name: data.heading,
+          type: "Story",
+          _id: ""
+        },
+        target: {
+          name: data.listName,
+          type: "List",
+          _id: data.id
         }
+      }
 
-        if (data.addTo == "Backlogs") {
-          BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
-            if (!err) {
-              io.to(data.room).emit('sprint:storyAdded', storyData);
-              actData.object._id = storyData._id;
-              Activity.addEvent(actData, function(data) {
-                io.to(data.activityRoom).emit('activityAdded', data);
-              });
+      if (data.addTo == "Backlogs") {
+        BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
+          if (!err) {
+            io.to(data.room).emit('sprint:storyAdded', storyData);
+            actData.object._id = storyData._id;
+            Activity.addEvent(actData, function(data) {
+              io.to(data.activityRoom).emit('activityAdded', data);
+            });
 
-            } else
-              console.log(err);
-          })
-        } else if (data.addTo == "BugLists") {
-          BackLogsBugList.addStoryBuglist(data.projectId, storyData._id, function(err, subDoc) {
-            if (!err) {
-              io.to(data.room).emit('sprint:storyAdded', storyData);
-              actData.object._id = storyData._id
-              Activity.addEvent(actData, function(data) {
-                io.to(data.activityRoom).emit('activityAdded', data);
-              });
+          } else
+            console.log(err);
+        })
+      } else if (data.addTo == "BugLists") {
+        BackLogsBugList.addStoryBuglist(data.projectId, storyData._id, function(err, subDoc) {
+          if (!err) {
+            io.to(data.room).emit('sprint:storyAdded', storyData);
+            actData.object._id = storyData._id
+            Activity.addEvent(actData, function(data) {
+              io.to(data.activityRoom).emit('activityAdded', data);
+            });
+          } else
 
-            } else
-              console.log(err);
-          })
-        } else {
-          Sprint.addStory(data.sprintId, data.id, storyData._id, function(err, subDoc) {
-            if (!err) {
+            console.log(err);
+        })
+      } else {
+        Sprint.addStory(data.sprintId, data.id, storyData._id, function(err, subDoc) {
+          if (!err) {
 
-              actData.object._id = storyData._id
+            actData.object._id = storyData._id
 
-              //FIXME: Not able to add new property to storyData :(
-              //storyData.listIdAdded = data.id;
-              //console.log(storyData);
-              storyData.listId = data.id
+            //FIXME: Not able to add new property to storyData :(
+            //storyData.listIdAdded = data.id;
+            //console.log(storyData);
+            storyData.listId = data.id
 
-              io.to(data.room).emit('sprint:storyAdded', storyData);
+            io.to(data.room).emit('sprint:storyAdded', storyData);
 
-              Activity.addEvent(actData, function(data) {
-                io.to(actData.room).emit('activityAdded', data);
-              });
+            Activity.addEvent(actData, function(data) {
+              io.to(actData.room).emit('activityAdded', data);
+            });
 
-            } else
-              console.log(err);
-          })
-        }
+          } else
+            console.log(err);
+        })
+      }
 
 
-      } else
-        console.log(err);
-    });
-
+    } else
+      console.log(err);
   });
 
-
+}
 }

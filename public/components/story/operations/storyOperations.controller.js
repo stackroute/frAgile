@@ -406,7 +406,8 @@ fragileApp.controller('storyOperationsController',['$scope','$rootScope','$state
         'memberid': memberObj._id,
         'projectID' : $scope.projectID,
         'fullName': memberObj.firstName + " " + memberObj.lastName,
-        'user':$rootScope.userProfile
+        'user':$rootScope.userProfile,
+        'github_profile':$rootScope.githubProfile
       });
     }else{
       //Add members working,tested
@@ -419,7 +420,8 @@ fragileApp.controller('storyOperationsController',['$scope','$rootScope','$state
         'fullName': memberObj.firstName + " " + memberObj.lastName,
         'user':$rootScope.userProfile,
         'sprintId':param.sprint._id,
-        'releaseId':$stateParams.releaseID
+        'releaseId':$stateParams.releaseID,
+        'github_profile':$rootScope.githubProfile
       });
     }
   }

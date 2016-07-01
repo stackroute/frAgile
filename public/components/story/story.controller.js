@@ -4,7 +4,7 @@ fragileApp.run(function(editableOptions,editableThemes) {
   // bootstrap3 theme. Can be also 'bs2', 'default'
 });
 
-fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window) {
+fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window','$sce', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window,$sce) {
   var socket = Socket($scope);
 
   console.log(socket.room);
@@ -14,8 +14,10 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   storyContr.complexDataObject = param;
   console.log("----------");
   console.log(param);
+
   console.log($stateParams);
   $scope.projectID=$stateParams.prId;
+
   console.log($scope.projectID);
   storyContr.storyData = storyContr.complexDataObject.story.data;
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
@@ -63,12 +65,14 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   //   $rootScope.activityRoom = 'activity:' + $stateParams.prId;
   //   emitData["activityRoom"] = 'activity:' + $stateParams.prId;
   // }
-  console.log(sprintService.currentRoom);
-  if(!sprintService.currentRoom.room){
-    console.log("joining room"+emitData);
-    socket.emit('join:room', emitData);
 
-  }
+console.log(sprintService.currentRoom);
+if(!sprintService.currentRoom.room){
+console.log("joining room"+emitData);
+  socket.emit('join:room', emitData);
+
+}
+
   $scope.roomName = "sprint:" + $scope.sprintID;
 
 
@@ -151,7 +155,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
       'memberid': memberId,
       'fullName': fullName,
       'projectID': $scope.projectID,
-      'user':$rootScope.userProfile
+      'user':$rootScope.userProfile,
+      'github_profile':$rootScope.githubProfile
     });
   }
 
@@ -323,7 +328,7 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   $scope.saveDescription = function() {
     $scope.model.description = angular.copy($scope.model.selected);
     //Post socket below is not required
-    storyService.saveStoryDescription($scope.storyData._id, $scope.model.description.name);
+    storyService.saveStoryDescription($scope.storyData._id, $scope.model.description.name,$rootScope.githubProfile);
 
     $scope.reset();
     $scope.set = false;
@@ -455,7 +460,8 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
       'storyId': $scope.storyData._id,
       'text': $scope.storyComment,
       'projectID': $scope.projectID,
-      'user':$rootScope.userProfile
+      'user':$rootScope.userProfile,
+      'github_profile':$rootScope.githubProfile
     });
     $scope.storyComment = "";
   };

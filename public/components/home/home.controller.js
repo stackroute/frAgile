@@ -10,7 +10,9 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
         _id: response._id,
         fullName: $rootScope.user.firstName + " " + $rootScope.user.lastName,
         photo: response.photo
-      }
+      };
+      $rootScope.githubProfile=response.github;
+      console.log(response);
     });
     homeService.getUserProjects().success(function(response) {
       $rootScope.projects = response.projects

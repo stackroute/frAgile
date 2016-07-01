@@ -25,7 +25,9 @@ var projectSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
+  githubStatus: Boolean,
   release: [releaseSchema]
+  // repository: {type: Schema.Types.ObjectId,ref: 'GithubRepo'}
 });
 
 projectSchema.statics.getSprints = function(releaseID, callback) {
@@ -106,6 +108,30 @@ projectSchema.statics.updateProject = function(projectId, newProject, callback) 
     });
 }
 
+projectSchema.statics.updateGithubStatus = function(projectId, callback) {
+  console.log("----------Inside update github model");
+  console.log("-" + projectId + "-");
+  //console.log(newProject);
+  this.findOneAndUpdate({
+      "_id": projectId
+    }, {
+      $set: {
+        githubStatus: true
+
+      }
+    }, {
+      upsert: true
+    })
+    .exec(function(err, doc) {
+      console.log("in github"+doc);
+      if (err) {
+        console.log(err);
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+}
 projectSchema.statics.updateRelease = function(projectId, releaseId, newRelease, callback) {
   this.findOneAndUpdate({
       "_id": projectId,

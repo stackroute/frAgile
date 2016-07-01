@@ -27,9 +27,19 @@ console.log("leaving activity room"+socket.activityRoom);
       if (socket.activityRoom) {
         socket.leave(socket.activityRoom);
       }
-console.log("joining activity "+data.activityRoom);
+
+      console.log("activity room"+data.activityRoom);
+
       socket.join(data.activityRoom);
       socket.activityRoom = data.activityRoom;
+    }
+    if(data.BacklogRoom){
+      if(socket.BacklogRoom){
+        socket.leave(socket.BacklogRoom)
+      }
+      console.log("BacklogRoom",data.BacklogRoom);
+      socket.join(data.BacklogRoom);
+      socket.BacklogRoom=data.BacklogRoom;
     }
   });
 
@@ -38,7 +48,7 @@ console.log("joining activity "+data.activityRoom);
   require('../io/sprint.io.js')(socket, io);
   require('../io/story.io.js')(socket, io);
   require('../io/activity.io.js')(socket, io);
-
+  require('../io/github.io.js')(socket,io);
 });
 
 

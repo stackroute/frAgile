@@ -1,5 +1,4 @@
 var Project = require('../models/project.js');
-var Stories= require('../models/story.js');
 var templates = require('../models/template.js');
 
 var mongoose = require('mongoose'),
@@ -28,14 +27,24 @@ userSchema = new mongoose.Schema({
     email: String,
     name: String
   },
+  github:{
+    id:String,
+    token: String,
+
+    name: String
+  },
   assignedStories: [{
     projectId:String,
+
     releaseId:String,
+
     sprintId:String,
-    stories: {
+
+    stories:{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Story'
+      ref:'Story'
     }
+
   }]
 });
 
@@ -139,7 +148,14 @@ userSchema.statics.getUserId = function(email, callback) {
     else callback(null, data);
   });
 }
-
+userSchema.statics.getGithubDetails = function(email, callback) {
+  return this.find({
+    'email': email
+  }).exec(function(err, data) {
+    if (err) callback(err, null);
+    else callback(null, data);
+  });
+}
 userSchema.statics.getUserEmail = function(email, callback) {
   return this.find({
     'email': RegExp(email)
@@ -157,66 +173,71 @@ userSchema.statics.getProjects = function(userID, callback) {
 }
 
 
-//cards code
 userSchema.statics.getCards = function(UserId, callback) {
-  return  this.find({
-    "_id": UserId
-  }).populate("assignedStories.stories").exec(function(err, data) {
+ return  this.find({
+   "_id": UserId
+ }).populate("assignedStories.stories").exec(function(err, data) {
 console.log("I reached user model");
 console.log(data);
-    if (err) callback(err)
-    else callback(data);
-  });
+   if (err) callback(err)
+   else callback(data);
+ });
 
 }
 
 
 userSchema.statics.addAssignedStories = function(dataObj, callback) {
-  this.findByIdAndUpdate(dataObj.memberid, {
+ this.findByIdAndUpdate(dataObj.memberid, {
 
-    $push:{'assignedStories':{
-      projectId:dataObj.projectID,
-      releaseId:dataObj.releaseId,
-      sprintId:dataObj.sprintId,
-      stories:dataObj.storyid
-    }}},
-    {
-      safe: true, upsert: true
-    }, function(err, data) {
-      console.log("I am in adding members to story model");
-      if (err) callback(err, null)
-      else {
+   $push:{'assignedStories':{
+     projectId:dataObj.projectID,
+     releaseId:dataObj.releaseId,
+     sprintId:dataObj.sprintId,
+     stories:dataObj.storyid
+   }}},
+   {
+     safe: true, upsert: true
+   }, function(err, data) {
+     console.log("I am in adding members to story model");
+     if (err) callback(err, null)
+     else {
 
-        console.log(dataObj.memberid);
-        //To send back added project data
-        this.find({
-          "_id": dataObj.memberid
-        }).populate("assignedStories.stories").exec(function(err, data) {
-          if (err){
-            console.log(err);
-            callback(err, null);}
-            else {
-              console.log(data);
-              callback(null, data);
-            }
-          })
-        };
-      })
-    }
+       console.log(dataObj.memberid);
+       //To send back added project data
+       this.find({
+         "_id": dataObj.memberid
+       }).populate("assignedStories.stories").exec(function(err, data) {
+         if (err){
+           console.log(err);
+           callback(err, null);}
+           else {
+             console.log(data);
+             callback(null, data);
+           }
+         })
+       };
+     })
+   }
 
-    userSchema.statics.removeAssignedStories = function(userID, storyID, callback) {
-      this.findByIdAndUpdate(userID, {
-          $pull:
-          {'assignedStories':{'stories':storyID}},
+   userSchema.statics.removeAssignedStories = function(userID, storyID, callback) {
+     this.findByIdAndUpdate(userID, {
+         $pull:
+         {'assignedStories':{'stories':storyID}},
 
-      }, {
-        new: true
-      }, function(err, data) {
-        if (err) callback(err)
-        else callback(data);
-      })
-    }
+     }, {
+       new: true
+     }, function(err, data) {
+       if (err) callback(err)
+       else callback(data);
+     })
+   }
+
+  userSchema.statics.getUserMember = function(UserId, callback) {
+  return  this.findById(UserId).exec(function(err, data) {
+      if (err) callback(err,null)
+      else callback(null,data);
+    });
+}
 
 
-
-    module.exports = mongoose.model('User', userSchema, 'Users');;
+module.exports = mongoose.model('User', userSchema, 'Users');

@@ -1,5 +1,5 @@
-fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket', '$filter', 'graphModalFactory','homeService',
-  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter, graphModalFactory,homeService) {
+fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket', '$filter', 'graphModalFactory','homeService','githubService',
+  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter, graphModalFactory,homeService,githubService) {
     // $scope.loadProjects = function() {
     //
     //   projectService.getUserProjects().success(function(response) {
@@ -191,6 +191,19 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
         }
       });
     });
+
+    socket.on('github:changeGithubStatus', function(githubRepo) {
+      console.log("----GithubEdited----");
+      console.log(githubRepo);
+      $rootScope.projects.forEach(function(project, projectIndex) {
+        if (project._id == githubRepo.projectId) {
+          $rootScope.projects[projectIndex].githubStatus = githubRepo.githubStatus;
+
+        }
+      });
+    });
+
+
     socket.on('project:releaseEdited', function(releaseData) {
       console.log(releaseData);
       console.log("--------------");
@@ -262,6 +275,80 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
     socket.on('project:addMemberFailed', function(data) {
       alert(data);
     });
+    $scope.getRepo= function(prId){
+      console.log(prId);
+      githubService.getAllRepos().success(function(response){
+
+      console.log(response);
+      modalInstance=$uibModal.open({
+        animation: true,
+        templateUrl: "/components/github/github.modal.view.html",
+        controller: "githubController",
+        controllerAs:"githubCntrl",
+        size: 'lg',
+        resolve: {
+          param: function() {
+            return {
+              response : response,
+              projectId : prId
+            }
+
+          }
+        }
+      });
+      modalInstance.result.then(function (){
+        console.log("in first closing");
+          $state.go('project');
+      },function(){
+        console.log("closing");
+      })
+
+      })
+      }
+
+    $scope.getIssues=function(prId){
+      console.log(prId);
+      githubService.getIssues(prId).success(function(response){
+
+      console.log(response);
+      modalInstance=$uibModal.open({
+        animation: true,
+        templateUrl: "/components/github/github.issues.view.html",
+        controller: "githubController",
+        controllerAs: "githubCntrl",
+        size: 'lg',
+        resolve: {
+          param: function() {
+            return {
+              response : response,
+              projectId : prId
+            }
+
+          }
+        }
+      });
+      modalInstance.result.then(function (){
+        console.log("in first closing");
+          //$state.go('project');
+      },function(){
+        console.log("closing");
+      })
+
+      })
+
+    }
+
+    $scope.pushStories=function(projectId){
+      console.log($rootScope.githubProfile);
+      if($rootScope.githubProfile){
+
+      socket.emit("github:pushStories",{projectId:projectId,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
+    }
+    }
+
+
+
+
 
   }
-]);
+  ]);

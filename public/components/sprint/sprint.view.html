@@ -27,7 +27,7 @@
       <div id="backlogs" class='parent backbug' ng-class='{"extendParent":addToBacklog,"":!addToBacklog}' data-drop="true" jqyoui-droppable="{multiple:true,onOver: 'overCallback',onOut: 'outCallback',onDrop:'dropCallback_backbug'}">
 
 
-        <div class="listHead">
+        <div class="listHead" id="Backlogs">
           {{backBug.backlogs.listName}}
         </div>
         <div class="parentInner" id="backbug">
@@ -75,7 +75,7 @@
           <i class="fa fa-trash" aria-hidden="true"></i>
         </div> -->
 
-        <div class="listHead">
+        <div class="listHead" id="{{listItem.group}}">
           {{listItem.listName}}
         </div>
         <div class="parentInner" id="list">
@@ -117,8 +117,8 @@
     </div>
 
     <div class="list-wrapper backBugList">
-      <div id="buglists" class='parent backbug' ng-class='{"extendParent":addToBuglist,"":!addToBuglist}'  data-drop="true" jqyoui-droppable="{multiple:true,onOver: 'overCallback',onOut: 'outCallback',onDrop:'dropCallback_backbug'}">
-        <div class="listHead">
+      <div id="buglist" class='parent backbug' ng-class='{"extendParent":addToBuglist,"":!addToBuglist}'  data-drop="true" jqyoui-droppable="{multiple:true,onOver: 'overCallback',onOut: 'outCallback',onDrop:'dropCallback_backbug'}">
+        <div class="listHead" id="BugLists">
           {{backBug.buglist.listName}}
         </div>
         <div class="parentInner" id="backbug">

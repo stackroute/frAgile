@@ -1,5 +1,5 @@
-fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'Socket', '$uibModal', '$location', '$anchorScroll', 'graphModalFactory',
-  function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibModal, $location, $anchorScroll, graphModalFactory) {
+fragileApp.controller('sprintController', ['$scope', '$rootScope', '$stateParams', 'sprintService', '$state', 'Socket', '$uibModal', '$location', '$anchorScroll', 'graphModalFactory','githubService',
+  function($scope, $rootScope, $stateParams, sprintService, $state, Socket, $uibModal, $location, $anchorScroll, graphModalFactory,githubService) {
 
 sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
   $scope.getSprints = function() {
@@ -51,7 +51,7 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
         $rootScope.activityRoom = 'activity:' + $stateParams.prId
         emitData["activityRoom"] = 'activity:' + $stateParams.prId
       }
-
+      emitData["BacklogRoom"]='BacklogBuglist:'+$stateParams.prId
       socket.emit('join:room', emitData);
     };
 
@@ -64,6 +64,7 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
     $scope.roomName = "sprint:" + $stateParams.sprintID
 
     socket.on('sprint:storyAdded', function(data) {
+      console.log("Story Recieved",data);
       var listName = ""
       if (data.listId == "BugLists") {
         $scope.backBug.buglist.stories.push(data);
@@ -78,7 +79,7 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
             listName = $scope.sprint.list[key].listName
           }
         });
-        angular.element("#" + data.listId)[0].scrollTop = angular.element("#" + data.listId)[0].scrollHeight;
+      angular.element("#" + data.listId)[0].scrollTop = angular.element("#" + data.listId)[0].scrollHeight;
       }
     });
 
@@ -129,6 +130,18 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
     $scope.addStory = function(listId, storyDetails, id, listName) {
       // $scope.listIdAdded = id;
       if (storyDetails != undefined && storyDetails != "") {
+        // if($rootScope.githubProfile){
+        //   var issue={}
+        //   issue.message={
+        //     'title': storyDetails,
+        //     'labels':[listId]
+        //   }
+        //   issue.github_profile=$rootScope.githubProfile;
+        //   issue.projectId=$stateParams.prId;
+        //
+        //   githubService.addIssue(issue).then(function(response){
+        //     console.log(response);
+
         var emitData = {
           'room': $scope.roomName,
           'activityRoom': 'activity:' + $stateParams.prId,
@@ -141,15 +154,20 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
           'listId': listId,
           'id': id,
           'listName': listName,
-          'user':$rootScope.userProfile
+          'user':$rootScope.userProfile,
+          // 'issueNumber':number,
+          'github_profile':$rootScope.githubProfile
         }
         socket.emit('sprint:addStory', emitData);
         $scope.storyDetails = "";
         return true;
-      } else {
+      // })
+    // }}
+  }else {
         return false
       }
     }
+
 
     $scope.gotoTop = function(id) {
       angular.element("#" + id)[0].scrollTop = angular.element("#" + id)[0].scrollHeight;
@@ -170,8 +188,10 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
           'sprintId': $stateParams.sprintID,
           'oldListId': divBeingDragged[0].id,
           'newListId': angular.element(event.target)[0].id,
+          'newListName':angular.element(event.target)[0].firstElementChild.id,
           'storyId': elemBeingDragged[0].id,
-          'user':$rootScope.userProfile
+          'user':$rootScope.userProfile,
+          'github_profile':$rootScope.githubProfile
         }
         if (divBeingDragged[0].id == "backlogs" || divBeingDragged[0].id == "buglists")
           socket.emit('sprint:moveFromBackbugStory', emitData)
@@ -193,8 +213,10 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
           'sprintId': $stateParams.sprintID,
           'oldListId': divBeingDragged[0].id,
           'newListId': angular.element(event.target)[0].id,
+          'newListName':angular.element(event.target)[0].firstElementChild.id,
           'storyId': elemBeingDragged[0].id,
-          'user':$rootScope.userProfile
+          'user':$rootScope.userProfile,
+          'github_profile':$rootScope.githubProfile
         });
       }
 

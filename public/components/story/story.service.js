@@ -1,11 +1,14 @@
-fragileApp.factory('storyService',['$http',function($http) {
+fragileApp.factory('storyService',['$http','$filter',function($http,$filter) {
 
     this.getStoryDetails = function() {
       return  $http.get('/story');
     };
-      this.saveStoryDescription = function(storyId,desc) {
+      this.saveStoryDescription = function(storyId,desc,githubProfile) {
     //    console.log("inside story factory");
-        return  $http.post('/story/saveStoryDescription?id='+storyId+'&desc='+desc);
+    var encodedDesc=this.encodedString = $filter('bcEncode')(desc);
+     console.log(encodedDesc);
+
+        return  $http.post('/story/saveStoryDescription?id='+storyId+'&desc='+encodedDesc,githubProfile);
       };
 
       this.addChecklistGroup = function(storyId,checklistObj) {

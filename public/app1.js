@@ -1,5 +1,5 @@
 
-var fragileApp = angular.module('fragileApp',['angular.filter','xeditable','ui.router','ngLetterAvatar','ui.bootstrap','ngAnimate','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3','jkuri.datepicker','ngMaterial', 'ngMessages', 'material.svgAssetsCache']);
+var fragileApp = angular.module('fragileApp',['angular.filter','xeditable','ui.router','ngLetterAvatar','ui.bootstrap','ngAnimate','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3','jkuri.datepicker','ngMaterial', 'ngMessages', 'material.svgAssetsCache','Showdown','ngSanitize','bc.AngularUrlEncode']);
 
 
 

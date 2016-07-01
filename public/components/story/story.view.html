@@ -32,14 +32,28 @@
                 <span ng-include="getTemplate(model.contacts)">
                 </span>
                 <script type="text/ng-template" id="display">
-                  <div class="story-sub-header" ng-click="editDescription(model.description)">{{model.description.name}}
+                  <div class="story-sub-header" ng-click="editDescription(model.description)">
+                    <div data-sd-model-to-html="model.description.name"></div>
                     <span ng-hide="model.description.name.length>0">
                       <h3 class="story-sub-header">Edit description</h3>
                     </span>
                   </div>
                 </script>
                 <script type="text/ng-template" id="edit">
-                  <span><textarea class="story-textarea form-control"   ng-model="model.selected.name" class="form-control" placeholder="Story Description........" autofocus></textarea></span>
+                  <span><textarea id="ed-txt-area"   data-ng-model="model.selected.name" ></textarea></span>
+                  <span class="pull-left">
+                   <div >
+                       <a i class="fa fa-question-circle"  href="" ng-click="toggle()" class="pageslide"></a>
+                       <div pageslide ps-open="checked" ps-side="left">
+                           <div style="padding:20px" id="demo-right">
+                               <h2>Markdown Syntax</h2><a i class="fa fa-remove" ng-click="toggle()" class="button" ></a>
+                               <p>Put here whatever you want</p>
+
+
+                           </div>
+                       </div>
+                   </div>
+                  </span>
                   <span class="pull-right edit-description">
                     <a class="btn btn-default btn-xs desc-btn" ng-click="saveDescription()" ><i class="fa fa-check"></i></a>
                     <a class="btn btn-default btn-xs desc-btn"ng-click="reset()" ><i class="fa fa-close"></i></a>

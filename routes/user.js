@@ -68,9 +68,24 @@ router.get('/getUserDetails', function(req, res, next) {
     lastName : req.user.lastName,
     email : req.user.email,
     _id : req.user._id,
-    photo: req.user.photo
+    photo: req.user.photo,
+    github: req.user.github
   };
   res.send(userDetails);
+});
+router.get('/githubAccount', function(req, res, next) {
+console.log("github account");
+  console.log(req.user.github.id);
+  if(req.user.github.id){
+  accountDetails = {
+    id: req.user.github.id,
+    username:req.user.github.name,
+    token:req.user.github.token
+  };
+res.send(accountDetails);
+  }
+  else{
+  res.send(false);}
 });
 router.get('/getUserId', function(req, res, next) {
   if (req.query.email) {

@@ -85,5 +85,42 @@ router.get('/issues',function(req,res){
   })
 
 })
+router.post('/issues',function(req,res){
+  // console.log("Issues req body: ", req.body);
+  var issue=req.body;
+  var projectId=issue.projectId;
+  var message=issue.message;
+  var github_profile=issue.github_profile;
+
+  //@TODO validate if the mandatory values for creating this record are coming or not
+
+  GithubRepo.getRepo(projectId,function(err,repoData){
+    if(!err){
+      var options={
+        url:"https://api.github.com/repos/"+repoData.owner+"/"+repoData.name+"/issues?access_token="+github_profile.token,
+        headers:{
+          "content-type":'application/json',
+          "User-Agent":'Limber'
+        },
+        json:message
+      };
+      console.log(options.url);
+
+      request.post(options,function(err,response,body){
+        console.log(response);
+        if(!err && response.statusCode==201){
+          console.log(body);
+          res.send(body)
+          //done(Error('some error'));
+        }
+        else res.send(err)
+
+      })
+    }
+  })
+
+
+
+})
 //http.request("/repo")
 module.exports = router;

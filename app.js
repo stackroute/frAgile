@@ -22,6 +22,8 @@ var project = require('./routes/project');
 var story = require('./routes/story');
 var graph = require('./routes/graph');
 var template = require('./routes/template.js');
+var github=require('./routes/github.js');
+// var github-api=require('./routes/github-api.js');
 var authenticationHandler = require('./routes/authenticationHandler')(passport);
 app.use(session({
   store: new RedisStore({
@@ -87,6 +89,7 @@ app.use('/user', user);
 app.use('/story', story);
 app.use('/graph', graph);
 app.use('/template',template);
+app.use('/github',github);
 // error handlers
 
 // development error handler

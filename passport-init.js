@@ -5,16 +5,21 @@ var mongoose = require('mongoose'),
 		GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
 		configAuth = require('./config/auth'),
 		bCrypt = require('bcrypt-nodejs');
-
+		GitHubStrategy = require('passport-github2').Strategy;
 module.exports = function(passport){
 
 	// Passport needs to be able to serialize and deserialize users to support persistent login sessions
 	passport.serializeUser(function(user, done) {
-		done(null, user._id);
+		console.log("in serialize");
+		console.log(user);
+		done(null, user.id);
 	});
 
 	passport.deserializeUser(function(id, done) {
+		console.log('=====Deserializing User: ', id);
 		User.findById(id, function(err, user) {
+
+			 console.log("In desrialize",user);
 			//console.log('deserializing user:',user.username);
 			done(err, user);
 		});
@@ -188,7 +193,66 @@ module.exports = function(passport){
 
 		));
 
+		passport.use(new GitHubStrategy({
+			clientID: configAuth.githubAuth.clientID,
+			clientSecret: configAuth.githubAuth.clientSecret,
+			callbackURL: configAuth.githubAuth.callbackURL,
+			passReqToCallback: true
+		  },
+		  function(req,accessToken, refreshToken, profile, done) {
+				console.log("entering in github");
+				console.log(accessToken);
+				console.log(refreshToken);
 
+		    // asynchronous verification, for effect...
+		    process.nextTick(function () {
+					User.findOne({'github.id': profile.id}, function(err, user){
+						if(err){
+							console.log(err);
+							return done(err);}
+						if(user){
+							console.log("inside tick");
+
+							user.github.token=accessToken;
+							console.log(user);
+							user.save(function(err){
+								if(err)
+								throw err;
+								return done(null, user.github);
+							})
+							}
+						else {
+							console.log("printing accessToken");
+
+							//req.user.github=github;
+							User.findOne({'_id':req.user._id},function(err,doc){
+								if(err){
+									return done(err);
+								}
+								var github={};
+								github.id=profile.id;
+								github.token=accessToken;
+								github.name=profile.username;
+								doc.github=github;
+								req.user.github=github;
+								console.log("doc is",doc);
+								doc.save(function(err){
+									if(err)
+									throw err;
+									return done(null,github);
+								});
+
+							});
+
+
+		      // To keep the example simple, the user's GitHub profile is returned to
+		      // represent the logged-in user.  In a typical application, you would want
+		      // to associate the GitHub account with a user record in your database,
+		      // and return that user instead.
+
+		    }});
+		  });
+		}));
 
 
 	var isValidPassword = function(user, password){

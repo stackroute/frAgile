@@ -93,7 +93,11 @@ var StorySchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
-  labelList: [String]
+  labelList: [String],
+  githubSync: {type: Schema.Types.ObjectId,ref: 'GithubRepo'},
+  projectId: {type: Schema.Types.ObjectId,ref: 'Project'},
+  issueNumber: String,
+
 });
 
 //Code merge by sharan Starts:
@@ -167,7 +171,7 @@ StorySchema.statics.addLabel = function(storyId,labelId, callback) {
 StorySchema.statics.addStory = function(story, callback) {
   this.create({
     'listId': story.listId,
-    //storyCreatorId: {type:Schema.Types.ObjectId,ref:'User'},
+    'storyCreatorId': story.storyCreatorId,
     'storyStatus': story.storyStatus,
     'heading': story.heading,
     'description': story.description,
@@ -183,7 +187,9 @@ StorySchema.statics.addStory = function(story, callback) {
     'attachmentList': [],
     'checklist': [],
     'memberList': [],
-    'labelList': []
+    'labelList': [],
+    'projectId':story.projectId,
+    'issueNumber':story.issueNumber
   },
   function(err, doc) {
     if (err) {
@@ -663,7 +669,56 @@ StorySchema.statics.getStories= function(storyIdAdd,callback){
   });
 }
 
-
+StorySchema.statics.updateGithubSync = function(projectId,userId,repoId,callback) {
+  //console.log("inside model find story");
+  this.update({
+    "projectId": projectId,
+    "storyCreatorId":userId
+  },{
+      $set:{
+        'githubSync':repoId
+      }
+    },{
+      upsert:true
+    })
+.exec(function(err, doc) {
+  console.log(doc);
+    if (err) {
+      //console.log("err"+err);
+      callback(err, null);
+    } else {
+      Story.find({
+      "projectId": projectId,
+      "storyCreatorId":userId
+    }).populate('githubSync').populate('memberList','github').populate('storyCreatorId','github').exec(function(err,data){
+      if(!err){
+        callback(null,data)
+      }
+      else
+        callback(err,null)
+    })
+      //console.log("doc"+doc);
+      //callback(null, doc);
+    }
+  });
+}
+StorySchema.statics.findIssue = function(storyId, callback) {
+  //console.log("inside model find story");
+  this.findOne({
+    "_id": storyId
+  })
+  .populate('githubSync', 'name owner')
+  .populate('memberList','github')
+  .exec(function(err, doc) {
+    if (err) {
+      //console.log("err"+err);
+      callback(err, null);
+    } else {
+      //console.log("doc"+doc);
+      callback(null, doc);
+    }
+  });
+}
 
 
 var Story = mongoose.model('Story', StorySchema, 'Stories');

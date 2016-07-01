@@ -43,6 +43,13 @@ module.exports = function(passport){
   // router.get('/home',function(req,res) {
   //   console.log("blah");
   // });
+  router.get('/github',passport.authorize('github', { scope: ['repo','user','read:org']}));
+  router.get('/github/callback',passport.authorize('github', { successRedirect: '/home.html',failureRedirect: '/home.html' }),
+              function(req,res){
+                console.log(req);
+                console.log("account is",req.account);
+                res.redirect('/home.html');
+              });
 
 //login using facebook
   router.get('/facebook', passport.authenticate('facebook', {scope: ['email']}));
@@ -57,6 +64,10 @@ module.exports = function(passport){
     router.get('/google/callback',
   	passport.authenticate('google', { successRedirect: '/home.html',
   																			failureRedirect: '/index.html'}));
+
+
+
+
 
 	return router;
 

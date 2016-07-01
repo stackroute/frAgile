@@ -10,5 +10,10 @@ angular.module('fragileApp').factory('githubService',['$http',function($http){
     },
     getIssues:function(prId){
       return $http.get('/github/issues?projectId='+prId);
+    },
+    addIssue:function(issue){
+      console.log("issue",issue);
+
+      return $http.post('/github/issues', issue);
     }
 }}])
