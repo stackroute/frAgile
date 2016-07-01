@@ -176,12 +176,8 @@
                        </md-input-container>
 
                        <md-list ng-init="todo.assignedMember=[]">
-                         <md-list-item class="md-1-line md-long-text" ng-hide="!newmemberName" ng-repeat="member in storyData.memberList | filter:newmemberName" ng-click="null">{{member.fullName}} 
-                          <md-checkbox class="md-secondary" ng-model="memberStatus" ng-click="toggleMember(member,todo)"></md-checkbox>
-
-
-
-                         </md-list-item>
+                         <md-list-item class="md-1-line md-long-text" ng-hide="!newmemberName" ng-repeat="member in storyData.memberList | filter:newmemberName" ng-click="toggleMember(member,todo)">{{member.fullName}} 
+                        </md-list-item>
                        </md-list>
 
                     </div>

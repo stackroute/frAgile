@@ -1,6 +1,5 @@
 <!-- start -->
 
-<div layout="row" layout-wrap> <!-- may have to remove -->
 	<md-content class="" layout-xs="column" layout="row" layout-wrap>
 
 		<md-card ng-init="editme=false">
@@ -10,32 +9,40 @@
 					<md-checkbox class="md-icon-button" ng-model="$ctrl.task.checked"
 					data-toggle="tooltip" title="Mark as Done" ng-change="$ctrl.updateTodoItemComp($ctrl.task,$ctrl.checklistid,'check')" >
 					</md-checkbox>
-					<md-button class="md-fab md-mini  md-raised md-hue-2"  ng-click="showDiv = !showDiv" data-toggle="tooltip" title="Edit Task" >
+					<!-- <md-button class="md-fab md-mini  md-raised md-hue-2"  ng-click="showDiv = !showDiv"  >
 						<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 					</md-button>
 
 					<md-button class="md-fab md-mini  md-raised md-hue-2 md-save" data-toggle="tooltip" ng-click="$ctrl.removeTaskComp(task)" title="Delete task">
 						<i class="fa fa-trash-o" aria-hidden="true"></i>
-					</md-button>
+					</md-button> -->
 				</md-card-actions>
-					<md-toolbar style="margin-right: 0;margin-left: 5px; max-width: 280px; min-width: 280px; border-radius:5px; background-color:rgb(106,249,161)">
+					<md-toolbar style="margin-left: 5px; max-width: 280px; min-width: 280px; border-radius:5px; background-color:#f1fcff" ng-mouseenter="taskhover=true" ng-mouseleave="taskhover=false">
 				<div  >
-					<span class="md-headline" ng-click="showDiv = !showDiv" ng-hide="showDiv" style="color:gray">{{$ctrl.task.text}}</span>
+					<div  ng-click="showDiv = !showDiv" ng-hide="showDiv" style="color:gray">{{$ctrl.task.text}}</div>
 					 <md-input-container ng-show="showDiv" >
-				        <label style="margin-top:10px; border-radius: 5px ; background-color:rgb(106,249,161)">Task</label>
-				        <input ng-model="$ctrl.task.text">
+				        <label style="margin-top:10px; border-radius: 5px ; background-color:#f1fcff">Task</label>
+				        <textarea  ng-model="$ctrl.task.text"	></textarea>
 				      </md-input-container>
+				    <div class="label label-success price pull-right md-raised" ng-show="taskhover" style="position: absolute;top: -10px;   right: 23px;  padding: 10px;" ng-click="showDiv = !showDiv" data-toggle="tooltip" data-toggle="tooltip" title="Edit Task"> <i class="fa fa-pencil-square-o"></i>
+					</div>		
+					<div class="label label-success price pull-right md-raised " ng-show="taskhover" ng-click="$ctrl.removeTaskComp(task)" style="position: absolute;top: -10px;   right: -10px;  padding: 10px;" data-toggle="tooltip" title="Delete Task"> <i class="fa fa-trash"></i>
+					</div>
+			</div>
+			<div layout="row" data-toggle="tooltip" title="Due Date" style="text-align:right; border-radius:0 0 5px 5px; background-color:gray" >	
+			<span class=" pull-right" >Due Date:{{$ctrl.task.dueDate  | date:"dd/MM/yyyy"}} </span>
 
 			</div>
-			<div class=" pull-right" data-toggle="tooltip" title="Due Date" style="text-align:right; margin-top:90px;border-radius:0 0 5px 5px; background-color:gray" >	<span>Due Date:</span>{{$ctrl.task.dueDate  | date:"dd/MM/yyyy"}} </div>
+
 
 			</md-toolbar>
+
 		</md-card-content>
 		<md-divider  layout="row" >
 			<div ng-repeat="member in $ctrl.task.assignedMember" ng-init="fullName=member.firstName+' '+member.lastName">
 			  <div class="avatar-wrapper" ng-show="member.photo == undefined">
 
-              <ng-letter-avatar data={{fullName}} charCount=2 shape="round" height="30px" width="30px" fontSize="25px" ></ng-letter-avatar>
+              <ng-letter-avatar data={{fullName}} charCount=2 shape="round" avatarborder="true"height="30px" width="30px" fontSize="25px" ></ng-letter-avatar>
 
             </div>
 	       </div>
@@ -64,4 +71,4 @@
 
 
 </md-content>
-</div>
+

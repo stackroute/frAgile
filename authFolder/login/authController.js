@@ -52,7 +52,10 @@ if (nv) {
       });;
     }
 
-
+    $scope.passportForgo=function()
+    {
+      $window.location.href="/forgot.html";
+    }
     $scope.register = function(){
       if($scope.user1.password!=$scope.user1.confirmpassword){
          $scope.passwordError="Password does not match the confirm password";
