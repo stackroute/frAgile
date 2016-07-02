@@ -7,12 +7,6 @@ fragileApp.config(function($stateProvider,$urlRouterProvider){
 controllerAs:'ctrl',
     url: '/cards/'
   });
-$stateProvider
-  .state('cardsPage',{
-    templateUrl: 'components/cards/cardsPage.view.html',
-    controller: 'cardsController',
-controllerAs:'ctrl',
-    url: '/cardsPage/'
-  })
+
 
 });

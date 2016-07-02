@@ -38,7 +38,10 @@ userSchema = new mongoose.Schema({
 
     releaseId:String,
 
-    sprintId:String,
+    sprintId:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref:'Sprint'
+    },
 
     stories:{
       type: mongoose.Schema.Types.ObjectId,
@@ -176,7 +179,9 @@ userSchema.statics.getProjects = function(userID, callback) {
 userSchema.statics.getCards = function(UserId, callback) {
  return  this.find({
    "_id": UserId
- }).populate("assignedStories.stories").exec(function(err, data) {
+ }).populate("assignedStories.stories")
+.populate("assignedStories.sprintId"," name")
+.exec(function(err, data) {
 console.log("I reached user model");
 console.log(data);
    if (err) callback(err)

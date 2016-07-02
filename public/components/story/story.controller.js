@@ -1,9 +1,3 @@
-fragileApp.run(function(editableOptions,editableThemes) {
-  editableOptions.theme = 'bs3';
-  editableThemes['bs3'].submitTpl='<button class="btn btn-danger"  type="submit" id="updateTodoItem(todo)">Save</button><button class="btn btn-danger btn-circle" ng-click="fetchMembersForChecklist()">...</button>';
-  // bootstrap3 theme. Can be also 'bs2', 'default'
-});
-
 fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window','$sce', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window,$sce) {
   var socket = Socket($scope);
 
@@ -22,27 +16,17 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   storyContr.storyData = storyContr.complexDataObject.story.data;
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
     storyContr.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
+
   });
 
+
+
   storyContr.storyGrp = storyContr.complexDataObject.storyGrp;
-  //Below code is to get labels data from project starts
-  // $scope.storyTempData = [];
-  // var respObj = $rootScope.projects.filter(function(item) {
-  //   return item._id === $stateParams.prId;
-  // });
-  // for (var i = 0; i < respObj[0].labelId.labelList.length; i++) {
-  //   if (storyContr.storyData.labelList.indexOf(respObj[0].labelId.labelList[i]._id) != -1) {
-  //     $scope.storyTempData.push(respObj[0].labelId.labelList[i]);
-  //   }
-  // }
-  // storyContr.storyData.labelList = $scope.storyTempData; //Overriding the old valuse
+
   //Ends
+
   $scope.storyData = storyContr.storyData;
   $scope.storyComment = "";
-
-  console.log($scope.storyData);
-
-
   $scope.storyData.memberList.forEach(function(data) {
     data.fullName = data.firstName + " " + data.lastName;
   });
@@ -100,14 +84,7 @@ console.log("joining room"+emitData);
     $scope.set = false;
   };
 
-  //
-  // $scope.getStory = function() {
-  //   console.log("inside");
-  //   $scope.description = "edited";
-  //   storyService.getStoryDetails().then(function(storyDetails) {
-  //
-  //   });
-  // };
+
   /***
   author:sharan
   function:addMember
@@ -117,7 +94,122 @@ console.log("joining room"+emitData);
   //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
   $scope.addMember = function() {
     modalService.open('sm', 'components/story/operations/addMember.view.html', 'storyOperationsController', storyContr.complexDataObject);
+    console.log("complexDataObject --->",storyContr.complexDataObject);
   };
+
+  //for toggling the selection of member while creating new task
+  $scope.toggleMember=function(newMember,task){
+    var result=0;
+    var index=0;
+    var hold=0;
+    task.assignedMember.filter(function(obj)
+      {
+          if(obj._id==newMember._id)
+          {
+              result=1;
+              hold=index;
+          }
+            index++;
+      });
+    if(result==1)
+    {
+      task.assignedMember.splice(hold,1);
+    }
+    else
+    {
+      task.assignedMember.push(newMember);
+    }
+
+    }
+  //for toggling the selection of member while creating new task Ends
+
+var flag=0;
+localData=[];
+$scope.memberArray=[];
+$scope.memberArrayIndex=[];
+  /***
+  author:nitish
+  function:addMember to check list
+  parameters:none
+  description:This function is used to add members to checklist
+  ***/
+
+//while loading the story page,setting memberArray with itemids and assignedMember
+$scope.fetchMemberDetails=function()
+{
+  $scope.memberArray=[];
+  $scope.memberArrayIndex=[];
+$scope.storyData.checklist.filter(function(checkList)
+{
+  checkList.items.filter(function(item)
+{
+  obj={};
+  obj["itemId"]=item._id;
+  obj["arrayOfMembers"]=item.assignedMember;
+  $scope.memberArrayIndex.push(item._id);
+  $scope.memberArray.push(obj);
+});
+});
+console.log("memberarray after item added",$scope.memberArray);
+console.log("memberarrayindex after item added",$scope.memberArrayIndex);
+}
+
+console.log("newly created array",JSON.stringify($scope.memberArray));
+
+  // $scope.addMemberObj=function(itemId)
+  // {
+  //   var check=$scope.memberArray.filter(function(obj)
+  //   {
+  //     return itemId==obj.itemId;
+  //   });
+  //   if(check.length==0)
+  //   {
+  //
+  //   obj={};
+  //   obj["itemId"]=itemId;
+  //   obj["arrayOfMembers"]=[];
+  //   $scope.memberArray.push(obj);
+  //   console.log("memberArray ",$scope.memberArray);
+  //
+  //   }
+  //
+  // }
+
+  $scope.addMemberToChecklist = function(listItem) {
+    //socket.emit("join:room",{"room":"checklist:"+lis})
+    console.log(listItem,"in add mem: ",listItem.assignedMember);
+
+
+    listItem.assignedMember=$scope.memberArray[$scope.memberArrayIndex.indexOf(listItem._id)]["arrayOfMembers"];
+
+    console.log("assignedMember list: ",listItem.assignedMember);
+    var checkListId;
+$scope.storyData.checklist.filter(function(checkList)
+{
+checkList.items.filter(function(item)
+{
+if(item._id==listItem._id)
+    checkListId=checkList._id;
+});
+});
+console.log("checklist id --->",checkListId);
+console.log("memberList --->",$scope.storyData.memberList);
+    data = {
+
+      listItem:listItem,
+     //members: storyData.assignedMember
+       roomName:$scope.roomName,
+      members:$scope.storyData.memberList,
+      storyId:$scope.storyData._id,
+      checkListId:checkListId,
+      memberArray:$scope.memberArray
+    };
+
+modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.html', 'addMemberToChecklistController', data);
+
+  };
+
+
 
   /***
   author:Sharan
@@ -148,7 +240,24 @@ console.log("joining room"+emitData);
   ***/
   $scope.removeMember = function(memberId, fullName) {
     //working,tested
-    socket.emit('story:removeMembers', {
+    var numberOfTasks=0;
+    var message='';
+    $scope.memberArray.filter(function(obj)
+  {
+    obj.arrayOfMembers.filter(function(member)
+  {
+    if(member._id==memberId)
+    numberOfTasks++;
+  })
+  })
+  if(numberOfTasks>0)
+  message=fullName.toUpperCase()+' '+"has been assigned to"+' '+numberOfTasks+' '+"tasks"+'\n'+"you wanna remove";
+  else
+  message="are you sure?";
+
+  var result=confirm(message)
+  if(result)
+  socket.emit('story:removeMembers', {
 
       'room': $scope.roomName,
       'storyid': storyContr.storyData._id,
@@ -345,12 +454,17 @@ console.log("joining room"+emitData);
   ***/
   $scope.addTodoItem = function(todo) {
     //todo.items.push({"text":todo.todoText,"done":false})
+    var assignedMember=[];
+    //console.log("inside story controller"+$rootScope.itemMember.fullName);
+    //assignedMember.push($rootScope.itemMember);
     var itemObj = {
       text: todo.todoText,
       checked: false,
       creationDate: Date.now(),
-      dueDate:todo.todoDueDate
-    }
+      dueDate:todo.dueDate,
+      assignedMember:todo.assignedMember
+    };
+
 
     socket.emit('story:addChecklistItem', {
 
@@ -378,7 +492,7 @@ console.log("joining room"+emitData);
     console.log(checklistGrp)
     console.log(listItem);
     //todo.items.push({"text":todo.todoText,"done":false})
-
+    console.log("inside the remove method--->");
     socket.emit('story:removeChecklistItem', {
 
       'room': $scope.roomName,
@@ -400,23 +514,37 @@ console.log("joining room"+emitData);
   description:this fuction is used to add a new item to the checklist group.
   ***/
   //TODO:Not working because of nth level
-  $scope.updateTodoItem = function(listItem, checklistGrp) {
+   //to update list item
+  $scope.updateListItem=function(listItem,checklistGrp){
+  console.log("Modified item: ",listItem);
+  // $scope.updateTodoItem(listItem,checklistGrp);
+
+  }
+
+  $scope.updateTodoItem = function(listItem, checkListId,operation) {
 
     //todo.items.push({"text":todo.todoText,"done":false})
-
+console.log("new data",listItem.text,listItem.dueDate);
+console.log("in controller",listItem.checked);
     socket.emit('story:updateChecklistItem', {
-
-      'room': $scope.roomName,
-      'storyid': $scope.storyData._id,
-      'checklistGrpId': checklistGrp._id,
+       'room': $scope.roomName,
+       'storyid': $scope.storyData._id,
+       'checklistGrpId': checkListId,
       'itemid': listItem._id,
       'checked': listItem.checked,
+      'operation':operation,
       'text': listItem.text,
+      'dueDate':listItem.dueDate,
       'projectID': $scope.projectID,
       'user':$rootScope.userProfile
     });
   };
 
+        $scope.mydueDate = moment();//for datepicker
+        var aFunction = function(){
+             var newDate = moment(timestamp);
+             $scope.mydueDate = newDate;
+        }
   $scope.remaining = function(list, todo) {
 
     //Todo need to update this function
@@ -435,16 +563,23 @@ console.log("joining room"+emitData);
   Parameters:None
   TODO:Presently we are not hitting the server for updating the data and pushing to model directly. Need to update the logic
   ***/
-  $scope.removeChecklistGroup = function(checklistGrpId, heading) {
+  $scope.removeChecklistGroup = function(checklist, heading) {
     //TODO:Add listner
+    var checkedCount=0;
+    checklist.items.filter(function(item)
+  {
+    if(item.checked)
+      checkedCount++;
+  });
     socket.emit('story:removeChecklistGroup', {
-
       'room': $scope.roomName,
       'storyid': $scope.storyData._id,
-      'checklistGrpId': checklistGrpId,
+      'checklistGrpId': checklist._id,
       'projectID': $scope.projectID,
       'heading': heading,
-      'user':$rootScope.userProfile
+      'user':$rootScope.userProfile,
+      'checkedCount':checkedCount,
+      'itemsLength':checklist.items.length
     });
   };
   /***
@@ -477,34 +612,25 @@ console.log("joining room"+emitData);
   }
   //Handler to update story for all story changes
   socket.on('story:dataModified', function(data) {
-    if (data._id == $scope.storyData._id) { //If the updated card is same as current opened card
-      data.memberList.forEach(function(storyItem) {
-        storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
-      });
+      if(data._id==$scope.storyData._id)
+      socket.emit("story:findStory",{"storyId":$scope.storyData._id,"roomName":$scope.roomName});
+
+
+      console.log("im here to modify");
+        // this is to set memberArray after item added/deleted.
       ///
-      // $scope.storyTempData = [];
-      // var projObj = $rootScope.projects.filter(function(item) {
-      //   return item._id === $stateParams.prId;
-      // });
-      // for (var i = 0; i < projObj[0].labelId.labelList.length; i++) {
-      //   if (data.labelList.indexOf(projObj[0].labelId.labelList[i]._id) != -1) {
-      //     $scope.storyTempData.push(projObj[0].labelId.labelList[i]);
-      //   }
-      // }
-      // data.labelList = $scope.storyTempData; //Overriding the old valuse
-      // ///
-      $scope.storyData = data;
+
+    })
+
+  socket.on("story:getStory",function(story)
+    {
+      if(story._id==$scope.storyData._id)
+      {
+        story.memberList.forEach(function(storyItem) {
+          storyItem.fullName = storyItem.firstName + " " + storyItem.lastName;
+        })
+        $scope.storyData = story;
+          $scope.fetchMemberDetails();
     }
-  })
-
-  // $scope.fetchMembersForChecklist=function(){
-  // $scope.checkListMembers=$rootScope.membersData;
-  // }
-
-
-
-  $scope.fetchMembersForChecklist = function() {
-    modalService.open('sm', 'components/story/operations/addMemberItem.view.html', 'storyOperationsController', storyContr.complexDataObject);
-  };
-
-}]);
+  });
+}])

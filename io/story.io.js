@@ -155,8 +155,11 @@ console.log(doc);
               memberList: doc.memberList
             }
             console.log("Im in add");
-            console.log(storyData);
-            io.to(data.room).emit('story:membersModified', members);
+
+            console.log(members);
+            io.to(data.room).emit('story:membersModified',members);
+            io.to(data.room).emit('story:membersModifiedOnItem',{"storyId":storyData._id,"memberList":storyData.memberList});
+
             io.to(data.room).emit('story:dataModified', storyData);
 
 
@@ -204,6 +207,7 @@ console.log(doc[0].assignedStories);
   description:listner to remove members from story
   ****/
   socket.on('story:removeMembers', function(data) {
+
     console.log("Data recieved by socket",data);
     Story.findIssue(data.storyid,function(err,storyData){
       console.log("story",storyData);
@@ -256,13 +260,9 @@ console.log(doc[0].assignedStories);
   })
     }
     })
-    Story.removeMembers(data.storyid, data.memberid, function(err, doc) {
 
-      //edited for cards page
-                  // io.to(data.memberid).emit('story:memberRemoved',data);
+    Story.removeMembers(data.storyid, data.memberid, function(err, storyData) {
 
-      if (!err) {
-        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
           if (!err) {
             io.to(data.room).emit('story:dataModified', storyData);
 
@@ -271,7 +271,7 @@ console.log(doc[0].assignedStories);
             console.log("Im in remove");
             var members = {
               _id: storyData._id,
-              memberList: doc.memberList
+              memberList: storyData.memberList
             }
             io.to(data.room).emit('story:membersModified', members);
 
@@ -294,8 +294,6 @@ console.log(doc[0].assignedStories);
             Activity.addEvent(actData, function(data) {
               io.to(actData.room).emit('activityAdded', data);
             });
-          }
-        });
       }
     })
 
@@ -343,33 +341,34 @@ io.to(data.memberid).emit('story:memberRemoved',doc);
   description:listner to addnew item to checklist group in a story
   ****/
   socket.on('story:addChecklistItem', function(data) {
-    data.itemObj.creatorName = user.fullName;
-    data.itemObj.createdBy = user._id;
-    // data.itemObj.createdBy="570395a239dc5fbac028505c";
-    // data.itemObj.creatorName="user.fullName";
-console.log(data);
-    Story.addChecklistItem(data.storyid, data.checklistGrpId, data.itemObj, function(err, doc) {
-      if (!err) {
-        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
-          if (!err) {
-console.log(data);
-            io.to(data.room).emit('story:dataModified', storyData);
-console.log("room");
-console.log(data.room);
-            var actData = {
-              room: "activity:" + data.projectID,
-              action: "added",
-              projectID: data.projectID,
-              user: data.user,
-              object: {
-                name: data.text,
-                type: "Story",
-                _id: data.checklistGrpId
-              },
-              target: {
-                name: storyData.heading,
-                type: "Story",
-                _id: data.storyid
+
+      data.itemObj.creatorName = data.user.fullName;
+      data.itemObj.createdBy = data.user._id;
+      // data.itemObj.createdBy="570395a239dc5fbac028505c";
+      // data.itemObj.creatorName="user.fullName";
+
+      Story.addChecklistItem(data.storyid, data.checklistGrpId, data.itemObj, function(err, doc) {
+        if (!err) {
+          Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+            if (!err) {
+              io.to(data.room).emit('story:dataModified', storyData);
+
+              var actData = {
+                room: "activity:" + data.projectID,
+                action: "added",
+                projectID: data.projectID,
+                user: data.user,
+                object: {
+                  name: data.text,
+                  type: "Story",
+                  _id: data.checklistGrpId
+                },
+                target: {
+                  name: storyData.heading,
+                  type: "Story",
+                  _id: data.storyid
+                }
+
               }
             }
             Activity.addEvent(actData, function(data) {
@@ -381,14 +380,52 @@ console.log(data+"activity checklist todo");
 
               io.to(actData.room).emit('activityAdded', data);
             });
-          }
+
         });
       }
     })
-  })
+})
   /****
   description:listner to remove item to checklist group in a story
   ****/
+/****
+    description:listner to remove item to checklist group in a story
+    ****/
+    // socket.on('story:removeChecklistItem', function(data) {
+    //     Story.removeItem(data.storyid, data.checklistGrpId, data.itemid, data.checked, function(err, doc) {
+    //       if (!err) {
+    //         //user.userID
+    //         Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+    //           if (!err) {
+    //             io.to(data.room).emit('story:dataModified', storyData);
+    //
+    //             var actData = {
+    //               room: "activity:" + data.projectID,
+    //               action: "added",
+    //               projectID: data.projectID,
+    //               user: data.user,
+    //               object: {
+    //                 name: data.text,
+    //                 type: "Story",
+    //                 _id: data.checklistGrpId
+    //               },
+    //               target: {
+    //                 name: storyData.heading,
+    //                 type: "Story",
+    //                 _id: data.storyid
+    //               }
+    //             }
+    //             Activity.addEvent(actData, function(data) {
+    //               io.to(actData.room).emit('activityAdded', data);
+    //             });
+    //           }
+    //         });
+    //       }
+    //     })
+    //   })
+
+
+
   socket.on('story:removeChecklistItem', function(data) {
     Story.removeChecklistItem(data.storyid, data.checklistGrpId, data.itemid, data.checked, function(err, doc) {
       if (!err) {
@@ -421,55 +458,11 @@ console.log(data+"activity checklist todo");
       }
     })
   })
-  /****
-  description:listner to remove item to checklist group in a story
-  ****/
+    /****
+    description:listner to remove item to checklist group in a story
+    ****/
   socket.on('story:removeChecklistGroup', function(data) {
-    Story.removeChecklistGroup(data.storyid, data.checklistGrpId, function(err, doc) {
-      if (!err) {
-        //user.userID
-        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
-          if (!err) {
-            io.to(data.room).emit('story:dataModified', storyData);
-
-            var actData = {
-              room: "activity:" + data.projectID,
-              action: "removed",
-              projectID: data.projectID,
-              user: data.user,
-              object: {
-                name: data.heading,
-                type: "Story",
-                _id: data.checklistGrpId
-              },
-              target: {
-                name: storyData.heading,
-                type: "Story",
-                _id: data.storyid
-              }
-            }
-            Activity.addEvent(actData, function(data) {
-              io.to(actData.room).emit('activityAdded', data);
-            });
-          }
-        });
-      }
-    })
-  })
-  /****
-  description:listner to update item to checklist group in a story
-  ****/
-  socket.on('story:updateChecklistItem', function(data) {
-
-    // Story.updateChecklistItem(data.storyid,data.checklistGrpId,data.itemid,data.checked, function(err, doc) {
-    //   if (!err) {
-    //     //user.userID
-    //     io.to(data.room).emit('story:checklistItemUpdated', doc);
-    //   }
-    // })
-    Story.getCheckItemIndex(data.itemid, function(err, index) {
-      if (index != -1)
-      Story.updateChecklistItem(data.storyid, data.checklistGrpId, data.itemid, data.checked, index, function(err, doc) {
+      Story.removeChecklistGroup(data.storyid, data.checklistGrpId,data.checkedCount,data.itemsLength,function(err, doc) {
         if (!err) {
           //user.userID
           Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
@@ -500,7 +493,73 @@ console.log(data+"activity checklist todo");
         }
       })
     })
+
+
+//get a story based on storyid after an item added or removed in checklist to update the memberarray in storyController
+  socket.on("story:findStory",function(data)
+  {
+    Story.findStory(data.storyId,function(err,doc)
+  {
+    io.to(data.roomName).emit('story:getStory',doc);
+  });
+  });
+
+
+    //start new
+    socket.on('story:addRemoveMembersListItem',function(data){
+      console.log("i received something----->",data.assignedMember);
+    console.log("assignedMember array --->",data.assignedMember);
+    io.to(data.roomName).emit('memberAdded',data);
+     Story.addMemberToChecklist(data,function(err,doc)
+   {
+    io.to(data.roomName).emit("story:getStory",doc);
+      })
+    });
+    //end new
+    //start
+    //neo
+    socket.on('story:addRemoveMembersList',function(data)
+    {
+
+      socket.emit('pushMemberToItem',data.assignedMember);
+      //console.log("my data members: ",data.assignedMember);
+
+    });
+    //end
+    /****
+    description:listner to update item to checklist group in a story
+
+    ****/
+
+  socket.on('story:updateChecklistItem', function(data) {
+        Story.updateChecklistItem(data.storyid, data.checklistGrpId,data.operation,data.itemid,data.checked,data.text,data.dueDate,function(err, doc) {
+          if (!err) {
+                io.to(data.room).emit('story:dataModified', doc);
+
+                var actData = {
+                  room: "activity:" + data.projectID,
+                  action: data.checked == true ? "completed" : "unchecked",
+                  projectID: data.projectID,
+                  user: data.user,
+                  object: {
+                    name: data.text,
+                    type: "Story",
+                    _id: data.checklistGrpId
+                  },
+                  target: {
+                    name: doc.heading,
+                    type: "Story",
+                    _id: data.storyid
+                  }
+                }
+                Activity.addEvent(actData, function(data) {
+                  io.to(actData.room).emit('activityAdded', data);
+                });
+              }
+    })
+
   })
+
 
   socket.on('story:addAttachment', function(data) {
     io.to(data.room).emit('story:attachmentAdded', data);

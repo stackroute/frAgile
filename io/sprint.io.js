@@ -136,6 +136,11 @@ module.exports = function(socket, io) {
         if (addStoryData.nModified == 1) { //If add is succesful
           Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
             if (delStoryData.nModified == 1) { //If delete is succesful
+              if(data.newListName!=='')
+                  Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+                  if(err) console.log("could not update");
+                  else console.log(updateStoryData);
+                  })
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedTo', data);
@@ -163,6 +168,11 @@ module.exports = function(socket, io) {
         if (addStoryData.nModified == 1) { //If add is succesful
           Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
             if (delStoryData.nModified == 1) { //If delete is succesful
+              if(data.newListName!=='')
+                  Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+                  if(err) console.log("could not update");
+                  else console.log(updateStoryData);
+                  })
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedTo', data);
@@ -233,6 +243,11 @@ module.exports = function(socket, io) {
         if (addStoryData.nModified == 1) { //If add is succesful
           BackLogsBugList.deleteStoryBacklog(data.projectID, data.storyId, function(err, delStoryData) {
             if (delStoryData.nModified == 1) { //If delete is succesful
+              if(data.newListName!=='')
+                Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+                if(err) console.log("could not update");
+                else console.log(updateStoryData);
+                })
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedFrom', data);
@@ -257,6 +272,11 @@ module.exports = function(socket, io) {
         if (addStoryData.nModified == 1) { //If add is succesful
           BackLogsBugList.deleteStoryBuglist(data.projectID, data.storyId, function(err, delStoryData) {
             if (delStoryData.nModified == 1) { //If delete is succesful
+              if(data.newListName!=='')
+                  Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+                  if(err) console.log("could not update");
+                  else console.log(updateStoryData);
+                  })
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedFrom', data);

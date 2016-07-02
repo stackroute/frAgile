@@ -78,6 +78,7 @@
         <div class="listHead" id="{{listItem.group}}">
           {{listItem.listName}}
         </div>
+
         <div class="parentInner" id="list">
 
           <div id="{{story._id}}" ng-repeat="story in listItem.stories" class="child"data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
@@ -126,7 +127,7 @@
           <div id="{{story._id}}" ng-repeat="story in backBug.buglist.stories" class="child" ng-click="showModal(story._id, 'backBug',backBug._id,'Buglist')" data-drag="true" data-jqyoui-options="{revert: 'invalid',helper:'clone'}"
             jqyoui-draggable="{index: {{$index}},onStart:'startCallback(item, $index)',onStop:'stopCallback(item,$index)'}">
             <div class="story_Name">
-              {{story.heading}}
+              {{story.heading }}
             </div>
             <div class="storyAttributes">
               <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>

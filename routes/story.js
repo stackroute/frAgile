@@ -46,6 +46,7 @@ router.post('/getMembersData',function(req,res,next){
       res.send(err);
     }else{
       console.log(data);
+      console.log("---------------------in story model to check---------");
       res.send(data.memberList);
     }
   })
@@ -162,6 +163,15 @@ res.send(data);
 })
 });
 
+
+router.get('/addMemberToChecklist',function(req,res,next)
+{
+story.addMemberToChecklist(req,function(err,data)
+{
+  console.log("im in stor");
+});
+});
+
 router.get('/addchecklistgroup', function(req, res, next) {
   //TODO:Get the below obj dynamically from request. Update indicators dynamically
 
@@ -204,7 +214,6 @@ story.updateLabelList(storyId,labelListId,operation,function(err,data){
 res.send(data);
 });
 });
-
 
 
 //ends

@@ -1,84 +1,41 @@
 <div class = "cardsPage container" ng-init="loadCards()">
-  <div class="showNewCards" ng-show = "cards.length == 0">
-    <center>All your Stories at one place</center>
-  </div>
-<ui sref="cardsUI()">
+ <div class="showNewCards" ng-show = "cards.length == 0">
+   <center>All your Stories at one place</center>
+ </div>
 
-  <div class="row ">
-    <div class="col-sm-6 form-group">
-      <div class="input-group" id="DateDemo">
-        <input type='text' id='weeklyDatePicker' placeholder="Select Week" class="form-control" value=getDate()/>
-      </div>
-<button ng-click="applyFilter()">Apply</button>
-    </div>
-<input type="text" model="startDate" id="startDate" style="display:none"><input type="text" model="endDate" id="endDate" style="display:none">
-  </div>
+   <div class="row ">
+   </div>
 
 
-  <h1 ng-hide="cards.length==0" align="center">My Stories</h1>
-  <div ng-repeat="card in cards " ng-init="count=0">
-    <br>
-    <div style="clear:both">
-      <a ng-click="gotoProject()">{{card.projectId}} </a>| <a ui-sref="release({ prId : card.projectId, releaseID: card.releaseId})">{{card.releaseId}}</a> | <a ui-sref="sprint({ prId : card.projectId, releaseID: card.releaseId,sprintID: card.sprintId})">{{card.sprintId}}</a>
-      <div  ng-hide >
+   <h1 ng-hide="cards.length==0" align="center">My Stories</h1>
+   <div ng-repeat="(key,value) in cards|groupBy:'sprintId._id'" ng-init="count=0" >
+     <br>
 
 
-        <div ng-repeat="story in card.stories"  >
-          <div class="boxStory" ui-sref=".story({sprintID: value[0].sprintId,storyID:story._id})">
-            {{story}}
-            <div class="storyAttributes">
-              <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
-              <span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{story.indicators.commentCount}}</span>
-              <span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{story.indicators.attachmentsCount}}</span>
-              <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{story.indicators.chklstItmsChkdCnt}} / {{story.indicators.chklstItmsCnt}}</span>
-              <span ng-hide="story.memberList!==undefined">
-                <div>
-                  <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
-                  <div class="avatar-ng" ng-show="member.photo == undefined">
-                    <ng-letter-avatar data="{{member.fullName}}" charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
-                  </div>
-                  &nbsp;
-                </div>
-              </span>
-            </div>
-          </div> <!-- Box story div ends here-->
-        </div>
-      </div>
-    </div>
-  </div><!-- cards  div ends here-->
+     <a ng-click="gotoProject()">{{value[0].projectName}} </a>| <a ui-sref="release({ prId : value[0].projectId, releaseID: value[0].releaseId})">{{value[0].releaseName}}</a> | <a ui-sref="sprint({ prId : value[0].projectId, releaseID: value[0].releaseId,sprintID:key})">{{value[0].sprintId.name}}</a>
 
+     <p ng-bind="startDate"></p>
+     <div ng-repeat="card in value" >
+       <div class="boxStory" ui-sref=".story({sprintID: value[0].sprintId._id,storyID:value[0].stories._id})">
+         {{card.stories.heading}}{{card.startDate}}{{card.endDate}}
+         <div class="storyAttributes">
+           <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+           <span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{card.stories.indicators.commentCount}}</span>
+           <span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{card.stories.indicators.attachmentsCount}}</span>
+           <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{card.stories.indicators.chklstItmsChkdCnt}} / {{card.stories.indicators.chklstItmsCnt}}</span>
+           <span ng-hide="value[0].stories.memberList!==undefined">
+             <div >
+               <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
+               <div class="avatar-ng" ng-show="member.photo == undefined">
+                 <ng-letter-avatar data="{{member.fullName}}" charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
+               </div>
+               &nbsp;
+             </div>
+           </span>
+         </div>
+       </div> <!-- Box story div ends here-->
+     </div>
+     <hr style="clear:both">
+   </div><!-- cards  div ends here-->
 
-  <script>
-  $("#weeklyDatePicker").datepicker({
-    format: 'dd/mm/yyyy',
-    autoclose: false,
-    todayBtn: "linked",
-    pickerPosition: "bottom-left"
-  });
-
-
-  $("#weeklyDatePicker").datepicker().change(function() {
-    var d = $(this).datepicker('getDate');
-    $(this).val(formatDatePickerDisplay(d))
-  }) /* trigger change to update display on page load*/
-  .change()
-
-
-  function formatDatePickerDisplay(d) {
-    if (!d) {
-      return '';
-    }
-    var currDate = moment(d),
-    sunday = moment(currDate).day(0).format('DD-MM-YYYY'),
-    saturday = moment(currDate).day(6).format('DD-MM-YYYY');
-$('#startDate').val(sunday);
-$('#endDate').val(saturday);
-    return sunday + ' - ' + saturday;
-
-  }
-
-  </script>
-
-
-
-</div>
+ </div>

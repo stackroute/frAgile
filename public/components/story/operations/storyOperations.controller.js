@@ -1,5 +1,8 @@
 fragileApp.controller('storyOperationsController',['$scope','$rootScope','$stateParams','storyService','modalService','$uibModal','$uibModalInstance','$location','param','Socket',function($scope,$rootScope,$stateParams,storyService,modalService,$uibModal,$uibModalInstance,$location,param,Socket){
-  var socket = Socket($scope);
+
+var socket = Socket($scope);
+console.log(" story controler param:",param);
+
   //TODO:need to check whether we need to get the "$scope.memberDetails" data directly from rootscope without resolving it in story Modal.   ---->Check
 
 
@@ -12,6 +15,7 @@ fragileApp.controller('storyOperationsController',['$scope','$rootScope','$state
   /***Received the data from resolve functionality of uibModal***/
   $scope.storyDetails= param.story.data;
   $scope.roomName = "sprint:" + param.sprint._id;
+
 
 
 
@@ -36,6 +40,25 @@ fragileApp.controller('storyOperationsController',['$scope','$rootScope','$state
       console.log(response);
       $scope.membersData=response.data;
     });
+
+  }
+
+    //neo list item member fetch
+    $scope.initLoadMembersList = function(){
+    //$scope.memberDetails= param.projMembers;
+
+    /*** Declaring variables required for addMembers,addLabels***/
+    $scope.longDescLimit=25 ;
+    $scope.checked = true;
+    $scope.membersData = [];
+    /** XHR request to fetch latest members details***/
+    console.log($scope.storyDetails._id);
+    // $scope.membersData=$scope.assMember;
+
+    // storyService.getMembersData($scope.storyDetails._id).then(function(response) {
+    //   console.log(response);
+    //   $scope.membersData=response.data;
+    // });
 
   }
 
@@ -382,6 +405,9 @@ fragileApp.controller('storyOperationsController',['$scope','$rootScope','$state
     $scope.checked=!$scope.checked;
   }
 
+
+
+
   /***
   authors:sharan,srinivas
   function:addRemoveMembers
@@ -424,7 +450,9 @@ fragileApp.controller('storyOperationsController',['$scope','$rootScope','$state
         'github_profile':$rootScope.githubProfile
       });
     }
-  }
+  }//addremoveMemmber ends
+
+
   socket.on('story:membersModified', function(data) {
     //Not Receiving any data
     console.log(data);

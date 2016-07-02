@@ -31,8 +31,10 @@ app.use(session({
     port: 6379,
     db: 7
   }),
+
   secret:'fragile'
 }));
+
 
 
 // app.use(session({
@@ -60,7 +62,11 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'authFolder')));
 app.use('/', routes);
 app.use('/auth',authenticationHandler);
-
+app.post('/issueEvents',function(req,res){
+  console.log("inside issue events");
+  console.log(req);
+  res.send("succesful");
+})
 // view engine setup
 
 app.use(function(req, res, next) {
