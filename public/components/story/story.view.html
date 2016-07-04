@@ -40,24 +40,22 @@
                   </div>
                 </script>
                 <script type="text/ng-template" id="edit">
-                  <span><textarea id="ed-txt-area"   data-ng-model="model.selected.name" ></textarea></span>
-                  <span class="pull-left">
-                   <div >
-                       <a i class="fa fa-question-circle"  href="" ng-click="toggle()" class="pageslide"></a>
-                       <div pageslide ps-open="checked" ps-side="left">
-                           <div style="padding:20px" id="demo-right">
-                               <h2>Markdown Syntax</h2><a i class="fa fa-remove" ng-click="toggle()" class="button" ></a>
-                               <p>Put here whatever you want</p>
+
+                   <span><textarea id="ed-txt-area" data-ng-model="model.selected.name" placeholder="Edit Using Markdown!!"></textarea> </span>
 
 
-                           </div>
-                       </div>
-                   </div>
-                  </span>
-                  <span class="pull-right edit-description">
+
+
+                 <i class="fa fa-question-circle" aria-hidden="true" title="Basic Markdown Syntax" data-content="{{popover.content}}" data-placement="left" data-template-url="/components/story/markdownSyntax.html"  data-auto-close="1" bs-popover></i>
+
+
+                    <span class="pull-right edit-description">
                     <a class="btn btn-default btn-xs desc-btn" ng-click="saveDescription()" ><i class="fa fa-check"></i></a>
                     <a class="btn btn-default btn-xs desc-btn"ng-click="reset()" ><i class="fa fa-close"></i></a>
                   </span>
+
+
+
                 </script>
               </div>
             </div>

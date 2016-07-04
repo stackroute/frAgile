@@ -6,14 +6,6 @@ $scope.assignedMember=[];
 $scope.assignedMemberIndex=[];
 $scope.currentItemId=param.listItem._id;
 $scope.title=param.listItem.text;
-  // $scope.initLoadMembersOfItem=function(){
-  //   $scope.assignedMember=$scope.assignedMember.concat(param.listItem.assignedMember);
-  //   $scope.assignedMember.filter(function(member)
-  // {
-  // $scope.assignedMemberIndex.push(member._id);
-  // });
-  //   console.log("yahoooooooo,: ",$scope.assignedMemberIndex);
-  // }//end of load member Item
 
 	$scope.initLoadMembersOfStory = function(){
     //$scope.memberDetails= param.projMembers;
@@ -40,7 +32,7 @@ $scope.title=param.listItem.text;
       console.log("after remove===>",$scope.storyMember);
     }
   });
-  
+
 console.log("story members --->",$scope.storyMember);
   }//end of init load member
 
@@ -72,7 +64,6 @@ console.log("story members --->",$scope.storyMember);
         if($scope.currentItemId==data.listItem._id)
         {
           $scope.assignedMember=data.assignedMember;
-          console.log("im in itemmodel to modify",$scope.assignedMember);
           $scope.assignedMemberIndex=data.indexArray;
         }
        });

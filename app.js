@@ -62,6 +62,7 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'authFolder')));
 app.use('/', routes);
 app.use('/auth',authenticationHandler);
+
 app.post('/issueEvents',function(req,res){
   console.log("inside issue events");
   console.log(req);

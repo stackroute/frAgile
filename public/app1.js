@@ -1,5 +1,5 @@
 
-var fragileApp = angular.module('fragileApp',['angular.filter','ui.router','ngLetterAvatar','ui.bootstrap','ngAnimate','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3','jkuri.datepicker','ngMaterial', 'ngMessages', 'material.svgAssetsCache','Showdown','ngSanitize','bc.AngularUrlEncode']);
+var fragileApp = angular.module('fragileApp',['angular.filter','ui.router','ngLetterAvatar','ui.bootstrap','ngAnimate','ngDragDrop','autocomplete', 'angular-loading-bar','ngFileUpload','nvd3','jkuri.datepicker','ngMaterial', 'ngMessages', 'material.svgAssetsCache','Showdown','ngSanitize','bc.AngularUrlEncode','mgcrea.ngStrap']);
 
 fragileApp.filter('dateSuffix', function($filter) {
  var suffixes = ["th", "st", "nd", "rd"];
@@ -13,3 +13,9 @@ fragileApp.filter('dateSuffix', function($filter) {
     return dtfilter+suffix + ", " + $filter('date')(input, 'yyyy')
   };
 });
+
+fragileApp.config(function($popoverProvider) {
+angular.extend($popoverProvider.defaults, {
+  html: true
+});
+})

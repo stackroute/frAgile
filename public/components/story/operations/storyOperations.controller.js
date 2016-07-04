@@ -455,9 +455,10 @@ console.log(" story controler param:",param);
 
   socket.on('story:membersModified', function(data) {
     //Not Receiving any data
-    console.log(data);
+    console.log(data.memberList);
     if(data._id == $scope.storyDetails._id){ //If the updated card is same as current opened card
       $scope.membersData = data.memberList;
+      console.log("meberlist------------------------",data.memberList);
     }
   })
   socket.on('story:labelsModified', function(data) {

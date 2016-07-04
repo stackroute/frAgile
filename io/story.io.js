@@ -124,8 +124,6 @@ console.log(data);
             }
             }
             })
-
-
       }
     }
   })
@@ -138,17 +136,11 @@ console.log(data);
       //edited for cards page
 console.log(data.memberid+ "new member added");
 console.log(doc);
-      // io.to(data.memberid).emit('story:memberAssigned',doc);
-
 
       if (!err) {
-
         console.log(data.memberid);
 
-
-
-
-        Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
+        Story.findById(data.storyid).exec(function(err, storyData) {
           if (!err) {
             var members = {
               _id: storyData._id,
@@ -265,9 +257,6 @@ console.log(doc[0].assignedStories);
 
           if (!err) {
             io.to(data.room).emit('story:dataModified', storyData);
-
-
-
             console.log("Im in remove");
             var members = {
               _id: storyData._id,
@@ -340,13 +329,11 @@ io.to(data.memberid).emit('story:memberRemoved',doc);
   /****
   description:listner to addnew item to checklist group in a story
   ****/
-  socket.on('story:addChecklistItem', function(data) {
 
+
+  socket.on('story:addChecklistItem', function(data) {
       data.itemObj.creatorName = data.user.fullName;
       data.itemObj.createdBy = data.user._id;
-      // data.itemObj.createdBy="570395a239dc5fbac028505c";
-      // data.itemObj.creatorName="user.fullName";
-
       Story.addChecklistItem(data.storyid, data.checklistGrpId, data.itemObj, function(err, doc) {
         if (!err) {
           Story.findById(data.storyid).populate("memberList").exec(function(err, storyData) {
