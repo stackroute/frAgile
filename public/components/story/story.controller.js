@@ -633,4 +633,5 @@ console.log("in controller",listItem.checked);
           $scope.fetchMemberDetails();
     }
   });
+  $scope.popover = {title: 'some title', content: 'some content'};
 }])
