@@ -208,7 +208,7 @@
                       <div ng-message="required">This is required!</div>
                     </div>
                   </md-input-container>
-
+                    <div ng-show="todo.todoText">
                     <span layout="row">
                           <div class="menu-bar-avatar" ng-repeat="member in todo.assignedMember" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
                           <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
@@ -231,11 +231,6 @@
                        </md-list>
 
                     </div>
-
-                    <div layout="row">
-
-                    </div>
-
                   <div layout="row">
                     <md-input-container md-no-float class="md-block">
                       <label>Enter Due Date</label>
@@ -250,6 +245,7 @@
                     <md-button class="md-fab md-mini  md-raised md-hue-2 md-raised md-warn pull-right" data-toggle="tooltip" title="Save" type="submit">
                       <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     </md-button>
+                    </div>
                     </div>
                   </form>
               </md-card>

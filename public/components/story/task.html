@@ -24,7 +24,7 @@
 							<div  ng-click="showDiv = !showDiv" ng-hide="showDiv" style="color:gray">{{$ctrl.task.text}}</div>
 							<md-input-container ng-show="showDiv" >
 								<label >Task</label>
-								<textarea  ng-model="$ctrl.task.text"	></textarea>
+								<textarea  ng-model="$ctrl.task.text"	required></textarea>
 							</md-input-container>
 							<div class="label label-default pull-right md-raised" ng-show="taskhover" style="position: absolute;top: -10px;   right: 23px;  padding: 10px;" ng-click="showDiv = !showDiv" data-toggle="tooltip" data-toggle="tooltip" title="Edit Task"> <i class="fa fa-pencil-square-o"></i>
 							</div>		
@@ -35,6 +35,7 @@
 
 					</md-toolbar>
 					<div ng-show="showDiv" style="margin-left: 5px; max-width: 280px; min-width: 280px; border-radius:5px; background-color:#f1fcff">
+
 						<label>Due Date</label>	<input style="background-color:#f1fcff" type="date" data-toggle="tooltip" title="Due Date" class="form-control ng-pristine ng-untouched ng-valid ng-empty pull-right" id="inputDate" ng-model="myDate" date-parser="dd.MM.yyyy" aria-invalid="false" >
 						<md-button class="md-icon-button md-accent pull-right" aria-label="Settings" ng-click="$ctrl.updateTodoItemComp($ctrl.task,$checklistid,'edit'); showDiv = !showDiv" data-toggle="tooltip" title="Save">
 							<i class="fa fa-floppy-o" aria-hidden="true"></i>
