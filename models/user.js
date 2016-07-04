@@ -232,8 +232,8 @@ userSchema.statics.addAssignedStories = function(dataObj, callback) {
      }, {
        new: true
      }, function(err, data) {
-       if (err) callback(err)
-       else callback(data);
+       if (err) callback(err,null)
+       else callback(null,data);
      })
    }
 

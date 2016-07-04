@@ -9,6 +9,30 @@ var queue= require('../redis/queue.js');
 
 module.exports = function(socket, io) {
 socket.on('github:addRepo', function(data) {
+  var message={
+            "name": "web",
+            "active": true,
+            "events": [
+              "issues",
+              "issue_comment",
+              "member"
+            ],
+            "config": {
+              "url": "http://gamersdemokrasy.com:8000/issueEvents",
+              "content_type": "json"
+            }
+          }
+
+  var options={
+    url:"https://api.github.com/repos/"+data.owner+"/"+data.name+"/hooks?access_token="+data.token,
+    headers:{
+      "content-type":'application/json',
+      "User-Agent":'Limber'
+    },
+    json:message
+  };
+  request.post(options,function(err,response,body){
+    if(response.statusCode===201 && !err){
   var githubRepo= new GithubRepo();
   githubRepo.name=data.name;
   githubRepo.owner=data.owner;
@@ -29,11 +53,15 @@ socket.on('github:addRepo', function(data) {
             var room = "user:"+ userID;
             io.to(room).emit('github:changeGithubStatus', githubRepo);
           });
+
+
         }
 
       })
     }
   });
+}
+})
       })
       socket.on("github:convertToStory",function(data){
       console.log("Listening for converting Story",data);
@@ -41,6 +69,15 @@ socket.on('github:addRepo', function(data) {
           var story=new Story();
           story.listId="Backlogs";
           story.heading=obj.title;
+          story.projectId=data.projectId;
+          story.description=obj.body;
+          story.createdTimeStamp=Date.now();
+          story.lastUpdated=Date.now();
+          story.memberList=obj.assignees;
+          GithubRepo.getRepo(data.projectId,function(err,repoDetails){
+              story.githubSync=repoDetails._id;
+              story.storyCreatorId=data.userProfile._id;
+
           story.save(function(err,storyData){
             if(!err){
               console.log("Github Issues Added",storyData);
@@ -54,6 +91,7 @@ socket.on('github:addRepo', function(data) {
               })
             }
           })
+        })
 
         })
 
@@ -90,7 +128,7 @@ socket.on('github:addRepo', function(data) {
                 issue.repo_details=repoData;
                 issue.github_profile=data.githubProfile;
                 console.log(issue);
-                //queue.storyPost.add(issue);
+                queue.storyPost.add(issue);
 
               })
 
