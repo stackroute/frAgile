@@ -535,10 +535,13 @@ console.log(data+"activity checklist todo");
         Story.updateChecklistItem(data.storyid, data.checklistGrpId,data.operation,data.itemid,data.checked,data.text,data.dueDate,function(err, doc) {
           if (!err) {
                 io.to(data.room).emit('story:dataModified', doc);
-
+                  if(data.operation=='check')
+                    var action=data.checked == true ? "completed" : "unchecked";
+                    else
+                      var action="Edited";
                 var actData = {
                   room: "activity:" + data.projectID,
-                  action: data.checked == true ? "completed" : "unchecked",
+                  action: action,
                   projectID: data.projectID,
                   user: data.user,
                   object: {

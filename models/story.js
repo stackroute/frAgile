@@ -233,7 +233,7 @@ story.memberList.splice(story.memberList.indexOf(memberId),1);
  });
  story.save(function(err,doc){
    if(!err){
-     Story.findStory(doc._id,function(err,storyData){
+     Story.findById(doc._id,function(err,storyData){
        if(!err){
          callback(null,storyData);
        }
