@@ -68,7 +68,7 @@
 <div class="story-details clearfix">
   <span class="pull-left story-left-head"><i class="fa fa-users" aria-hidden="true"></i></span>
   <div class="pull-left story-members">
-    <h3 class="story-sub-header">Members<i class="fa fa-plus story-addbutton"ng-click="addMember()" aria-hidden="true"></i></h3>
+    <h3 class="story-sub-header">Members<i class="fa fa-plus story-addbutton" ng-click="addMember()" aria-hidden="true"></i></h3>
     <div class="menu-bar-avatar" ng-repeat="member in storyData.memberList" ng-mouseenter="hovering=true" ng-mouseleave="hovering=false">
       <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
       <div ng-show="member.photo == undefined">

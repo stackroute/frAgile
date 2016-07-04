@@ -138,9 +138,10 @@ StorySchema.statics.findStory = function(storyId, callback) {
 
   //Find was written only for reference
   //  this.findOne({"_id":storyId}).exec(function(err,doc){ console.log(doc);});
+
   this.findOneAndUpdate({
     "_id": storyId
-  }, {
+  },{
     $addToSet: {
       memberList: membersId
     }
@@ -152,11 +153,11 @@ StorySchema.statics.findStory = function(storyId, callback) {
     if (err) {
       callback(err, null);
     } else {
-
       callback(null, doc);
     }
   });
 }
+
 /*** addLabel function is used to assign the label to
 the story from the project label list.**/
 StorySchema.statics.addLabel = function(storyId,labelId, callback) {
@@ -221,7 +222,8 @@ StorySchema.statics.removeMembers = function(storyId, memberId, callback)
 {
 this.findOne({
  "_id": storyId
-}).exec(function(err, story) {
+})
+.exec(function(err, story) {
 story.memberList.splice(story.memberList.indexOf(memberId),1);
  story.checklist.filter(function(checkList)
  {
@@ -233,7 +235,7 @@ story.memberList.splice(story.memberList.indexOf(memberId),1);
  });
  story.save(function(err,doc){
    if(!err){
-     Story.findStory(doc._id,function(err,storyData){
+     Story.findById(doc._id,function(err,storyData){
        if(!err){
          callback(null,storyData);
        }

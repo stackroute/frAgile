@@ -209,7 +209,7 @@ userSchema.statics.addAssignedStories = function(dataObj, callback) {
 
        console.log(dataObj.memberid);
        //To send back added project data
-       this.find({
+       mongoose.model("User").find({
          "_id": dataObj.memberid
        }).populate("assignedStories.stories").exec(function(err, data) {
          if (err){
