@@ -1,4 +1,4 @@
-fragileApp.controller('githubController',['$scope','$stateParams','$uibModalInstance','githubService','param','Socket',function($scope,$stateParams,$uibModalInstance,githubService,param,Socket){
+fragileApp.controller('githubController',['$rootScope','$scope','$stateParams','$uibModalInstance','githubService','param','Socket',function($rootScope,$scope,$stateParams,$uibModalInstance,githubService,param,Socket){
   //var account=githubService.getGithubAccount();
   var socket = Socket($scope);
   var githubCntrl=this;
@@ -8,33 +8,34 @@ fragileApp.controller('githubController',['$scope','$stateParams','$uibModalInst
   $scope.selectedIssues=[];
   $scope.selectedRepo={};
   console.log(param);
-  $scope.linkRepository=function(){
-
-    var repo=JSON.parse($scope.selectedRepo);
-
-    console.log(JSON.parse($scope.selectedRepo));
-    repoDetails={
-      projectId: param.projectId,
-      name: repo.name,
-      owner: repo.owner.login
-    }
-    console.log(repoDetails);
-    githubService.addRepo(repoDetails).success(function(response){
-console.log(response);
-console.log("-------");
-
-console.log($uibModalInstance);
-$uibModalInstance.close()
-
-    })
-
-  }
+//   $scope.linkRepository=function(){
+//
+//     var repo=JSON.parse($scope.selectedRepo);
+//
+//     console.log(JSON.parse($scope.selectedRepo));
+//     repoDetails={
+//       projectId: param.projectId,
+//       name: repo.name,
+//       owner: repo.owner.login
+//     }
+//     console.log(repoDetails);
+//     githubService.addRepo(repoDetails).success(function(response){
+// console.log(response);
+// console.log("-------");
+//
+// console.log($uibModalInstance);
+// $uibModalInstance.close()
+//
+//     })
+//
+//   }
   $scope.linkRepo=function(){
     var repo=JSON.parse($scope.selectedRepo);
     var repoDetails={
       projectId: param.projectId,
       name: repo.name,
-      owner: repo.owner.login
+      owner: repo.owner.login,
+      token: $rootScope.githubProfile.token
     }
     socket.emit("github:addRepo",repoDetails)
     $uibModalInstance.close();
@@ -64,7 +65,8 @@ $uibModalInstance.close()
       console.log($scope.selectedIssues);
   }
 $scope.createStory=function(){
-  socket.emit("github:convertToStory",{'issues':$scope.selectedIssues,'projectId':githubCntrl.GithubComplexObj.projectId});
+  console.log("Issues",$scope.selectedIssues);
+  socket.emit("github:convertToStory",{'issues':$scope.selectedIssues,'projectId':githubCntrl.GithubComplexObj.projectId,'userProfile':$rootScope.userProfile});
   $uibModalInstance.close();
 
 }

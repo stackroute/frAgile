@@ -45,17 +45,19 @@ fragileApp.controller('cardsController', ['$scope', '$state','sprintService', '$
 
 
    socket.on('story:memberAssigned',function(data){
-     $scope.stories=[];
-     $scope.stories.push(data);
+     //$scope.stories=[];
+     $scope.cards.push(data);
+     $scope.loadCards();
      //console.log(data.length);
      console.log("you are added");
-     console.log($scope.stories);
+     console.log($scope.cards);
 
    })
 
    socket.on('story:memberRemoved',function(data)
    {
-     $scope.stories = $filter('filter')($scope.stories, {_id: !data._id})
+     console.log("memberRemoved",data);
+     $scope.cards = $filter('filter')($scope.cards, {_id: !data._id})
 
    });
 
