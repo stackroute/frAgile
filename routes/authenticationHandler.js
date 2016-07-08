@@ -117,14 +117,14 @@ router.get('/facebook/callback',
 
               service:'Gmail',
               auth:{
-                user:'nitishasgrylls@gmail.com',
-                pass: 'meenubua'
+                user:'mylimberapp@gmail.com',
+                pass: 'mylimber@123'
               }
             });
              var code=req.body.code;
              console.log("code is in server ",code);
              var mailOption={
-              from:'Limber <mylimber@gmail.com>',
+              from:'Limber <mylimberapp@gmail.com>',
               to:email,
               subject:'varification',
               text:"Your varification code is "+code+"\nEnter this code to reset your password.",
