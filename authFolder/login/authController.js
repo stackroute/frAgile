@@ -1,7 +1,17 @@
 angular.module('Limber')
-    .controller('authController',function($scope,$http,$rootScope,$window,$location){
+    .controller('authController',function($scope,$http,$rootScope,$window,$location,$timeout){
       $scope.logInErrorMsg = '';
       $scope.passwordError='';
+      $scope.passwordErrorMsg='';
+      $rootScope.newUser={
+      email:'',
+      code:'',
+      codeCheck:'',
+      password:'',
+      confirmpassword:'',
+      verifyCheck:false,
+      sendStatus:false
+       };//this object is for forgot password
          $scope.dismissMsg = function() {
            $scope.registerErrorMsg = '';
            $scope.logInErrorMsg = '';
@@ -51,10 +61,68 @@ if (nv) {
          }
       });;
     }
+    
 
-    $scope.passportForgo=function()
-    {
-      $window.location.href="/forgot.html";
+    $scope.forgotPassword=function()
+    { 
+      var code=Math.floor(Math.random()*90000) + 10000;
+      $rootScope.newUser.code=code;
+       console.log("user email client",$rootScope.newUser.email,$rootScope.newUser.code);
+
+
+      $http.post('/auth/forgotpass',$rootScope.newUser).success(function(data)
+      {         
+          if(data.error){
+              $scope.passwordErrorMsg=data.error;
+              $timeout(function() {$scope.passwordErrorMsg=''}, 2000);
+          }
+          else{
+            $rootScope.newUser.sendStatus=true;
+            
+            console.log("in else forgotPassword yooy",$rootScope.newUser);
+          }
+
+          //$timeout(function() {}, 2000);
+
+
+      });
+     // $window.location.href="/forgot.html";
+    }//forgot password ends
+    $scope.passwordUpdateMsg='';
+    $scope.resetPassword=function(){
+      if($rootScope.newUser.verifyCheck==false){
+          if($rootScope.newUser.code==$rootScope.newUser.codeCheck){
+            console.log(" verification done");
+            $scope.passwordErrorMsg="Verified!"
+            $timeout(function() {$scope.passwordErrorMsg=''; $rootScope.newUser.verifyCheck=true}, 2000);
+
+          }else{
+              console.log(" verification not done");
+               $scope.passwordErrorMsg="Incorrect code. Try again..."
+              $timeout(function() {$scope.passwordErrorMsg=''}, 2000);
+
+          }
+        }else if ($rootScope.newUser.verifyCheck==true){
+            if($rootScope.newUser.password===$rootScope.newUser.confirmpassword){
+                $http.post('/auth/resetPassword',$rootScope.newUser).success(function(data){
+                if(data.error){
+                   $scope.passwordUpdateMsg="Something went wrong. Try again";
+                    $timeout(function() {$scope.passwordUpdateMsg='';}, 2000);
+
+                } else{
+                     $scope.passwordUpdateMsg="Password changed! Login again."
+                      $timeout(function() {$scope.passwordUpdateMsg=''; $window.location.href = '/index.html';}, 2000);
+
+                     }
+                })
+
+
+            }else{
+               $scope.passwordUpdateMsg="Passwords doesn't match"
+              $timeout(function() {$scope.passwordUpdateMsg='';}, 2000);
+
+            }
+        }
     }
     $scope.register = function(){
       if($scope.user1.password!=$scope.user1.confirmpassword){

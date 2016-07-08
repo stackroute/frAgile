@@ -63,6 +63,7 @@ app.use(express.static(path.join(__dirname, 'authFolder')));
 app.use('/', routes);
 app.use('/auth',authenticationHandler);
 
+
 app.post('/issueEvents',function(req,res){
   console.log("inside issue events");
   console.log(req);
@@ -79,7 +80,8 @@ app.use(function(req, res, next) {
   }
   else
   {
-console.log("resp");
+
+console.log("resp");
     return res.redirect('/index.html');
   }
 });
