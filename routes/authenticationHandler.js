@@ -100,6 +100,59 @@ router.get('/facebook/callback',
       })
 
       });
+      //verify new user starts
+      router.post('/verifycode',function(req,res,next){
+        var email=req.body.email;
+        var code=Math.floor(Math.random()*90000) + 10000;
+        User.findOne({'email':req.body.email}).exec(function(err,user){
+          if(err){
+            console.log(err);
+            res.send({error:"Something went wrong. Please try again."});
+          }else if(user){
+            console.log("user is server ", user.password);
+
+         res.send({error:"Entered email belongs to an existing account.Please login with same."})
+          } else{
+              var transporter=nodemailer.createTransport({
+
+              service:'Gmail',
+              auth:{
+                user:'mylimberapp@gmail.com',
+                pass: 'mylimber@123'
+              }
+            });
+             
+             console.log("code is in server ",code);
+             var mailOption={
+              from:'Limber <mylimberapp@gmail.com>',
+              to:email,
+              subject:'Welcome to Limber',
+              text:"Your varification code is "+code+"Enter this code to register.",
+              html:'<b>Limber </b>helps you to manage your project in better way.<h2>Varification code for registering Limber app </h2> Varification code :<b>'+code+'</b> <br><b>Enter this code in Limber App to register.</b>'
+            }
+            transporter.sendMail(mailOption,function(error,info){
+              if(error){
+
+                console.log(error);
+                res.redirect('/index.html')
+              }
+              else{
+                console.log("All done!");
+                        //res.send(code);
+                        console.log("new code, ",code)
+                    res.send({code:code});
+                    //res.redirect('/index.html')
+                  }
+                });
+
+          }//main else
+
+        });
+       
+        console.log("new email",email);
+
+      });
+      //verify new user ends
       //this is for forgot password
       router.post('/forgotpass',function(req,res,next)
         { var email=req.body.email;
@@ -144,10 +197,9 @@ router.get('/facebook/callback',
                     });
             } //end of final else
           })
-        //////////////////
-        
-        //next();
-      })
+     });
+      //forgot passwords ends here
+
 
 
 
