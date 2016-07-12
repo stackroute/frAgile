@@ -1883,3 +1883,43 @@ background-color: rgba(162, 222, 208, 0.12)
      border-radius: 4px;
      font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
    }
+
+
+   .chatNav {
+       height: 100%;
+       width: 0;
+       position: fixed;
+       z-index: 1;
+       top: 0;
+       right: 260px;
+       background-color: #111;
+       overflow-x: hidden;
+       transition: 0.5s;
+       padding-top: 60px;
+   }
+
+   .chatNav a {
+       padding: 8px 8px 8px 32px;
+       text-decoration: none;
+       font-size: 25px;
+       color: #818181;
+       display: block;
+       transition: 0.3s
+   }
+
+   .chatNav a:hover, .offcanvas a:focus{
+       color: #f1f1f1;
+   }
+
+   .closebtn {
+       position: absolute;
+       top: 0;
+       right: 25px;
+       font-size: 36px !important;
+       margin-left: 50px;
+   }
+
+   @media screen and (max-height: 450px) {
+     .chatNav {padding-top: 15px;}
+     .chatNav a {font-size: 18px;}
+   }

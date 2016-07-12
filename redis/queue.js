@@ -3,6 +3,7 @@ var request= require('request');
 var storyPost=Queue("Server1",6379,'127.0.0.1');
 var editStory=Queue("Server2",6379,'127.0.0.1');
 var commentPost=Queue("Server3",6379,'127.0.0.1');
+var Story=require("../models/story.js");
 
 
 storyPost.process(function(job,done){
@@ -17,10 +18,21 @@ storyPost.process(function(job,done){
  console.log(options.url);
  console.log(job.data);
  request.post(options,function(err,res,body){
-   console.log(res);
+   //console.log(res);
    if(!err && res.statusCode==201){
-     console.log(body);
-     done(null,body);
+  console.log(body);
+     Story.findOne({_id: job.data.message.storyId}, function (err, story) {
+         story.issueNumber = body.number;
+         story.save(function (err) {
+             if(err) {
+                 console.error('ERROR!');
+             }
+             done(null,body);
+
+         });
+     });
+
+
      //done(Error('some error'));
    }
    done(body,null)

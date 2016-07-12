@@ -8,35 +8,37 @@ fragileApp.controller('githubController',['$rootScope','$scope','$stateParams','
   $scope.selectedIssues=[];
   $scope.selectedRepo={};
   console.log(param);
-//   $scope.linkRepository=function(){
-//
-//     var repo=JSON.parse($scope.selectedRepo);
-//
-//     console.log(JSON.parse($scope.selectedRepo));
-//     repoDetails={
-//       projectId: param.projectId,
-//       name: repo.name,
-//       owner: repo.owner.login
-//     }
-//     console.log(repoDetails);
-//     githubService.addRepo(repoDetails).success(function(response){
-// console.log(response);
-// console.log("-------");
-//
-// console.log($uibModalInstance);
-// $uibModalInstance.close()
-//
-//     })
-//
-//   }
+  //   $scope.linkRepository=function(){
+  //
+  //     var repo=JSON.parse($scope.selectedRepo);
+  //
+  //     console.log(JSON.parse($scope.selectedRepo));
+  //     repoDetails={
+  //       projectId: param.projectId,
+  //       name: repo.name,
+  //       owner: repo.owner.login
+  //     }
+  //     console.log(repoDetails);
+  //     githubService.addRepo(repoDetails).success(function(response){
+  // console.log(response);
+  // console.log("-------");
+  //
+  // console.log($uibModalInstance);
+  // $uibModalInstance.close()
+  //
+  //     })
+  //
+  //   }
   $scope.linkRepo=function(){
     var repo=JSON.parse($scope.selectedRepo);
     var repoDetails={
       projectId: param.projectId,
       name: repo.name,
       owner: repo.owner.login,
-      token: $rootScope.githubProfile.token
+      token: $rootScope.githubProfile.token,
+      userId:$rootScope.userProfile._id
     }
+
     socket.emit("github:addRepo",repoDetails)
     $uibModalInstance.close();
   }
@@ -57,23 +59,23 @@ fragileApp.controller('githubController',['$rootScope','$scope','$stateParams','
 
       }
     })
-      if(!flag){
-        $scope.selectedIssues.push(issue);
-      }
+    if(!flag){
+      $scope.selectedIssues.push(issue);
+    }
 
 
-      console.log($scope.selectedIssues);
+    console.log($scope.selectedIssues);
   }
-$scope.createStory=function(){
-  console.log("Issues",$scope.selectedIssues);
-  socket.emit("github:convertToStory",{'issues':$scope.selectedIssues,'projectId':githubCntrl.GithubComplexObj.projectId,'userProfile':$rootScope.userProfile});
-  $uibModalInstance.close();
+  $scope.createStory=function(){
+    console.log("Issues",$scope.selectedIssues);
+    socket.emit("github:convertToStory",{'issues':$scope.selectedIssues,'projectId':githubCntrl.GithubComplexObj.projectId,'userProfile':$rootScope.userProfile});
+    $uibModalInstance.close();
 
-}
-$scope.ok = function() {
-  $uibModalInstance.dismiss('cancel');
-};
-$scope.cancel = function() {
-  $uibModalInstance.dismiss('cancel');
-};
+  }
+  $scope.ok = function() {
+    $uibModalInstance.dismiss('cancel');
+  };
+  $scope.close = function() {
+    $uibModalInstance.dismiss('cancel');
+  };
 }])

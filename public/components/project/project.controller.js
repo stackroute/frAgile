@@ -14,16 +14,24 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       console.log("Refreshing project");
       homeService.getUserProjects().success(function(response) {
         $rootScope.projects = response.projects
+        if($rootScope.githubProfile.length!==0){
+          $rootScope.projects.forEach(function (project){
+            socket.emit("github:pushStories",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
+        console.log("Emitting pushStories event");
+        })
+        }
       });
     }
-
+$scope.syncing=false;
 
     projectService.getCurrentUser().success(function(response) {
       socket.emit('join:room', {
         'room': "user:" + response._id
       });
     })
-
+socket.on("syncing event",function(msg){
+$scope.msg=msg;
+})
 
     socket.on('releaseDeleted', function(releaseData) {
       $rootScope.projects.forEach(function(project) {
@@ -198,7 +206,7 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       $rootScope.projects.forEach(function(project, projectIndex) {
         if (project._id == githubRepo.projectId) {
           $rootScope.projects[projectIndex].githubStatus = githubRepo.githubStatus;
-
+          $scope.msg.syncing=false;
         }
       });
     });
