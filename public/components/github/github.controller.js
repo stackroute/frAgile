@@ -35,7 +35,8 @@ fragileApp.controller('githubController',['$rootScope','$scope','$stateParams','
       projectId: param.projectId,
       name: repo.name,
       owner: repo.owner.login,
-      token: $rootScope.githubProfile.token
+      token: $rootScope.githubProfile.token,
+      userId:$rootScope.userProfile._id
     }
     socket.emit("github:addRepo",repoDetails)
     $uibModalInstance.close();

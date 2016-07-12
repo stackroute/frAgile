@@ -523,7 +523,6 @@ this.findOne({
 }).exec(function(err, story) {
  story.checklist.filter(function(checkList)
  {
-
    if(checkList._id==data.checkListId)
      checkList.items.filter(function(item)
      {

@@ -27,10 +27,11 @@ Over View
   <div ng-repeat="project in projects" class="main">
       <div id="{{project._id}}" class = "container">
         <h4>{{project.name}} <i class="fa fa-pencil" ng-click = "editProjectShow=true; newProjectName=project.name; newProjectDetails=project.description"></i>
-        <i class="fa fa-user-plus" data-toggle="modal" data-target="#addMembersModal"  ng-click="getAllUsers(project._id,project.name)" aria-hidden="true"></i>
-        <i class="fa fa-github"  ng-click="getRepo(project._id)" ng-hide="githubProfile.id == undefined || githubProfile == undefined || project.githubStatus == true" ></i>
-        <i class="fa fa-cloud-download"  ng-click="getIssues(project._id)" ng-show="project.githubStatus == true" ></i>
-        <i class="fa fa-cloud-upload"  ng-click="pushStories(project._id)" ng-show="project.githubStatus == true" ></i>
+        <i class="fa fa-user-plus" data-toggle="modal" data-target="#addMembersModal"  ng-click="getAllUsers(project._id,project.name,project.githubStatus)" aria-hidden="true"></i>
+        <i class="fa fa-github" ng-click="getRepo(project._id)" ng-hide="githubProfile.id == undefined || githubProfile == undefined || project.githubStatus == true" ></i>
+        <i class="fa fa-refresh fa-spin fa-3x fa-fw" style="padding-left:0px" ng-show="project.githubStatus!=true && syncValue(project._id)" ></i>
+        <i class="fa fa-cloud-download"  ng-click="getIssues(project._id)" ng-show="project.githubStatus == true"></i>
+        <i class="fa fa-cloud-upload"  ng-click="pushStories(project._id);pushMember()" ng-show="project.githubStatus == true"></i>
       </h4>
 
         <small tooltip-placement="bottom"  uib-tooltip="{{project.description}}" >{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">

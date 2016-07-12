@@ -433,7 +433,8 @@ console.log(" story controler param:",param);
         'projectID' : $scope.projectID,
         'fullName': memberObj.firstName + " " + memberObj.lastName,
         'user':$rootScope.userProfile,
-        'github_profile':$rootScope.githubProfile
+        'github_profile':$rootScope.githubProfile,
+        'atTheTimeOfIntegration':false
       });
     }else{
       //Add members working,tested
@@ -447,7 +448,8 @@ console.log(" story controler param:",param);
         'user':$rootScope.userProfile,
         'sprintId':param.sprint._id,
         'releaseId':$stateParams.releaseID,
-        'github_profile':$rootScope.githubProfile
+        'github_profile':$rootScope.githubProfile,
+        'atTheTimeOfIntegration':false
       });
     }
   }//addremoveMemmber ends

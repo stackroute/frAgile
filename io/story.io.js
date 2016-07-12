@@ -84,35 +84,41 @@ console.log(data);
   description:listner to add members to story
   ****/
   socket.on('story:addMembers', function(data) {
-
+    var atTheTimeOfIntegration=data.atTheTimeOfIntegration;
     Story.findIssue(data.storyid,function(err,storyData){
-      console.log("story",storyData);
+      console.log("story--------------------------",storyData);
 
       if(!err){
-
         var assignees=[];
         var issue={};
       GithubRepo.getRepo(storyData.projectId,function(err,repoData){
         if(!err && repoData){
-          console.log("Repo data",repoData);
+          console.log("Repo data---------------",repoData);
           if(storyData.issueNumber){
             User.getUserMember(data.memberid,function(error,memberData){
-              console.log("Member Data",memberData);
+              console.log("Member Data--------------",memberData);
+              console.log("");
               if(!error){
-                  if(memberData.github){
                 storyData.memberList.forEach(function(member){
-                  console.log(member);
-                  if(member.github){
+
+                  if(member.github.name!==undefined){
+                    console.log("inside member git------------------>");
+                    console.log("------meber----------------",member);
                     assignees.push(member.github.name)
                   }
                   else{
                     console.log("Not having github profile",member);
                   }
                 })
+                if(data.atTheTimeOfIntegration==false && memberData.github.name!==undefined)
+                {
                 assignees.push(memberData.github.name);
               }
+              else {
+                //send message here if one person doesn't provide git details but he is added to a project.
+              }
               if(assignees){
-                console.log("assignees",assignees);
+                console.log("assignees-----------",assignees);
               issue.message={
                 'assignees':assignees
               }
@@ -130,12 +136,15 @@ console.log(data);
     }
     })
 
+
+
+      //check if this is called at the time of integrating account with github, if not proceed
+      if(data.atTheTimeOfIntegration==false)
     Story.addMembers(data.storyid, data.memberid, function(err, doc) {
 
-
       //edited for cards page
-console.log(data.memberid+ "new member added");
-console.log(doc);
+      console.log(data.memberid+ "new member added");
+      console.log(doc);
 
       if (!err) {
         console.log(data.memberid);
@@ -182,11 +191,14 @@ console.log(data);
     })
 
 //Updating the user schema ehen a member is added for cards
+if(atTheTimeOfIntegration==false)
+{
 User.addAssignedStories(data, function(err, doc) {
 console.log("------doc after adding members------");
 console.log(doc[0].assignedStories);
   io.to(data.memberid).emit('story:memberAssigned',doc);
  })
+ }
 
 
 
@@ -205,7 +217,6 @@ console.log(doc[0].assignedStories);
       console.log("story",storyData);
 
       if(!err){
-
         var assignees=[];
         var issue={};
       GithubRepo.getRepo(storyData.projectId,function(err,repoData){
