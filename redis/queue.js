@@ -4,7 +4,7 @@ var storyPost=Queue("Server1",6379,'127.0.0.1');
 var editStory=Queue("Server2",6379,'127.0.0.1');
 var commentPost=Queue("Server3",6379,'127.0.0.1');
 var Story=require("../models/story.js");
-
+var collaboratorPost=Queue("Server4",6379,'127.0.0.1');
 
 storyPost.process(function(job,done){
  var options={
@@ -31,17 +31,10 @@ storyPost.process(function(job,done){
 
          });
      });
-
-
      //done(Error('some error'));
    }
-   done(body,null)
-
-
-
-
+   done(body,null);
  })
-
 
 });
 
@@ -78,14 +71,10 @@ editStory.process(function(job,done){
   console.log(options.url);
   console.log(job.data);
   request.post(options,function(err,res,body){
-    console.log(res);
-    console.log(body);
-    console.log(res.statusCode);
-    // if(!err && res.statusCode==201){
-    //   console.log(body);
-    //   done(null,body);
-    //   //done(Error('some error'));
-    // }
+    console.log("error----------------",err);
+    //console.log(res);
+    //console.log(body);
+    //console.log(res.statusCode);
     done(body,null)
 
 
@@ -93,11 +82,21 @@ editStory.process(function(job,done){
 });
 
 
-
+//adding collaborator to git starts here
+collaboratorPost.process(function(job,done)
+{
+  console.log("---------------jod data=----",JSON.stringify(job.data));
+  request.put(job.data,function(error,response,body)
+{
+  if(!error)
+  done(body,null)
+});
+});
+//adding collaborator to git ends here
 
 
 
 module.exports.storyPost=storyPost;
-// module.exports.storyPost=storyPost;
+module.exports.collaboratorPost=collaboratorPost;
 module.exports.editStory=editStory;
 module.exports.commentPost=commentPost;

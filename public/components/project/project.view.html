@@ -17,27 +17,28 @@ Over View
   <div class="btn btn-success addProject" ng-click = "setDefaultForProject(project._id)" data-toggle="modal" data-target="#myModal">
     <i class="fa fa-plus"></i>  Add New Project
   </div>
-  <!-- <div class="pageHeading">
-  <b>Project</b>
-  <span>
-  <b class="fa fa-table" ng-click="openReleaseChart()"></b>
-  <b class="fa fa-sun-o" ng-click="showOverGraph()"></b>
-</span>
-</div> -->
-<div ng-repeat="project in projects" class="main" >
-  <div id="{{project._id}}" class = "container" >
-    <h4>{{project.name}} <i class="fa fa-pencil" ng-click = "editProjectShow=true; newProjectName=project.name; newProjectDetails=project.description"></i>
-      <i class="fa fa-user-plus"  data-toggle="modal" data-target="#addMembersModal"  ng-click="getAllUsers(project._id,project.name)" aria-hidden="true"></i>
-      <i class="fa fa-github" tooltip-placement="bottom"  uib-tooltip="Sync"  ng-click="getRepo(project._id)" ng-hide="githubProfile.id == undefined || githubProfile == undefined || project.githubStatus == true||syncing==true" ></i>
-      <i  style='padding-left:0px;' class="fa fa-refresh fa-spin fa-3x fa-fw" ng-show="msg.syncing && msg.projectId==project._id" ></i></span>
-      <i class="fa fa-exclamation-circle" tooltip-placement="bottom"  uib-tooltip="Issues"  ng-click="getIssues(project._id);pushStories(project._id)" ng-show="project.githubStatus == true" ></i>
-      <!-- <i class="fa fa-cloud-upload" tooltip-placement="bottom"  uib-tooltip="Sync stories" ng-click="pushStories(project._id)" ng-show="project.githubStatus == true" ></i> -->
-    </h4>
-    <small tooltip-placement="bottom"  uib-tooltip="{{project.description}}" >{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
-      ...
-    </span></small><br>
+   <div class="pageHeading">
+    <b>Project</b>
+    <span>
+    <b class="fa fa-table" ng-click="openReleaseChart()"></b>
+    <b class="fa fa-sun-o" ng-click="showOverGraph()"></b>
+    </span>
+  </div>
+  <div ng-repeat="project in projects" class="main">
+      <div id="{{project._id}}" class = "container">
+        <h4>{{project.name}} <i class="fa fa-pencil" ng-click = "editProjectShow=true; newProjectName=project.name; newProjectDetails=project.description"></i>
+        <i class="fa fa-user-plus" data-toggle="modal" data-target="#addMembersModal"  ng-click="getAllUsers(project._id,project.name,project.githubStatus)" aria-hidden="true"></i>
+        <i class="fa fa-github" ng-click="getRepo(project._id)" ng-hide="githubProfile.id == undefined || githubProfile == undefined || project.githubStatus == true" ></i>
+        <i class="fa fa-refresh fa-spin fa-3x fa-fw" style="padding-left:0px" ng-show="project.githubStatus!=true && syncValue(project._id)" ></i>
+        <i class="fa fa-cloud-download"  ng-click="getIssues(project._id)" ng-show="project.githubStatus == true"></i>
+        <i class="fa fa-exclamation"  ng-click="pushStories(project._id);pushMember()" ng-show="project.githubStatus == true"></i>
+      </h4>
 
-    <div class="backgroundBlack" ng-class="{'showEdit':editProjectShow,'hideEdit':!editProjectShow}" ng-click = "editProjectShow=false">
+        <small tooltip-placement="bottom"  uib-tooltip="{{project.description}}" >{{project.description | limitTo:longPrjDescLimit }}<span ng-hide="project.description.length < longPrjDescLimit || project.description.length==undefined">
+          ...
+        </span></small><br>
+
+          <div class="backgroundBlack" ng-class="{'showEdit':editProjectShow,'hideEdit':!editProjectShow}" ng-click = "editProjectShow=false">
 
     </div>
     <form class="editRelease editProject" ng-class="{'showEdit':editProjectShow,'hideEdit':!editProjectShow}">

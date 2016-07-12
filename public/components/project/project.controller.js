@@ -1,5 +1,5 @@
-fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal', 'projectService', 'Socket', '$filter', 'graphModalFactory','homeService','githubService',
-  function($scope, $state, $rootScope, $stateParams, $uibModal, projectService, Socket, $filter, graphModalFactory,homeService,githubService) {
+fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal','cardsService','projectService', 'Socket', '$filter', 'graphModalFactory','homeService','githubService',
+  function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projectService, Socket, $filter, graphModalFactory,homeService,githubService) {
     // $scope.loadProjects = function() {
     //
     //   projectService.getUserProjects().success(function(response) {
@@ -14,16 +14,35 @@ fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$
       console.log("Refreshing project");
       homeService.getUserProjects().success(function(response) {
         $rootScope.projects = response.projects
-        if($rootScope.githubProfile.length!==0){
-          $rootScope.projects.forEach(function (project){
-            socket.emit("github:pushStories",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
-        console.log("Emitting pushStories event");
-        })
-        }
+        // if($rootScope.githubProfile.length!==0){
+        //   $rootScope.projects.forEach(function (project){
+        //     socket.emit("github:pushStories",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
+        // console.log("Emitting pushStories event");
+        // })
+        // }
       });
     }
 $scope.syncing=false;
 
+var syncArray=[];
+socket.on("startSync",function(projectId)
+{
+  syncArray.push(projectId);
+  console.log("------------",syncArray,syncArray.length);
+});
+$scope.syncValue=function(projectId)
+{
+  if(syncArray.indexOf(projectId)!=-1)
+  return true;
+  else
+  return false;
+}
+socket.on("stopSync",function(projectId)
+{
+  if(syncArray.indexOf(projectId)!=-1)
+  syncArray.splice(syncArray.indexOf(projectId),1);
+  socket.emit("SyncIsStopped",true);
+})
     projectService.getCurrentUser().success(function(response) {
       socket.emit('join:room', {
         'room': "user:" + response._id
@@ -231,9 +250,10 @@ $scope.msg=msg;
     });
     // FIXME: Code duplicated in Menu controller. Can be fixed
     var dbIds;
-    $scope.getAllUsers = function(projectID, projectName) {
+    $scope.getAllUsers = function(projectID, projectName,githubStatus) {
       $scope.selectedProject = projectID;
       $scope.selectedProjectName = projectName;
+      $scope.selectedProjectGithubStatus=githubStatus;
       projectService.getMembers($scope.selectedProject).success(function(response) {
         response.memberList.forEach(function(data) {
           data.fullName = data.firstName + " " + data.lastName;
@@ -269,12 +289,17 @@ $scope.msg=msg;
           'projectId': $scope.selectedProject,
           'memberList': [addedUserId],
           'projectName': $scope.selectedProjectName,
-          'user':$rootScope.userProfile
+          'user':$rootScope.userProfile,
+          'githubStatus':$scope.selectedProjectGithubStatus
         });
 
       }
     }
 
+socket.on("notify:memberNotAdded",function(msg)
+{
+  alert(msg.toUpperCase()+" has not shared his github details with Limber, So we can't add him to your git repository");
+})
     socket.on('project:memberAdded', function(data) {
       data.fullName = data.firstName + " " + data.lastName;
       $scope.projMemberList.push(data);
@@ -346,13 +371,37 @@ $scope.msg=msg;
 
     }
 
-    $scope.pushStories=function(projectId){
-      console.log($rootScope.githubProfile);
-      if($rootScope.githubProfile){
 
-      socket.emit("github:pushStories",{projectId:projectId,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
-    }
-    }
+    //github
+    //making this person as a collaborator to a story,if he is already assigned to any story.
+$scope.pushMember=function()
+{
+  cardsService.getAssignedStories().success(function(userObject)
+{
+  console.log("userObject----------",userObject);
+  userObject.assignedStories.filter(function(assignedStory)
+  {
+    console.log("storyid-----------------",assignedStory.stories);
+    console.log("userObject._id-------------",userObject._id);
+    console.log("github----------------",userObject.github);
+    socket.emit('story:addMembers', {
+      'storyid': assignedStory.stories,
+      'memberid': userObject._id,
+      'github_profile':userObject.github,
+      'atTheTimeOfIntegration':true
+    });
+});
+});
+}
+//end of making this person as a collaborator to a story,if he is already assigned to any story.
+
+    // $scope.pushStories=function(projectId){
+    //   console.log($rootScope.githubProfile);
+    //   if($rootScope.githubProfile){
+    //
+    //   socket.emit("github:pushStories",{projectId:projectId,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
+    // }
+    // }
 
 
 

@@ -512,42 +512,43 @@ StorySchema.statics.removeLabel = function(storyId,labelId, callback) {
 
 
 
-  StorySchema.statics.addMemberToChecklist=function(data,callback)
-  {
-    //console.log("im in story model -->",data);
 
-    console.log("----------printig story-------------");
+StorySchema.statics.addMemberToChecklist=function(data,callback)
+{
+//console.log("im in story model -->",data);
 
-    this.findOne({
-      "_id": data.storyId
-    }).exec(function(err, story) {
-      story.checklist.filter(function(checkList)
-      {
+console.log("----------printig story-------------");
 
-        if(checkList._id==data.checkListId)
-        checkList.items.filter(function(item)
-        {
-          if(item._id==data.listItem._id)
-          {
-            item.assignedMember=data.assignedMember;
-          }
-        });
-      });
-      story.save(function(err,doc){
-        if(!err){
-          Story.findStory(doc._id,function(err,storyData){
-            if(!err){
-              callback(null,storyData);
-            }
-            else {
-              callback(err,null);
-            }
-          })
-        }
-        else callback(err,null)
-      });
-    });
-  }
+this.findOne({
+ "_id": data.storyId
+}).exec(function(err, story) {
+ story.checklist.filter(function(checkList)
+ {
+   if(checkList._id==data.checkListId)
+     checkList.items.filter(function(item)
+     {
+       if(item._id==data.listItem._id)
+       {
+         item.assignedMember=data.assignedMember;
+       }
+     });
+ });
+ story.save(function(err,doc){
+   if(!err){
+     Story.findStory(doc._id,function(err,storyData){
+       if(!err){
+         callback(null,storyData);
+       }
+       else {
+         callback(err,null);
+       }
+     })
+   }
+   else callback(err,null)
+ });
+});
+}
+
 
 
 

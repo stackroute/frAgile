@@ -44,7 +44,7 @@ userSchema = new mongoose.Schema({
     },
 
     stories:{
-      type: mongoose.Schema.Types.ObjectId,
+      type:mongoose.Schema.Types.ObjectId,
       ref:'Story'
     }
 
@@ -67,6 +67,21 @@ userSchema.statics.addUser = function(userDetails, callback) {
     else callback(data);
   });
 }
+
+userSchema.statics.findAll=function(memberList,callback)
+{
+this.find(
+  {
+    "_id":{$in:memberList}
+  },{
+    "github":1
+  }).exec(function(err,data)
+{
+  if(!err)
+    callback(null,data);
+})
+}
+
 userSchema.statics.updateUser = function(userId, newUserDetails, callback) {
   console.log("----------Inside updateUser model");
   console.log("-" + userId + "-");
@@ -244,5 +259,22 @@ userSchema.statics.addAssignedStories = function(dataObj, callback) {
     });
 }
 
+userSchema.statics.getOwnerToken = function(name, callback)
+{
+  this.find(
+    {
+      "github.name":name
+    },{
+      "github.token":1
+    }
+  ).
+  exec(function(err,data)
+{
+  if(!err)
+  {
+    callback(null,data);
+  }
+})
+}
 
 module.exports = mongoose.model('User', userSchema, 'Users');

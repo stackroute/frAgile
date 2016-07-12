@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+  <title>Limber</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+  <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
+  <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="lib/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" href="lib/css/form-elements.css">
+  <link rel="stylesheet" href="lib/css/style.css">
+
+
+  <title>Limber</title>
+</head>
+<body ng-app="Limber" ng-controller="authController">
+
+  <div class="top-content">
+
+    <div class="inner-bg">
+      <div class="container">
+
+        <div class="row center">
+          <div class="col-sm-8 col-sm-offset-2 text" style="margin-top: -64px;">
+            <h1><img src="lib/img/logo.png" class="logo"><strong>{{'APP_NAME' | myFilter}}</strong></h1>
+            <div class="description">
+              <p>
+                <h3><i><soft>{{'TAG_LINE' | myFilter}}</soft><i></h3>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-5 col-sm-offset-4" style="margin-top:-31px;">
+
+              <div class="form-box" >
+                <div class="form-top">
+                  <div class="form-top-left">
+                    <h3>Password recovery</h3>
+
+                  </div>
+
+                  <div class="form-top-right">
+                    <i class="fa fa-key"></i>
+                  </div>
+                 
+                </div>
+                <div ng-hide="newUser.verifyCheck">
+                <div class="form-bottom" >
+                 <p>Enter your email:</p>
+                 
+                  <form ng-submit="forgotPassword()">
+                    <div class="form-group">
+                      <label class="sr-only" for="form-email">Email</label>
+                      <input type="text" name="form-username"  ng-model="newUser.email" placeholder="Enter Email" class="form-username form-control" id="form-email" required>
+
+                    </div>
+                    <div class="form-group alert alert-danger" role="alert" ng-show="passwordErrorMsg">{{passwordErrorMsg}}</div>
+                    <button type="submit"  class="btn">Send me varification code</button>
+
+                  </form>
+                  <p>or</p>
+                  <a href="/index.html" class="btn btn-danger">Sign in</a>
+                  <div ng-show="newUser.sendStatus">
+                    <p>A varification code has been sent to your email.</p>
+                    <label class="sr-only" for="form-email">Enter code</label>
+                      <input type="text" name="form-username"  ng-model="newUser.codeCheck" placeholder="Enter Code" class="form-username form-control"  required>
+                      <br>
+                      <div class="form-group alert alert-danger" ng-show="passwordErrorMsg" >
+                       <p  >{{passwordErrorMsg}}</p>
+
+                      </div>
+                      <div class="form-group">
+                      <a class="btn btn-primary" ng-click="resetPassword()" >Verify</a>
+                      </div>
+                  </div>
+
+                </div>  <!-- form bottom -->
+                </div>
+                </div> <!-- form box -->
+                 
+                <div class="form-bottom" ng-show="newUser.verifyCheck">
+                   <div class="form-group">
+                      <label class="sr-only" for="form-email">New Password</label>
+                      <input type="password"   ng-model="newUser.password" placeholder="Enter new password" class="form-username form-control"  required>
+                    
+                    </div>
+                    <div class="form-group">
+                     <label class="sr-only" for="form-email">Confirm new Password</label>
+                    <input type="password"   ng-model="newUser.confirmpassword" placeholder="Confirm Password" class="form-username form-control"  required>
+                    </div>
+                    <div class="form-group">
+                    <a class="btn btn-success" ng-click="resetPassword()">Change Password</a>
+                    </div>
+                    <div class="form-group">
+                      
+                        <p ng-show="passwordUpdateMsg">{{passwordUpdateMsg}}</p>
+                    </div>
+                </div>
+              </div><!--  form box -->
+              
+
+            </div> <!-- main form box ends -->
+
+
+            
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <i class="fa fa-copyright" aria-hidden="true"></i> Limber Team</br>
+
+    </footer>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.17/angular-ui-router.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-cookies.min.js"></script>
+
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.5.js"></script>
+    <script src="lib/js/jquery-1.11.1.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="lib/js/jquery.backstretch.min.js"></script>
+    <script src="lib/js/scripts.js"></script>
+    <!-- <script type="text/javascript" src='lib/angular.min.js'></script>
+    <script type="text/javascript" src='lib/angular-route.min.js'></script>
+    <script type="text/javascript" src="lib/angular-cookies.min.js"></script> -->
+    <script src="app.js"></script>
+    <script type="text/javascript" src='login/routeProvider.js'></script>
+    <script src="/login/authController.js"></script>
+     <script src="/resfilter.js"></script>
+
+
+    <!-- Bootstrap JS -->
+
+  </body>
+  </html>
