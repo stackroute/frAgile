@@ -1,233 +1,236 @@
 fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal','cardsService','projectService', 'Socket', '$filter', 'graphModalFactory','homeService','githubService',
-  function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projectService, Socket, $filter, graphModalFactory,homeService,githubService) {
-    // $scope.loadProjects = function() {
-    //
-    //   projectService.getUserProjects().success(function(response) {
-    //     $rootScope.projects = response.projects
-    //   });
-    //
-    //   $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
-    // }
-    var socket = Socket($scope);
-    //Temporary fix, make a better logic
-    if ($scope.refreshProjects) {
-      console.log("Refreshing project");
-      homeService.getUserProjects().success(function(response) {
-        $rootScope.projects = response.projects
-        // if($rootScope.githubProfile.length!==0){
-        //   $rootScope.projects.forEach(function (project){
-        //     socket.emit("github:pushStories",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
-        // console.log("Emitting pushStories event");
-        // })
-        // }
-      });
-    }
-$scope.syncing=false;
+function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projectService, Socket, $filter, graphModalFactory,homeService,githubService) {
+  // $scope.loadProjects = function() {
+  //
+  //   projectService.getUserProjects().success(function(response) {
+  //     $rootScope.projects = response.projects
+  //   });
+  //
+  //   $rootScope.defaultDate =  $filter('date')(Date.now(), "yyyy-MM-dd");
+  // }
+  var socket = Socket($scope);
+  //Temporary fix, make a better logic
+  if ($scope.refreshProjects) {
+    console.log("Refreshing project");
+    homeService.getUserProjects().success(function(response) {
+      $rootScope.projects = response.projects
+      // if($rootScope.githubProfile.length!==0){
+      //   $rootScope.projects.forEach(function (project){
+      //     socket.emit("github:pushStories",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
+      // console.log("Emitting pushStories event");
+      // })
+      // }
+    });
+  }
+  $scope.syncing=false;
 
-var syncArray=[];
-socket.on("startSync",function(projectId)
-{
-  syncArray.push(projectId);
-  console.log("------------",syncArray,syncArray.length);
-});
-$scope.syncValue=function(projectId)
-{
-  if(syncArray.indexOf(projectId)!=-1)
-  return true;
-  else
-  return false;
-}
-socket.on("stopSync",function(projectId)
-{
-  if(syncArray.indexOf(projectId)!=-1)
-  syncArray.splice(syncArray.indexOf(projectId),1);
-  socket.emit("SyncIsStopped",true);
-})
-    projectService.getCurrentUser().success(function(response) {
-      socket.emit('join:room', {
-        'room': "user:" + response._id
-      });
-    })
-socket.on("syncing event",function(msg){
-$scope.msg=msg;
-})
+  var syncArray=[];
+  socket.on("startSync",function(projectId)
+  {
+    syncArray.push(projectId);
+    console.log("------------",syncArray,syncArray.length);
+  });
+  $scope.syncValue=function(projectId)
+  {
+    if(syncArray.indexOf(projectId)!=-1)
+    return true;
+    else
+    return false;
+  }
+  socket.on("stopSync",function(projectId)
+  {
+    if(syncArray.indexOf(projectId)!=-1)
+    syncArray.splice(syncArray.indexOf(projectId),1);
+    socket.emit("SyncIsStopped",true);
+  })
+  projectService.getCurrentUser().success(function(response) {
+    socket.emit('join:room', {
+      'room': "user:" + response._id
+    });
+  })
+  socket.on("syncing event",function(msg){
+    $scope.msg=msg;
+  })
 
-    socket.on('releaseDeleted', function(releaseData) {
-      $rootScope.projects.forEach(function(project) {
-        if (project._id == releaseData.projectId) {
-          project.release.forEach(function(release, index) {
-            if (release._id == releaseData.releaseId) {
-              var releaseName = release.name; //For activity
-              project.release.splice(index, 1);
-            }
-          })
-        }
-      })
-    })
-
-    $rootScope.inprojectRoom=true;
-    // Opening Modal window for Release Chart
-    $scope.openReleaseChart = function() {
-      graphModalFactory.open('lg', './components/releaseChart/releaseChart.html', "Release Chart");
-    };
-
-    // Opening Modal window for Overview Chart
-    $scope.showOverGraph = function() {
-      graphModalFactory.open('lg', './components/releaseChart/overViewChart.html', "Overview Graph");
-    };
-
-    $scope.longDescLimit = 38;
-    $scope.longPrjDescLimit = 120;
-    $scope.setDefaultForRelease = function(projectId) {
-
-      $scope.addWhat = "Release";
-      $scope.projectId = projectId;
-      projectService.setData($scope.addWhat, projectId);
-      var modalInstance = $uibModal.open({
-        animation: $scope.animationsEnabled,
-        templateUrl: '/components/project/project.modal.html',
-        controller: 'modalController',
-        controllerAs: 'modalContr'
-      });
-    }
-    $scope.setDefaultForProject = function(projectId) {
-      $scope.dismissThis = "none";
-      $scope.addWhat = "Project";
-      $scope.warningModalDesc = true;
-      $scope.warningModalName = true;
-      $scope.warningModalDate = true;
-      projectService.setData($scope.addWhat);
-      var modalInstance = $uibModal.open({
-        animation: $scope.animationsEnabled,
-        templateUrl: '/components/project/project.modal.html',
-        controller: 'modalController',
-        controllerAs: 'modalContr'
-      });
-    }
-    $scope.closeThis = function() {
-      $uibModalInstance.dismiss('cancel');
-    }
-    $scope.editProject = function(newProjectName, newProjectDetails, prId) {
-      console.log(newProjectName);
-      console.log(newProjectDetails);
-      console.log(prId);
-      if (newProjectName != "") {
-        socket.emit('project:editProject', {
-          'room': 'projectRoom',
-          'name': newProjectName,
-          'description': newProjectDetails,
-          "prId": prId,
-          'user':$rootScope.userProfile
-        });
-        return true;
-      } else {
-        return false;
+  socket.on('releaseDeleted', function(releaseData) {
+    $rootScope.projects.forEach(function(project) {
+      if (project._id == releaseData.projectId) {
+        project.release.forEach(function(release, index) {
+          if (release._id == releaseData.releaseId) {
+            var releaseName = release.name; //For activity
+            project.release.splice(index, 1);
+          }
+        })
       }
-    };
-    $scope.editRelease = function(newReleaseName, newReleaseDetails, newReleaseDate, creationDate, prId, relId, oldName) {
-      if (newReleaseDate != null && creationDate != null && newReleaseName != "") {
-        var dt = new Date(newReleaseDate);
-        var crDt = new Date(creationDate);
-        socket.emit('project:editRelease', {
-          'room': 'projectRoom',
-          'projectId': prId,
-          'releaseId': relId,
-          "name": newReleaseName,
-          "description": newReleaseDetails,
-          "creationDate": crDt,
-          "releaseDate": dt,
-          "oldReleaseName": oldName,
-          'user':$rootScope.userProfile
-        });
-        return true;
-      } else {
-        return false;
-      }
-    }
-    $scope.setReleaseToDelete = function(projectId, releaseId, projectName, releaseName) {
-      $scope.toDeleteProjectId = projectId;
-      $scope.toDeleteReleaseId = releaseId;
-      $scope.toDeleteProjectName = projectName;
-      $scope.toDeleteReleaseName = releaseName;
-    }
-    $scope.archiveFun = function() {
-      // console.log("archiveFun" + rel)
-      socket.emit('deleteRelease', {
+    })
+  })
+
+  $rootScope.inprojectRoom=true;
+  // Opening Modal window for Release Chart
+  $scope.openReleaseChart = function() {
+    graphModalFactory.open('lg', './components/releaseChart/releaseChart.html', "Release Chart");
+  };
+
+  // Opening Modal window for Overview Chart
+  $scope.showOverGraph = function() {
+    graphModalFactory.open('lg', './components/releaseChart/overViewChart.html', "Overview Graph");
+  };
+
+  $scope.longDescLimit = 38;
+  $scope.longPrjDescLimit = 120;
+  $scope.setDefaultForRelease = function(projectId) {
+
+    $scope.addWhat = "Release";
+    $scope.projectId = projectId;
+    projectService.setData($scope.addWhat, projectId);
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: '/components/project/project.modal.html',
+      controller: 'modalController',
+      controllerAs: 'modalContr'
+    });
+  }
+  $scope.setDefaultForProject = function(projectId) {
+    $scope.dismissThis = "none";
+    $scope.addWhat = "Project";
+    $scope.warningModalDesc = true;
+    $scope.warningModalName = true;
+    $scope.warningModalDate = true;
+    projectService.setData($scope.addWhat);
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: '/components/project/project.modal.html',
+      controller: 'modalController',
+      controllerAs: 'modalContr'
+    });
+  }
+  $scope.closeThis = function() {
+    $uibModalInstance.dismiss('cancel');
+  }
+  $scope.editProject = function(newProjectName, newProjectDetails, prId) {
+    console.log(newProjectName);
+    console.log(newProjectDetails);
+    console.log(prId);
+    if (newProjectName != "") {
+      socket.emit('project:editProject', {
         'room': 'projectRoom',
-        'activityRoom': 'activity:' + $scope.toDeleteProjectId,
-        'projectId': $scope.toDeleteProjectId,
-        'releaseId': $scope.toDeleteReleaseId,
-        'releaseName': $scope.toDeleteReleaseName,
-        'projectName': $scope.toDeleteProjectName,
+        'name': newProjectName,
+        'description': newProjectDetails,
+        "prId": prId,
         'user':$rootScope.userProfile
       });
-    };
-    $scope.editFun = function(rel) {
-
-    };
-    $scope.starFun = function(rel) {
-      console.log("starFun" + rel);
-    };
-
-    $scope.setProject = function(projectId, projectName, releaseId, releaseName, releaseDesc) {
-      $rootScope.projectName = projectName,
-        $rootScope.release = {};
-      $rootScope.releaseName = releaseName;
-      $rootScope.release.description = releaseDesc;
+      return true;
+    } else {
+      return false;
     }
-
-    socket.on('project:releaseEdited', function(releaseData) {
-      console.log(releaseData);
-      console.log("--------------");
-      $rootScope.projects.forEach(function(item, itmIndex) {
-        if (item._id == releaseData.prId) {
-          item.release.forEach(function(rel, relIndex) {
-            if (rel._id == releaseData._id) {
-              console.log($rootScope.projects[itmIndex].release[relIndex]);
-              $rootScope.projects[itmIndex].release[relIndex].name = releaseData.name;
-              $rootScope.projects[itmIndex].release[relIndex].description = releaseData.description;
-              $rootScope.projects[itmIndex].release[relIndex].releaseDate = releaseData.releaseDate;
-            }
-          });
-        }
+  };
+  $scope.editRelease = function(newReleaseName, newReleaseDetails, newReleaseDate, creationDate, prId, relId, oldName) {
+    if (newReleaseDate != null && creationDate != null && newReleaseName != "") {
+      var dt = new Date(newReleaseDate);
+      var crDt = new Date(creationDate);
+      socket.emit('project:editRelease', {
+        'room': 'projectRoom',
+        'projectId': prId,
+        'releaseId': relId,
+        "name": newReleaseName,
+        "description": newReleaseDetails,
+        "creationDate": crDt,
+        "releaseDate": dt,
+        "oldReleaseName": oldName,
+        'user':$rootScope.userProfile
       });
-      //console.log(releaseData);
+      return true;
+    } else {
+      return false;
+    }
+  }
+  $scope.setReleaseToDelete = function(projectId, releaseId, projectName, releaseName) {
+    $scope.toDeleteProjectId = projectId;
+    $scope.toDeleteReleaseId = releaseId;
+    $scope.toDeleteProjectName = projectName;
+    $scope.toDeleteReleaseName = releaseName;
+  }
+  $scope.archiveFun = function() {
+    // console.log("archiveFun" + rel)
+    socket.emit('deleteRelease', {
+      'room': 'projectRoom',
+      'activityRoom': 'activity:' + $scope.toDeleteProjectId,
+      'projectId': $scope.toDeleteProjectId,
+      'releaseId': $scope.toDeleteReleaseId,
+      'releaseName': $scope.toDeleteReleaseName,
+      'projectName': $scope.toDeleteProjectName,
+      'user':$rootScope.userProfile
+    });
+  };
+  $scope.editFun = function(rel) {
+
+  };
+  $scope.starFun = function(rel) {
+    console.log("starFun" + rel);
+  };
+
+  $scope.setProject = function(projectId, projectName, releaseId, releaseName, releaseDesc) {
+    $rootScope.projectName = projectName,
+    $rootScope.release = {};
+    $rootScope.releaseName = releaseName;
+    $rootScope.release.description = releaseDesc;
+  }
+
+  socket.on('project:releaseEdited', function(releaseData) {
+    console.log(releaseData);
+    console.log("--------------");
+    $rootScope.projects.forEach(function(item, itmIndex) {
+      if (item._id == releaseData.prId) {
+        item.release.forEach(function(rel, relIndex) {
+          if (rel._id == releaseData._id) {
+            console.log($rootScope.projects[itmIndex].release[relIndex]);
+            $rootScope.projects[itmIndex].release[relIndex].name = releaseData.name;
+            $rootScope.projects[itmIndex].release[relIndex].description = releaseData.description;
+            $rootScope.projects[itmIndex].release[relIndex].releaseDate = releaseData.releaseDate;
+          }
+        });
+      }
+    });
+    //console.log(releaseData);
+  });
+
+  socket.on('project:releaseAdded', function(releaseData) {
+    // Returns entire project document
+    $rootScope.projects.forEach(function(item, index) {
+      if (item._id == releaseData._id) { //Comparing  Scope Projects ID with Updated Project ID
+        $rootScope.projects[index] = releaseData;
+
+      }
+    });
+  });
+
+  socket.on('project:projectAdded', function(data) {
+    $rootScope.projects.push(data);
+  });
+
+  socket.on('project:projectEdited', function(newProject) {
+    console.log("----projectEdited----");
+    console.log(newProject);
+    $rootScope.projects.forEach(function(project, projectIndex) {
+      if (project._id == newProject._id) {
+        $rootScope.projects[projectIndex].name = newProject.name;
+        $rootScope.projects[projectIndex].description = newProject.description;
+      }
+    });
+  });
+
+  socket.on('github:changeGithubStatus', function(githubRepo) {
+    console.log("----GithubEdited----");
+    console.log(githubRepo);
+    $rootScope.projects.forEach(function(project, projectIndex) {
+      if (project._id == githubRepo.projectId) {
+        $rootScope.projects[projectIndex].githubStatus = githubRepo.githubStatus;
+        //$scope.msg.syncing=false;
+        socket.emit("github:pushStories",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
+  $scope.pushMember();
+  }
     });
 
-    socket.on('project:releaseAdded', function(releaseData) {
-      // Returns entire project document
-      $rootScope.projects.forEach(function(item, index) {
-        if (item._id == releaseData._id) { //Comparing  Scope Projects ID with Updated Project ID
-          $rootScope.projects[index] = releaseData;
-
-        }
-      });
-    });
-
-    socket.on('project:projectAdded', function(data) {
-      $rootScope.projects.push(data);
-    });
-
-    socket.on('project:projectEdited', function(newProject) {
-      console.log("----projectEdited----");
-      console.log(newProject);
-      $rootScope.projects.forEach(function(project, projectIndex) {
-        if (project._id == newProject._id) {
-          $rootScope.projects[projectIndex].name = newProject.name;
-          $rootScope.projects[projectIndex].description = newProject.description;
-        }
-      });
-    });
-
-    socket.on('github:changeGithubStatus', function(githubRepo) {
-      console.log("----GithubEdited----");
-      console.log(githubRepo);
-      $rootScope.projects.forEach(function(project, projectIndex) {
-        if (project._id == githubRepo.projectId) {
-          $rootScope.projects[projectIndex].githubStatus = githubRepo.githubStatus;
-          $scope.msg.syncing=false;
-        }
-      });
     });
 
 
@@ -296,10 +299,10 @@ $scope.msg=msg;
       }
     }
 
-socket.on("notify:memberNotAdded",function(msg)
-{
-  alert(msg.toUpperCase()+" has not shared his github details with Limber, So we can't add him to your git repository");
-})
+    socket.on("notify:memberNotAdded",function(msg)
+    {
+      alert(msg.toUpperCase()+" has not shared his github details with Limber, So we can't add him to your git repository");
+    })
     socket.on('project:memberAdded', function(data) {
       data.fullName = data.firstName + " " + data.lastName;
       $scope.projMemberList.push(data);
@@ -312,60 +315,60 @@ socket.on("notify:memberNotAdded",function(msg)
       console.log(prId);
       githubService.getAllRepos().success(function(response){
 
-      console.log(response);
-      modalInstance=$uibModal.open({
-        animation: true,
-        templateUrl: "/components/github/github.modal.view.html",
-        controller: "githubController",
-        controllerAs:"githubCntrl",
-        size: 'lg',
-        resolve: {
-          param: function() {
-            return {
-              response : response,
-              projectId : prId
+        console.log(response);
+        modalInstance=$uibModal.open({
+          animation: true,
+          templateUrl: "/components/github/github.modal.view.html",
+          controller: "githubController",
+          controllerAs:"githubCntrl",
+          size: 'lg',
+          resolve: {
+            param: function() {
+              return {
+                response : response,
+                projectId : prId
+              }
+
             }
-
           }
-        }
-      });
-      modalInstance.result.then(function (){
-        console.log("in first closing");
+        });
+        modalInstance.result.then(function (){
+          console.log("in first closing");
           $state.go('project');
-      },function(){
-        console.log("closing");
-      })
+        },function(){
+          console.log("closing");
+        })
 
       })
-      }
+    }
 
     $scope.getIssues=function(prId){
       console.log(prId);
       githubService.getIssues(prId).success(function(response){
 
-      console.log(response);
-      modalInstance=$uibModal.open({
-        animation: true,
-        templateUrl: "/components/github/github.issues.view.html",
-        controller: "githubController",
-        controllerAs: "githubCntrl",
-        size: 'lg',
-        resolve: {
-          param: function() {
-            return {
-              response : response,
-              projectId : prId
-            }
+        console.log(response);
+        modalInstance=$uibModal.open({
+          animation: true,
+          templateUrl: "/components/github/github.issues.view.html",
+          controller: "githubController",
+          controllerAs: "githubCntrl",
+          size: 'lg',
+          resolve: {
+            param: function() {
+              return {
+                response : response,
+                projectId : prId
+              }
 
+            }
           }
-        }
-      });
-      modalInstance.result.then(function (){
-        console.log("in first closing");
+        });
+        modalInstance.result.then(function (){
+          console.log("in first closing");
           //$state.go('project');
-      },function(){
-        console.log("closing");
-      })
+        },function(){
+          console.log("closing");
+        })
 
       })
 
@@ -374,38 +377,38 @@ socket.on("notify:memberNotAdded",function(msg)
 
     //github
     //making this person as a collaborator to a story,if he is already assigned to any story.
-$scope.pushMember=function()
-{
-  cardsService.getAssignedStories().success(function(userObject)
-{
-  console.log("userObject----------",userObject);
-  userObject.assignedStories.filter(function(assignedStory)
-  {
-    console.log("storyid-----------------",assignedStory.stories);
-    console.log("userObject._id-------------",userObject._id);
-    console.log("github----------------",userObject.github);
-    socket.emit('story:addMembers', {
-      'storyid': assignedStory.stories,
-      'memberid': userObject._id,
-      'github_profile':userObject.github,
-      'atTheTimeOfIntegration':true
-    });
-});
-});
-}
-//end of making this person as a collaborator to a story,if he is already assigned to any story.
+    $scope.pushMember=function()
+    {
+      cardsService.getAssignedStories().success(function(userObject)
+      {
+        console.log("userObject----------",userObject);
+        userObject.assignedStories.filter(function(assignedStory)
+        {
+          console.log("storyid-----------------",assignedStory.stories);
+          console.log("userObject._id-------------",userObject._id);
+          console.log("github----------------",userObject.github);
+          socket.emit('story:addMembers', {
+            'storyid': assignedStory.stories,
+            'memberid': userObject._id,
+            'github_profile':userObject.github,
+            'atTheTimeOfIntegration':true
+          });
+        });
+      });
+    }
+    //end of making this person as a collaborator to a story,if he is already assigned to any story.
 
-    // $scope.pushStories=function(projectId){
-    //   console.log($rootScope.githubProfile);
-    //   if($rootScope.githubProfile){
-    //
-    //   socket.emit("github:pushStories",{projectId:projectId,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
-    // }
-    // }
+    $scope.pushStories=function(projectId){
+      console.log($rootScope.githubProfile);
+      if($rootScope.githubProfile){
+
+        socket.emit("github:pushStories",{projectId:projectId,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
+      }
+    }
 
 
 
 
 
   }
-  ]);
+]);

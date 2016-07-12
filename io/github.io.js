@@ -221,7 +221,7 @@ else {
             {console.log("no github");
             console.log(story._id);
 
-
+//check if
 
 
           }
