@@ -26,7 +26,7 @@ module.exports = function(socket, io) {
     }
 
     var options={
-      url:"https://api.github.com/repos/"+data.owner+"/"+data.name+"/hooks?access_token="+data.token,
+      url:"https://api.github.com/repos/"+data.owner+"/"+data.name+"/hooks?access_token="+data.githubProfile.token,
       headers:{
         "content-type":'application/json',
         "User-Agent":'Limber'
@@ -35,7 +35,7 @@ module.exports = function(socket, io) {
     };
 
     var collaboratorOptions={
-      url:"https://api.github.com/repos/"+data.owner+"/"+data.name+"/collaborators?access_token="+data.token,
+      url:"https://api.github.com/repos/"+data.owner+"/"+data.name+"/collaborators?access_token="+data.githubProfile.token,
       //qs:{access_token:data.token},
       headers:{
         "User-Agent":'Limber'
@@ -49,6 +49,9 @@ module.exports = function(socket, io) {
         githubRepo.name=data.name;
         githubRepo.owner=data.owner;
         githubRepo.projectId=data.projectId;
+        githubRepo.admin.id=data.githubProfile.id;
+        githubRepo.admin.token=data.githubProfile.token;
+        githubRepo.admin.name=data.githubProfile.name;
         var memberList=[];
         githubRepo.save(function(err){
           if(!err){
@@ -98,7 +101,7 @@ module.exports = function(socket, io) {
                             if(flag==0)
                             {
                               var putOptions={
-                                url:"https://api.github.com/repos/"+data.owner+"/"+data.name+"/collaborators/"+memberGitData.github.name+"?access_token="+data.token,
+                                url:"https://api.github.com/repos/"+data.owner+"/"+data.name+"/collaborators/"+memberGitData.github.name+"?access_token="+data.githubProfile.token,
                                 headers:{
                                   "User-Agent":'Limber'
                                 }
@@ -198,6 +201,10 @@ module.exports = function(socket, io) {
                   }
 else {
 //in story shema add that user
+story.pendingMemberToGithub.push(member._id);
+story.save(function(err,res){
+  console.log("After Saving",res);
+})
 }
                 })
               }
@@ -213,18 +220,18 @@ else {
 
               }
               issue.repo_details=repoData;
-              issue.github_profile=data.githubProfile;
+              issue.github_profile=story.storyCreatorId.github;
               console.log(issue);
               queue.storyPost.add(issue);
             }
-            else if(story.storyCreatorId.github==null)
-            {console.log("no github");
-            console.log(story._id);
-
-//check if
-
-
-          }
+//             else if(story.storyCreatorId.github==null)
+//             {console.log("no github");
+//             console.log(story._id);
+//
+// check if
+//
+//
+//           }
         })
 
 

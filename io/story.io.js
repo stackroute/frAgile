@@ -107,6 +107,10 @@ console.log(data);
                     assignees.push(member.github.name)
                   }
                   else{
+                    storyData.pendingMemberToGithub.push(member._id);
+                    storyData.save(function(err,res){
+                    //send message here if one person doesn't provide git details but he is added to a project.
+                  })
                     console.log("Not having github profile",member);
                   }
                 })
@@ -115,8 +119,11 @@ console.log(data);
                 assignees.push(memberData.github.name);
               }
               else {
+                storyData.pendingMemberToGithub.push(memberData._id);
+                storyData.save(function(err,res){
                 //send message here if one person doesn't provide git details but he is added to a project.
-              }
+              })
+            }
               if(assignees){
                 console.log("assignees-----------",assignees);
               issue.message={

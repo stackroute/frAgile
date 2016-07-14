@@ -32,21 +32,19 @@ if(!err)
     if(!err)
       {
         console.log("after getting github repo--------------");
-        User.getOwnerToken(githubRepo.owner,function(err,ownerGithub)
-        {
-          console.log(ownerGithub);
-          if(!err)
-              {
+
+          
+
                 var putOptions={
-                url:"https://api.github.com/repos/"+githubRepo.owner+"/"+githubRepo.name+"/collaborators/"+user.github.name+"?access_token="+ownerGithub[0].github.token,
+                url:"https://api.github.com/repos/"+githubRepo.owner+"/"+githubRepo.name+"/collaborators/"+user.github.name+"?access_token="+githubRepo.admin.token,
                 headers:{
                   "User-Agent":'Limber'
                   }
                   }
                   console.log("before queue-----------",putOptions.url);
                 queue.collaboratorPost.add(putOptions);
-              }
-        })
+
+
       }
     })
   }

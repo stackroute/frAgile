@@ -11,7 +11,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var RedisStore = require('connect-redis')(session);
 var app = express();
-
+var queue= require('./redis/queue.js')
 mongoose.connect('mongodb://localhost/fragileDB');
 var routes = require('./routes/index');
 //var users = require('./routes/users');
@@ -65,9 +65,19 @@ app.use('/auth',authenticationHandler);
 
 
 app.post('/issueEvents',function(req,res){
-  console.log("inside issue events");
-  console.log(req);
-  res.send("succesful");
+  setTimeout(function(){
+    console.log("inside issue events");
+    console.log(req.headers);
+    console.log(req.body);
+    if(req.headers['x-github-event']==="issues"){
+      console.log("in issues");
+      queue.addGitIssues.add(req.body);
+    }
+    //if(body.act)
+    //queue.createStory.add()
+    return res.send("succesful");
+  },3000)
+
 })
 // view engine setup
 

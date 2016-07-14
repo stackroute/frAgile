@@ -12,7 +12,7 @@ module.exports = function(passport){
 	passport.serializeUser(function(user, done) {
 		console.log("in serialize");
 		console.log(user);
-		done(null, user.id);
+		done(null, user._id);
 	});
 
 	passport.deserializeUser(function(id, done) {
@@ -225,6 +225,7 @@ module.exports = function(passport){
 							console.log("printing accessToken");
 
 							//req.user.github=github;
+							console.log(req);
 							User.findOne({'_id':req.user._id},function(err,doc){
 								if(err){
 									return done(err);

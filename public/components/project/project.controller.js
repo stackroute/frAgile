@@ -231,6 +231,7 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projec
   }
     });
 
+
     });
 
 
@@ -376,7 +377,7 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projec
 
 
     //github
-    //making this person as a collaborator to a story,if he is already assigned to any story.
+    //making this person as a collaborator in github to the linked repository,if he/she is already assigned to any story.
     $scope.pushMember=function()
     {
       cardsService.getAssignedStories().success(function(userObject)

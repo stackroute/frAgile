@@ -35,7 +35,7 @@ fragileApp.controller('githubController',['$rootScope','$scope','$stateParams','
       projectId: param.projectId,
       name: repo.name,
       owner: repo.owner.login,
-      token: $rootScope.githubProfile.token,
+      githubProfile: $rootScope.githubProfile,
       userId:$rootScope.userProfile._id
     }
 

@@ -99,6 +99,10 @@ var StorySchema = new Schema({
     githubSync: {type: Schema.Types.ObjectId,ref: 'GithubRepo'},
     projectId: {type: Schema.Types.ObjectId,ref: 'Project'},
     issueNumber: String,
+    pendingMemberFromGithub: [String],
+    pendingMemberToGithub: [{
+      type: Schema.Types.ObjectId,
+      ref: 'User'}]
   });
   //Code merge by sharan Starts:
   /***this function is to fetch the story details from the collection
@@ -816,8 +820,8 @@ story.save(function(err,cb)
 })
 })
   Story.find({
-    "projectId": projectId,
-    "storyCreatorId":userId
+    "projectId": projectId
+
   }).populate('memberList','github').populate('storyCreatorId','github').exec(function(err,data){
     if(!err){
       callback(null,data)
@@ -900,6 +904,23 @@ StorySchema.statics.findConvertedIssues = function(projectId, callback) {
   });
 }
 
+StorySchema.statics.findbyGithubId = function(githubRepoId,issueNumber, callback) {
+  //console.log("inside model find story");
+  this.findOne({
+    "githubSync": githubRepoId,
+    "issueNumber":issueNumber
+  })
+
+  .exec(function(err, doc) {
+    if (err) {
+      //console.log("err"+err);
+      callback(err, null);
+    } else {
+      //console.log("doc"+doc);
+      callback(null, doc);
+    }
+  });
+}
 
 
 
