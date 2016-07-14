@@ -42,6 +42,11 @@ if(!err)
                   }
                   }
                   console.log("before queue-----------",putOptions.url);
+                  Project.updateCollaborators({projectId:data.projectId,collaboratorId:data.memberList[0]},function(err,data)
+                {
+                  if(!err)
+                  console.log("collaboratorList--->",data.collaboratorList);
+                });
                 queue.collaboratorPost.add(putOptions);
 
 

@@ -10,6 +10,7 @@ var collaboratorPost=Queue("Server4",6379,'127.0.0.1');
 var addGitIssues=Queue("Server5",6379,'127.0.0.1');
 var io=require("../io/io.js");
 var User=require("../models/user.js");
+
 storyPost.process(function(job,done){
  var options={
    url:"https://api.github.com/repos/"+job.data.repo_details.owner+"/"+job.data.repo_details.name+"/issues?access_token="+job.data.github_profile.token,
@@ -63,7 +64,7 @@ done(res,null);
 //
 editStory.process(function(job,done){
   var options={
-    url:"https://api.github.com/repos/"+job.data.repo_details.owner+"/"+job.data.repo_details.name+"/issues/"+job.data.issueNumber+"?access_token="+job.data.github_profile.token,
+    url:"https://api.github.com/repos/"+job.data.repo_details.owner+"/"+job.data.repo_details.name+"/issues/"+job.data.issueNumber+"?access_token="+job.data.repo_details.admin.token,
     headers:{
       "content-type":'application/json',
       "User-Agent":'Limber'
@@ -103,7 +104,6 @@ addGitIssues.process(function(job,done){
   var owner=job.data.repository.owner.login;
   var name=job.data.repository.name;
   var number=job.data.issue.number;
-
   console.log(job.data);
   if(job.data.action==="opened"){
     console.log("in opened",owner,name);
