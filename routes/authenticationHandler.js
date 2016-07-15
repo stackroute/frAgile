@@ -16,11 +16,11 @@ module.exports = function(passport){
 
 	//sends failure login state back to angular
 	router.get('/failure', function(req, res){
-		res.send({ error: "Invalid Email or Password"});
+		res.send({ error: "PASSWORD_ERR"});
 		// req.session.user=null;
 	});
   router.get('/regfailure', function(req, res){
-    res.send({ error: "Email Id already exits"});
+    res.send({ error: "EMAIL_ERR"});
 		// req.session.user=null;
 	});
 
@@ -111,7 +111,7 @@ router.get('/facebook/callback',
           }else if(user){
             console.log("user is server ", user.password);
 
-         res.send({error:"Entered email belongs to an existing account.Please login with same."})
+         res.send({error:"EMAIL_ERR"})
           } else{
               var transporter=nodemailer.createTransport({
 
@@ -179,9 +179,9 @@ router.get('/facebook/callback',
              var mailOption={
               from:'Limber <mylimberapp@gmail.com>',
               to:email,
-              subject:'varification',
-              text:"Your varification code is "+code+"\nEnter this code to reset your password.",
-              html:'<h2>Your varification code is </h2><b>Varification code :'+code+'</b> <p>Enter this code in Limber App to reset your password</p><a href="http://localhost:8080/forgot.html" target="_blank">Click here</a>'
+              subject:'Limber Password Reset',
+              text:"We heard you need a password reset. Code is: "+code+"\nEnter this code to reset your password.",
+              html:'<h2>Hello,</h2><h3>We heard you need a password reset. </h3><b>Enter this code to reset your password:'+code+'</b> '
             }
             transporter.sendMail(mailOption,function(error,info){
               if(error){
