@@ -25,6 +25,14 @@ var projectSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   }],
+  collaboratorsList:[{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  gitStories:[{
+    type:Schema.Types.ObjectId,
+    ref:'Story'
+  }],
   githubStatus: Boolean,
   release: [releaseSchema]
   // repository: {type: Schema.Types.ObjectId,ref: 'GithubRepo'}
@@ -286,6 +294,65 @@ projectSchema.statics.getStoryMoveData=function(projectId,callback){
       }
     });
 }
+
+projectSchema.statics.updateCollaborators=function(data,callback)
+{
+  this.findOne(
+    {
+      "_id":data.projectId
+    }).exec(function(err,projectData)
+  {
+    if(projectData.collaboratorsList.indexOf(data.collaboratorId)==-1)
+    {
+      projectData.collaboratorsList.push(data.collaboratorId);
+    }
+    projectData.save(function(err,doc)
+  {
+    if(!err)
+    callback(null,doc);
+  })
+  })
+}
+
+projectSchema.statics.getCollaboratorsList=function(projectId,callback)
+{
+this.find({
+  "_id":projectId
+},{
+  collaboratorsList:1
+}).exec(function(err,projectData)
+{
+  if(!err)
+  callback(null,projectData);
+})
+}
+
+projectSchema.statics.findOneProject=function(projectId,callback)
+{
+this.findOne({
+  "_id":projectId
+}).exec(function(err,data)
+{
+  if(!err)
+  callback(null,data);
+})
+
+}
+
+
+projectSchema.statics.addGitStory=function(data)
+{
+  this.findOne(
+    {
+      "_id":data.projectId
+    }
+  ).exec(function(err,project)
+{
+  project.gitStories.push(data.storyId);
+  project.save();
+})
+}
+
 var Project = mongoose.model('Project', projectSchema, "Projects");
 
 module.exports = Project;

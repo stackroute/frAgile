@@ -69,6 +69,7 @@ console.log(data);
   console.log(doc[0].assignedStories);
     io.to(data.memberid).emit('story:memberAssigned',doc);
    })
+
 },
 removeMember: function(data){
   Story.removeMembers(data.storyid, data.memberid, function(err, storyData) {
@@ -109,7 +110,9 @@ io.to(data.memberid).emit('story:memberRemoved',doc);
 })
 },
 
+
 //Updating the user schema ehen a member is added for cards
+
 
 
 
@@ -369,4 +372,5 @@ moveToBackBug: function(data){
 
   }
 }
+
 }

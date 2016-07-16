@@ -38,7 +38,7 @@ fragileApp.controller('githubController',['$rootScope','$scope','$stateParams','
       githubProfile: $rootScope.githubProfile,
       userId:$rootScope.userProfile._id
     }
-
+console.log("inside linke repo........");
     socket.emit("github:addRepo",repoDetails)
     $uibModalInstance.close();
   }

@@ -6,6 +6,8 @@ var request=require('request');
 var github_api = require("../routes/github-api.js");
 var BackLogsBugList = require('../models/backlogBuglist.js');
 var queue= require('../redis/queue.js');
+var githubCall=require('../githubIntegration/githubCall.js');
+
 
 module.exports = function(socket, io) {
   socket.on('github:addRepo', function(data) {
@@ -34,14 +36,7 @@ module.exports = function(socket, io) {
       json:message
     };
 
-    var collaboratorOptions={
-      url:"https://api.github.com/repos/"+data.owner+"/"+data.name+"/collaborators?access_token="+data.githubProfile.token,
-      //qs:{access_token:data.token},
-      headers:{
-        "User-Agent":'Limber'
-      }
-    };
-    console.log("url---------",collaboratorOptions.url);
+    //console.log("url---------",collaboratorOptions.url);
     request.post(options,function(err,response,body){
       if(!err){
         console.log("inside of repo socket-------------------");
@@ -64,85 +59,28 @@ module.exports = function(socket, io) {
                   'projectId':data.projectId
                 };
                 memberList=statusDoc.memberList;
-                //  console.log(doc);
-                // doc.memberList.forEach(function(userID){
-                //   var room = "user:"+ userID;
-                //   io.to(room).emit('github:changeGithubStatus', githubRepo);
-                // });
 
-                //start of collaborators api call
-                User.findAll(memberList,function(err,doc)
+                memberList.filter(function(userId)
                 {
-                  var collaboratorsIds=[];
-                  if(!err)
-                  {
-                    console.log("-------its fine",doc);
-                    request.get(collaboratorOptions,function(error,response,body)
-                    {
-                      if(!error)
-                      {
-                        var collaborators=JSON.parse(body);
-                        var index=0;
-                        if(doc.length==0)
-                        io.to("user:"+data.userId).emit("stopSync",data.projectId);
-                        doc.filter(function(memberGitData)
-                        {
-                          if(memberGitData.github.name!==undefined)
-                          {
-                            console.log("collaboratorsIds------------",collaboratorsIds);
-                            var flag=0;
-                            collaborators.filter(function(member)
-                            {
-                              if(member.id==memberGitData.github.id)
-                              {
-                                flag=1;
-                              }
-                            })
-                            if(flag==0)
-                            {
-                              var putOptions={
-                                url:"https://api.github.com/repos/"+data.owner+"/"+data.name+"/collaborators/"+memberGitData.github.name+"?access_token="+data.githubProfile.token,
-                                headers:{
-                                  "User-Agent":'Limber'
-                                }
-                              }
-                              console.log("before queue-----------",putOptions.url);
-                              queue.collaboratorPost.add(putOptions);//push member to queue to make him as collaborator
-                            }
-                          }
-                          else {
-                            //notify the user to provide git
-                            console.log("this member dosent have git ids",memberGitData.firstName);
-                          }
-                          index++;
-                          if(index==doc.length)
-                          {
-                            io.to("user:"+data.userId).emit("stopSync",data.projectId);
-                            socket.on("SyncIsStopped",function(msg)
-                            {
-                              statusDoc.memberList.forEach(function(userID){
-                                var room = "user:"+ userID;
-                                io.to(room).emit('github:changeGithubStatus', githubRepo);
-                              });
-                            })
-                          }
-
-                        })
-
-                        /////////////////////////////////////////////////
-
-                      }
-                    });
-                  }
-
+                  console.log("calling githubCall method--------------------------");
+                githubCall.makeUserAsCollaborator({"projectId":data.projectId,"userId":userId,"atTheTimeOfIntegration":false,addingOneMember:false});
                 })
+                //  console.log(doc);
+                memberList.forEach(function(userID){
+                  var room = "user:"+ userID;
+                  io.to(room).emit('github:changeGithubStatus', githubRepo);
+                });
+
               }
             })
             //end of collaborators api call
+
+
           }
         });
       }
     })
+
   })
 
   socket.on("github:convertToStory",function(data){
@@ -182,65 +120,9 @@ module.exports = function(socket, io) {
 
   })
 
-  socket.on("github:pushStories",function(data){
-    console.log("in push Stories",data);
-    GithubRepo.getRepo(data.projectId,function(err,repoData){
-      console.log("Repository Details",repoData);
-      if(!err && repoData){
-        Story.updateGithubSync(data.projectId,data.userId,repoData._id,function(err,storyData){
-          console.log("Stories All Project",storyData);
-          storyData.forEach(function(story){
-            if(story.issueNumber==null && story.storyCreatorId.github!==null)
-            {
-              console.log(story.storyCreatorId.github);
-              var assignees=[];
-              if(story.memberList){
-                story.memberList.forEach(function(member){
-                  if (member.github!=undefined){
-                    assignees.push(member.github.name)
-                  }
-else {
-//in story shema add that user
-story.pendingMemberToGithub.push(member._id);
-story.save(function(err,res){
-  console.log("After Saving",res);
-})
-}
-                })
-              }
-
-              var issue={};
-              issue.message={
-                'title':story.heading,
-                'assignees':assignees,
-                'labels':[story.listId],
-                'body':story.description,
-                'storyId':story._id
-
-
-              }
-              issue.repo_details=repoData;
-              issue.github_profile=story.storyCreatorId.github;
-              console.log(issue);
-              queue.storyPost.add(issue);
-            }
-//             else if(story.storyCreatorId.github==null)
-//             {console.log("no github");
-//             console.log(story._id);
-//
-// check if
-//
-//
-//           }
-        })
-
-
-
-      })
-    }
-
-
-  })
+  socket.on("github:integrateGit",function(data){
+    console.log("in integrateGit metho-----------------------------------------------");
+      githubCall.makeUserAsCollaborator({projectId:data.projectId,userId:data.userId,atTheTimeOfIntegration:true,addingOneMember:false});
 })
 
 }

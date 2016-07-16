@@ -1,41 +1,45 @@
-angular.module('Limber').filter('myFilter', ['$rootScope','$http', function($rootScope,$http) {
-  // The code here executes only once, during initialization.
-  // We'll return the actual filter function that's executed
-  //many times.
+var app=angular.module('LimberAuth');
+app.factory('ResourceBundle', function($q, $rootScope, $http) {
+  $rootScope.resourceBundle ={};
 
-  var tables = {
-    'en': { 'APP_NAME':'Limber' ,
-            'SINGUP_MSG':'Enter email and password to log on:',
-            'TAG_LINE':'Manage your projects in a better way',
-            'LOGIN_MSG':'Fill in the form below to get instant access:',
-            'SIGNUP':'Sign up',
-            'SIGNUP_BTN':'Sign me up!',
-            'LOGIN':'Sign in',
-            'SIGNIN_BTN':'Sign in!',
-            'EMAIL' :'Email',
-            'FORGOT_PASSWORD':'forgot password?'
-          },
-    'nl': { 'APP_NAME': 'limber:' }
-  };
+  var retrieveResourceBundle = function() {
+    var defer = $q.defer();
 
-  // var mainResource={};
-  //  $http.get('resource.json').success(function(data) {
-  //       //mainResource=data;
-  //       mainResource=data;
-  //         console.log("the data inside ",mainResource[0].APP_NAME);
+    if(!$rootScope.resourceBundle) {
+      console.log("Point 1 ",$rootScope.resourceBundle);
+      defer.resolve();
+    } else {
+      var retrieveResourceBundleHttpPromise = $http.get('/resource_bundle.en.json');
+      retrieveResourceBundleHttpPromise.success(function(data) {
+          $rootScope.resourceBundle = data;
+      console.log("Point 2 ",$rootScope.resourceBundle);
 
-  //   });
+          defer.resolve();
+        
+      });
+      retrieveResourceBundleHttpPromise.error(function(data) {
+          console.log("Thye data reject----.",data);
 
-  //console.log("the data is ",mainResource);
+        defer.reject(data);
+      });
+    }
+   // $rootScope.resourceBundle=defer.promise.value;
+    console.log('Retrieving Resource Bundle!! point 3 ',$rootScope.resourceBundle);
+    return defer.promise;
+  }
+
+  return {
+    retrieveResourceBundle: retrieveResourceBundle
+  }
+});
+
+
+app.filter('l10n', function($rootScope, $http) {
   $rootScope.currentLanguage = 'en';
-  return function(label) {
-    // tables is a nested map; by first selecting the
-    // current language (kept in the $rootScope as a
-    // global variable), and selecting the label,
-    // we get the correct value.
-    // console.log("The label name is: ",label);
-    return tables[$rootScope.currentLanguage][label];
-    return tables[label];
-    //return mainResource[0].label;
-  };
-}]);
+
+  return function(label,page) {
+    // console.log('resourceBundle is: ', $rootScope.resourceBundle);
+    // console.log('$rootScope.resourceBundle[label]: '+label+'and vlaue is '  + $rootScope.resourceBundle[label]);
+    return $rootScope.resourceBundle[page][label];
+  }
+});

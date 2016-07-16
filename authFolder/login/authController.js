@@ -1,5 +1,5 @@
-angular.module('Limber')
-    .controller('authController',function($scope,$http,$rootScope,$window,$location,$timeout){
+angular.module('LimberAuth')
+    .controller('authController',function($scope,$http,$rootScope,$window,$location,$timeout,$q){
       $scope.logInErrorMsg = '';
       $scope.passwordError='';
       $scope.passwordErrorMsg='';
@@ -65,8 +65,11 @@ if (nv) {
          }
       });;
     }
-    
+    //Service call for resource bundling
+    //$scope.nitTest=resourceService.testFun();
+
     //verifyCode starts : this function is to send a verification code to new user
+    $rootScope.newUserEmail='';
     $scope.verifyCode=function(){
       $http.post('/auth/verifycode',$scope.user1).success(function(data){
           if(data.error)
@@ -75,6 +78,7 @@ if (nv) {
 
           }else if(data.code){
                 $scope.user1.code=data.code;
+                $rootScope.newUserEmail=$scope.user1.email;
                 $scope.user1.sendStatus=true;
           }
 
@@ -102,10 +106,13 @@ if (nv) {
       {         
           if(data.error){
               $scope.passwordErrorMsg=data.error;
+            $timeout(function() {$scope.passwordErrorMsg='';}, 2000);
+
           }
           else{
             $rootScope.newUser.sendStatus=true;
-            
+            $timeout(function() {$scope.passwordErrorMsg='';}, 2000);
+
           }
 
           //$timeout(function() {}, 2000);
@@ -115,15 +122,16 @@ if (nv) {
      // $window.location.href="/forgot.html";
     }//forgot password ends
     $scope.passwordUpdateMsg='';
+    $scope.verifyErrorMsg='';
     $scope.resetPassword=function(){
       if($rootScope.newUser.verifyCheck==false){
           if($rootScope.newUser.code==$rootScope.newUser.codeCheck){
-            $scope.passwordErrorMsg="Verified!"
-            $timeout(function() {$scope.passwordErrorMsg=''; $rootScope.newUser.verifyCheck=true}, 2000);
+            $scope.verifyErrorMsg="Verified!"
+            $timeout(function() {$scope.verifyErrorMsg=''; $rootScope.newUser.verifyCheck=true}, 2000);
 
           }else{
-               $scope.passwordErrorMsg="Incorrect code. Try again..."
-              $timeout(function() {$scope.passwordErrorMsg=''}, 2000);
+               $scope.verifyErrorMsg="Incorrect code. Try again..."
+              $timeout(function() {$scope.verifyErrorMsg=''}, 2000);
 
           }
         }else if ($rootScope.newUser.verifyCheck==true){
@@ -151,6 +159,8 @@ if (nv) {
     $scope.register = function(){
       if($scope.user1.password!=$scope.user1.confirmpassword){
          $scope.passwordError="Password does not match the confirm password";
+      } else if($rootScope.newUserEmail!=$scope.user1.email){
+          $scope.passwordError="Verification is done for "+$rootScope.newUserEmail+" Please use the same.";
       }
       else{
       $http.post('/auth/register', $scope.user1).success(function(data){
@@ -164,5 +174,6 @@ if (nv) {
 
       });
     }
-  };
-});
+  };//end of register
+
+});//end of controller

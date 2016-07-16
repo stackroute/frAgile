@@ -19,7 +19,7 @@ module.exports = function(passport){
 		console.log('=====Deserializing User: ', id);
 		User.findById(id, function(err, user) {
 
-			 console.log("In desrialize",user);
+			// console.log("In desrialize",user);
 			//console.log('deserializing user:',user.username);
 			done(err, user);
 		});

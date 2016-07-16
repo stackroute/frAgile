@@ -22,21 +22,21 @@ module.exports = function(socket, io) {
             if(storyData.issueNumber){
               if(data.newListName==="Releasable"){
                 issue.message={
-                  'labels':["Releasable"],
+
                   'state':"closed"
                 }
               }
               else
               if(data.newListName==="buglists"){
                 issue.message={
-                  'labels':["Bug"],
+
                   'state': "open"
                 }
               }
               else
               {
                 issue.message={
-                  'labels':[data.newListName],
+
                   'state': "open"
                 }
               }
@@ -102,21 +102,21 @@ module.exports = function(socket, io) {
             if(storyData.issueNumber){
               if(data.newListName==="Releasable"){
                 issue.message={
-                  'labels':["Releasable"],
+
                   'state':"closed"
                 }
               }
               else
               if(data.newListName==="buglists"){
                 issue.message={
-                  'labels':["Bug"],
+
                   'state': "open"
                 }
               }
               else
               {
                 issue.message={
-                  'labels':[data.newListName],
+
                   'state': "open"
                 }
               }
@@ -209,21 +209,21 @@ module.exports = function(socket, io) {
             if(storyData.issueNumber){
               if(data.newListName==="Releasable"){
                 issue.message={
-                  'labels':["Releasable"],
+
                   'state':"closed"
                 }
               }
               else
               if(data.newListName==="buglists"){
                 issue.message={
-                  'labels':["Bug"],
+
                   'state': "open"
                 }
               }
               else
               {
                 issue.message={
-                  'labels':[data.newListName],
+
                   'state': "open"
                 }
               }
@@ -374,7 +374,7 @@ module.exports = function(socket, io) {
           var issue={}
           issue.message={
             'title': data.heading,
-            'labels':[data.listId]
+
           }
           issue.github_profile=data.github_profile;
           issue.repo_details=repoData;
@@ -433,6 +433,7 @@ module.exports = function(socket, io) {
             if (!err) {
               io.to(data.room).emit('sprint:storyAdded', storyData);
               actData.object._id = storyData._id;
+              console.log("Activity added",actData);
               Activity.addEvent(actData, function(data) {
                 io.to(data.activityRoom).emit('activityAdded', data);
               });
