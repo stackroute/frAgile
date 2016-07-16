@@ -253,7 +253,7 @@ pushStories:function(data)
 
             Story.getStory(story._id,function(err,doc)
             {
-            console.log("got the story---------------------");
+            //console.log("got the story---------------------");
             if(!err)
             {
               if(data.atTheTimeOfIntegration==true)
@@ -263,8 +263,9 @@ pushStories:function(data)
                 //  console.log("insdie if condition----------------->");
                   editStory({'storyid':story._id,'memberid':data.userId,'atTheTimeOfIntegration':data.atTheTimeOfIntegration})
                 }
+                else if()
               }
-              console.log("story.storyCreatorId._id----->",story.storyCreatorId._id,"data userId --->",data.userId,"story.issueNumber-------",story.issueNumber,"compare-->",story.issueNumber==undefined);
+              //console.log("story.storyCreatorId._id----->",story.storyCreatorId._id,"data userId --->",data.userId,"story.issueNumber-------",story.issueNumber,"compare-->",story.issueNumber==undefined);
 
               if((story.storyCreatorId._id==data.userId && story.issueNumber===undefined) || (doc.memberList.indexOf(data.userId)!==-1 && !data.atTheTimeOfIntegration)){
                   console.log("insdie second if --------------------------------",doc.memberList);
