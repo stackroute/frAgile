@@ -21,7 +21,7 @@ var socket = Socket($scope);
       if($rootScope.githubProfile.length!==0){
         $rootScope.projects.forEach(function (project){
           if(project.githubStatus ){
-          //socket.emit("github:integrateGit",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile,atTheTimeOfIntegration:true});
+      socket.emit("github:integrateGit",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile,atTheTimeOfIntegration:true});
 console.log("Emitting pushStories event");}
 })
       }
