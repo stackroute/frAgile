@@ -15,13 +15,13 @@ var socket = Socket($scope);
       console.log(response);
 
     });
-    homeService.getUserProjects().success(function(response) {
+    homeService.getUserProjects().success(function(response){
 
       $rootScope.projects = response.projects
       if($rootScope.githubProfile.length!==0){
         $rootScope.projects.forEach(function (project){
-          if(project.githubStatus){
-          socket.emit("github:pushStories",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
+          if(project.githubStatus ){
+          //socket.emit("github:integrateGit",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile,atTheTimeOfIntegration:true});
 console.log("Emitting pushStories event");}
 })
       }

@@ -757,7 +757,6 @@ StorySchema.statics.deleteComment = function(storyId, commentId, callback) {
 StorySchema.statics.getStory = function(storyId, callback) {
   this.findOne({"_id":storyId})
   .exec(function(err,doc){
-    console.log(doc+"in ");
     if (err) {
       callback(err, null);
     }
@@ -819,6 +818,7 @@ story.save(function(err,cb)
 
 })
 })
+
   Story.find({
     "projectId": projectId
 

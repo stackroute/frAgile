@@ -36,7 +36,7 @@ module.exports = function(socket, io) {
       json:message
     };
 
-    console.log("url---------",collaboratorOptions.url);
+    //console.log("url---------",collaboratorOptions.url);
     request.post(options,function(err,response,body){
       if(!err){
         console.log("inside of repo socket-------------------");
@@ -60,19 +60,27 @@ module.exports = function(socket, io) {
                 };
                 memberList=statusDoc.memberList;
 
+                memberList.filter(function(userId)
+                {
+                  console.log("calling githubCall method--------------------------");
+                githubCall.makeUserAsCollaborator({"projectId":data.projectId,"userId":userId,"atTheTimeOfIntegration":false,addingOneMember:false});
+                })
                 //  console.log(doc);
-                // doc.memberList.forEach(function(userID){
-                //   var room = "user:"+ userID;
-                //   io.to(room).emit('github:changeGithubStatus', githubRepo);
-                // });
+                memberList.forEach(function(userID){
+                  var room = "user:"+ userID;
+                  io.to(room).emit('github:changeGithubStatus', githubRepo);
+                });
 
               }
             })
             //end of collaborators api call
+
+
           }
         });
       }
     })
+
   })
 
   socket.on("github:convertToStory",function(data){
@@ -112,115 +120,9 @@ module.exports = function(socket, io) {
 
   })
 
-  socket.on("github:pushStories",function(data){
-//     console.log("in push Stories",data);
-// <<<<<<< Updated upstream
-//     GithubRepo.getRepo(data.projectId,function(err,repoData){
-//       console.log("Repository Details",repoData);
-//       if(!err && repoData){
-//         Story.updateGithubSync(data.projectId,data.userId,repoData._id,function(err,storyData){
-//           console.log("Stories All Project",storyData);
-//           storyData.forEach(function(story){
-//             if(story.issueNumber==null && story.storyCreatorId.github!==null)
-//             {
-//               console.log(story.storyCreatorId.github);
-//               var assignees=[];
-//               if(story.memberList){
-//                 story.memberList.forEach(function(member){
-//                   if (member.github!=undefined){
-//                     assignees.push(member.github.name)
-//                   }
-// else {
-// //in story shema add that user
-// story.pendingMemberToGithub.push(member._id);
-// story.save(function(err,res){
-//   console.log("After Saving",res);
-// })
-// }
-//                 })
-//               }
-//
-//               var issue={};
-//               issue.message={
-//                 'title':story.heading,
-//                 'assignees':assignees,
-//                 'labels':[story.listId],
-//                 'body':story.description,
-//                 'storyId':story._id
-//
-//
-//               }
-//               issue.repo_details=repoData;
-//               issue.github_profile=story.storyCreatorId.github;
-//               console.log(issue);
-//               queue.storyPost.add(issue);
-//             }
-//             else if(story.storyCreatorId.github==null)
-//             {console.log("no github");
-//             console.log(story._id);
-//
-// check if
-//
-//
-//           }
-  //       })
-  //
-  //
-  //
-  //     })
-  //   }
-  //
-  //
-  // })
-
-      githubCall.addCollaborator(data,function(err,data)
-      {
-
-      });
-//     GithubRepo.getRepo(data.projectId,function(err,repoData){
-//       console.log("Repository Details",repoData);
-//       if(!err && repoData){
-//         Story.updateGithubSync(data.projectId,data.userId,repoData._id,function(err,storyData){
-//           console.log("Stories All Project",storyData);
-//           storyData.forEach(function(story){
-//             if(story.issueNumber==null && story.storyCreatorId.github!==null)
-//             {
-//               console.log(story.storyCreatorId.github);
-//               var assignees=[];
-//               if(story.memberList){
-//                 story.memberList.forEach(function(member){
-//                   if (member.github!=undefined){
-//                     assignees.push(member.github.name)
-//                   }
-// else {
-// //in story shema add that user
-// }
-//                 })
-//               }
-//               var issue={};
-//               issue.message={
-//                 'title':story.heading,
-//                 'assignees':assignees,
-//                 'labels':[story.listId],
-//                 'body':story.description,
-//                 'storyId':story._id
-//               }
-//               issue.repo_details=repoData;
-//               issue.github_profile=data.githubProfile;
-//               console.log(issue);
-//               queue.storyPost.add(issue);
-//             }
-//             else if(story.storyCreatorId.github==null)
-//             {
-//               console.log("no github");
-//             console.log(story._id);
-// //check if
-//           }
-//         })
-//       })
-//     }
-//   })
-
+  socket.on("github:integrateGit",function(data){
+    console.log("in integrateGit metho-----------------------------------------------");
+      githubCall.makeUserAsCollaborator({projectId:data.projectId,userId:data.userId,atTheTimeOfIntegration:true,addingOneMember:false});
 })
 
 }

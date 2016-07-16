@@ -226,8 +226,8 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projec
       if (project._id == githubRepo.projectId) {
         $rootScope.projects[projectIndex].githubStatus = githubRepo.githubStatus;
         //$scope.msg.syncing=false;
-        socket.emit("github:pushStories",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
-  $scope.pushMember();
+        // socket.emit("github:pushStories",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
+  //$scope.pushMember();
   }
     });
 
@@ -376,36 +376,13 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projec
     }
 
 
-    //github
-    //making this person as a collaborator in github to the linked repository,if he/she is already assigned to any story.
-    $scope.pushMember=function()
-    {
-      cardsService.getAssignedStories().success(function(userObject)
-      {
-        console.log("userObject----------",userObject);
-        userObject.assignedStories.filter(function(assignedStory)
-        {
-          console.log("storyid-----------------",assignedStory.stories);
-          console.log("userObject._id-------------",userObject._id);
-          console.log("github----------------",userObject.github);
-          socket.emit('story:addMembers', {
-            'storyid': assignedStory.stories,
-            'memberid': userObject._id,
-            'github_profile':userObject.github,
-            'atTheTimeOfIntegration':true
-          });
-        });
-      });
-    }
-    //end of making this person as a collaborator to a story,if he is already assigned to any story.
-
-    $scope.pushStories=function(projectId){
-      console.log($rootScope.githubProfile);
-      if($rootScope.githubProfile){
-
-        socket.emit("github:pushStories",{projectId:projectId,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
-      }
-    }
+    // $scope.pushStories=function(projectId){
+    //   console.log($rootScope.githubProfile);
+    //   if($rootScope.githubProfile){
+    //
+    //   //  socket.emit("github:pushStories",{projectId:projectId,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile});
+    //   }
+    // }
 
 
 

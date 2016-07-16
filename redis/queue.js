@@ -4,12 +4,14 @@ var storyPost=Queue("Server1",6379,'127.0.0.1');
 var editStory=Queue("Server2",6379,'127.0.0.1');
 var commentPost=Queue("Server3",6379,'127.0.0.1');
 var Story=require("../models/story.js");
+var Project=require("../models/project.js");
 var BackLogsBugList=require("../models/backlogBuglist.js");
 var GithubRepo=require("../models/githubRepo.js");
 var collaboratorPost=Queue("Server4",6379,'127.0.0.1');
 var addGitIssues=Queue("Server5",6379,'127.0.0.1');
 var io=require("../io/io.js");
 var User=require("../models/user.js");
+var githubCall=require('../githubIntegration/githubCall.js');
 
 storyPost.process(function(job,done){
  var options={
@@ -20,12 +22,12 @@ storyPost.process(function(job,done){
    },
    json:job.data.message
  };
- console.log(options.url);
- console.log(job.data);
+ //console.log(options.url);
+ //console.log(job.data);
  request.post(options,function(err,res,body){
    //console.log(res);
    if(!err && res.statusCode==201){
-  console.log(body);
+  //console.log(body);
      Story.findOne({_id: job.data.message.storyId}, function (err, story) {
          story.issueNumber = body.number;
          story.save(function (err) {
@@ -91,10 +93,24 @@ editStory.process(function(job,done){
 collaboratorPost.process(function(job,done)
 {
   console.log("---------------jod data=----",JSON.stringify(job.data));
-  request.put(job.data,function(error,response,body)
+  request.put(job.data.urlOptions,function(error,response,body)
 {
-  if(!error)
+  if(!error && job.data.addingOneMember==false)
+  {
+    Project.updateCollaborators({projectId:job.data.projectId,collaboratorId:job.data.userId},function(err,projectData)
+    {
+      console.log("adding as collaborator---------------------- ----------------------------------",projectData.collaboratorsList);
+      if(!err)
+        {
+        console.log("in queue--- calling pushStories function ---------");
+        githubCall.pushStories({atTheTimeOfIntegration:job.data.atTheTimeOfIntegration,projectId:job.data.projectId,userId:job.data.userId,collaboratorsList:projectData.collaboratorsList});
+        done(body,null)
+        }
+    });
+}
+else {
   done(body,null)
+}
 });
 });
 //adding collaborator to git ends here
