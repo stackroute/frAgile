@@ -64,6 +64,11 @@ module.exports = function(socket, io) {
 
         Sprint.deleteStory(sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
           if (delStoryData.nModified == 1) { //If delete is succesful
+            if(data.newListName!=='')
+            Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+              if(err) console.log("could not update");
+              else console.log(updateStoryData);
+            })
             Story.findById(data.storyId, function(err, storyData) {
               data.story = storyData;
               io.to(data.room).emit('sprint:storyMoved', data);
@@ -163,7 +168,7 @@ module.exports = function(socket, io) {
 
 
     } else if (data.newListId == "buglists") {
-
+      console.log(data);
       BackLogsBugList.addStoryBuglist(data.projectID, data.storyId, function(err, addStoryData) {
         if (addStoryData.nModified == 1) { //If add is succesful
           Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {

@@ -76,7 +76,7 @@ app.post('/issueEvents',function(req,res){
     //if(body.act)
     //queue.createStory.add()
     return res.send("succesful");
-  },3000)
+  },10000)
 
 })
 // view engine setup

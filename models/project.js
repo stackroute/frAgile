@@ -352,7 +352,27 @@ projectSchema.statics.addGitStory=function(data)
   project.save();
 })
 }
+projectSchema.statics.getRelease=function(projectId,callback)
+{
+this.aggregate({
+  "$unwind":"$release"
+},{
+  $match:{"release.releaseDate":{$gte: new Date()}}
+},{
+  "$sort":{"release.releaseDate":1}
+},{
+  "$limit":1
+}
+).exec(function(err,data)
+{
+  if(!err)
+  callback(null,data);
+  else {
+    callback(err,null);
+  }
+})
 
+}
 var Project = mongoose.model('Project', projectSchema, "Projects");
 
 module.exports = Project;

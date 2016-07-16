@@ -206,7 +206,7 @@ moveFromBackbug: function(data){
 
             });
           } else { //reverting changes
-            console.log("Couldn't delete story", socket.id);
+            console.log("Couldn't delete story");
             Sprint.deleteStory(data.sprintId, data.newListId, data.storyId, function(err, delStoryData) {
               // if (err) //console.log("Duplicate story created ", data.storyId);
               // else {
@@ -254,7 +254,7 @@ moveFromBackbug: function(data){
 
             });
           } else { //reverting changes
-            console.log("Couldn't delete story", socket.id);
+            console.log("Couldn't delete story");
             Sprint.deleteStory(data.sprintId, data.newListId, data.storyId, function(err, delStoryData) {
               // if (err) //console.log("Duplicate story created ", data.storyId);
               // else {
@@ -307,12 +307,12 @@ moveToBackBug: function(data){
 
             });
           } else { //reverting changes
-            console.log("Couldn't delete story", socket.id);
+            console.log("Couldn't delete story");
             BackLogsBugList.deleteStoryBacklog(data.projectID, data.storyId, function(err, delStoryData) {
-              if (err) console.log("Duplicate story created ", data.storyId);
-              else {
-                console.log("Deleted previously added story", socket.id);
-              }
+              // if (err) console.log("Duplicate story created ", data.storyId);
+              // else {
+              //   console.log("Deleted previously added story", socket.id);
+              // }
 
             });
           }
@@ -357,12 +357,12 @@ moveToBackBug: function(data){
               });
             });
           } else { //reverting changes
-            console.log("Couldn't delete story", socket.id);
+            console.log("Couldn't delete story");
             BackLogsBugList.deleteStoryBuglist(data.projectID, data.storyId, function(err, delStoryData) {
-              if (err) console.log("Duplicate story created ", data.storyId);
-              else {
-                console.log("Deleted previously added story", socket.id);
-              }
+              // if (err) console.log("Duplicate story created ", data.storyId);
+              // else {
+              //   console.log("Deleted previously added story", socket.id);
+              // }
 
             });
           }

@@ -130,6 +130,63 @@ sprintSchema.statics.deleteStory = function(sprintId, listId, storyId, callback)
       upsert: true
     })
     .exec(function(err, doc) {
+      console.log("error",err);
+      console.log("doc after updating",doc);
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+}
+
+sprintSchema.statics.findSprintForStory = function(storyId, callback) {
+  this.findOne({
+
+      "list.stories": storyId
+    })
+    .select("list.$")
+    .exec(function(err, doc) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+}
+
+sprintSchema.statics.findReleasableListId = function(sprintId,group, callback) {
+  this.findOne({
+
+      "_id": sprintId,
+      "list.group":group
+    })
+    .select("list.$")
+    .exec(function(err, doc) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+}
+
+
+sprintSchema.statics.findCurrentSprint = function(sprintIds, callback) {
+  this.aggregate({
+    "$match":{
+      "_id":{$in:sprintIds}
+    }
+  },{
+    "$match":{
+      "startDate":{$lte: new Date()},
+      "endDate":{$gte:new Date()}
+    }
+  })
+
+    .exec(function(err, doc) {
+      console.log("error in sprint",err);
+      console.log("doc",doc);
       if (err) {
         callback(err, null);
       } else {

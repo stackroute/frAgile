@@ -102,7 +102,8 @@ var StorySchema = new Schema({
     pendingMemberFromGithub: [String],
     pendingMemberToGithub: [{
       type: Schema.Types.ObjectId,
-      ref: 'User'}]
+      ref: 'User'}],
+    issueCreatorId:String
   });
   //Code merge by sharan Starts:
   /***this function is to fetch the story details from the collection

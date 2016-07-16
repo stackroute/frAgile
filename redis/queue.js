@@ -345,23 +345,23 @@ addGitIssues.process(function(job,done){
           }
           })
         }
-        else if(storyData.listId==="Buglists"){
+        else if(storyData.listId==="BugLists"){
           Project.getRelease(storyData.projectId,function(err,release){
             console.log("Release",release);
             if(!err && release){
-            Sprint.findCurrentSprint(release.sprints,function(error,sprint){
-              console.log("current Sprint",sprint);
-              if(!error && sprint){
+            Sprint.findCurrentSprint(release[0].release.sprints,function(error,sprint){
+              console.log("current Sprint",sprint[0]);
+              if(!error && sprint[0]){
                 var group="Releasable";
-                Sprint.findReleasableListId(sprint._id,group,function(error,releasableListId){
+                Sprint.findReleasableListId(sprint[0]._id,group,function(error,releasableListId){
 
                     console.log(releasableListId);
                     if(!error){
                       var data={
-                      'room': "sprint:"+sprint._id,
+                      'room': "sprint:"+sprint[0]._id,
                       'activityRoom': 'activity:' + storyData.projectId,
                       'projectID': storyData.projectId,
-                      'sprintId': sprint._id,
+                      'sprintId': sprint[0]._id,
                       'oldListId': "buglists",
                       'newListId': releasableListId.list[0]._id,
                       'newListName':"Releasable",
