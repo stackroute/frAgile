@@ -92,11 +92,25 @@ editStory.process(function(job,done){
 //adding collaborator to git starts here
 collaboratorPost.process(function(job,done)
 {
-  console.log("---------------jod data=----",JSON.stringify(job.data));
-  request.put(job.data,function(error,response,body)
+ console.log("---------------jod data=----",JSON.stringify(job.data));
+ request.put(job.data.urlOptions,function(error,response,body)
 {
-  if(!error)
-  done(body,null)
+ if(!error && job.data.addingOneMember==false)
+ {
+   Project.updateCollaborators({projectId:job.data.projectId,collaboratorId:job.data.userId},function(err,projectData)
+   {
+     console.log("adding as collaborator---------------------- ----------------------------------",projectData.collaboratorsList);
+     if(!err)
+       {
+       console.log("in queue--- calling pushStories function ---------");
+       githubCall.pushStories({atTheTimeOfIntegration:job.data.atTheTimeOfIntegration,projectId:job.data.projectId,userId:job.data.userId,collaboratorsList:projectData.collaboratorsList});
+       done(body,null)
+       }
+   });
+}
+else {
+ done(body,null)
+}
 });
 });
 //adding collaborator to git ends here
