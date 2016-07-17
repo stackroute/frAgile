@@ -20,9 +20,15 @@ function pushToGithub(data){
     issue.message={
       'title':data.story.heading,
       'assignees':data.assignees,
-      'labels':[data.story.listId],
+
       'body':data.story.description,
       'storyId':data.story._id
+      }
+      if(data.story.listId==="Releasable"){
+        issue.message.state="closed"
+      }
+      else{
+        issue.message.state="open"
       }
     issue.repo_details=data.repoData;
     issue.github_profile=data.github_profile;
@@ -263,7 +269,7 @@ pushStories:function(data)
                 //  console.log("insdie if condition----------------->");
                   editStory({'storyid':story._id,'memberid':data.userId,'atTheTimeOfIntegration':data.atTheTimeOfIntegration})
                 }
-                else if()
+                //else if()
               }
               //console.log("story.storyCreatorId._id----->",story.storyCreatorId._id,"data userId --->",data.userId,"story.issueNumber-------",story.issueNumber,"compare-->",story.issueNumber==undefined);
 

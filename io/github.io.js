@@ -7,7 +7,7 @@ var github_api = require("../routes/github-api.js");
 var BackLogsBugList = require('../models/backlogBuglist.js');
 var queue= require('../redis/queue.js');
 var githubCall=require('../githubIntegration/githubCall.js');
-
+var User=require('../models/user.js');
 
 module.exports = function(socket, io) {
   socket.on('github:addRepo', function(data) {
@@ -93,14 +93,29 @@ module.exports = function(socket, io) {
       story.description=obj.body;
       story.createdTimeStamp=Date.now();
       story.lastUpdated=Date.now();
-      story.memberList=obj.assignees;
+
+      //story.memberList=obj.assignees;
       story.issueNumber=obj.number;
       GithubRepo.getRepo(data.projectId,function(err,repoDetails){
         story.githubSync=repoDetails._id;
         story.storyCreatorId=data.userProfile._id;
+        story.memberList=[];
+        if(obj.assignees.length!==0){
+          obj.assignees.forEach(function(assignee){
+             User.findOne({'github.id':assignee.id},function(error,user){
+               if(!error){
+               story.memberList.push(user._id);
+             }
+             else{
+               story.issueAssigneeList=assignee.id;
+             }
+             })
+          })
+
+        }
 
 
-        story.save(function(err,storyData){
+        Story.addStory(story,function(err,storyData){
           if(!err){
             console.log("Github Issues Added",storyData);
             BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {

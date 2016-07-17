@@ -320,8 +320,8 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projec
         modalInstance=$uibModal.open({
           animation: true,
           templateUrl: "/components/github/github.modal.view.html",
-          controller: "githubController",
-          controllerAs:"githubCntrl",
+          controller: "githubRepoController",
+          //controllerAs:"githubCntrl",
           size: 'lg',
           resolve: {
             param: function() {
@@ -351,8 +351,8 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projec
         modalInstance=$uibModal.open({
           animation: true,
           templateUrl: "/components/github/github.issues.view.html",
-          controller: "githubController",
-          controllerAs: "githubCntrl",
+          controller: "githubIssueController",
+          //controllerAs: "githubCntrl",
           size: 'lg',
           resolve: {
             param: function() {

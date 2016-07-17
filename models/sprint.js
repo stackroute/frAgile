@@ -110,6 +110,7 @@ sprintSchema.statics.addStory = function(sprintId, listId, storyId, callback) {
       upsert: true
     })
     .exec(function(err, doc) {
+      console.log("in adding story",err,doc);
       if (err) {
         callback(err, null);
       } else {

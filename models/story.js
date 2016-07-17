@@ -103,7 +103,8 @@ var StorySchema = new Schema({
     pendingMemberToGithub: [{
       type: Schema.Types.ObjectId,
       ref: 'User'}],
-    issueCreatorId:String
+    issueCreatorId:String,
+    issueAssigneeList:[String]
   });
   //Code merge by sharan Starts:
   /***this function is to fetch the story details from the collection
@@ -209,7 +210,9 @@ StorySchema.statics.addStory = function(story, callback) {
     'labelList': [],
     'projectId':story.projectId,
     'issueNumber':story.issueNumber,
-    'githubSync':story.githubSync
+    'githubSync':story.githubSync,
+    'issueCreatorId':story.issueCreatorId,
+    'issueAssigneeList':story.issueAssigneeList
   },
   function(err, doc) {
     if (err) {
@@ -882,7 +885,7 @@ StorySchema.statics.findIssue = function(storyId, callback) {
       //console.log("err"+err);
       callback(err, null);
     } else {
-      //console.log("doc"+doc);
+      console.log("doc in find issue"+doc);
       callback(null, doc);
     }
   });

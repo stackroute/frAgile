@@ -95,7 +95,7 @@ module.exports = function(socket, io) {
 
   socket.on('sprint:moveToBackbugStory', function(data) {
     //Adding story in new list, then deleting from old list
-    console.log("Moving From Backlog",data);
+    console.log("Moving To backlogBuglist",data);
     Story.findIssue(data.storyId,function(err,storyData){
       console.log("story",storyData);
 

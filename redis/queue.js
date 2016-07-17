@@ -13,6 +13,7 @@ var User=require("../models/user.js");
 var Sprint=require("../models/sprint.js");
 var databaseCall =require("../githubIntegration/databaseCall.js");
 var Project=require("../models/project.js");
+var githubCall=require("../githubIntegration/githubCall.js")
 storyPost.process(function(job,done){
  var options={
    url:"https://api.github.com/repos/"+job.data.repo_details.owner+"/"+job.data.repo_details.name+"/issues?access_token="+job.data.github_profile.token,
@@ -132,6 +133,7 @@ addGitIssues.process(function(job,done){
       Story.findbyGithubId(doc._id,number,function(error,storyData){
         console.log(storyData);
         if(!error && !storyData){
+          console.log("inside creating story");
           var story=new Story();
           User.findOne({'github.id': job.data.sender.id}, function(err, user){
             if(user){
@@ -140,25 +142,25 @@ addGitIssues.process(function(job,done){
             else{
               story.issueCreatorId=job.data.sender.id;
             }
-
+            console.log("user",user);
           story.listId="Backlogs";
           story.heading=job.data.issue.title;
           story.projectId=doc.projectId;
           story.description=job.data.issue.body;
           story.createdTimeStamp=Date.now();
           story.lastUpdated=Date.now();
-          story.memberList=job.data.issue.assignees;
+          //story.memberList=job.data.issue.assignees;
           story.issueNumber=job.data.issue.number;
           story.githubSync=doc._id;
 
-          story.save(function(err,story){
+          Story.addStory(story,function(err,storyData){
             if(!err){
-              console.log("Github Issues Added",story);
-              BackLogsBugList.addStoryBacklog(doc.projectId, story._id, function(err, subDoc) {
+              console.log("Github Issues Added",storyData);
+              BackLogsBugList.addStoryBacklog(doc.projectId, storyData._id, function(err, subDoc) {
                 if(!err){
                   console.log("Updated Backlog bUg list",subDoc);
                   console.log("BacklogBuglist:"+doc.projectId);
-                  io.to("BacklogBuglist:"+doc.projectId).emit("sprint:storyAdded",story);
+                  io.to("BacklogBuglist:"+doc.projectId).emit("sprint:storyAdded",storyData);
                   done(null,null);
                 }
 
@@ -190,48 +192,64 @@ addGitIssues.process(function(job,done){
               if(!err && user){
                 if(job.data.action==="assigned"){
                 if(storyData.memberList.indexOf(user._id)==-1){
+                  user.fullName=user.firstName + " " + user.lastName
+                  var data={
+                    'storyid':storyData._id,
+                    'memberid':user._id,
+                    'user':user,
+
+                    'projectID':storyData.projectId,
+                    'fullName': user.firstName + " " + user.lastName
+
+                  };
+                  if(storyData.listId==="inProgress" || storyData.listId==="Releasable"){
                   Sprint.findSprintForStory(storyData._id,function(err,sprint){
                     if(!err){
                       console.log("Sprints",sprint);
-                      user.fullName=user.firstName + " " + user.lastName
-                      var data={
-                        'storyid':storyData._id,
-                        'memberid':user._id,
-                        'user':user,
-                        'room':"sprint:"+sprint._id,
-                        'projectID':storyData.projectId,
-                        'fullName': user.firstName + " " + user.lastName
+                      data.room="sprint:"+sprint._id;
 
-                      };
                       console.log("Data in ",data);
                       databaseCall.addMember(data);
                       //storyData.memberList.push(user._id);
                     }
                   })
-
                 }
+                else if(storyData.listId==="Backlogs" || storyData.listId==="BugLists"){
+                  data.room="BacklogBuglist:"+storyData.projectId;
+                  databaseCall.addMember(data);
+                }
+                }
+
                 }
                 else if(job.data.action==="unassigned"){
                   var index=storyData.memberList.indexOf(user._id);
                   if(index!=-1){
+                    user.fullName=user.firstName + " " + user.lastName
+                    var data={
+                      'storyid':storyData._id,
+                      'memberid':user._id,
+                      'user':user,
+
+                      'projectID':storyData.projectId,
+                      'fullName': user.firstName + " " + user.lastName
+
+                    };
+                    if(storyData.listId==="inProgress" || storyData.listId==="Releasable"){
                     Sprint.findSprintForStory(storyData._id,function(err,sprint){
                       if(!err){
                         console.log("Sprints",sprint);
-                        user.fullName=user.firstName + " " + user.lastName
-                        var data={
-                          'storyid':storyData._id,
-                          'memberid':user._id,
-                          'user':user,
-                          'room':"sprint:"+sprint._id,
-                          'projectID':storyData.projectId,
-                          'fullName': user.firstName + " " + user.lastName
+                        data.room="sprint:"+sprint._id;
 
-                        };
                         console.log("Data in ",data);
                         databaseCall.removeMember(data);
                         //storyData.memberList.push(user._id);
                       }
                     })
+                  }
+                  else if(storyData.listId==="Backlogs" || storyData.listId==="BugLists"){
+                    data.room="BacklogBuglist:"+storyData.projectId;
+                    databaseCall.removeMember(data);
+                  }
                     //storyData.memberList.splice(index,1);
 
                   }
