@@ -1,0 +1,7 @@
+angular-wysiwyg
+angular-trix
+textAngular
+ngEmbed
+tinymce
+Hallo.js
+angular-highlight

@@ -8,7 +8,7 @@ fragileApp.factory('cardsService', ['$http', 'Socket',function($http,Socket) {
     },
     getUserStories: function(storyIdArr)
     {
-  
+
       return  $http({
         method: 'GET',
         url: '/story/getStories',
@@ -19,4 +19,17 @@ fragileApp.factory('cardsService', ['$http', 'Socket',function($http,Socket) {
 
 
     }
+
+
+      
+        var filter = 0;
+        return {
+            getFilter: function () {
+                return filter;
+            },
+            setFilter: function(value) {
+                filter = value;
+            }
+        }
+
   }]);

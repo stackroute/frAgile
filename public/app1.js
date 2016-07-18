@@ -19,3 +19,10 @@ angular.extend($popoverProvider.defaults, {
   html: true
 });
 })
+
+fragileApp.config(function($datepickerProvider) {
+  angular.extend($datepickerProvider.defaults, {
+    dateFormat: 'dd/MM/yyyy',
+    startWeek: 1
+  });
+})

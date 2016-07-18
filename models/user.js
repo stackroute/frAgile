@@ -180,7 +180,7 @@ userSchema.statics.getCards = function(UserId, callback) {
  return  this.find({
    "_id": UserId
  }).populate("assignedStories.stories")
-.populate("assignedStories.sprintId"," name")
+.populate("assignedStories.sprintId"," name startDate endDate")
 .exec(function(err, data) {
 console.log("I reached user model");
 console.log(data);
