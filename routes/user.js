@@ -123,4 +123,16 @@ console.log(req.user._id+"  user id in user routes");
   }
 });
 
+router.get('/assignedStories',function(req,res,next)
+{
+User.getUserMember(req.user._id,function(err,data)
+{
+  if(!err)
+  res.send(data);
+  else {
+    res.end()
+  }
+})
+})
+
 module.exports = router;

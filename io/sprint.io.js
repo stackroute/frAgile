@@ -16,40 +16,40 @@ module.exports = function(socket, io) {
 
       if(!err){
         var issue={};
-      GithubRepo.getRepo(data.projectID,function(err,repoData){
-        if(!err && repoData){
-          console.log("Repo data",repoData);
-          if(storyData.issueNumber){
-            if(data.newListName==="Releasable"){
-              issue.message={
-                'labels':["Releasable"],
-                'state':"closed"
+        GithubRepo.getRepo(data.projectID,function(err,repoData){
+          if(!err && repoData){
+            console.log("Repo data",repoData);
+            if(storyData.issueNumber){
+              if(data.newListName==="Releasable"){
+                issue.message={
+
+                  'state':"closed"
+                }
               }
-            }
-            else
-            if(data.newListName==="buglists"){
-              issue.message={
-                'labels':["Bug"],
-                'state': "open"
+              else
+              if(data.newListName==="buglists"){
+                issue.message={
+
+                  'state': "open"
+                }
               }
-            }
-            else
-            {
-            issue.message={
-              'labels':[data.newListName],
-              'state': "open"
+              else
+              {
+                issue.message={
+
+                  'state': "open"
+                }
+              }
+              issue.repo_details=repoData;
+              issue.github_profile=data.github_profile;
+              issue.issueNumber=storyData.issueNumber;
+              console.log("issue",issue);
+              queue.editStory.add(issue);
             }
           }
-            issue.repo_details=repoData;
-            issue.github_profile=data.github_profile;
-            issue.issueNumber=storyData.issueNumber;
-            console.log("issue",issue);
-            queue.editStory.add(issue);
-          }
-        }
-      })
-    }
-  })
+        })
+      }
+    })
     //Adding story in new list, then deleting from old list
 
     Sprint.addStory(data.sprintId, data.newListId, data.storyId, function(err, addStoryData) {
@@ -64,6 +64,11 @@ module.exports = function(socket, io) {
 
         Sprint.deleteStory(sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
           if (delStoryData.nModified == 1) { //If delete is succesful
+            if(data.newListName!=='')
+            Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+              if(err) console.log("could not update");
+              else console.log(updateStoryData);
+            })
             Story.findById(data.storyId, function(err, storyData) {
               data.story = storyData;
               io.to(data.room).emit('sprint:storyMoved', data);
@@ -90,46 +95,46 @@ module.exports = function(socket, io) {
 
   socket.on('sprint:moveToBackbugStory', function(data) {
     //Adding story in new list, then deleting from old list
-    console.log("Moving From Backlog",data);
+    console.log("Moving To backlogBuglist",data);
     Story.findIssue(data.storyId,function(err,storyData){
       console.log("story",storyData);
 
       if(!err){
         var issue={};
-      GithubRepo.getRepo(data.projectID,function(err,repoData){
-        if(!err && repoData){
-          console.log("Repo data",repoData);
-          if(storyData.issueNumber){
-            if(data.newListName==="Releasable"){
-              issue.message={
-                'labels':["Releasable"],
-                'state':"closed"
+        GithubRepo.getRepo(data.projectID,function(err,repoData){
+          if(!err && repoData){
+            console.log("Repo data",repoData);
+            if(storyData.issueNumber){
+              if(data.newListName==="Releasable"){
+                issue.message={
+
+                  'state':"closed"
+                }
               }
-            }
-            else
-            if(data.newListName==="buglists"){
-              issue.message={
-                'labels':["Bug"],
-                'state': "open"
+              else
+              if(data.newListName==="buglists"){
+                issue.message={
+
+                  'state': "open"
+                }
               }
-            }
-            else
-            {
-            issue.message={
-              'labels':[data.newListName],
-              'state': "open"
+              else
+              {
+                issue.message={
+
+                  'state': "open"
+                }
+              }
+              issue.repo_details=repoData;
+              issue.github_profile=data.github_profile;
+              issue.issueNumber=storyData.issueNumber;
+              console.log("issue",issue);
+              queue.editStory.add(issue);
             }
           }
-            issue.repo_details=repoData;
-            issue.github_profile=data.github_profile;
-            issue.issueNumber=storyData.issueNumber;
-            console.log("issue",issue);
-            queue.editStory.add(issue);
-          }
-        }
-      })
-    }
-  })
+        })
+      }
+    })
     if (data.newListId == "backlogs") {
 
       BackLogsBugList.addStoryBacklog(data.projectID, data.storyId, function(err, addStoryData) {
@@ -137,10 +142,10 @@ module.exports = function(socket, io) {
           Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
             if (delStoryData.nModified == 1) { //If delete is succesful
               if(data.newListName!=='')
-                  Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
-                  if(err) console.log("could not update");
-                  else console.log(updateStoryData);
-                  })
+              Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+                if(err) console.log("could not update");
+                else console.log(updateStoryData);
+              })
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedTo', data);
@@ -163,16 +168,16 @@ module.exports = function(socket, io) {
 
 
     } else if (data.newListId == "buglists") {
-
+      console.log(data);
       BackLogsBugList.addStoryBuglist(data.projectID, data.storyId, function(err, addStoryData) {
         if (addStoryData.nModified == 1) { //If add is succesful
           Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
             if (delStoryData.nModified == 1) { //If delete is succesful
               if(data.newListName!=='')
-                  Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
-                  if(err) console.log("could not update");
-                  else console.log(updateStoryData);
-                  })
+              Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+                if(err) console.log("could not update");
+                else console.log(updateStoryData);
+              })
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedTo', data);
@@ -203,40 +208,40 @@ module.exports = function(socket, io) {
 
       if(!err){
         var issue={};
-      GithubRepo.getRepo(data.projectID,function(err,repoData){
-        if(!err && repoData){
-          console.log("Repo data",repoData);
-          if(storyData.issueNumber){
-            if(data.newListName==="Releasable"){
-              issue.message={
-                'labels':["Releasable"],
-                'state':"closed"
+        GithubRepo.getRepo(data.projectID,function(err,repoData){
+          if(!err && repoData){
+            console.log("Repo data",repoData);
+            if(storyData.issueNumber){
+              if(data.newListName==="Releasable"){
+                issue.message={
+
+                  'state':"closed"
+                }
               }
-            }
-            else
-            if(data.newListName==="buglists"){
-              issue.message={
-                'labels':["Bug"],
-                'state': "open"
+              else
+              if(data.newListName==="buglists"){
+                issue.message={
+
+                  'state': "open"
+                }
               }
-            }
-            else
-            {
-            issue.message={
-              'labels':[data.newListName],
-              'state': "open"
+              else
+              {
+                issue.message={
+
+                  'state': "open"
+                }
+              }
+              issue.repo_details=repoData;
+              issue.github_profile=data.github_profile;
+              issue.issueNumber=storyData.issueNumber;
+              console.log("issue",issue);
+              queue.editStory.add(issue);
             }
           }
-            issue.repo_details=repoData;
-            issue.github_profile=data.github_profile;
-            issue.issueNumber=storyData.issueNumber;
-            console.log("issue",issue);
-            queue.editStory.add(issue);
-          }
-        }
-      })
-    }
-  })
+        })
+      }
+    })
     if (data.oldListId == "backlogs") {
 
       Sprint.addStory(data.sprintId, data.newListId, data.storyId, function(err, addStoryData) {
@@ -244,10 +249,10 @@ module.exports = function(socket, io) {
           BackLogsBugList.deleteStoryBacklog(data.projectID, data.storyId, function(err, delStoryData) {
             if (delStoryData.nModified == 1) { //If delete is succesful
               if(data.newListName!=='')
-                Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+              Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
                 if(err) console.log("could not update");
                 else console.log(updateStoryData);
-                })
+              })
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedFrom', data);
@@ -273,10 +278,10 @@ module.exports = function(socket, io) {
           BackLogsBugList.deleteStoryBuglist(data.projectID, data.storyId, function(err, delStoryData) {
             if (delStoryData.nModified == 1) { //If delete is succesful
               if(data.newListName!=='')
-                  Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
-                  if(err) console.log("could not update");
-                  else console.log(updateStoryData);
-                  })
+              Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+                if(err) console.log("could not update");
+                else console.log(updateStoryData);
+              })
               Story.findById(data.storyId, function(err, storyData) {
                 data.story = storyData;
                 io.to(data.room).emit('sprint:backbugStoryMovedFrom', data);
@@ -361,119 +366,124 @@ module.exports = function(socket, io) {
       heading: data.heading,
       description: data.description,
       listId: data.listId,
-
+      storyCreatorId:data.user,
       projectId:data.projectId
     }
-    console.log(story);
-    if(data.github_profile){
-      var issue={}
-      issue.message={
-        'title': data.heading,
-        'labels':[data.listId]
-      }
-      issue.github_profile=data.github_profile;
-      GithubRepo.getRepo(data.projectId,function(err,repoData){
-        if(!err && repoData){
-        issue.repo_details=repoData;
-        console.log(issue);
-        var options={
-          url:"https://api.github.com/repos/"+repoData.owner+"/"+repoData.name+"/issues?access_token="+data.github_profile.token,
-          headers:{
-            "content-type":'application/json',
-            "User-Agent":'Limber'
-          },
-          json:issue.message
-        };
-        api_calls.postIssue(options,function(error,response,body){
-          if(response.statusCode===201 && !error){
-            console.log(body);
-            story.issueNumber=body.number;
-            saveStory(data,story);
+    console.log(data.github_profile);
+    GithubRepo.getRepo(data.projectId,function(err,repoData){
+      if(!err && repoData){
+        story.githubSync=repoData._id;
+        console.log("new story");
+        console.log(story);
+        if(data.github_profile.id){
+          var issue={}
+          issue.message={
+            'title': data.heading,
+
           }
+          issue.github_profile=data.github_profile;
+          issue.repo_details=repoData;
+          console.log(issue);
+          var options={
+            url:"https://api.github.com/repos/"+repoData.owner+"/"+repoData.name+"/issues?access_token="+data.github_profile.token,
+            headers:{
+              "content-type":'application/json',
+              "User-Agent":'Limber'
+            },
+            json:issue.message
+          };
+          api_calls.postIssue(options,function(error,response,body){
+            if(response.statusCode===201 && !error){
+              console.log(body);
+              story.issueNumber=body.number;
+              saveStory(data,story);
+            }
 
-        })
-
+          })
+        }
+        else {
+          saveStory(data,story);
+        }
       }
       else saveStory(data,story);
     })
-    }
-    else saveStory(data,story);
+
+  })
 
 
 
 
-})
-
-function saveStory(data,story){
-  Story.addStory(story, function(err, storyData) {
-    if (!err) {
-      var actData = {
-        room: data.activityRoom,
-        action: "added",
-        projectID: data.projectId,
-        user: data.user,
-        object: {
-          name: data.heading,
-          type: "Story",
-          _id: ""
-        },
-        target: {
-          name: data.listName,
-          type: "List",
-          _id: data.id
+  function saveStory(data,story){
+    Story.addStory(story, function(err, storyData) {
+      if (!err) {
+        var actData = {
+          room: data.activityRoom,
+          action: "added",
+          projectID: data.projectId,
+          user: data.user,
+          object: {
+            name: data.heading,
+            type: "Story",
+            _id: ""
+          },
+          target: {
+            name: data.listName,
+            type: "List",
+            _id: data.id
+          }
         }
-      }
 
-      if (data.addTo == "Backlogs") {
-        BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
-          if (!err) {
-            io.to(data.room).emit('sprint:storyAdded', storyData);
-            actData.object._id = storyData._id;
-            Activity.addEvent(actData, function(data) {
-              io.to(data.activityRoom).emit('activityAdded', data);
-            });
+        if (data.addTo == "Backlogs") {
+          BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
+            if (!err) {
+              io.to(data.room).emit('sprint:storyAdded', storyData);
+              actData.object._id = storyData._id;
+              console.log("Activity added",actData);
+              Activity.addEvent(actData, function(data) {
+                io.to(data.activityRoom).emit('activityAdded', data);
+              });
 
-          } else
+            } else
             console.log(err);
-        })
-      } else if (data.addTo == "BugLists") {
-        BackLogsBugList.addStoryBuglist(data.projectId, storyData._id, function(err, subDoc) {
-          if (!err) {
-            io.to(data.room).emit('sprint:storyAdded', storyData);
-            actData.object._id = storyData._id
-            Activity.addEvent(actData, function(data) {
-              io.to(data.activityRoom).emit('activityAdded', data);
-            });
-          } else
+          })
+        } else if (data.addTo == "BugLists") {
+          BackLogsBugList.addStoryBuglist(data.projectId, storyData._id, function(err, subDoc) {
+            if (!err) {
+              io.to(data.room).emit('sprint:storyAdded', storyData);
+              actData.object._id = storyData._id
+              Activity.addEvent(actData, function(data) {
+                io.to(data.activityRoom).emit('activityAdded', data);
+              });
+            } else
 
             console.log(err);
-        })
-      } else {
-        Sprint.addStory(data.sprintId, data.id, storyData._id, function(err, subDoc) {
-          if (!err) {
+          })
+        } else {
+          Sprint.addStory(data.sprintId, data.id, storyData._id, function(err, subDoc) {
+            if (!err) {
 
-            actData.object._id = storyData._id
+              actData.object._id = storyData._id
 
-            //FIXME: Not able to add new property to storyData :(
-            //storyData.listIdAdded = data.id;
-            //console.log(storyData);
-            storyData.listId = data.id
+              //FIXME: Not able to add new property to storyData :(
+              //storyData.listIdAdded = data.id;
+              //console.log(storyData);
+              storyData.listId = data.id
 
-            io.to(data.room).emit('sprint:storyAdded', storyData);
+              io.to(data.room).emit('sprint:storyAdded', storyData);
 
-            Activity.addEvent(actData, function(data) {
-              io.to(actData.room).emit('activityAdded', data);
-            });
+              Activity.addEvent(actData, function(data) {
+                io.to(actData.room).emit('activityAdded', data);
+              });
 
-          } else
+            } else
             console.log(err);
-        })
-      }
+          })
+        }
 
 
-    } else
+      } else
       console.log(err);
-  });
+    });
 
-}
+  }
 }

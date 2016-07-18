@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var User = require('../models/user.js');
 var GithubRepo = require('../models/githubRepo.js');
 var Project = require('../models/project.js');
+var Story=require('../models/story.js');
 var request=require('request');
 var github_api = require("./github-api.js");
 
@@ -59,13 +60,16 @@ router.get('/repos',function(req,res){
       console.log("Error in git api request: ", error);
       res.send(error);
     } else {
+      console.log("repos",body);
       res.send(JSON.parse(body));
     }
   });
 
-  })
+})
 router.get('/issues',function(req,res){
   GithubRepo.getRepo(req.query.projectId,function(err,doc){
+    var projectId=req.query.projectId;
+
     console.log("Repo:",doc);
     var options={
       url:'https://api.github.com/repos/'+doc.owner+"/"+doc.name+"/issues",
@@ -78,7 +82,21 @@ router.get('/issues',function(req,res){
         console.log("Error in issue: ", error);
         res.send(error);
       } else {
-        res.send(JSON.parse(body));
+        console.log("got response");
+        var filteredBody=[];
+        var issueNumbers=[];
+        Story.findConvertedIssues(projectId,function(err,docs){
+          docs.forEach(function(story){
+            issueNumbers.push(story.issueNumber);
+          })
+          console.log({"allIssues":JSON.parse(body),"syncedIssueNumbers":issueNumbers,"githubRepo":doc.owner+"/"+doc.name});
+          // JSON.parse(body).forEach(function(item){
+          //   if(issueNumbers.indexOf(item.number.toString())==-1)
+          //   filteredBody.push(item);
+          // })
+         res.send({"allIssues":JSON.parse(body),"syncedIssueNumbers":issueNumbers,"githubRepo":doc.owner+"/"+doc.name});
+// res.send(JSON.parse(body));
+        })
       }
 
     })

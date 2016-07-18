@@ -5,7 +5,11 @@ var githubRepoSchema = new Schema({
   projectId: {type: Schema.Types.ObjectId,ref: 'Project'},
   name: String,
   owner: String,
-  issues: [{type: Schema.Types.ObjectId,ref: 'GithubIssues'}]
+  admin: {
+    id:String,
+    token: String,
+    name: String
+  }
 });
 
 githubRepoSchema.statics.addRepo = function(repoDetails,callback) {
@@ -23,6 +27,18 @@ githubRepoSchema.statics.getRepo = function(prId,callback) {
   return this.findOne({
     'projectId': prId
   }).exec(function(err, data) {
+    if (err) callback(err, null);
+    else callback(null, data);
+  });
+
+
+}
+githubRepoSchema.statics.getGitRepo = function(owner,name,callback) {
+  return this.findOne({
+    'owner': owner,'name':name
+  }).exec(function(err, data) {
+    console.log("error",err);
+    console.log(data);
     if (err) callback(err, null);
     else callback(null, data);
   });

@@ -7,7 +7,7 @@
 
         <div class="form-group">
 
-        <div ng-repeat="repo in selected">
+        <div ng-repeat="repo in githubRepos | filter: {permissions:{admin:'true'}}">
           <label>
             <input type="radio" name="selectedRepo" ng-model="$parent.selectedRepo" value="{{repo}}">
             Name:{{repo.name}} | Owner:{{repo.owner.login}} (URL: {{repo.html_url}})
@@ -18,7 +18,7 @@
   </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-danger" ng-click="close()" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" ng-click="close()" data-dismiss="modal">Cancel</button>
         <button type="button" class="btn btn-success" data-dismiss="modal" ng-click="linkRepo()" >Link</button>
 
       </div>

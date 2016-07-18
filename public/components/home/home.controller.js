@@ -1,5 +1,5 @@
-fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'homeService', '$filter','Socket', function($scope, $state, $rootScope, homeService, $filter,socket) {
-
+fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'homeService', '$filter','Socket', function($scope, $state, $rootScope, homeService, $filter,Socket) {
+var socket = Socket($scope);
   $scope.loadProjects = function() {
     homeService.getUserDetails().success(function(response) {
       //TODO: Use single userProfile variable everywhere
@@ -13,9 +13,18 @@ fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'home
       };
       $rootScope.githubProfile=response.github;
       console.log(response);
+
     });
-    homeService.getUserProjects().success(function(response) {
+    homeService.getUserProjects().success(function(response){
+
       $rootScope.projects = response.projects
+      if($rootScope.githubProfile.length!==0){
+        $rootScope.projects.forEach(function (project){
+          if(project.githubStatus ){
+      socket.emit("github:integrateGit",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile,atTheTimeOfIntegration:true});
+console.log("Emitting pushStories event");}
+})
+      }
     });
 
     $rootScope.refreshProjects = false;

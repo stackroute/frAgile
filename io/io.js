@@ -8,6 +8,7 @@ var Sprint = require('../models/sprint.js');
 var Story = require('../models/story.js');
 var BackLogsBugList = require('../models/backlogBuglist.js');
 
+
 io.on('connection', function(socket) {
 
   socket.on('join:room', function(data) {
@@ -50,6 +51,8 @@ console.log("leaving activity room"+socket.activityRoom);
   require('../io/story.io.js')(socket, io);
   require('../io/activity.io.js')(socket, io);
   require('../io/github.io.js')(socket,io);
+  //require('../githubIntegration/databaseCall.js');
+
 });
 
 

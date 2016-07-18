@@ -7,7 +7,8 @@ var BackLogsBugList = require('../models/backlogBuglist.js');
 var Template = require('../models/template.js');
 var queue= require('../redis/queue.js');
 var GithubRepo = require('../models/githubRepo.js');
-
+var githubCall=require('../githubIntegration/githubCall.js');
+var databaseCall=require('../githubIntegration/databaseCall.js');
 module.exports = function(socket, io) {
   socket.on('story:removeLabel', function(data) {
     console.log("Received here remove label");
@@ -84,115 +85,11 @@ console.log(data);
   description:listner to add members to story
   ****/
   socket.on('story:addMembers', function(data) {
+    var atTheTimeOfIntegration=data.atTheTimeOfIntegration;
+    console.log("----------------------------------------redirecting to git-----------------------------------------");
+    githubCall.editStory(data);
 
-    Story.findIssue(data.storyid,function(err,storyData){
-      console.log("story",storyData);
-
-      if(!err){
-
-        var assignees=[];
-        var issue={};
-      GithubRepo.getRepo(storyData.projectId,function(err,repoData){
-        if(!err && repoData){
-          console.log("Repo data",repoData);
-          if(storyData.issueNumber){
-            User.getUserMember(data.memberid,function(error,memberData){
-              console.log("Member Data",memberData);
-              if(!error){
-                  if(memberData.github){
-                storyData.memberList.forEach(function(member){
-                  console.log(member);
-                  if(member.github){
-                    assignees.push(member.github.name)
-                  }
-                  else{
-                    console.log("Not having github profile",member);
-                  }
-                })
-                assignees.push(memberData.github.name);
-              }
-              if(assignees){
-                console.log("assignees",assignees);
-              issue.message={
-                'assignees':assignees
-              }
-              issue.repo_details=repoData;
-              issue.github_profile=data.github_profile;
-              issue.issueNumber=storyData.issueNumber;
-              console.log("issue",issue);
-              queue.editStory.add(issue);
-            }
-            }
-            })
-      }
-    }
-  })
-    }
-    })
-
-    Story.addMembers(data.storyid, data.memberid, function(err, doc) {
-
-
-      //edited for cards page
-console.log(data.memberid+ "new member added");
-console.log(doc);
-
-      if (!err) {
-        console.log(data.memberid);
-
-        Story.findById(data.storyid).exec(function(err, storyData) {
-          if (!err) {
-            var members = {
-              _id: storyData._id,
-              memberList: doc.memberList
-            }
-            console.log("Im in add");
-
-            console.log(members);
-            io.to(data.room).emit('story:membersModified',members);
-            io.to(data.room).emit('story:membersModifiedOnItem',{"storyId":storyData._id,"memberList":storyData.memberList});
-
-            io.to(data.room).emit('story:dataModified', storyData);
-
-
-            var actData = {
-              room: "activity:" + data.projectID,
-              action: "added",
-              projectID: data.projectID,
-              user: data.user,
-              object: {
-                name: data.fullName,
-                type: "User",
-                _id: data.memberid
-              },
-              target: {
-                name: storyData.heading,
-                type: "Story",
-                _id: storyData._id
-              }
-            }
-            Activity.addEvent(actData, function(data) {
-console.log("on add members in activity"+actData.room);
-console.log(data);
-              io.to(actData.room).emit('activityAdded', data);
-            });
-          }
-        });
-      }
-    })
-
-//Updating the user schema ehen a member is added for cards
-User.addAssignedStories(data, function(err, doc) {
-console.log("------doc after adding members------");
-console.log(doc[0].assignedStories);
-  io.to(data.memberid).emit('story:memberAssigned',doc);
- })
-
-
-
-
-
-
+  databaseCall.addMember(data);
   })
 
   /****
@@ -205,7 +102,6 @@ console.log(doc[0].assignedStories);
       console.log("story",storyData);
 
       if(!err){
-
         var assignees=[];
         var issue={};
       GithubRepo.getRepo(storyData.projectId,function(err,repoData){
@@ -522,10 +418,13 @@ console.log(data+"activity checklist todo");
         Story.updateChecklistItem(data.storyid, data.checklistGrpId,data.operation,data.itemid,data.checked,data.text,data.dueDate,function(err, doc) {
           if (!err) {
                 io.to(data.room).emit('story:dataModified', doc);
-
+                  if(data.operation=='check')
+                    var action=data.checked == true ? "completed" : "unchecked";
+                    else
+                      var action="Edited";
                 var actData = {
                   room: "activity:" + data.projectID,
-                  action: data.checked == true ? "completed" : "unchecked",
+                  action: action,
                   projectID: data.projectID,
                   user: data.user,
                   object: {

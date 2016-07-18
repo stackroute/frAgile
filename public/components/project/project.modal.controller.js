@@ -6,6 +6,11 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
   $scope.warningModalName = true;
   $scope.warningModalDate = true;
 
+$scope.sync={sync:false};
+socket.on("sync",function(obj)
+{
+  $scope.sync=obj;
+})
   // var story = this;
   // story.items =boardFactory.storyData;
   var modalContr = this;

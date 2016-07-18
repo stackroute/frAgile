@@ -44,8 +44,8 @@ backlogBuglistSchema.statics.findList = function(projectId, callback) {
   this.findOne({
       'projectId': projectId
     })
-    .populate("backlogs.stories", "storyStatus heading indicators")
-    .populate("buglist.stories", "storyStatus heading indicators")
+    .populate("backlogs.stories", "storyStatus heading indicators githubSync issueNumber")
+    .populate("buglist.stories", "storyStatus heading indicators githubSync issueNumber")
     .exec(function(err, doc) {
       if (err) {
         callback(err, null);

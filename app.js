@@ -11,7 +11,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var mongoose = require('mongoose');
 var RedisStore = require('connect-redis')(session);
 var app = express();
-
+var queue= require('./redis/queue.js')
 mongoose.connect('mongodb://localhost/fragileDB');
 var routes = require('./routes/index');
 //var users = require('./routes/users');
@@ -63,10 +63,21 @@ app.use(express.static(path.join(__dirname, 'authFolder')));
 app.use('/', routes);
 app.use('/auth',authenticationHandler);
 
+
 app.post('/issueEvents',function(req,res){
-  console.log("inside issue events");
-  console.log(req);
-  res.send("succesful");
+  setTimeout(function(){
+    console.log("inside issue events");
+    console.log(req.headers);
+    console.log(req.body);
+    if(req.headers['x-github-event']==="issues"){
+      console.log("in issues");
+      queue.addGitIssues.add(req.body);
+    }
+    //if(body.act)
+    //queue.createStory.add()
+    return res.send("succesful");
+  },10000)
+
 })
 // view engine setup
 
@@ -79,7 +90,8 @@ app.use(function(req, res, next) {
   }
   else
   {
-console.log("resp");
+
+console.log("resp");
     return res.redirect('/index.html');
   }
 });
