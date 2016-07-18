@@ -235,6 +235,11 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projec
     });
 
 
+$scope.syncAgain=function(projectId)
+{
+  socket.emit("github:syncAgain",projectId);
+}
+
     socket.on('project:releaseEdited', function(releaseData) {
       console.log(releaseData);
       console.log("--------------");

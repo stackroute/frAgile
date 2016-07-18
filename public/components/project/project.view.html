@@ -17,13 +17,13 @@ Over View
   <div class="btn btn-success addProject" ng-click = "setDefaultForProject(project._id)" data-toggle="modal" data-target="#myModal">
     <i class="fa fa-plus"></i>  Add New Project
   </div>
-  <div class="pageHeading">
+  <!-- <div class="pageHeading">
     <b>Project</b>
     <span>
       <b class="fa fa-table" ng-click="openReleaseChart()"></b>
       <b class="fa fa-sun-o" ng-click="showOverGraph()"></b>
     </span>
-  </div>
+  </div> -->
   <div ng-repeat="project in projects" class="main">
     <div id="{{project._id}}" class = "container">
       <h4>{{project.name}}
@@ -31,8 +31,9 @@ Over View
         <i class="fa fa-user-plus" data-toggle="modal" data-target="#addMembersModal"  ng-click="getAllUsers(project._id,project.name,project.githubStatus)" aria-hidden="true"></i>
         <i class="fa fa-github" ng-click="getRepo(project._id)" ng-hide="githubProfile.id == undefined || githubProfile == undefined || project.githubStatus == true" ></i>
         <i class="fa fa-github" ng-click="getRepo(project._id)" ng-show="githubProfile.id == undefined &&  project.githubStatus == true" style="color:red" tooltip-placement="top"  uib-tooltip="Please integrate your account with github"></i>
-        <i class="fa fa-refresh fa-spin fa-3x fa-fw" style="padding-left:0px" ng-show="project.githubStatus!=true && syncValue(project._id)" ></i>
+
         <i class="fa fa-cloud-download"   ng-click="getIssues(project._id)" ng-show="project.githubStatus == true && githubProfile.id"></i>
+        <i class="fa fa-refresh fa-spin fa-3x fa-fw"  ng-show="project.githubStatus!=true && syncValue(project._id)" ></i>
         <!-- <i class="fa fa-exclamation"  ng-click="pushStories(project._id);pushMember()" ng-show="project.githubStatus == true"></i> -->
       </h4>
 

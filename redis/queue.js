@@ -140,6 +140,7 @@ addGitIssues.process(function(job,done){
               story.storyCreatorId=user._id
             }
             else{
+              story.storyCreatorId=null;
               story.issueCreatorId=job.data.sender.id;
             }
             console.log("user",user);

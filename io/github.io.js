@@ -83,6 +83,21 @@ module.exports = function(socket, io) {
 
   })
 
+  socket.on("github:syncAgain",function(projectId)
+{
+  Project.findOneProject(projectId,function(err,projectData)
+{
+  if(!err)
+    {
+      projectData.memberList.forEach(function(userId)
+      {
+        githubCall.makeUserAsCollaborator({"projectId":projectData.projectId,"userId":userId,"atTheTimeOfIntegration":false,addingOneMember:false});
+
+      })
+    }
+})
+})
+
   socket.on("github:convertToStory",function(data){
     console.log("Listening for converting Story",data);
     data.issues.forEach(function(obj){
@@ -107,8 +122,10 @@ module.exports = function(socket, io) {
                story.memberList.push(user._id);
              }
              else{
-               story.issueAssigneeList=assignee.id;
-             }
+               if(story.pendingMemberFromGithub){
+               if(story.pendingMemberFromGithub.indexOf(assignee.id)==-1){
+               story.pendingMemberFromGithub.push(assignee.id);
+             }}}
              })
           })
 

@@ -269,14 +269,44 @@ pushStories:function(data)
                 //  console.log("insdie if condition----------------->");
                   editStory({'storyid':story._id,'memberid':data.userId,'atTheTimeOfIntegration':data.atTheTimeOfIntegration})
                 }
-                //else if()
+                User.getUserMember(data.userId,function(err,userDoc){
+                  console.log("getting userDetails",userDoc);
+                  if(userDoc.github.id===story.issueCreatorId){
+                    story.storyCreatorId=userDoc._id
+                    story.issueCreatorId=null;
+                    story.save(function(err,subDoc){
+                      console.log("Saved Story in creatorNam",subDoc);
+                    })
+                  }
+                  if(story.pendingMembersFromGithub){
+                  if(story.pendingMembersFromGithub.indexOf(userDoc.github.id)!=-1){
+                    if(story.memberList.indexOf(userDoc._id)==-1){
+                      story.memberList.push(userDoc._id);
+                      story.pendingMembersFromGithub.splice(story.pendingMembersFromGithub.indexOf(userDoc.github.id),1)
+                      story.save(function(err,subDoc){
+                          console.log("Saved Story in member",subDoc);
+                          editStory({'storyid':story._id,'memberid':data.userId,'atTheTimeOfIntegration':true})
+                      })
+                    }
+                  }
+                }
+                    })
+
               }
               //console.log("story.storyCreatorId._id----->",story.storyCreatorId._id,"data userId --->",data.userId,"story.issueNumber-------",story.issueNumber,"compare-->",story.issueNumber==undefined);
-
-              if((story.storyCreatorId._id==data.userId && story.issueNumber===undefined) || (doc.memberList.indexOf(data.userId)!==-1 && !data.atTheTimeOfIntegration)){
-                  console.log("insdie second if --------------------------------",doc.memberList);
+                if(story.storyCreatorId)
+                {
+          if((story.storyCreatorId._id==data.userId && story.issueNumber===undefined) || (doc.memberList.indexOf(data.userId)!==-1 && !data.atTheTimeOfIntegration && story.issueNumber===undefined)){
               personsHaveGitIds({"collaboratorsList":data.collaboratorsList,"memberList":doc.memberList,"projectId":data.projectId,"story":story,"repoData":repoData,"github_profile":story.storyCreatorId.github});
             }
+              }
+            //   else {
+            //     if((doc.memberList.indexOf(data.userId)!==-1 && !data.atTheTimeOfIntegration && story.issueNumber===undefined)){
+            //         console.log("insdie second if --------------------------------",doc.memberList);
+            //     personsHaveGitIds({"collaboratorsList":data.collaboratorsList,"memberList":doc.memberList,"projectId":data.projectId,"story":story,"repoData":repoData,"github_profile":story.storyCreatorId.github});
+            //   }
+            //
+            // }
             }
 
               })
