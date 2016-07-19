@@ -27,6 +27,9 @@ storyPost.process(function(job,done){
              if(err) {
                  console.error('ERROR!');
              }
+else{
+//emit socket with story Socket.emit
+}
              done(null,body);
 
          });

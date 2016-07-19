@@ -8,7 +8,21 @@ var Sprint = require('../models/sprint.js');
 var Story = require('../models/story.js');
 var BackLogsBugList = require('../models/backlogBuglist.js');
 
+
+const ChatMiddleware = require('../io/chatmiddleware.js');
+
 io.on('connection', function(socket) {
+  var chatMiddleware = new ChatMiddleware(socket);
+var message1={};
+  socket.on('authenticate', function(message) {
+ message1={'status':'active','user':message.user}
+    io.emit('status',message1);
+    chatMiddleware.setUser(message.user);
+// User.findOneAndUpdate({"_id":user},{$set:{"status":"active"}}).exec(function(err,doc){});
+User.setStatus(message1,function(err,data){})
+});
+
+
 
   socket.on('join:room', function(data) {
     console.log(" Joining room :",data);
@@ -50,6 +64,13 @@ console.log("leaving activity room"+socket.activityRoom);
   require('../io/story.io.js')(socket, io);
   require('../io/activity.io.js')(socket, io);
   require('../io/github.io.js')(socket,io);
+
+  socket.on('disconnect',function(){
+    var message={'status':'inactive','user':message1.user}
+        io.sockets.emit('status',message);
+        User.setStatus(message,function(err,data){})
+  })
+
 });
 
 

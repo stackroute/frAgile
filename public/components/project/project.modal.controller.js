@@ -6,11 +6,11 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
   $scope.warningModalName = true;
   $scope.warningModalDate = true;
 
-$scope.sync={sync:false};
-socket.on("sync",function(obj)
-{
-  $scope.sync=obj;
-})
+  $scope.sync={sync:false};
+  socket.on("sync",function(obj)
+  {
+    $scope.sync=obj;
+  })
   // var story = this;
   // story.items =boardFactory.storyData;
   var modalContr = this;
@@ -31,8 +31,17 @@ socket.on("sync",function(obj)
     //   $scope.warningModalDesc = true;
     // }
     if ($scope.newReleaseName != undefined && $scope.newReleaseName != "") {
+      var emitData={
+        'message' : {'command':'generateUUID'},
+        'details':{}
+      }
+
+      console.log($scope.newReleaseName);
       projectService.addProject($scope.newReleaseName, $scope.newReleaseDesc).success(function(response) {
+
         projectService.addProjectToUser( response._id).success(function(data) {
+          emitData.details.projectId=response._id;
+          socket.emit('subscribe',emitData);
 
           //Pushing added object into the scope to display
           $rootScope.projects.push(data[0]);
@@ -54,6 +63,10 @@ socket.on("sync",function(obj)
 
         });
       });
+      //  socket.on('generateUUID',function(data){
+      //
+      // })
+
       $scope.dismissThis = "modal";
       $scope.newReleaseName = "";
       $scope.newReleaseDesc = "";
@@ -85,34 +98,35 @@ socket.on("sync",function(obj)
     }
     console.log("$scope.newReleaseDate -" + $scope.newReleaseDate);
     if ($scope.newReleaseName != undefined && $scope.newReleaseName != "" &&
-      $scope.newReleaseDate != undefined && $scope.newReleaseDate != ""
-    ) {
+    $scope.newReleaseDate != undefined && $scope.newReleaseDate != ""
+  ) {
 
-      //Emitting release data to be added
-      data = {
-        room:'projectRoom',
-        projectID: modalContr.addId,
-        name: $scope.newReleaseName,
-        desc: $scope.newReleaseDesc,
-        dt: $scope.newReleaseDate,
-        userID:$scope.userID,
-        fullName:$scope.fullName,
-        'user':$rootScope.userProfile
-      }
-      socket.emit('project:addRelease', data);
-
-
-
-      $scope.dismissThis = "modal";
-      $scope.newReleaseName = "";
-      $scope.newReleaseDesc = "";
-      $scope.newReleaseDate = "";
-      $uibModalInstance.dismiss('cancel');
+    //Emitting release data to be added
+    data = {
+      room:'projectRoom',
+      projectID: modalContr.addId,
+      name: $scope.newReleaseName,
+      desc: $scope.newReleaseDesc,
+      dt: $scope.newReleaseDate,
+      userID:$scope.userID,
+      fullName:$scope.fullName,
+      'user':$rootScope.userProfile
     }
-  }
-  $scope.closeThis = function() {
+    socket.emit('project:addRelease', data);
+
+
+
+    $scope.dismissThis = "modal";
+    $scope.newReleaseName = "";
+    $scope.newReleaseDesc = "";
+    $scope.newReleaseDate = "";
     $uibModalInstance.dismiss('cancel');
   }
+}
+$scope.closeThis = function() {
+  $uibModalInstance.dismiss('cancel');
+}
+
 
 
 }]);

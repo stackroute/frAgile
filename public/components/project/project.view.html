@@ -17,13 +17,13 @@ Over View
   <div class="btn btn-success addProject" ng-click = "setDefaultForProject(project._id)" data-toggle="modal" data-target="#myModal">
     <i class="fa fa-plus"></i>  Add New Project
   </div>
-  <div class="pageHeading">
+  <!-- <div class="pageHeading">
     <b>Project</b>
     <span>
       <b class="fa fa-table" ng-click="openReleaseChart()"></b>
       <b class="fa fa-sun-o" ng-click="showOverGraph()"></b>
     </span>
-  </div>
+  </div> -->
   <div ng-repeat="project in projects" class="main">
     <div id="{{project._id}}" class = "container">
       <h4>{{project.name}}

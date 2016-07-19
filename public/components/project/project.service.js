@@ -17,13 +17,13 @@ angular.module('fragileApp').factory('projectService', ['$http', 'Socket',functi
       }
       return $http(req);
     },
-    addProject: function(name, desc) {
+    addProject: function(name, desc,uuid) {
       var req = {
         method: 'POST',
         url: '/project',
         data: {
           name: name,
-          desc: desc,
+          desc: desc
         }
       }
       return $http(req);
@@ -53,6 +53,21 @@ angular.module('fragileApp').factory('projectService', ['$http', 'Socket',functi
 
       var url = '/project/memberList?id=' + projectID
 
+      return $http.get(url);
+    },
+    getUuid:function(projectId,member){
+      var req = {
+        method: 'GET',
+        url: '/project/channelId',
+        params  : {
+          'projectId': projectId,
+          'member':member._id,
+        }
+      }
+      return $http(req);
+    },
+    getChannels:function(projectId){
+      var url = '/project/allChannels?projectId=' + projectId
       return $http.get(url);
     }
   }

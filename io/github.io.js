@@ -187,7 +187,7 @@ module.exports = function(socket, io) {
         Story.updateGithubSync(data.projectId,data.userId,repoData._id,function(err,storyData){
           console.log("Stories All Project",storyData);
           storyData.forEach(function(story){
-            if(story.issueNumber==null && story.storyCreatorId.github!==null)
+            if(story.issueNumber==null && data.userId.github!==null)
             {
               console.log(story.storyCreatorId.github);
               var assignees=[];
@@ -213,11 +213,11 @@ else {
 
               }
               issue.repo_details=repoData;
-              issue.github_profile=data.githubProfile;
+              issue.github_profile=story.storyCreatorId.github;
               console.log(issue);
               queue.storyPost.add(issue);
             }
-            else if(story.storyCreatorId.github==null)
+            else if(data.userId.github==null)
             {console.log("no github");
             console.log(story._id);
 

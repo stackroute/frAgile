@@ -1,5 +1,7 @@
 fragileApp.controller('homeController', ['$scope', '$state', '$rootScope', 'homeService', '$filter','Socket', function($scope, $state, $rootScope, homeService, $filter,Socket) {
 var socket = Socket($scope);
+
+
   $scope.loadProjects = function() {
     homeService.getUserDetails().success(function(response) {
       //TODO: Use single userProfile variable everywhere
@@ -13,7 +15,7 @@ var socket = Socket($scope);
       };
       $rootScope.githubProfile=response.github;
       console.log(response);
-
+socket.emit('authenticate',{'user':$rootScope.userProfile._id});
     });
     homeService.getUserProjects().success(function(response) {
 

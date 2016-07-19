@@ -11,7 +11,7 @@ var Story = require('../models/story.js');
 /* GET home page. */
 
 router.get('/', function(req, res, next) {
-  res.render('index');
+  res.render('index2');
 });
 
 module.exports = router;
