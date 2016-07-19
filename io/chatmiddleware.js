@@ -22,8 +22,8 @@ exports = module.exports = function(socket,io) {
     self.io=io;
     console.log(io);
     self.user = user;
-    var subscriber = require('redis').createClient(6379, 'localhost');
-    var publisher = require('redis').createClient(6379, 'localhost');
+    var subscriber = require('redis').createClient(6379, '172.23.238.253');
+    var publisher = require('redis').createClient(6379, '172.23.238.253');
     console.log('Creating publisher');
 
     publisher.on('publish', function() {
