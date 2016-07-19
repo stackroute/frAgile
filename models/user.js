@@ -192,17 +192,19 @@ userSchema.statics.findAll=function(memberList,callback)
   }
 
 
-  userSchema.statics.getCards = function(UserId, callback) {
-    return  this.find({
-      "_id": UserId
-    }).populate("assignedStories.stories")
-    .populate("assignedStories.sprintId"," name")
-    .exec(function(err, data) {
-      console.log("I reached user model");
-      console.log(data);
-      if (err) callback(err)
-      else callback(data);
-    });
+
+userSchema.statics.getCards = function(UserId, callback) {
+ return  this.find({
+   "_id": UserId
+ }).populate("assignedStories.stories")
+.populate("assignedStories.sprintId"," name startDate endDate")
+.exec(function(err, data) {
+console.log("I reached user model");
+console.log(data);
+   if (err) callback(err)
+   else callback(data);
+ });
+
 
   }
 

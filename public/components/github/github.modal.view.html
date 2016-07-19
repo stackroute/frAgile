@@ -7,7 +7,7 @@
 
         <div class="form-group">
 
-        <div ng-repeat="repo in selected">
+        <div ng-repeat="repo in githubRepos | filter: {permissions:{admin:'true'}}">
           <label>
             <input type="radio" name="selectedRepo" ng-model="$parent.selectedRepo" value="{{repo}}">
             Name:{{repo.name}} | Owner:{{repo.owner.login}} (URL: {{repo.html_url}})

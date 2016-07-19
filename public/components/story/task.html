@@ -52,7 +52,7 @@
 			</md-card-content>
 		
 		<md-divider  layout="row" >
-			<div ng-repeat="member in $ctrl.task.assignedMember" ng-init="fullName=member.firstName+' '+member.lastName">
+			<div ng-repeat="member in $ctrl.task.assignedMember" ng-init="fullName=member.firstName+' '+member.lastName" data-toggle="tooltip" title="Assigned to {{member.firstName}} {{member.lastName}}">
 				<div class="avatar-wrapper" ng-show="member.photo == undefined">
 
 					<ng-letter-avatar data={{fullName}} charCount=2  avatarborder="true"height="30px" width="30px" fontSize="25px" ></ng-letter-avatar>

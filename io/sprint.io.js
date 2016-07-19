@@ -22,21 +22,21 @@ module.exports = function(socket, io) {
             if(storyData.issueNumber){
               if(data.newListName==="Releasable"){
                 issue.message={
-                  'labels':["Releasable"],
+
                   'state':"closed"
                 }
               }
               else
               if(data.newListName==="buglists"){
                 issue.message={
-                  'labels':["Bug"],
+
                   'state': "open"
                 }
               }
               else
               {
                 issue.message={
-                  'labels':[data.newListName],
+
                   'state': "open"
                 }
               }
@@ -64,6 +64,11 @@ module.exports = function(socket, io) {
 
         Sprint.deleteStory(sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
           if (delStoryData.nModified == 1) { //If delete is succesful
+            if(data.newListName!=='')
+            Story.updateList(data.storyId,data.newListName,function(err,updateStoryData){
+              if(err) console.log("could not update");
+              else console.log(updateStoryData);
+            })
             Story.findById(data.storyId, function(err, storyData) {
               data.story = storyData;
               io.to(data.room).emit('sprint:storyMoved', data);
@@ -90,7 +95,7 @@ module.exports = function(socket, io) {
 
   socket.on('sprint:moveToBackbugStory', function(data) {
     //Adding story in new list, then deleting from old list
-    console.log("Moving From Backlog",data);
+    console.log("Moving To backlogBuglist",data);
     Story.findIssue(data.storyId,function(err,storyData){
       console.log("story",storyData);
 
@@ -102,21 +107,21 @@ module.exports = function(socket, io) {
             if(storyData.issueNumber){
               if(data.newListName==="Releasable"){
                 issue.message={
-                  'labels':["Releasable"],
+
                   'state':"closed"
                 }
               }
               else
               if(data.newListName==="buglists"){
                 issue.message={
-                  'labels':["Bug"],
+
                   'state': "open"
                 }
               }
               else
               {
                 issue.message={
-                  'labels':[data.newListName],
+
                   'state': "open"
                 }
               }
@@ -163,7 +168,7 @@ module.exports = function(socket, io) {
 
 
     } else if (data.newListId == "buglists") {
-
+      console.log(data);
       BackLogsBugList.addStoryBuglist(data.projectID, data.storyId, function(err, addStoryData) {
         if (addStoryData.nModified == 1) { //If add is succesful
           Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
@@ -209,21 +214,21 @@ module.exports = function(socket, io) {
             if(storyData.issueNumber){
               if(data.newListName==="Releasable"){
                 issue.message={
-                  'labels':["Releasable"],
+
                   'state':"closed"
                 }
               }
               else
               if(data.newListName==="buglists"){
                 issue.message={
-                  'labels':["Bug"],
+
                   'state': "open"
                 }
               }
               else
               {
                 issue.message={
-                  'labels':[data.newListName],
+
                   'state': "open"
                 }
               }
@@ -374,7 +379,7 @@ module.exports = function(socket, io) {
           var issue={}
           issue.message={
             'title': data.heading,
-            'labels':[data.listId]
+
           }
           issue.github_profile=data.github_profile;
           issue.repo_details=repoData;
@@ -433,6 +438,7 @@ module.exports = function(socket, io) {
             if (!err) {
               io.to(data.room).emit('sprint:storyAdded', storyData);
               actData.object._id = storyData._id;
+              console.log("Activity added",actData);
               Activity.addEvent(actData, function(data) {
                 io.to(data.activityRoom).emit('activityAdded', data);
               });

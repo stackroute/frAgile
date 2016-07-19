@@ -12,14 +12,14 @@ module.exports = function(passport){
 	passport.serializeUser(function(user, done) {
 		console.log("in serialize");
 		console.log(user);
-		done(null, user.id);
+		done(null, user._id);
 	});
 
 	passport.deserializeUser(function(id, done) {
 		console.log('=====Deserializing User: ', id);
 		User.findById(id, function(err, user) {
 
-			 console.log("In desrialize",user);
+			// console.log("In desrialize",user);
 			//console.log('deserializing user:',user.username);
 			done(err, user);
 		});
@@ -225,6 +225,7 @@ module.exports = function(passport){
 							console.log("printing accessToken");
 
 							//req.user.github=github;
+							console.log(req);
 							User.findOne({'_id':req.user._id},function(err,doc){
 								if(err){
 									return done(err);

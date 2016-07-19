@@ -60,6 +60,7 @@ router.get('/repos',function(req,res){
       console.log("Error in git api request: ", error);
       res.send(error);
     } else {
+      console.log("repos",body);
       res.send(JSON.parse(body));
     }
   });
@@ -81,18 +82,19 @@ router.get('/issues',function(req,res){
         console.log("Error in issue: ", error);
         res.send(error);
       } else {
-
+        console.log("got response");
         var filteredBody=[];
         var issueNumbers=[];
         Story.findConvertedIssues(projectId,function(err,docs){
           docs.forEach(function(story){
             issueNumbers.push(story.issueNumber);
           })
-          JSON.parse(body).forEach(function(item){
-            if(issueNumbers.indexOf(item.number.toString())==-1)
-            filteredBody.push(item);
-          })
-         res.send(filteredBody);
+          console.log({"allIssues":JSON.parse(body),"syncedIssueNumbers":issueNumbers,"githubRepo":doc.owner+"/"+doc.name});
+          // JSON.parse(body).forEach(function(item){
+          //   if(issueNumbers.indexOf(item.number.toString())==-1)
+          //   filteredBody.push(item);
+          // })
+         res.send({"allIssues":JSON.parse(body),"syncedIssueNumbers":issueNumbers,"githubRepo":doc.owner+"/"+doc.name});
 // res.send(JSON.parse(body));
         })
       }

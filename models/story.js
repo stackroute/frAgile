@@ -99,6 +99,12 @@ var StorySchema = new Schema({
     githubSync: {type: Schema.Types.ObjectId,ref: 'GithubRepo'},
     projectId: {type: Schema.Types.ObjectId,ref: 'Project'},
     issueNumber: String,
+    pendingMemberFromGithub: [String],
+    pendingMemberToGithub: [{
+      type: Schema.Types.ObjectId,
+      ref: 'User'}],
+    issueCreatorId:String,
+    issueAssigneeList:[String]
   });
   //Code merge by sharan Starts:
   /***this function is to fetch the story details from the collection
@@ -204,7 +210,9 @@ StorySchema.statics.addStory = function(story, callback) {
     'labelList': [],
     'projectId':story.projectId,
     'issueNumber':story.issueNumber,
-    'githubSync':story.githubSync
+    'githubSync':story.githubSync,
+    'issueCreatorId':story.issueCreatorId,
+    'issueAssigneeList':story.issueAssigneeList
   },
   function(err, doc) {
     if (err) {
@@ -753,7 +761,6 @@ StorySchema.statics.deleteComment = function(storyId, commentId, callback) {
 StorySchema.statics.getStory = function(storyId, callback) {
   this.findOne({"_id":storyId})
   .exec(function(err,doc){
-    console.log(doc+"in ");
     if (err) {
       callback(err, null);
     }
@@ -815,8 +822,10 @@ story.save(function(err,cb)
 
 })
 })
+
   Story.find({
     "projectId": projectId
+
     //"storyCreatorId":userId
   }).populate('memberList','github').populate('storyCreatorId','github').exec(function(err,data){
     if(!err){
@@ -877,7 +886,7 @@ StorySchema.statics.findIssue = function(storyId, callback) {
       //console.log("err"+err);
       callback(err, null);
     } else {
-      //console.log("doc"+doc);
+      console.log("doc in find issue"+doc);
       callback(null, doc);
     }
   });
@@ -900,6 +909,23 @@ StorySchema.statics.findConvertedIssues = function(projectId, callback) {
   });
 }
 
+StorySchema.statics.findbyGithubId = function(githubRepoId,issueNumber, callback) {
+  //console.log("inside model find story");
+  this.findOne({
+    "githubSync": githubRepoId,
+    "issueNumber":issueNumber
+  })
+
+  .exec(function(err, doc) {
+    if (err) {
+      //console.log("err"+err);
+      callback(err, null);
+    } else {
+      //console.log("doc"+doc);
+      callback(null, doc);
+    }
+  });
+}
 
 
 

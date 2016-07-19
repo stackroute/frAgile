@@ -9,7 +9,9 @@ var Story = require('../models/story.js');
 var BackLogsBugList = require('../models/backlogBuglist.js');
 
 
+
 const ChatMiddleware = require('../io/chatmiddleware.js');
+
 
 io.on('connection', function(socket) {
   var chatMiddleware = new ChatMiddleware(socket);
@@ -65,11 +67,15 @@ console.log("leaving activity room"+socket.activityRoom);
   require('../io/activity.io.js')(socket, io);
   require('../io/github.io.js')(socket,io);
 
+
   socket.on('disconnect',function(){
     var message={'status':'inactive','user':message1.user}
         io.sockets.emit('status',message);
         User.setStatus(message,function(err,data){})
   })
+
+  //require('../githubIntegration/databaseCall.js');
+
 
 });
 

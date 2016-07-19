@@ -1,14 +1,36 @@
-fragileApp.controller('cardsController', ['$scope', '$state','sprintService', '$rootScope', '$stateParams', '$uibModal','uibDateParser', 'cardsService', 'Socket', '$filter', 'graphModalFactory','homeService',function($scope, $state,sprintService, $rootScope, $stateParams, $uibModal,uibDateParser, cardsService, Socket, $filter, graphModalFactory,homeService) {
+fragileApp.controller('cardsController', ['$scope', '$state','sprintService', '$rootScope', '$stateParams', '$uibModal','uibDateParser', 'cardsService', 'Socket', '$filter', 'graphModalFactory','homeService','$timeout',function($scope, $state,sprintService, $rootScope, $stateParams, $uibModal,uibDateParser, cardsService, Socket, $filter, graphModalFactory,homeService,$timeout) {
+
+$scope.date = new Date();
+
+
+
+
+
+ $scope.setDate=function(){
+
+  $scope.startDate= moment($scope.date).day(1).format('YYYY-MM-DD');
+  //  console.log("startDate",$scope.startDate);
+  $scope.startDateConverted = new Date($scope.startDate);
+  console.log("startDateConverted",$scope.startDateConverted);
+  $scope.displayStartDate = $scope.startDateConverted.toDateString(); // " format:Wed Aug 26 2015"
+  //  console.log("displayStartDate ",$scope.displayStartDate );
+
+   $scope.endDate= moment($scope.date).day(7).format('YYYY-MM-DD');
+  //  console.log("endDate",$scope.endDate);
+  $scope.endDateConverted = new Date($scope.endDate);
+  $scope.displayEndDate = $scope.endDateConverted.toDateString();
+  // console.log("displayEndDate ",$scope.displayEndDate );
+
+
+}
+$scope.setDate()
 
  var socket = Socket($scope);
  $rootScope.inprojectRoom=false;
- $scope.setDate=function(){
 
-   var date=new Date();
-   $scope.startDate= moment(date).day(6).format('DD-MM-YYYY');
-   $scope.endDate= moment(date).day(6).format('DD-MM-YYYY');
-   $scope.daterange=$scope.startDate+'-'+$scope.endDate;
- }
+
+
+
  console.log($stateParams);
  $scope.loadCards=function(){
 
@@ -72,20 +94,67 @@ fragileApp.controller('cardsController', ['$scope', '$state','sprintService', '$
        angular.element("#"+story._id).triggerHandler("ng-click");
      })
    }
+   $scope.processDate = function(dt)
+  {
+    return $filter('date')(dt, 'dd-MM-yyyy');
+  }
  }
+
+
 }
 ])
+
+
+
+
+
+
 .filter('applyFilter', function() {
- return function(cards, startDate,endDate) {
-   return  cards.filter(function(card) {
-     var parsedDate=moment(card.itemDate).utc().format('DD-MM-YYYY');
-     console.log(startDate);
-     console.log(parsedDate);
-     if( parsedDate >= startDate && parsedDate <= endDate)
-     {console.log("startDate:",startDate);
-     console.log("parsedDate:",parsedDate);
-     return(true);}
-     return false;
-   });
- }
+
+  return function(items,date) {
+if(items,date){
+
+  function myFunc(d,weekNum) {
+    // console.log("d",d);
+    d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+    var week = new Date(d.getFullYear(), 0, 4);
+    var weekNum = 1 + Math.round(((d.getTime() - week.getTime()) / 86400000
+                          - 3 + (week.getDay() + 6) % 7) / 7);
+
+    return weekNum;
+}
+
+
+
+var dateDefault = new Date();
+var defaultDate = myFunc(dateDefault);
+var weekNumberInput = myFunc(date);
+
+
+      return items.filter(function (item) {
+
+
+      var itemStartDate=item.sprintId.startDate;
+      var itemStartDateConverted = moment.utc(itemStartDate);
+      var itemStartDateConvertedExtracted = itemStartDateConverted._d;
+       var itemStartDateWeekNum = myFunc(itemStartDateConvertedExtracted);
+
+      var itemEndDate=item.sprintId.endDate;
+       var itemEndDateConverted = moment.utc(itemEndDate);
+       var itemEndDateConvertedExtracted = itemEndDateConverted._d;
+       var itemEndDateWeekNum = myFunc(itemEndDateConvertedExtracted);
+
+
+if(itemStartDateWeekNum == weekNumberInput || itemEndDateWeekNum == weekNumberInput)
+              {
+             return(true);
+           }
+               return false;
+
+
+     });
+
+}
+
+}
 });

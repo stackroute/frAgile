@@ -31,8 +31,9 @@ Over View
         <i class="fa fa-user-plus" data-toggle="modal" data-target="#addMembersModal"  ng-click="getAllUsers(project._id,project.name,project.githubStatus)" aria-hidden="true"></i>
         <i class="fa fa-github" ng-click="getRepo(project._id)" ng-hide="githubProfile.id == undefined || githubProfile == undefined || project.githubStatus == true" ></i>
         <i class="fa fa-github" ng-click="getRepo(project._id)" ng-show="githubProfile.id == undefined &&  project.githubStatus == true" style="color:red" tooltip-placement="top"  uib-tooltip="Please integrate your account with github"></i>
-        <i class="fa fa-refresh fa-spin fa-3x fa-fw" style="padding-left:0px" ng-show="project.githubStatus!=true && syncValue(project._id)" ></i>
+
         <i class="fa fa-cloud-download"   ng-click="getIssues(project._id)" ng-show="project.githubStatus == true && githubProfile.id"></i>
+        <i class="fa fa-refresh fa-spin fa-3x fa-fw"  ng-show="project.githubStatus!=true && syncValue(project._id)" ></i>
         <!-- <i class="fa fa-exclamation"  ng-click="pushStories(project._id);pushMember()" ng-show="project.githubStatus == true"></i> -->
       </h4>
 
