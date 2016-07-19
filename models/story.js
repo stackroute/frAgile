@@ -826,6 +826,7 @@ story.save(function(err,cb)
   Story.find({
     "projectId": projectId
 
+    //"storyCreatorId":userId
   }).populate('memberList','github').populate('storyCreatorId','github').exec(function(err,data){
     if(!err){
       callback(null,data)

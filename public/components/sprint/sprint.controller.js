@@ -8,7 +8,7 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
       $scope.addToBuglist = false;
       sprintService.getSprints($stateParams.sprintID).then(function(sprint) {
         $scope.sprint = sprint.data;
-        $scope.sprintWidth = ($scope.sprint.list.length * 278 + 560) + "px";
+        $scope.sprintWidth = ($scope.sprint.list.length * 278 + 560+200) + "px";
         $rootScope.projects.forEach(function(project, projectKey) {
           if (project._id == $stateParams.prId) {
             $scope.curProjectLoc = projectKey;

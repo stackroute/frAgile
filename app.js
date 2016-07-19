@@ -92,7 +92,7 @@ app.use(function(req, res, next) {
   {
 
 console.log("resp");
-    return res.redirect('/index.html');
+    return res.redirect('');
   }
 });
 

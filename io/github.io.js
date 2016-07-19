@@ -156,9 +156,11 @@ module.exports = function(socket, io) {
 
   })
 
+
   socket.on("github:integrateGit",function(data){
     console.log("in integrateGit metho-----------------------------------------------");
       githubCall.makeUserAsCollaborator({projectId:data.projectId,userId:data.userId,atTheTimeOfIntegration:true,addingOneMember:false});
+
 })
 
 }

@@ -34,7 +34,8 @@ var projectSchema = new Schema({
     ref:'Story'
   }],
   githubStatus: Boolean,
-  release: [releaseSchema]
+  release: [releaseSchema],
+channelId:[String]
   // repository: {type: Schema.Types.ObjectId,ref: 'GithubRepo'}
 });
 
@@ -266,7 +267,7 @@ projectSchema.statics.findProj = function(projectList, callback) {
 projectSchema.statics.getProjectMembers = function(projectId, callback) {
 
   this.findOne({"_id":projectId})
-  .populate('memberList','_id firstName lastName photo' )
+  .populate('memberList','_id firstName lastName photo status email' )
     .exec(function(err, doc) {
       if (err) {
         callback(err, null);
@@ -294,6 +295,43 @@ projectSchema.statics.getStoryMoveData=function(projectId,callback){
       }
     });
 }
+projectSchema.statics.addChannel=function(channelId,projectId,callback){
+  this.findOneAndUpdate({
+      "_id": projectId
+    }, {
+      $push: {
+        "channelId": channelId
+      }
+    }, {
+      upsert: true
+    })
+    .exec(function(err, doc) {
+      if (err) {
+        callback(err, null);
+      } else {
+        callback(null, doc);
+      }
+    });
+}
+
+// projectSchema.statics.getChannelId=function(data){
+//   this.findOne(
+//     {"projectId":data.projectId,
+//     "subject":data.member
+//   },{'object':1,'_id':'0'}
+// )
+// .exec(function(err, doc) {
+//   if (err) {
+//     callback(err, null);
+//   } else {
+//     callback(null, doc);
+//   }
+// });
+//
+//
+// }
+
+
 
 projectSchema.statics.updateCollaborators=function(data,callback)
 {
@@ -373,6 +411,7 @@ this.aggregate({
 })
 
 }
+
 var Project = mongoose.model('Project', projectSchema, "Projects");
 
 module.exports = Project;
