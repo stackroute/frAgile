@@ -253,7 +253,7 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   if(numberOfTasks>0)
   message=fullName.toUpperCase()+' '+"has been assigned to"+' '+numberOfTasks+' '+"tasks"+'\n'+"Do you want remove?";
   else
-  message="are you sure?";
+  message="Do you want to remove "+fullName;
 
   var result=confirm(message)
   if(result)

@@ -6,9 +6,9 @@
     <div  >
       <md-content class="chatStrip" ng-cloak>
         <md-list  ng-cloak="" class="listdemoListControls" >
-          <md-subheader class="md-no-sticky"><i class="fa fa-users"></i> Chat</md-subheader>
+          <md-subheader ><i class="fa fa-users"></i> Chat</md-subheader>
           <md-list-item ng-repeat="project in projects" ng-click="openLeftMenu(project)">
-            <p id={{project._id}} class="active"> {{ project.name }} </p>
+            <p id={{project._id}} class="active" style="color:#FFFFFF"> {{ project.name }} </p>
           </md-list-item>
         </md-list>
       </md-content>
@@ -18,12 +18,12 @@
 
 
           <md-content style="height:100%">
-            <md-subheader class="md-primary header" ng-show="room" style="background:#55C7AD">{{room.fullName}} <i class="fa fa-close fa-2x" ng-click="openLeftMenu(project)" style="float:right"></i>  </md-subheader>
+            <md-subheader class="md-primary header" ng-show="room" style="background:#55C7AD;">{{room.fullName}} <i class="fa fa-close fa-2x" ng-click="openLeftMenu(project)" style="float:right"></i>  </md-subheader>
             <md-subheader class="md-primary header" ng-hide="room" style="background:#55C7AD;height:45px"><i class="fa fa-close fa-2x" ng-click="openLeftMenu(project)" style="float:right"></i>  </md-subheader>
 
             <div style=" overflow-y:scroll;height:78%;padding:12px" scroll-bottom="scroller">
               <section >
-                <md-subheader class="md-primary header" ng-show="room.typeOfchat=='personal'"> {{member.fullName}}  </md-subheader>
+                <md-subheader class="md-primary header" ng-show="room.typeOfchat=='personal'" > {{member.fullName}}  </md-subheader>
 
                 <div layout="row"  layout-align="center center" ng-show="messages.length==0 || room">
                   <i class="fa fa-weixin fa-5x " style="color:orange"></i>
@@ -78,7 +78,7 @@
 
         </div>
         <div class="col-md-4" id={{project._id}}>
-          <md-header class="overflow_ellipsis" id="projectName" >{{project.name}}<span class="pull-right"><i class="fa fa-bell" aria-hidden="true"></i> </span></md-header>
+          <md-header  class="overflow_ellipsis md-display-1" id="projectName"  >{{project.name}}<span class="pull-right" > </span></md-header>
           <md-subheader class="overflow_ellipsis">  <i class="fa fa-circle" id="active" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<span id="teamMembers" class="active">{{userProfile.fullName}}</span></md-subheader>
           <md-list class="" flex>
             <md-subheader class="md-no-sticky overflow_ellipsis" id="heading">Groups</md-subheader>
@@ -89,7 +89,7 @@
             </md-list-item>
           </md-list>
           <br><br>
-          <md-header id="projectName"  class=" md-raised" ng-click="createGroup($event,project)">+Create a channel</md-header>
+         <!--  <md-header id="projectName"  class=" md-raised" ng-click="createGroup($event,project)">+Create a channel</md-header> -->
           <md-divider></md-divider>
           <md-list class="md-dense" flex>
             <md-subheader class="md-no-sticky overflow_ellipsis" id="heading">DIRECT MESSAGES</md-subheader>

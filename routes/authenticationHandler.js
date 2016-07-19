@@ -47,6 +47,14 @@ module.exports = function(passport){
   // router.get('/home',function(req,res) {
   //   console.log("blah");
   // });
+
+router.get('/dropbox',passport.authorize('dropbox-oauth2'));
+  router.get('/dropbox/callback',passport.authorize('dropbox-oauth2', { successRedirect: '/home.html',failureRedirect: '/home.html' }),
+    function(req,res){
+      console.log(req);
+      console.log("account for Dbox is",req.account);
+      res.redirect('/home.html');
+    });
   router.get('/github',passport.authorize('github', { scope: ['repo','user','read:org']}));
   router.get('/github/callback',passport.authorize('github', { successRedirect: '/home.html',failureRedirect: '/home.html' }),
     function(req,res){
