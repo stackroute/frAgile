@@ -15,32 +15,37 @@ const ChatMiddleware = require('../io/chatmiddleware.js');
 
 io.on('connection', function(socket) {
   var chatMiddleware = new ChatMiddleware(socket);
-var message1={};
+  var message1={};
   socket.on('authenticate', function(message) {
- message1={'status':'active','user':message.user}
+    message1={'status':'active','user':message.user}
     io.emit('status',message1);
-    chatMiddleware.setUser(message.user);
-// User.findOneAndUpdate({"_id":user},{$set:{"status":"active"}}).exec(function(err,doc){});
-User.setStatus(message1,function(err,data){})
-});
+    chatMiddleware.setUser(message.user,io);
+    // User.findOneAndUpdate({"_id":user},{$set:{"status":"active"}}).exec(function(err,doc){});
+    User.setStatus(message1,function(err,data){})
+  });
 
+  var channelData;
+  //joining all chatRooms
+  socket.on('join:chatRoom',function(data){
+    socket.join(data.chatRoom);
+  })
 
 
   socket.on('join:room', function(data) {
     console.log(" Joining room :",data);
     //To make sure socket connects to one room only
     if (socket.lastRoom) {
-  console.log("leaving room"+socket.lastRoom);
+      console.log("leaving room"+socket.lastRoom);
       socket.leave(socket.lastRoom);
       socket.lastRoom = null;
     }
-  console.log("joining "+data.room);
+    console.log("joining "+data.room);
     socket.join(data.room);
     socket.lastRoom = data.room;
 
     // activity room
     if (data.activityRoom) {
-console.log("leaving activity room"+socket.activityRoom);
+      console.log("leaving activity room"+socket.activityRoom);
       if (socket.activityRoom) {
         socket.leave(socket.activityRoom);
       }
@@ -66,12 +71,12 @@ console.log("leaving activity room"+socket.activityRoom);
   require('../io/story.io.js')(socket, io);
   require('../io/activity.io.js')(socket, io);
   require('../io/github.io.js')(socket,io);
-
+  require('../io/chatmiddleware.js')(socket,io);
 
   socket.on('disconnect',function(){
     var message={'status':'inactive','user':message1.user}
-        io.sockets.emit('status',message);
-        User.setStatus(message,function(err,data){})
+    io.sockets.emit('status',message);
+    User.setStatus(message,function(err,data){})
   })
 
   //require('../githubIntegration/databaseCall.js');

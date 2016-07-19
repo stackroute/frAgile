@@ -96,8 +96,9 @@
             <md-list-item class="" ng-repeat="member in projMemberList" ng-click="chat(member,project._id)" ng-hide="member._id===userProfile._id">
               <i class="fa fa-circle" id={{member.chatStatus}}></i> &nbsp;&nbsp;
               <span> <h3 id="teamMembers" >{{ member.fullName }}</h3>
-<i class="fa fa-circle" ng-show="new"></i>
-</span>
+
+                <i class="fa fa-circle" ng-if="newMessage && newMessage.sentBy.userId!==currentUserID && newMessage.sentBy.userId!==room._id"></i>
+              </span>
             </md-list-item>
           </md-list>
           <br><br>
@@ -140,7 +141,7 @@
                   <md-icon ><i class="material-icons">mail</i></md-icon>
                   <input ng-model="memberName" type="text" placeholder="Invite" ng-required="true" list="members">
                   <datalist id="members">
-                    <option ng-repeat="member in project.memberList" value="{{member.fullName}}"/>
+                    <option ng-repeat="member in project.memberList" value="{{member.email}}"/>
                   </datalist>
                 </md-input-container>
                 <br>
@@ -197,8 +198,8 @@
 
 
   </div>
-<script>
-var objDiv=document.getElementById("bottom");
-objDiv.scrollTop=objDiv.scrollHeight;
-</script>
+  <script>
+  var objDiv=document.getElementById("bottom");
+  objDiv.scrollTop=objDiv.scrollHeight;
+  </script>
 </div>

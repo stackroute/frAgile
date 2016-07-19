@@ -1,6 +1,8 @@
 var Personal=require('../models/personal.js');
 var Project=require('../models/project.js')
-exports = module.exports = function(socket) {
+//var io=require('./io.js')
+//console.log("io", io);
+exports = module.exports = function(socket,io) {
   var self = this;
 
 
@@ -16,7 +18,9 @@ exports = module.exports = function(socket) {
 
 
 
-  self.setUser = function(user) {
+  self.setUser = function(user,io) {
+    self.io=io;
+    console.log(io);
     self.user = user;
     var subscriber = require('redis').createClient(6379, 'localhost');
     var publisher = require('redis').createClient(6379, 'localhost');
@@ -26,38 +30,41 @@ exports = module.exports = function(socket) {
       console.log('Created publisher');
     });
 
-//subscribing all  channels
-socket.on('sub',function(data){
-subscriber.subscribe(data);
-console.log("subscribed to :-----------------------------------------------------------------------------------------------------------------------------------------------------",data);
-})
+    //subscribing all  channels
+    socket.on('sub',function(data){
+      subscriber.subscribe(data);
+      console.log("subscribed to :---",data);
+    })
 
     //generating uuid
     socket.on('subscribe', function(data) {
-        var randomTopic=generateUUID();
-        data.message.content=randomTopic;
-        subscriber.subscribe(data.message.content);
-        publisher.publish('uuidGenerator',JSON.stringify(data));
+      var randomTopic=generateUUID();
+      data.message.content=randomTopic;
+      subscriber.subscribe(data.message.content);
+      publisher.publish('uuidgenerator',JSON.stringify(data));
     });
 
     //sending message
     socket.on('chatMsg',function(data){
       subscriber.subscribe(data.message.content);
-      publisher.publish('uuidGenerator',JSON.stringify(data));
+      publisher.publish('uuidgenerator',JSON.stringify(data));
     })
 
     //retrieving history
     socket.on('history',function(data){
+
       subscriber.subscribe(data.message.content);
-      publisher.publish('uuidGenerator',JSON.stringify(data));
+      publisher.publish('uuidgenerator',JSON.stringify(data));
     })
 
     subscriber.on('message', function(channel, message){
-        console.log("subscribed to :",channel);
-      console.log("Response uuid,",message);
+      // console.log("subscribed to :",channel);
       var message1=JSON.parse(message);
-      console.log("command",message1.message.command);
-      if(message1.message.command==='generateUUID'){
+
+      console.log("Response uuid ",message);
+
+      console.log("command",message1.command);
+      if(message1.command==='generateUUID'){
         //save to db
         console.log(message1.details.projectId);
         if(message1.details.userId!==undefined)
@@ -67,7 +74,7 @@ console.log("subscribed to :----------------------------------------------------
           Personal.create({
             subject: members,
             relation: 'chatOver',
-            object:message1.message.content,
+            object:message1.content,
             projectId:message1.details.projectId
           }, function(err, data) {
             if(err){
@@ -78,7 +85,7 @@ console.log("subscribed to :----------------------------------------------------
           });
         }
         else {
-          Project.addChannel(message1.message.content,message1.details.projectId,function(err,doc){
+          Project.addChannel(message1.content,message1.details.projectId,function(err,doc){
 
           })
 
@@ -86,14 +93,29 @@ console.log("subscribed to :----------------------------------------------------
         }
       }
 
-      if(message1.message.command==='sendMessage'){
-        console.log(message1.message);
+      if(message1.command==='sendMessage'){
+        console.log(message1);
 
-        socket.emit('room:chatMessages',message1.message);
+        if(message1.details && message1.details.prj){
+          Personal.getChannelMembers(message1.content,function(err,doc){
+            if(!err) {console.log("on  middleware channel object",doc);
+
+            io.to(message1.details.projectId).emit('chat:newMessage', doc);
+          }
+        })
+
+
+
       }
-      if(message1.message.command==='retrieveHistory'){
-        socket.emit('room:chatMessages',message1.message);
-      }
-    })
-  }
+      else
+      socket.emit('room:chatMessages',message1);
+    }
+    if(message1.command==='retrieveHistory'){
+
+      socket.emit('room:chatMessages',message1);
+    }
+
+
+  })
+}
 }

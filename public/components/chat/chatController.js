@@ -157,8 +157,9 @@ fragileApp.controller('chatController',["$scope",'$rootScope', '$mdSidenav','$q'
       //selecting member
       $scope.chat=function(member,projectId){
         $scope.room=member;
+        console.log("room is",$scope.room);
         var emitData={
-          'message':  {'command':'generateUUID'},
+          "message":{'command':'generateUUID'},
           'details':{'member':member._id,'projectId':projectId,'userId':$rootScope.currentUserID}
         }
         var memberList=[member._id,$rootScope.currentUserID]
@@ -168,7 +169,8 @@ fragileApp.controller('chatController',["$scope",'$rootScope', '$mdSidenav','$q'
             console.log(response);
             $scope.topic=response.object;
             var historyData={
-              'message':{'command':'retrieveHistory','content':$scope.topic}
+              "message" : {'command':'retrieveHistory',
+              'content':$scope.topic}
             }
 
             socket.emit('history',historyData);
@@ -186,15 +188,18 @@ fragileApp.controller('chatController',["$scope",'$rootScope', '$mdSidenav','$q'
 
       //sending message
       $scope.send=function(){
-      if($scope.message)  $scope.message=$scope.message.replace(/\n/g, "<br />");
+        if($scope.message)  $scope.message=$scope.message.replace(/\n/g, "<br />");
         var user={
           'fullName':$rootScope.user.fullName,
           'userId':$rootScope.user._id
         }
         console.log($scope.topic);
         var message={
-          'message':{'text':$scope.message,"sentBy":user,"content":$scope.topic,'command':'sendMessage'}, //topic to be saved
-
+        "message":  {'text':$scope.message,
+          "sentBy":user,
+          "content":$scope.topic,
+          'command':'sendMessage'},
+          'details':{'projectId':$scope.project._id}
         }
         $scope.message="";
         socket.emit('chatMsg',message);
@@ -222,6 +227,7 @@ fragileApp.controller('chatController',["$scope",'$rootScope', '$mdSidenav','$q'
         else if(data.command==='sendMessage') {
           var flag=false;
           var item={};
+          $scope.newMessage=data;
           if($scope.messages.length!=0){
 
             $scope.messages.forEach(function(messageItem){
@@ -242,12 +248,12 @@ fragileApp.controller('chatController',["$scope",'$rootScope', '$mdSidenav','$q'
 
           console.log($scope.messages);
 
-//showing notification for new messages
-if(data.sentBy.userId!==$rootScope.currentUserID)
-{
-if($scope.room._id!==data.sentBy._id)
-$scope.new=true;
-}
+          //showing notification for new messages
+          // if(data.sentBy.userId!==$rootScope.currentUserID)
+          // {
+          // if($scope.room._id!==data.sentBy._id)
+          // $scope.new=true;
+          // }
         }
 
 
@@ -261,8 +267,14 @@ $scope.new=true;
           response.forEach(function(channel){
             console.log("joining all channels");
             socket.emit('sub',channel.object);
+
           })
         })
+        var emitData={
+          'chatRoom':project._id
+        }
+        socket.emit("join:chatRoom",emitData);
+        socket.emit('sub',project._id);
       })
 
 

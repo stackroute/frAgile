@@ -23,5 +23,20 @@ console.log("MemberList",memberList);
       }
     });
 }
+
+personalSchema.statics.getChannelMembers = function(channelId, callback) {
+  this.findOne({
+      "object": channelId,
+    })
+    .exec(function(err, doc) {
+      if (err) {
+        callback(err, null);
+      } else {
+  console.log("channel obj",doc);
+        callback(null, doc);
+      }
+    });
+}
+
 var Personal = mongoose.model('Personal', personalSchema, 'Personal');
 module.exports = Personal;
