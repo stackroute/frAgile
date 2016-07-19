@@ -12,6 +12,20 @@ var githubCall=require('./githubCall.js');
 
 
 
+function makeUserAsAStoryMember(data)
+{
+
+    if(data.story.memberList.indexOf(data.userDoc._id)==-1){
+      console.log("he is not present in memberList");
+      data.story.memberList.push(data.userDoc._id);
+      data.story.pendingMemberFromGithub.splice(data.story.pendingMemberFromGithub.indexOf(data.userDoc.github.id),1)
+      data.story.save(function(err,subDoc){
+          console.log("Saved Story in member",subDoc);
+          //editStory({'storyid':story._id,'memberid':data.userId,'atTheTimeOfIntegration':true});
+      })
+    }
+
+}
 
 function pushToGithub(data){
     //console.log(story.storyCreatorId.github);
@@ -254,7 +268,7 @@ pushStories:function(data)
     //console.log("Repository Details",repoData);
     if(!err && repoData){
       Story.updateGithubSync(data.projectId,data.userId,repoData._id,function(err,storyData){
-      //  console.log("Stories All Project",storyData);
+        console.log("Stories All Project",storyData);
         storyData.forEach(function(story){
 
             Story.getStory(story._id,function(err,doc)
@@ -272,51 +286,49 @@ pushStories:function(data)
                 User.getUserMember(data.userId,function(err,userDoc){
                   console.log("getting userDetails",userDoc);
                   if(userDoc.github.id===story.issueCreatorId){
-                    story.storyCreatorId=userDoc._id
+                    story.storyCreatorId=userDoc._id;
                     story.issueCreatorId=null;
                     story.save(function(err,subDoc){
                       console.log("Saved Story in creatorNam",subDoc);
                     })
                   }
-                  if(story.pendingMembersFromGithub){
-                  if(story.pendingMembersFromGithub.indexOf(userDoc.github.id)!=-1){
-                    if(story.memberList.indexOf(userDoc._id)==-1){
-                      story.memberList.push(userDoc._id);
-                      story.pendingMembersFromGithub.splice(story.pendingMembersFromGithub.indexOf(userDoc.github.id),1)
-                      story.save(function(err,subDoc){
-                          console.log("Saved Story in member",subDoc);
-                          editStory({'storyid':story._id,'memberid':data.userId,'atTheTimeOfIntegration':true})
-                      })
+                  console.log("printtin story.pendingMembersFromGithub----",story.pendingMemberFromGithub);
+                  console.log("print story.pendingMembersFromGithub-------",story.pendingMemberFromGithub);
+                  console.log("printing userDoc.github.id-----------------",userDoc.github.id);
+                  if(story.pendingMemberFromGithub)
+                    if(story.pendingMemberFromGithub.indexOf(userDoc.github.id)!=-1){
+                      console.log("calling makeyuserasamember----");
+                      makeUserAsAStoryMember({"story":story,"userDoc":userDoc});
                     }
-                  }
-                }
-                    })
-
+                })
               }
+
+
               //console.log("story.storyCreatorId._id----->",story.storyCreatorId._id,"data userId --->",data.userId,"story.issueNumber-------",story.issueNumber,"compare-->",story.issueNumber==undefined);
-                if(story.storyCreatorId)
-                {
+            if(story.storyCreatorId)
+            {
           if((story.storyCreatorId._id==data.userId && story.issueNumber===undefined) || (doc.memberList.indexOf(data.userId)!==-1 && !data.atTheTimeOfIntegration && story.issueNumber===undefined)){
               personsHaveGitIds({"collaboratorsList":data.collaboratorsList,"memberList":doc.memberList,"projectId":data.projectId,"story":story,"repoData":repoData,"github_profile":story.storyCreatorId.github});
-            }
+
               }
-            //   else {
-            //     if((doc.memberList.indexOf(data.userId)!==-1 && !data.atTheTimeOfIntegration && story.issueNumber===undefined)){
-            //         console.log("insdie second if --------------------------------",doc.memberList);
-            //     personsHaveGitIds({"collaboratorsList":data.collaboratorsList,"memberList":doc.memberList,"projectId":data.projectId,"story":story,"repoData":repoData,"github_profile":story.storyCreatorId.github});
-            //   }
-            //
-            // }
             }
+              else {
+                if((doc.memberList.indexOf(data.userId)!==-1 && !data.atTheTimeOfIntegration && story.issueNumber===undefined)){
+                    console.log("insdie second if --------------------------------",doc.memberList);
+                personsHaveGitIds({"collaboratorsList":data.collaboratorsList,"memberList":doc.memberList,"projectId":data.projectId,"story":story,"repoData":repoData,"github_profile":story.storyCreatorId.github});
+              }
+
+            }
+          }
+          })
 
               })
         })
-        })
-      }
-    })
+        }
+      })
     }
+  }
 
-}
 
 
 

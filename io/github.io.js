@@ -118,14 +118,18 @@ module.exports = function(socket, io) {
         if(obj.assignees.length!==0){
           obj.assignees.forEach(function(assignee){
              User.findOne({'github.id':assignee.id},function(error,user){
-               if(!error){
-               story.memberList.push(user._id);
+               if(!error && user){
+                 Project.findOneProject(data.projectId,function(err,project){
+                   if(project.memberList.indexOf(user._id)!=-1){
+                     story.memberList.push(user._id);
              }
              else{
                if(story.pendingMemberFromGithub){
                if(story.pendingMemberFromGithub.indexOf(assignee.id)==-1){
                story.pendingMemberFromGithub.push(assignee.id);
              }}}
+           })
+         }
              })
           })
 

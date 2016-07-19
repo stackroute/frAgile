@@ -523,10 +523,11 @@ console.log(data+"activity checklist todo");
 
     var commentsObj = {};
     commentsObj['text'] = data.text;
-    commentsObj['commentedBy'] = user._id;
+    commentsObj['commentedBy'] = data.user._id;
     commentsObj['userName'] = data.user.fullName;
 
     commentsObj['commentedDate'] = Date.now();
+    console.log("in comment adding database",commentsObj);
     Story.addComment(data.storyId, commentsObj, function(err, storyData) {
       if (!err) {
         io.to(data.room).emit('story:dataModified', storyData);
