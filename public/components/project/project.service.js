@@ -55,13 +55,13 @@ angular.module('fragileApp').factory('projectService', ['$http', 'Socket',functi
 
       return $http.get(url);
     },
-    getUuid:function(projectId,member){
+    getUuid:function(projectId,memberList){
       var req = {
         method: 'GET',
         url: '/project/channelId',
         params  : {
           'projectId': projectId,
-          'member':member._id,
+          'member':memberList,
         }
       }
       return $http(req);

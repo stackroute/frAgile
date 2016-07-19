@@ -8,7 +8,7 @@
         <md-list  ng-cloak="" class="listdemoListControls" >
           <md-subheader class="md-no-sticky"><i class="fa fa-users"></i> Chat</md-subheader>
           <md-list-item ng-repeat="project in projects" ng-click="openLeftMenu(project)">
-            <p id={{project._id}}> {{ project.name }} </p>
+            <p id={{project._id}} class="active"> {{ project.name }} </p>
           </md-list-item>
         </md-list>
       </md-content>
@@ -18,10 +18,10 @@
 
 
           <md-content style="height:100%">
-            <md-subheader class="md-primary header" ng-show="room" style="background:#55C7AD">{{room}} <i class="fa fa-close fa-2x" ng-click="openLeftMenu(project)" style="float:right"></i>  </md-subheader>
+            <md-subheader class="md-primary header" ng-show="room" style="background:#55C7AD">{{room.fullName}} <i class="fa fa-close fa-2x" ng-click="openLeftMenu(project)" style="float:right"></i>  </md-subheader>
             <md-subheader class="md-primary header" ng-hide="room" style="background:#55C7AD;height:45px"><i class="fa fa-close fa-2x" ng-click="openLeftMenu(project)" style="float:right"></i>  </md-subheader>
 
-            <div style=" overflow-y:scroll;height:78%;padding:12px" scroll-bottom="messages">
+            <div style=" overflow-y:scroll;height:78%;padding:12px" scroll-bottom="scroller">
               <section >
                 <md-subheader class="md-primary header" ng-show="room.typeOfchat=='personal'"> {{member.fullName}}  </md-subheader>
 
@@ -95,7 +95,9 @@
             <md-subheader class="md-no-sticky overflow_ellipsis" id="heading">DIRECT MESSAGES</md-subheader>
             <md-list-item class="" ng-repeat="member in projMemberList" ng-click="chat(member,project._id)" ng-hide="member._id===userProfile._id">
               <i class="fa fa-circle" id={{member.chatStatus}}></i> &nbsp;&nbsp;
-              <span> <h3 id="teamMembers" >{{ member.fullName }}</h3></span>
+              <span> <h3 id="teamMembers" >{{ member.fullName }}</h3>
+<i class="fa fa-circle" ng-show="new"></i>
+</span>
             </md-list-item>
           </md-list>
           <br><br>

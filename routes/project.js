@@ -210,13 +210,11 @@ router.post('/getstorymovedata',function(req,res,next){
 });
 
 router.get('/channelId',function(req,res,next){
-  console.log(req.query);
-  Personal.findOne(
-    {"projectId":req.query.projectId,
-    "subject":req.query.member,
-  } ,function(err,doc){
+  console.log("Query",req.query);
+
+  Personal.findMatchedSubject(req.query.projectId,req.query.member,function(err,doc){
     if(!err){
-      console.log(doc);
+      console.log("Response from db",doc);
       res.send(doc);
     }
     else {console.log(error);}
