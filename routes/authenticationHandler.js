@@ -44,9 +44,16 @@ module.exports = function(passport){
     req.logout();
     res.redirect('/index.html');
   });
-  // router.get('/home',function(req,res) {
-  //   console.log("blah");
-  // });
+router.get('/home',function(req,res) {
+    console.log("blah");
+  });
+
+// var projectId="";
+// router.get('/dropbox',function(req,res,next){
+//    var projectId=req.body.projectId;
+//   console.log(" I got : ", projectId);
+//   passport.authorize('dropbox-oauth2');
+// })
 
 router.get('/dropbox',passport.authorize('dropbox-oauth2'));
   router.get('/dropbox/callback',passport.authorize('dropbox-oauth2', { successRedirect: '/home.html',failureRedirect: '/home.html' }),
@@ -58,7 +65,7 @@ router.get('/dropbox',passport.authorize('dropbox-oauth2'));
   router.get('/github',passport.authorize('github', { scope: ['repo','user','read:org']}));
   router.get('/github/callback',passport.authorize('github', { successRedirect: '/home.html',failureRedirect: '/home.html' }),
     function(req,res){
-      console.log(req);
+      //console.log(req);
       console.log("account is",req.account);
       res.redirect('/home.html');
     });
@@ -135,8 +142,8 @@ router.get('/facebook/callback',
               from:'Limber <mylimberapp@gmail.com>',
               to:email,
               subject:'Welcome to Limber',
-              text:"Your varification code is "+code+"Enter this code to register.",
-              html:'<b>Limber </b>helps you to manage your project in better way.<h2>Varification code for registering Limber app </h2> Varification code :<b>'+code+'</b> <br><b>Enter this code in Limber App to register.</b>'
+              text:"Your verification code is "+code+"Enter this code to register.",
+              html:'<b>Limber </b>helps you to manage your project in better way.<h2>Verification code for registering Limber app </h2> Verification code :<b>'+code+'</b> <br><b>Enter this code in Limber App to register.</b>'
             }
             transporter.sendMail(mailOption,function(error,info){
               if(error){

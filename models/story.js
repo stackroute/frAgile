@@ -95,6 +95,13 @@ var StorySchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'User'
     }],
+    projectFiles:[{
+          fileName:String,
+          uploadedBy:{type: Schema.Types.ObjectId, ref: 'User'},
+          timeStamp:Date,
+          description:String,
+          fileStatus:String          
+        }],
     labelList: [String],
     githubSync: {type: Schema.Types.ObjectId,ref: 'GithubRepo'},
     projectId: {type: Schema.Types.ObjectId,ref: 'Project'},

@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
 		User = require('./models/user'),
+		Project=require('./models/project'),
 		LocalStrategy   = require('passport-local').Strategy,
 		FacebookStrategy = require('passport-facebook').Strategy,
 		GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
@@ -192,13 +193,20 @@ var mongoose = require('mongoose'),
 			    callbackURL: configAuth.dropboxAuth.callbackURL
 			  },
 			  function(accessToken, refreshToken, profile, done) {
-			   // User.findOrCreate({ providerId: profile.id }, function (err, user) {
+			  	console.log(accessToken)
+			  	console.log(profile)
+			   Project.findOne({ 'dropbox.id': profile.id }, function (err, project) {
+			      	if(err){
+			      		console.log("Inside dropbox err.");
+			      		return done(err);
+			      	}else {
 			      	console.log("In refreshToken");
 			      console.log(" accessToken : ",accessToken);
 			      console.log("refreshToken: ",refreshToken);
 			      console.log("profile ",profile);
-			    //  return done(err, user);
-			    // });
+
+			     return done(null, project);}
+			     });
 			  }
 			));
 			    

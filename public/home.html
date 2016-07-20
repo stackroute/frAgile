@@ -91,7 +91,7 @@
 
 
 
- <script data-require="jquery@*" data-semver="2.1.1" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script data-require="jquery@*" data-semver="2.1.1" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 
 
@@ -142,15 +142,15 @@
   <link href="css/lib/xeditable.css" rel="stylesheet">
   <script src="js/lib/xeditable.js"></script>
   <!-- app.js -->
-<link rel="stylesheet" href="/components/chat/style.css">
+  <link rel="stylesheet" href="/components/chat/style.css">
 
 
 </head>
 
-<body ng-controller="homeController" ng-cloak>
+<body ng-controller="homeController" ng-cloak ">
 
-  <div class="container-fluid top-header">
-    <nav class="navbar navbar-default navbar-xs" role="navigation"  ng-init="loadProjects()">
+  <div class="container-fluid top-header" >
+    <nav class="navbar navbar-default navbar-xs" role="navigation"  ng-init="loadProjects()"  >
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -200,7 +200,6 @@
     </div><!-- /.navbar-collapse -->
   </nav>
 </div>
-
 <div >
   <div  class="chatArea" ng-include="'components/chat/chat.view.html'" ></div>
 </div>
@@ -226,6 +225,7 @@
   </div>
 
 </div>
+
 
 <!-- Profile Modal Starts -->
 <div class="modal fade" id="profileModal" role="dialog">

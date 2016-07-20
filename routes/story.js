@@ -16,6 +16,7 @@ var express = require('express');
 var formidable = require('formidable');
 var path = require('path');
 var fs = require('fs');
+var uploadfileService=require('./uploadfile.js');
 var router = express.Router();
 var story = require('../models/story.js');
 var sprint = require('../models/sprint.js');
@@ -88,6 +89,7 @@ router.post('/addattachments', function(req, res, next) {
     newfile_name=files.file.name.substring(0, (files.file.name.lastIndexOf('.'))),
     folder_path=path.join(process.env.PWD+ '/public/uploadfile/'+storyId),
     new_path = path.join(process.env.PWD+ '/public/uploadfile/'+storyId +"/"+ file_name + '.' + file_ext);
+                   console.log("In uploadfile --->Step-6");
 
 
     attachmentObj={
@@ -100,15 +102,28 @@ router.post('/addattachments', function(req, res, next) {
     };
     if(!fs.existsSync(folder_path)){
       fs.mkdir(folder_path, function(err){
+                           console.log("In uploadfile --->Step-5");
+
         fs.readFile(old_path, function(err, data) {
+                             console.log("In uploadfile --->Step-4");
+
           fs.writeFile(new_path, data, function(err) {
+                               console.log("In uploadfile --->Step-3");
+
             fs.unlink(old_path, function(err) {
+                                 console.log("In uploadfile --->Step-2");
+
               if (err) {
                 res.status(500);
                 res.json({'success': false});
               } else {
                 story.addAttachments(storyId,attachmentObj,function(err,data){
-                  res.send(data);
+                   console.log("In uploadfile --->Step1");
+                uploadfileService(storyId, file_name + '.' + file_ext, function(err, url) {
+                    console.log("In uploadfile --->step2");
+                    if(err) { res.send(500).json(err); }
+                    res.send(data);
+                  });
                 })
               }
             });

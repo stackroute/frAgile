@@ -316,6 +316,10 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
       socket.emit("story:removeAttachment", data);
     });
   };
+
+  //==================
+ 
+  //==================
   /***
   author:Shrinivas
   Function Name: submit

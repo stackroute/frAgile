@@ -1,5 +1,5 @@
-fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal','cardsService','projectService', 'Socket', '$filter', 'graphModalFactory','homeService','githubService',
-function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projectService, Socket, $filter, graphModalFactory,homeService,githubService) {
+fragileApp.controller('projectController', ['$scope', '$state', '$rootScope', '$stateParams', '$uibModal','$http','$window','cardsService','projectService', 'Socket', '$filter', 'graphModalFactory','homeService','githubService',
+function($scope, $state, $rootScope, $stateParams, $uibModal,$http,$window,cardsService,projectService, Socket, $filter, graphModalFactory,homeService,githubService) {
   // $scope.loadProjects = function() {
   //
   //   projectService.getUserProjects().success(function(response) {
@@ -106,6 +106,11 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,cardsService,projec
   }
   $scope.closeThis = function() {
     $uibModalInstance.dismiss('cancel');
+  }
+  $scope.linkDropbox=function (projectId){
+    console.log(" the pid ------------->",projectId);
+    localStorage.projectToLinkWithDropbox=projectId;
+    $window.location.href="/auth/dropbox";
   }
   $scope.editProject = function(newProjectName, newProjectDetails, prId) {
     console.log(newProjectName);
