@@ -2,6 +2,7 @@ var Personal=require('../models/personal.js');
 var Project=require('../models/project.js')
 //var io=require('./io.js')
 //console.log("io", io);
+var Group=require('../models/group.js');
 exports = module.exports = function(socket,io) {
   var self = this;
 
@@ -86,6 +87,23 @@ exports = module.exports = function(socket,io) {
         }
         else {
           Project.addChannel(message1.content,message1.details.projectId,function(err,doc){
+            if(!err){
+              Project.findOneProject(message1.details.projectId,function(err,project){
+                if(!err){
+                  var group=new Group();
+                  group.channelId= message1.content;
+                  group.members=project.memberList;
+                  group.groupName="#general";
+                  group.projectId=message1.details.projectId;
+                  group.save(function(err,groupDoc){
+                    if(!err){
+                      console.log("GroupDoc",groupDoc);
+
+                    }
+                  })
+                }
+              })
+            }
 
           })
 
@@ -99,8 +117,17 @@ exports = module.exports = function(socket,io) {
         if(message1.details && message1.details.prj){
           Personal.getChannelMembers(message1.content,function(err,doc){
             if(!err) {console.log("on  middleware channel object",doc);
-
-            io.to(message1.details.projectId).emit('chat:newMessage', doc);
+            var sentToId;
+            for(i=0;i<doc.subject;i++)
+            {
+              if(doc.subject[i]!==message1.sentBy.userId)
+              sentToId=doc.subject[i];
+            }
+            var newMsg={
+              projectId:doc.projectId,
+              sentToId:sentToId
+            }
+            io.to(message1.details.projectId).emit('chat:newMessage', newMsg);
           }
         })
 

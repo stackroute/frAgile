@@ -107,6 +107,10 @@ position: absolute;
 md-list-item, md-list-item .md-list-item-inner {
   min-height: 20px!important;
   height: 40px!important;
+color:white;
+}
+.message md-list-item, md-list-item .md-list-item-inner{
+height:auto!important;
 }
 
  .selectedPrj{

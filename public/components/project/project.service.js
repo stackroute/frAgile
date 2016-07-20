@@ -69,6 +69,16 @@ angular.module('fragileApp').factory('projectService', ['$http', 'Socket',functi
     getChannels:function(projectId){
       var url = '/project/allChannels?projectId=' + projectId
       return $http.get(url);
+    },
+    groupDetails:function(channelIds){
+      var req={
+        method:'GET',
+        url:'/project/groupDetails',
+        params:{
+          'channelIds':channelIds
+        }
+      }
+      return $http(req);
     }
   }
 }]);

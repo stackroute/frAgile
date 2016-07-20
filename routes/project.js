@@ -8,7 +8,7 @@ var Project = require('../models/project.js');
 var Sprint = require('../models/sprint.js');
 var backLogsBugList = require('../models/backlogBuglist.js');
 var Personal=require('../models/personal.js');
-
+var Group=require('../models/group.js')
 
 router.get('/backLogsBugList', function(req, res, next) {
   projectId = req.query.projId;
@@ -235,5 +235,16 @@ router.get('/allChannels',function(req,res,next){
   }
 )
 });
+
+router.get('/groupDetails',function(req,res,next){
+  console.log("group params from servcice",req.query);
+  Group.getGroupDetails(req.query.channelIds,function(err,doc){
+    if(!err){
+      console.log("group details from collection",doc);
+      res.send(doc);
+    }
+  })
+});
+
 
 module.exports = router ;

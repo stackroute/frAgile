@@ -8,9 +8,45 @@ var groupSchema = new Schema({
     ref: 'User'
   },
   channelId:String,
-  members:[String]
+  members:[{
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }],
+  projectId:String
 });
 
+groupSchema.statics.getGroupDetails = function(channelIds, callback) {
 
-var Group = mongoose.model('Group', groupShema, 'Groups');
+  this.find({"channelId":{$in : channelIds}})
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
+}
+
+groupSchema.statics.addMemberToGroup=function(projectId,memberList,callback){
+  this.findOneAndUpdate({"projectId":projectId},
+  {
+    $addToSet: {
+      "members": {
+        $each: memberList
+      }
+    }
+  },{
+    upsert: true
+  })
+  .exec(function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+
+      callback(null, doc);
+    }
+  });
+}
+
+var Group = mongoose.model('Group', groupSchema, 'Groups');
 module.exports = Group;

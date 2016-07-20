@@ -35,7 +35,7 @@ var projectSchema = new Schema({
   }],
   githubStatus: Boolean,
   release: [releaseSchema],
-channelId:[String]
+channelList:[String]
   // repository: {type: Schema.Types.ObjectId,ref: 'GithubRepo'}
 });
 
@@ -277,6 +277,9 @@ projectSchema.statics.getProjectMembers = function(projectId, callback) {
     });
 }
 
+
+
+
 /***
 author:Sharan
 method: getStoryMoveData
@@ -300,7 +303,7 @@ projectSchema.statics.addChannel=function(channelId,projectId,callback){
       "_id": projectId
     }, {
       $push: {
-        "channelId": channelId
+        "channelList": channelId
       }
     }, {
       upsert: true
