@@ -10,7 +10,17 @@ var groupSchema = new Schema({
   channelId:String,
   members:[String]
 });
+// groupSchema.statics.addGroup=function(projMembers,channelId,callback)
+// {
+// this.({
+//   "_id":projectId
+// }).exec(function(err,data)
+// {
+//   if(!err)
+//   callback(null,data);
+// })
+//
+// }
 
-
-var Group = mongoose.model('Group', groupShema, 'Groups');
+var Group = mongoose.model('Group', groupSchema, 'Groups');
 module.exports = Group;

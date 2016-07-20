@@ -116,39 +116,69 @@ module.exports = function(socket, io) {
         story.storyCreatorId=data.userProfile._id;
         story.memberList=[];
         if(obj.assignees.length!==0){
+          var index=0;
           obj.assignees.forEach(function(assignee){
+            console.log("inside for each-----------");
              User.findOne({'github.id':assignee.id},function(error,user){
+               console.log("inside user findone");
                if(!error && user){
+                 console.log("printing--------user-------------",user);
                  Project.findOneProject(data.projectId,function(err,project){
+                   console.log("project.memberList-----------",project.memberList);
+                   console.log("userId------------------",user._id);
                    if(project.memberList.indexOf(user._id)!=-1){
                      story.memberList.push(user._id);
+                     index++;
              }
              else{
+               index++;
                if(story.pendingMemberFromGithub){
                if(story.pendingMemberFromGithub.indexOf(assignee.id)==-1){
                story.pendingMemberFromGithub.push(assignee.id);
              }}}
+
+             console.log("index -----",index,"assignees length------",obj.assignees.length,"assignees length----",story.memberList);
+             if(index==obj.assignees.length)
+                {
+                  Story.convertToStory(story,function(err,storyData){
+                    if(!err){
+                      console.log("Github Issues Added------------------------",storyData);
+                      BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
+                        if(!err){
+                    //      console.log("Updated Backlog bUg list",subDoc);
+                      //    console.log("BacklogBuglist:"+data.projectId);
+                          io.to("BacklogBuglist:"+data.projectId).emit("sprint:storyAdded",storyData);
+                        }
+
+                      })
+                    }
+                  })
+                }
            })
          }
-             })
+            })
+
           })
 
         }
+        else {
+          Story.convertToStory(story,function(err,storyData){
+            if(!err){
+              console.log("Github Issues Added------------------------",storyData);
+              BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
+                if(!err){
+            //      console.log("Updated Backlog bUg list",subDoc);
+              //    console.log("BacklogBuglist:"+data.projectId);
+                  io.to("BacklogBuglist:"+data.projectId).emit("sprint:storyAdded",storyData);
+                }
+
+              })
+            }
+          })
+        }
 
 
-        Story.addStory(story,function(err,storyData){
-          if(!err){
-            console.log("Github Issues Added",storyData);
-            BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
-              if(!err){
-                console.log("Updated Backlog bUg list",subDoc);
-                console.log("BacklogBuglist:"+data.projectId);
-                io.to("BacklogBuglist:"+data.projectId).emit("sprint:storyAdded",storyData);
-              }
 
-            })
-          }
-        })
       })
 
     })

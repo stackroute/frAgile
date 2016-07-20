@@ -1,5 +1,6 @@
 var Personal=require('../models/personal.js');
 var Project=require('../models/project.js')
+var Group=require('../models/group.js');
 //var io=require('./io.js')
 //console.log("io", io);
 exports = module.exports = function(socket,io) {
@@ -41,20 +42,20 @@ exports = module.exports = function(socket,io) {
       var randomTopic=generateUUID();
       data.message.content=randomTopic;
       subscriber.subscribe(data.message.content);
-      publisher.publish('uuidgenerator',JSON.stringify(data));
+      publisher.publish('limber',JSON.stringify(data));
     });
 
     //sending message
     socket.on('chatMsg',function(data){
       subscriber.subscribe(data.message.content);
-      publisher.publish('uuidgenerator',JSON.stringify(data));
+      publisher.publish('limber',JSON.stringify(data));
     })
 
     //retrieving history
     socket.on('history',function(data){
 
       subscriber.subscribe(data.message.content);
-      publisher.publish('uuidgenerator',JSON.stringify(data));
+      publisher.publish('limber',JSON.stringify(data));
     })
 
     subscriber.on('message', function(channel, message){
@@ -84,9 +85,24 @@ exports = module.exports = function(socket,io) {
             else{console.log(data);}
           });
         }
-        else {
+        else if(message1.details.projectId){
           Project.addChannel(message1.content,message1.details.projectId,function(err,doc){
+            if(!err){
+              Project.findOneProject(message1.details.projectId,function(err,project){
+                if(!err){
+                  var group=new Group();
+                  group.channelId= message1.content;
+                  group.members=project.memberList;
+                  group.groupName="#general";
+                  group.save(function(err,groupDoc){
+                    if(!err){
+                      console.log("GroupDoc",groupDoc);
 
+                    }
+                  })
+                }
+              })
+            }
           })
 
 
