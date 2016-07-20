@@ -43,20 +43,20 @@ exports = module.exports = function(socket,io) {
       var randomTopic=generateUUID();
       data.message.content=randomTopic;
       subscriber.subscribe(data.message.content);
-      publisher.publish('limber',JSON.stringify(data));
+      publisher.publish('ChatService1',JSON.stringify(data));
     });
 
     //sending message
     socket.on('chatMsg',function(data){
       subscriber.subscribe(data.message.content);
-      publisher.publish('limber',JSON.stringify(data));
+      publisher.publish('ChatService1',JSON.stringify(data));
     })
 
     //retrieving history
     socket.on('history',function(data){
 
       subscriber.subscribe(data.message.content);
-      publisher.publish('limber',JSON.stringify(data));
+      publisher.publish('ChatService1',JSON.stringify(data));
     })
 
     subscriber.on('message', function(channel, message){

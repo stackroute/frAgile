@@ -6,12 +6,14 @@ fragileApp.controller('chatController',["$scope",'$rootScope', '$mdSidenav','$q'
   $scope.projects=$rootScope.projects;
 
   $scope.openLeftMenu = function(prj) {
+$scope.room=null;
     if($scope.project!==undefined && $scope.project!==prj){
       $scope.project=prj;
     }
     else
     {    $scope.project=prj;
       $mdSidenav('left').toggle(); }
+
       projectService.getMembers(prj._id).success(function(response) {
         console.log(response);
         response.memberList.forEach(function(data) {

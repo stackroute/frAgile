@@ -44,7 +44,7 @@
                     </div>
                   </md-whiteframe>
                 </div> -->
-                <md-list  flex  class="message">
+                <md-list  flex  class="message" ng-show="room">
                   <md-list-item ng-repeat="message in messages[topic]"  class="" ng-click="null">
                     <div class="md-list-item-text" layout="column" >
 <!-- {{message}} -->
