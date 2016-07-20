@@ -133,13 +133,22 @@ router.post('/addattachments', function(req, res, next) {
     }else{
       fs.readFile(old_path, function(err, data) {
         fs.writeFile(new_path, data, function(err) {
+           console.log("In uploadfile --->step4");
+
           fs.unlink(old_path, function(err) {
             if (err) {
               res.status(500);
               res.json({'success': false});
             } else {
+          console.log("In uploadfile --->step5");
+
               story.addAttachments(storyId,attachmentObj,function(err,data){
-                res.send(data);
+            console.log("In uploadfile --->step6");
+                  uploadfileService(storyId, file_name + '.' + file_ext, function(err, url) {
+                    console.log("In uploadfile --->step2");
+                    if(err) { res.send(500).json(err); }
+                    res.send(data);
+                  });
               })
               //res.status(200);
               //res.json({'success': true});
