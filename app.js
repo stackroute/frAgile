@@ -66,11 +66,8 @@ app.use('/auth',authenticationHandler);
 
 app.post('/issueEvents',function(req,res){
   setTimeout(function(){
-    console.log("inside issue events");
-    console.log(req.headers);
-    console.log(req.body);
+    
     if(req.headers['x-github-event']==="issues"){
-      console.log("in issues");
       queue.addGitIssues.add(req.body);
     }
     //if(body.act)
@@ -82,16 +79,12 @@ app.post('/issueEvents',function(req,res){
 // view engine setup
 
 app.use(function(req, res, next) {
-  //console.log("**************** checking for authentication ************ ");
   if (req.isAuthenticated())
   {
-	console.log("req"+req);
     return next();
   }
   else
   {
-
-console.log("resp");
     return res.redirect('');
   }
 });
@@ -116,7 +109,6 @@ app.use('/github',github);
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    console.log(err);
     res.render('error', {
       message: err.message,
       error: err
@@ -128,8 +120,7 @@ if (app.get('env') === 'development') {
 //no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-//console.log(err.message);
- res.render('error', {
+   res.render('error', {
    message: err.message,
     error: {}
  });

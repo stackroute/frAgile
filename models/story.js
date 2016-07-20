@@ -187,6 +187,44 @@ var StorySchema = new Schema({
     }
   });
 }
+
+StorySchema.statics.convertToStory=function(story,callback)
+{
+  this.create({
+    'listId': story.listId,
+
+    'storyCreatorId': story.storyCreatorId,
+    'storyStatus': story.storyStatus,
+    'heading': story.heading,
+    'description': story.description,
+    'createdTimeStamp': Date.now(),
+    'lastUpdated': Date.now(),
+    'indicators': {
+      'descriptionStatus': false,
+      "chklstItmsCnt": 0,
+      "chklstItmsChkdCnt": 0,
+      'attachmentsCount': 0,
+      'commentCount': 0
+    },
+    'attachmentList': [],
+    'checklist': [],
+    'memberList': story.memberList,
+    'labelList': [],
+    'projectId':story.projectId,
+    'issueNumber':story.issueNumber,
+    'githubSync':story.githubSync,
+    'issueCreatorId':story.issueCreatorId,
+    'issueAssigneeList':story.issueAssigneeList
+  },
+  function(err, doc) {
+    if (err) {
+      callback(err, null);
+    } else {
+      callback(null, doc);
+    }
+  });
+}
+
 StorySchema.statics.addStory = function(story, callback) {
   this.create({
     'listId': story.listId,

@@ -50,6 +50,7 @@ else{
 });
 
 commentPost.process(function(job,done){
+  console.log(job);
   var options={
     url:"https://api.github.com/repos/"+job.data.repo_details.owner+"/"+job.data.repo_details.name+"/issues/"+job.data.issueNumber+"/comments?access_token="+job.data.github_profile.token,
     headers:{
@@ -60,6 +61,7 @@ commentPost.process(function(job,done){
 
   };
  request.post(options,function(err,res,body){
+   console.log("Comment post",body);
 if(!err && res.statusCode==="201") done(null,body);
 done(res,null);
 
@@ -99,7 +101,7 @@ collaboratorPost.process(function(job,done)
  console.log("---------------jod data=----",JSON.stringify(job.data));
  request.put(job.data.urlOptions,function(error,response,body)
 {
- if(!error && job.data.addingOneMember==false)
+ if(!error)
  {
    Project.updateCollaborators({projectId:job.data.projectId,collaboratorId:job.data.userId},function(err,projectData)
    {
@@ -107,7 +109,14 @@ collaboratorPost.process(function(job,done)
      if(!err)
        {
        console.log("in queue--- calling pushStories function ---------");
-       githubCall.pushStories({atTheTimeOfIntegration:job.data.atTheTimeOfIntegration,projectId:job.data.projectId,userId:job.data.userId,collaboratorsList:projectData.collaboratorsList});
+       if(job.data.addingOneMember)
+       {
+         githubCall.pushStories({atTheTimeOfIntegration:true,projectId:job.data.projectId,userId:job.data.userId,collaboratorsList:projectData.collaboratorsList});
+
+       }
+       else {
+         githubCall.pushStories({atTheTimeOfIntegration:job.data.atTheTimeOfIntegration,projectId:job.data.projectId,userId:job.data.userId,collaboratorsList:projectData.collaboratorsList});
+       }
        done(body,null)
        }
    });
@@ -194,6 +203,10 @@ addGitIssues.process(function(job,done){
             User.findOne({'github.id': job.data.assignee.id}, function(err, user){
               console.log(user);
               if(!err && user){
+                Project.findOneProject(doc.projectId,function(err,project){
+                  if(project.memberList.indexOf(user._id)!=-1){
+
+
                 if(job.data.action==="assigned"){
                 if(storyData.memberList.indexOf(user._id)==-1){
                   user.fullName=user.firstName + " " + user.lastName
@@ -263,7 +276,14 @@ addGitIssues.process(function(job,done){
                   // })
                 }
 
+              }
+              else{
+                storyData.pendingMemberFromGithub.push(job.data.assignee.id);
+                storyData.save(function(err,res){
 
+                })
+              }
+            })
                 }
 
               else{

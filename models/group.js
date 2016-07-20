@@ -14,6 +14,18 @@ var groupSchema = new Schema({
   }],
   projectId:String
 });
+// groupSchema.statics.addGroup=function(projMembers,channelId,callback)
+// {
+// this.({
+//   "_id":projectId
+// }).exec(function(err,data)
+// {
+//   if(!err)
+//   callback(null,data);
+// })
+//
+// }
+
 
 groupSchema.statics.getGroupDetails = function(channelIds, callback) {
 
@@ -47,6 +59,7 @@ groupSchema.statics.addMemberToGroup=function(projectId,memberList,callback){
     }
   });
 }
+
 
 var Group = mongoose.model('Group', groupSchema, 'Groups');
 module.exports = Group;

@@ -6,6 +6,12 @@ var releaseSchema = new Schema({
   description: String,
   creationDate: Date,
   releaseDate: Date,
+  dropbox:{
+    projectName:String,
+    linked:Boolean,
+    linkedUser:String,
+    token:String
+  },
   sprints: [{
     type: Schema.ObjectId,
     ref: 'Sprint'

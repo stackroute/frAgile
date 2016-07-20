@@ -18,7 +18,8 @@ md-dialog.fullscreen-dialog {
 
 .chatStrip {
   position:fixed;
-  top: 50px;
+  margin-top: -8px;
+  top: 0px;
   right:0px;
   width: 120px;
   background-color:#4d394b;
