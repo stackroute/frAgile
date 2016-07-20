@@ -6,17 +6,16 @@ var mongoose = require('mongoose'),
 		configAuth = require('./config/auth'),
 		bCrypt = require('bcrypt-nodejs');
 		GitHubStrategy = require('passport-github2').Strategy;
-module.exports = function(passport){
+		DropboxStrategy=require('passport-dropbox-oauth2').Strategy;
+		module.exports = function(passport){
 
 	// Passport needs to be able to serialize and deserialize users to support persistent login sessions
 	passport.serializeUser(function(user, done) {
-		console.log("in serialize");
-		console.log(user);
+		
 		done(null, user._id);
 	});
 
 	passport.deserializeUser(function(id, done) {
-		console.log('=====Deserializing User: ', id);
 		User.findById(id, function(err, user) {
 
 			// console.log("In desrialize",user);
@@ -35,7 +34,6 @@ module.exports = function(passport){
 			// check in mongo if a user with email exists or not
 			User.findOne({ 'email' :  email },
 				function(err, user) {
-					console.log("In passport init",user);
 					console.log(err);
 					// In case of any error, return using the done method
 					if (err)
@@ -69,7 +67,6 @@ module.exports = function(passport){
 		function(req, email, password, done) {
 			// find a user in mongo with provided email
 			User.findOne({ 'email' :  email }, function(err, user) {
-				console.log("In Register now");
 				// In case of any error, return using the done method
 				if (err){
 					console.log('Error in register: '+err);
@@ -77,7 +74,6 @@ module.exports = function(passport){
 				}
 				// already exists
 				if (user) {
-					console.log('User already exists:');
 					return done(null, false);
 				} else {
 					// if there is no user, create the user
@@ -100,14 +96,12 @@ module.exports = function(passport){
 					else{
 						newUser.lastName=req.body.lastName;
 					}
-					console.log(req.body.firstName);
 					// save the user
 					newUser.save(function(err) {
 						if (err){
 							console.log('Error in Saving user: '+err);
 							throw err;
 						}
-						console.log(newUser.email + ' Registration succesful');
 						return done(null, newUser);
 					});
 				}
@@ -127,11 +121,9 @@ module.exports = function(passport){
 		    			if(err)
 		    				return done(err);
 		    			if(user) {
-								console.log('Saved directly from Facebook');
 		    				return done(null, user);
 		    			} else {
 
-								console.log("----------" , profile.photos);
 		    				var newUser = new User();
 		    				newUser.facebook.id = profile.id;
 		    				newUser.facebook.token = accessToken;
@@ -161,7 +153,7 @@ module.exports = function(passport){
 		  },
 		  function(accessToken, refreshToken, profile, done) {
 		    	process.nextTick(function(){
-						console.log(profile);
+					
 		    		User.findOne({'google.id': profile.id}, function(err, user){
 		    			if(err)
 		    				return done(err);
@@ -185,15 +177,34 @@ module.exports = function(passport){
 		    						throw err;
 		    					return done(null, newUser);
 		    				})
-		    				console.log(profile);
+		    				//console.log(profile);
 		    			}
 		    		});
 		    	});
 		    }
 
 		));
-
+			//================ Dropbox start: This has to use for uploading file to projects
+			passport.use(new DropboxStrategy({
+			    apiVersion: '2',
+			    clientID: configAuth.dropboxAuth.clientID,
+			    clientSecret: configAuth.dropboxAuth.clientSecret,
+			    callbackURL: configAuth.dropboxAuth.callbackURL
+			  },
+			  function(accessToken, refreshToken, profile, done) {
+			   // User.findOrCreate({ providerId: profile.id }, function (err, user) {
+			      	console.log("In refreshToken");
+			      console.log(" accessToken : ",accessToken);
+			      console.log("refreshToken: ",refreshToken);
+			      console.log("profile ",profile);
+			    //  return done(err, user);
+			    // });
+			  }
+			));
+			    
+			//================Dropbox ends
 		passport.use(new GitHubStrategy({
+			apiVersion: '2',
 			clientID: configAuth.githubAuth.clientID,
 			clientSecret: configAuth.githubAuth.clientSecret,
 			callbackURL: configAuth.githubAuth.callbackURL,
@@ -211,10 +222,8 @@ module.exports = function(passport){
 							console.log(err);
 							return done(err);}
 						if(user){
-							console.log("inside tick");
 
 							user.github.token=accessToken;
-							console.log(user);
 							user.save(function(err){
 								if(err)
 								throw err;
@@ -222,10 +231,8 @@ module.exports = function(passport){
 							})
 							}
 						else {
-							console.log("printing accessToken");
 
 							//req.user.github=github;
-							console.log(req);
 							User.findOne({'_id':req.user._id},function(err,doc){
 								if(err){
 									return done(err);
@@ -236,7 +243,6 @@ module.exports = function(passport){
 								github.name=profile.username;
 								doc.github=github;
 								req.user.github=github;
-								console.log("doc is",doc);
 								doc.save(function(err){
 									if(err)
 									throw err;
