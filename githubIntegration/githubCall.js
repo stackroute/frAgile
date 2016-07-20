@@ -11,7 +11,6 @@ var request=require('request');
 var githubCall=require('./githubCall.js');
 
 
-
 function makeUserAsAStoryMember(data)
 {
 
@@ -34,7 +33,6 @@ function pushToGithub(data){
     issue.message={
       'title':data.story.heading,
       'assignees':data.assignees,
-
       'body':data.story.description,
       'storyId':data.story._id
       }
@@ -46,20 +44,22 @@ function pushToGithub(data){
       }
     issue.repo_details=data.repoData;
     issue.github_profile=data.github_profile;
-    console.log(issue);
+    //console.log(issue);
     Project.findOneProject(data.projectId,function(err,projectData)
   {
     if(!err)
       {
+        console.log("projectData.gitStories--------------",projectData.gitStories);
+        console.log("data.story._id------------------",data.story._id);
         if(projectData.gitStories.indexOf(data.story._id)==-1)
           {
+            console.log("putting story into queue--------");
             queue.storyPost.add(issue);
             console.log("collaborators in posttogithub------------------------------",projectData.collaboratorsList);
             Project.addGitStory({projectId:data.projectId,storyId:data.story._id});
           }
       }
   })
-
   }
   /////////////
 
@@ -268,7 +268,7 @@ pushStories:function(data)
     //console.log("Repository Details",repoData);
     if(!err && repoData){
       Story.updateGithubSync(data.projectId,data.userId,repoData._id,function(err,storyData){
-        console.log("Stories All Project",storyData);
+        //console.log("Stories All Project",storyData);
         storyData.forEach(function(story){
 
             Story.getStory(story._id,function(err,doc)
@@ -284,12 +284,12 @@ pushStories:function(data)
                   editStory({'storyid':story._id,'memberid':data.userId,'atTheTimeOfIntegration':data.atTheTimeOfIntegration})
                 }
                 User.getUserMember(data.userId,function(err,userDoc){
-                  console.log("getting userDetails",userDoc);
+                  //console.log("getting userDetails",userDoc);
                   if(userDoc.github.id===story.issueCreatorId){
                     story.storyCreatorId=userDoc._id;
                     story.issueCreatorId=null;
                     story.save(function(err,subDoc){
-                      console.log("Saved Story in creatorNam",subDoc);
+                      //console.log("Saved Story in creatorNam",subDoc);
                     })
                   }
                   console.log("printtin story.pendingMembersFromGithub----",story.pendingMemberFromGithub);
@@ -309,7 +309,7 @@ pushStories:function(data)
             {
           if((story.storyCreatorId._id==data.userId && story.issueNumber===undefined) || (doc.memberList.indexOf(data.userId)!==-1 && !data.atTheTimeOfIntegration && story.issueNumber===undefined)){
               personsHaveGitIds({"collaboratorsList":data.collaboratorsList,"memberList":doc.memberList,"projectId":data.projectId,"story":story,"repoData":repoData,"github_profile":story.storyCreatorId.github});
-
+                console.log("inside if story.storyCreatorId");
               }
             }
               else {

@@ -83,6 +83,9 @@ $scope.setDate()
 
    });
 
+   $scope.storyFilter = $filter('applyFilter')
+   console.log("$scope.storyFilter",$scope.storyFilter);
+
 
    $scope.gotoProject=function(){
      $state.go('project');
@@ -111,50 +114,52 @@ $scope.setDate()
 
 .filter('applyFilter', function() {
 
-  return function(items,date) {
+return function(items,date) {
 if(items,date){
-
-  function myFunc(d,weekNum) {
-    // console.log("d",d);
-    d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
+  var filtered = [];
+function myFunc(d,weekNum) {
+    // console.log("d",d);d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
     var week = new Date(d.getFullYear(), 0, 4);
     var weekNum = 1 + Math.round(((d.getTime() - week.getTime()) / 86400000
                           - 3 + (week.getDay() + 6) % 7) / 7);
-
     return weekNum;
-}
-
-
-
+      }
 var dateDefault = new Date();
 var defaultDate = myFunc(dateDefault);
 var weekNumberInput = myFunc(date);
+console.log("weekNumberInput",weekNumberInput);
 
+return items.filter(function (item) {
 
-      return items.filter(function (item) {
+var itemStartDate=item.sprintId.startDate;
+var itemStartDateConverted = moment.utc(itemStartDate);
+var itemStartDateConvertedExtracted = itemStartDateConverted._d;
+var itemStartDateWeekNum = myFunc(itemStartDateConvertedExtracted);
+console.log("itemStartDateWeekNum",itemStartDateWeekNum);
 
-
-      var itemStartDate=item.sprintId.startDate;
-      var itemStartDateConverted = moment.utc(itemStartDate);
-      var itemStartDateConvertedExtracted = itemStartDateConverted._d;
-       var itemStartDateWeekNum = myFunc(itemStartDateConvertedExtracted);
-
-      var itemEndDate=item.sprintId.endDate;
-       var itemEndDateConverted = moment.utc(itemEndDate);
-       var itemEndDateConvertedExtracted = itemEndDateConverted._d;
-       var itemEndDateWeekNum = myFunc(itemEndDateConvertedExtracted);
+var itemEndDate=item.sprintId.endDate;
+var itemEndDateConverted = moment.utc(itemEndDate);
+var itemEndDateConvertedExtracted = itemEndDateConverted._d;
+var itemEndDateWeekNum = myFunc(itemEndDateConvertedExtracted);
+console.log("itemEndDateWeekNum",itemEndDateWeekNum);
 
 
 if(itemStartDateWeekNum == weekNumberInput || itemEndDateWeekNum == weekNumberInput)
-              {
-             return(true);
-           }
-               return false;
+  {
+
+           filtered.push(item)
+           console.log("filtered",filtered);
+         return filtered;
+
+  }
+          return false;
 
 
-     });
+  });
 
 }
 
+
 }
+
 });

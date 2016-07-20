@@ -11,7 +11,7 @@
       <div >
       <label>Pick a week :
        <input id="exampleInput" type="week" name="input" ng-model="date" placeholder="dd-YYYY-W##" min="2012-W32" max="2060-W52" value="today" required ng-change="setDate()" />
-        <!-- <button type="button" class="btn btn-success" ng-click="setDate()">Select</button> -->
+      
 
       </label>
 
@@ -21,37 +21,29 @@
  <div> <h5> <i>{{displayStartDate }}</i> <b>-</b><i>{{displayEndDate}}</i></h5></div>
 
 
-   <!-- To be edited -->
-    <div ng-repeat="card in cards|applyFilter:date" ng-init="count=0" >
-    <!-- <div ng-repeat="card in cards|groupBy:'sprintId._id'" ng-init="count=0" > -->
+    <div ng-repeat="sprint in cards|applyFilter:date|groupBy:'sprintId._id'">
+      <a ng-click="gotoProject()">{{sprint[0].projectName}}</a> | <a ui-sref="release({prId: sprint[0].projectId, releaseID: sprint[0].releaseId})">{{sprint[0].releaseName}}</a> | <a ui-sref="release({prId: sprint[0].projectId, releaseID: sprint[0].releaseId,sprintID:sprint[0].sprintId})">{{sprint[0].sprintId.name}}</a>
+      <div class="row">
+      <div ng-repeat="story in sprint">
+          <div class="boxStory" ui-sref=".story({sprintID: story.sprintId._id,storyID:story.stories._id})">
+           story: {{story.stories.heading}}
+            <div class="storyAttributes">
+              <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
+              <span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{story.stories.indicators.commentCount}}</span>
+              <span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{story.stories.indicators.attachmentsCount}}</span>
+              <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{story.stories.indicators.chklstItmsChkdCnt}} / {{story.stories.indicators.chklstItmsCnt}}</span>
 
-     <br>
-     <br>
+            </div>
+          </div>
+      </div>
+        <div style="clear:both"></div>
+      </div>
+      <hr />
+    </div>
 
-     <a ng-click="gotoProject()">{{card.projectName}} </a>| <a ui-sref="release({ prId : card.projectId, releaseID: card.releaseId})">{{card.releaseName}}</a> | <a ui-sref="sprint({ prId : card.projectId, releaseID: card.releaseId,sprintID:key})">{{card.sprintId.name}}</a>
 
-     <!-- <p ng-bind="startDate"></p> -->
-     <div>
-       <div class="boxStory" ui-sref=".story({sprintID: card.sprintId._id,storyID:card.stories._id})">
-        story: {{card.stories.heading}}
-         <div class="storyAttributes">
-           <span ng-show="story.indicators.descriptionStatus"><i class="fa fa-sticky-note" aria-hidden="true"></i></span>
-           <span ng-show="story.indicators.commentCount != 0"><i class="fa fa-comment-o" aria-hidden="true"></i> {{card.stories.indicators.commentCount}}</span>
-           <span ng-show="story.indicators.attachmentsCount != 0"><i class="fa fa-paperclip" aria-hidden="true"></i> {{card.stories.indicators.attachmentsCount}}</span>
-           <span ng-show="story.indicators.chklstItmsCnt != 0"><i class="fa fa-check-square-o" aria-hidden="true"></i> {{card.stories.indicators.chklstItmsChkdCnt}} / {{card.stories.indicators.chklstItmsCnt}}</span>
-           <span ng-hide="card.stories.memberList!==undefined">
-             <div >
-               <img ng-src={{member.photo}} class="pic-avatar" ng-hide="member.photo == undefined" />
-               <div class="avatar-ng" ng-show="member.photo == undefined">
-                 <ng-letter-avatar data="{{member.fullName}}" charCount=2 shape="round" height="30px" width="30px" fontSize="25px"></ng-letter-avatar>
-               </div>
-               &nbsp;
-             </div>
-           </span>
-         </div>
-       </div> <!-- Box story div ends here-->
-     </div>
-     <hr style="clear:both">
-   </div><!-- cards  div ends here-->
+
+ <br>
+  <br>
 
  </div>

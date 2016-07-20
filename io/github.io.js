@@ -115,13 +115,25 @@ module.exports = function(socket, io) {
         story.githubSync=repoDetails._id;
         story.storyCreatorId=data.userProfile._id;
         story.memberList=[];
+        story['indicators']={
+          'descriptionStatus': false,
+          "chklstItmsCnt": 0,
+          "chklstItmsChkdCnt": 0,
+          'attachmentsCount': 0,
+          'commentCount': 0
+        }
         if(obj.assignees.length!==0){
           obj.assignees.forEach(function(assignee){
+            console.log("assigness",assignee);
              User.findOne({'github.id':assignee.id},function(error,user){
+               console.log("userDetails",user);
                if(!error && user){
                  Project.findOneProject(data.projectId,function(err,project){
+                   console.log(project);
                    if(project.memberList.indexOf(user._id)!=-1){
+                     console.log("pushing",project.memberList);
                      story.memberList.push(user._id);
+                     console.log("story",story);
              }
              else{
                if(story.pendingMemberFromGithub){
@@ -136,7 +148,7 @@ module.exports = function(socket, io) {
         }
 
 
-        Story.addStory(story,function(err,storyData){
+        story.save(function(err,storyData){
           if(!err){
             console.log("Github Issues Added",storyData);
             BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
@@ -145,7 +157,6 @@ module.exports = function(socket, io) {
                 console.log("BacklogBuglist:"+data.projectId);
                 io.to("BacklogBuglist:"+data.projectId).emit("sprint:storyAdded",storyData);
               }
-
             })
           }
         })
@@ -153,9 +164,7 @@ module.exports = function(socket, io) {
 
     })
 
-
   })
-
 
   socket.on("github:integrateGit",function(data){
     console.log("in integrateGit metho-----------------------------------------------");

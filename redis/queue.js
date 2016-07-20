@@ -23,6 +23,7 @@ storyPost.process(function(job,done){
    },
    json:job.data.message
  };
+ console.log("insdie story queue------------");
  console.log(options.url);
  console.log(job.data);
  request.post(options,function(err,res,body){
@@ -33,9 +34,17 @@ storyPost.process(function(job,done){
          story.issueNumber = body.number;
          story.save(function (err) {
              if(err) {
+
                  console.error('ERROR!');
              }
 else{
+  Sprint.findSprintForStory(story._id,function(err,sprintData)
+  {
+    if(!err)
+      {
+        io.to("sprint:"+sprintData._id).emit("story:dataModified",story);
+      }
+  })
 //emit socket with story Socket.emit
 }
              done(null,body);
