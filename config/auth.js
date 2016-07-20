@@ -13,5 +13,12 @@ module.exports = {
 		'clientID': "26f08576b86ec549a368",
     'clientSecret': "0306c3f70e11af5a4ac9e11b7b41174a4e1b3a30",
     'callbackURL': "http://localhost:8080/auth/github/callback"
+	},
+	'dropboxAuth':{
+		'clientID':"xhr4rvb0mv5h05i",
+		'clientSecret':"toy07da0j1ruu5y",
+		'callbackURL': "http://localhost:8080/auth/dropbox/callback"
+
+
 	}
 }

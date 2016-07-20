@@ -142,6 +142,7 @@ if (nv) {
                     $timeout(function() {$scope.passwordUpdateMsg='';}, 2000);
 
                 } else{
+                    console.log("I am in reset password");
                      $scope.passwordUpdateMsg="Password changed! Login again."
                       $timeout(function() {$scope.passwordUpdateMsg=''; $window.location.href = '/index.html';}, 2000);
 

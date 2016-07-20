@@ -18,7 +18,8 @@ md-dialog.fullscreen-dialog {
 
 .chatStrip {
   position:fixed;
-  top: 50px;
+  margin-top: -8px;
+  top: 0px;
   right:0px;
   width: 120px;
   background-color:#4d394b;
@@ -107,6 +108,10 @@ position: absolute;
 md-list-item, md-list-item .md-list-item-inner {
   min-height: 20px!important;
   height: 40px!important;
+color:white;
+}
+.message md-list-item, md-list-item .md-list-item-inner{
+height:auto!important;
 }
 
  .selectedPrj{

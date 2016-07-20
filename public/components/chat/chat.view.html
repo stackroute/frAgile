@@ -6,10 +6,16 @@
     <div  >
       <md-content class="chatStrip" ng-cloak>
         <md-list  ng-cloak="" class="listdemoListControls" >
+
           <md-subheader class="md-no-sticky"><i class="fa fa-users"></i> Chat</md-subheader>
-          <md-list-item ng-repeat="project in projects" ng-click="openLeftMenu(project)">
+
+          <md-list-item ng-repeat="project in projects" ng-click="openLeftMenu(project)" >
+
             <p id={{project._id}} class="active"> {{ project.name }} </p>
+
+
           </md-list-item>
+
         </md-list>
       </md-content>
       <md-sidenav md-component-id="left" class="md-sidenav-right"  ng-cloak  style="position:fixed" layout="row">
@@ -18,29 +24,36 @@
 
 
           <md-content style="height:100%">
-            <md-subheader class="md-primary header" ng-show="room" style="background:#55C7AD">{{room.fullName}} <i class="fa fa-close fa-2x" ng-click="openLeftMenu(project)" style="float:right"></i>  </md-subheader>
+            <md-subheader class="md-primary header" ng-show="room" style="background:#55C7AD;">{{room.fullName}} <i class="fa fa-close fa-2x" ng-click="openLeftMenu(project)" style="float:right"></i>  </md-subheader>
             <md-subheader class="md-primary header" ng-hide="room" style="background:#55C7AD;height:45px"><i class="fa fa-close fa-2x" ng-click="openLeftMenu(project)" style="float:right"></i>  </md-subheader>
 
             <div style=" overflow-y:scroll;height:78%;padding:12px" scroll-bottom="scroller">
               <section >
-                <md-subheader class="md-primary header" ng-show="room.typeOfchat=='personal'"> {{member.fullName}}  </md-subheader>
+                <md-subheader class="md-primary header" ng-show="room.typeOfchat=='personal'" > {{member.fullName}}  </md-subheader>
 
-                <div layout="row"  layout-align="center center" ng-show="messages.length==0 || room">
+                <div layout="row"  layout-align="center center" ng-show="!room">
                   <i class="fa fa-weixin fa-5x " style="color:orange"></i>
                   <p>  Start using Limber Chat!</p>
                 </div>
-                <div ng-show="messages.length>10">
-                  <a ng-click="">Show previous messages</a>
-                </div>
 
-                <div ng-repeat="topicMsg in messages" >
+                <!-- <div ng-repeat="topicMsg in messages" >
                   <md-whiteframe ng-repeat="msg in topicMsg.message"  class="md-whiteframe-z2 message" layout layout-align="" style="border-radius:9px"  ng-show="topicMsg.topicId===topic">
                     <div class="md-list-item-text"  >
                       <b>{{ msg.sentBy.fullName }}</b>
                       <p ng-bind-html="msg.message|smilies"></p>
                     </div>
                   </md-whiteframe>
-                </div>
+                </div> -->
+                <md-list  flex  class="message" ng-show="room">
+                  <md-list-item ng-repeat="message in messages[topic]"  class="" ng-click="null">
+                    <div class="md-list-item-text" layout="column" >
+<!-- {{message}} -->
+                      <h4>{{ message.sentBy.fullName }}</h4>
+                      <p ng-bind-html="message.text|smilies" style="color:black"></p>
+                    </div>
+                  </md-list-item>
+                </md-list>
+
                 <br><br>
               </section>
             </div>
@@ -54,7 +67,7 @@
                 smilies-placement="right"
                 smilies-title="Smilies"></span>
                 <span class="input-group-addon chatInput" style="width:100%">   <textarea ng-model="message" focus-on-change="message"  class="form-control "  ng-keydown="($event.which === 13 && !$event.shiftKey) && send()" > </textarea></span>
-                <span class="input-group-addon">
+                <!-- <span class="input-group-addon">
                   <md-menu style="z-index:3009!important" md-position-mode="target-right target" md-menu-backdrop>
                     <i class="material-icons" style="color:#4c9689;font-size: 20px;" ng-click="$mdOpenMenu($event)">note_add</i>
                     <md-menu-content width="3" >
@@ -67,7 +80,7 @@
                       </md-menu-item>
                     </md-menu-content>
                   </md-menu>
-                </span>
+                </span> -->
               </div>
               <!-- <button class="btn btn-info" ng-click="send()" ng-show="room">Send</button> -->
 
@@ -78,18 +91,12 @@
 
         </div>
         <div class="col-md-4" id={{project._id}}>
-          <md-header class="overflow_ellipsis" id="projectName" >{{project.name}}<span class="pull-right"><i class="fa fa-bell" aria-hidden="true"></i> </span></md-header>
-          <md-subheader class="overflow_ellipsis">  <i class="fa fa-circle" id="active" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<span id="teamMembers" class="active">{{userProfile.fullName}}</span></md-subheader>
-          <md-list class="" flex>
-            <md-subheader class="md-no-sticky overflow_ellipsis" id="heading">Groups</md-subheader>
-            <md-list-item class="" ng-repeat="group in groups" ng-click="chatRoom(group)">
-              <div class="md-list-item-text" layout="column" >
-                <h3 id="teamMembers" ng-show="group.projectId==project._id">{{ group.groupName }}</h3>
-              </div>
-            </md-list-item>
-          </md-list>
+
+          <md-header class="overflow_ellipsis" id="projectName" >{{project.name}}</md-header>
+          <md-subheader class="overflow_ellipsis">  <i class="fa fa-circle" id="active" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;<span id="teamMembers" class="active">{{userProfile.fullName}} (me)</span></md-subheader>
+
+
           <br><br>
-          <md-header id="projectName"  class=" md-raised" ng-click="createGroup($event,project)">+Create a channel</md-header>
           <md-divider></md-divider>
           <md-list class="md-dense" flex>
             <md-subheader class="md-no-sticky overflow_ellipsis" id="heading">DIRECT MESSAGES</md-subheader>
@@ -97,12 +104,11 @@
               <i class="fa fa-circle" id={{member.chatStatus}}></i> &nbsp;&nbsp;
               <span> <h3 id="teamMembers" >{{ member.fullName }}</h3>
 
-                <i class="fa fa-circle" ng-if="newMessage && newMessage.sentBy.userId!==currentUserID && newMessage.sentBy.userId!==room._id"></i>
               </span>
             </md-list-item>
           </md-list>
           <br><br>
-          <md-header id="projectName"  class=" md-raised" ng-click="inviteUser($event,project)">Invite People</md-header>
+          <!-- <md-header id="projectName"  class=" md-raised" ng-click="inviteUser($event,project)">Invite People</md-header> -->
 
           <md-divider></md-divider>
         </div>

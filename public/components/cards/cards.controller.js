@@ -31,23 +31,19 @@ $scope.setDate()
 
 
 
- console.log($stateParams);
  $scope.loadCards=function(){
 
    sprintService.currentRoom={};
-   console.log($rootScope);
 
    var emitData={
      'room' :$scope.currentUserID
    };
-   console.log(emitData);
    socket.emit('join:room', emitData);
 
    //$scope.cards={};
    $scope.stories=[];
    cardsService.getUserCards().success(function(response) {
      $scope.cards = response[0].assignedStories;
-     console.log(response[0].assignedStories);
 
 
      $scope.cards.forEach(function(item){
@@ -71,14 +67,11 @@ $scope.setDate()
      $scope.cards.push(data);
      $scope.loadCards();
      //console.log(data.length);
-     console.log("you are added");
-     console.log($scope.cards);
 
    })
 
    socket.on('story:memberRemoved',function(data)
    {
-     console.log("memberRemoved",data);
      $scope.cards = $filter('filter')($scope.cards, {_id: !data._id})
 
    });
@@ -93,7 +86,6 @@ $scope.setDate()
    $scope.goToSprint=function(params,story){
      $state.go('sprint',params).then(function(){
        //$rootScope.showModal(story._id, listItem.group,listItem._id,listItem.listName);\
-       console.log(story._id+"in then");
        angular.element("#"+story._id).triggerHandler("ng-click");
      })
    }
