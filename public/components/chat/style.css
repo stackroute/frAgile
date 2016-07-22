@@ -105,7 +105,7 @@ position: absolute;
 }
 
 
-md-list-item, md-list-item .md-list-item-inner {
+#myList {
   min-height: 20px!important;
   height: 40px!important;
 color:white;

@@ -17,7 +17,10 @@ var releaseSchema = new Schema({
     ref: 'Sprint'
   }]
 });
-
+/*  <!--  !!IMPORTANT!!  this dropbox should be connected to one of the member asigned to projects. 
+Then store the data in DB. And the dropbox button (project.view.html) should be removed. Now that button not doing anything.
+ that will just give the access token( Check out project.controller.js).
+ Save the token in DB. And use the token to upload all attachments into single dropdox. */
 var projectSchema = new Schema({
   name: String,
   description: String,

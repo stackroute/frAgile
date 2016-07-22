@@ -30,7 +30,7 @@ Over View
       <h4>{{project.name}}
         <i class="fa fa-pencil" ng-click = "editProjectShow=true; newProjectName=project.name; newProjectDetails=project.description"></i>
         <i class="fa fa-user-plus" data-toggle="modal" data-target="#addMembersModal"  ng-click="getAllUsers(project._id,project.name,project.githubStatus)" aria-hidden="true"></i>
-        
+       <!-- TODO !!IMPORTANT!!  this dropbox should be connected to one of the member asigned to projects. Then store the data in DB. Then this button should be removed. Now it's not doing anything. It will just give the access token( Check out project.controller.js). Save the token in DB. And use the token to upload all attachments into single dropdox. -->  
         <a ng-click="linkDropbox(project._id)"><i class="fa fa-dropbox"></i></a>
 
         <i class="fa fa-github" ng-click="getRepo(project._id)" ng-hide="githubProfile.id == undefined || githubProfile == undefined || project.githubStatus == true" tooltip-placement="bottom"  uib-tooltip="Show "></i>

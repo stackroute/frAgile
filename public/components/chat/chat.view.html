@@ -9,7 +9,7 @@
 
           <md-subheader class="md-no-sticky"><i class="fa fa-users"></i> Chat</md-subheader>
 
-          <md-list-item ng-repeat="project in projects" ng-click="openLeftMenu(project)" >
+          <md-list-item ng-repeat="project in projects" id="myList" ng-click="openLeftMenu(project)" >
 
             <p id={{project._id}} class="active"> {{ project.name }} </p>
 
