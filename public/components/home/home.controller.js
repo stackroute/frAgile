@@ -14,7 +14,6 @@ var socket = Socket($scope);
         photo: response.photo
       };
       $rootScope.githubProfile=response.github;
-      console.log(response);
 socket.emit('authenticate',{'user':$rootScope.userProfile._id});
     });
     homeService.getUserProjects().success(function(response){
@@ -24,7 +23,6 @@ socket.emit('authenticate',{'user':$rootScope.userProfile._id});
         $rootScope.projects.forEach(function (project){
           if(project.githubStatus ){
       socket.emit("github:integrateGit",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile,atTheTimeOfIntegration:true});
-console.log("Emitting pushStories event");}
 })
       }
     });

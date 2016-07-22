@@ -84,9 +84,6 @@ userSchema.statics.findAll=function(memberList,callback)
   }
 
   userSchema.statics.updateUser = function(userId, newUserDetails, callback) {
-    console.log("----------Inside updateUser model");
-    console.log("-" + userId + "-");
-    console.log(newUserDetails);
     this.findOneAndUpdate({
       "_id": userId
     }, {
@@ -199,8 +196,6 @@ userSchema.statics.getCards = function(UserId, callback) {
  }).populate("assignedStories.stories")
 .populate("assignedStories.sprintId"," name startDate endDate")
 .exec(function(err, data) {
-console.log("I reached user model");
-console.log(data);
    if (err) callback(err)
    else callback(data);
  });
@@ -221,11 +216,9 @@ console.log(data);
       {
         safe: true, upsert: true
       }, function(err, data) {
-        console.log("I am in adding members to story model");
         if (err) callback(err, null)
         else {
 
-          console.log(dataObj.memberid);
           //To send back added project data
           mongoose.model("User").find({
             "_id": dataObj.memberid

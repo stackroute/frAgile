@@ -2,7 +2,6 @@ fragileApp.controller('githubIssueController',['$rootScope','$scope','$statePara
   //var account=githubService.getGithubAccount();
   var socket = Socket($scope);
   $scope.githubissues= param.response.allIssues;
-  console.log("Param in github issues",param);
   $scope.selectedIssues=[];
   $scope.syncedissues=param.response.syncedIssueNumbers;
 $scope.githubRepo=param.response.githubRepo;
@@ -22,18 +21,13 @@ $scope.githubRepo=param.response.githubRepo;
     }
 
 
-    console.log($scope.selectedIssues);
   }
   $scope.createStory=function(){
-    console.log("Issues",$scope.selectedIssues);
     socket.emit("github:convertToStory",{'issues':$scope.selectedIssues,'projectId':param.projectId,'userProfile':$rootScope.userProfile});
     $uibModalInstance.close();
 
   }
   $scope.filterExistingIssue=function(currentIssue){
-    console.log("in Exisying issue");
-    console.log(currentIssue.number.toString());
-    console.log($scope.syncedissues.indexOf(currentIssue.number.toString())!==-1)
     return $scope.syncedissues.indexOf(currentIssue.number.toString())!==-1
   }
   $scope.ok = function() {

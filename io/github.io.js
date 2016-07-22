@@ -39,7 +39,6 @@ module.exports = function(socket, io) {
     //console.log("url---------",collaboratorOptions.url);
     request.post(options,function(err,response,body){
       if(!err){
-        console.log("inside of repo socket-------------------");
         var githubRepo= new GithubRepo();
         githubRepo.name=data.name;
         githubRepo.owner=data.owner;
@@ -52,7 +51,6 @@ module.exports = function(socket, io) {
           if(!err){
             Project.updateGithubStatus(data.projectId,function(error,statusDoc){
               if(!error){
-                console.log("in update");
                 //  console.log(doc);
                 var githubRepo={
                   'githubStatus':true,
@@ -62,7 +60,6 @@ module.exports = function(socket, io) {
 
                 memberList.filter(function(userId)
                 {
-                  console.log("calling githubCall method--------------------------");
                 githubCall.makeUserAsCollaborator({"projectId":data.projectId,"userId":userId,"atTheTimeOfIntegration":false,addingOneMember:false});
                 })
                 //  console.log(doc);
@@ -99,7 +96,6 @@ module.exports = function(socket, io) {
 })
 
   socket.on("github:convertToStory",function(data){
-    console.log("Listening for converting Story",data);
     data.issues.forEach(function(obj){
       var story=new Story();
       story.listId="Backlogs";
@@ -126,18 +122,12 @@ module.exports = function(socket, io) {
           var index=0;
           obj.assignees.forEach(function(assignee){
 
-            console.log("assigness",assignee);
              User.findOne({'github.id':assignee.id},function(error,user){
-               console.log("userDetails",user);
 
                if(!error && user){
-                 console.log("printing--------user-------------",user);
                  Project.findOneProject(data.projectId,function(err,project){
-                   console.log("project.memberList-----------",project.memberList);
-                   console.log("userId------------------",user._id);
 
                    if(project.memberList.indexOf(user._id)!=-1){
-                     console.log("pushing",project.memberList);
                      story.memberList.push(user._id);
 
                      index++;
@@ -150,12 +140,10 @@ module.exports = function(socket, io) {
                story.pendingMemberFromGithub.push(assignee.id);
              }}}
 
-             console.log("index -----",index,"assignees length------",obj.assignees.length,"assignees length----",story.memberList);
              if(index==obj.assignees.length)
                 {
                   Story.convertToStory(story,function(err,storyData){
                     if(!err){
-                      console.log("Github Issues Added------------------------",storyData);
                       BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
                         if(!err){
                     //      console.log("Updated Backlog bUg list",subDoc);
@@ -177,7 +165,6 @@ module.exports = function(socket, io) {
         else {
           Story.convertToStory(story,function(err,storyData){
             if(!err){
-              console.log("Github Issues Added------------------------",storyData);
               BackLogsBugList.addStoryBacklog(data.projectId, storyData._id, function(err, subDoc) {
                 if(!err){
             //      console.log("Updated Backlog bUg list",subDoc);
@@ -198,7 +185,6 @@ module.exports = function(socket, io) {
   })
 
   socket.on("github:integrateGit",function(data){
-    console.log("in integrateGit metho-----------------------------------------------");
       githubCall.makeUserAsCollaborator({projectId:data.projectId,userId:data.userId,atTheTimeOfIntegration:true,addingOneMember:false});
 
 })

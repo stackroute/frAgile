@@ -1,4 +1,4 @@
-// This file has no apparent use in this app. This app is running without this file. the routing is 
+// This file has no apparent use in this app. This app is running without this file. the routing is
 //done in authFolder/app.js
 
 
@@ -18,7 +18,7 @@
 //               defer.resolve();
 //               return defer.promise;
 //             }
-           
+
 //           }
 //         })
 //         .when('/login', {
@@ -30,7 +30,7 @@
 //              // $timeout(function(){},10000);
 //                defer.resolve();
 //                return defer.promise;
-//             }  
+//             }
 //           }
 //         })
 //         });

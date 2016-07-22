@@ -17,9 +17,6 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
   modalContr.addWhat = projectService.addWhat;
   modalContr.addId = projectService.addId;
   $scope.AddNewProject = function() {
-    console.log($scope.newReleaseName);
-    console.log($scope.newReleaseDesc);
-    console.log();
     if ($scope.newReleaseName == undefined || $scope.newReleaseName == "") {
       $scope.warningModalName = false;
     } else {
@@ -36,7 +33,6 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
         'details':{}
       }
 
-      console.log($scope.newReleaseName);
       projectService.addProject($scope.newReleaseName, $scope.newReleaseDesc).success(function(response) {
 
         projectService.addProjectToUser( response._id).success(function(data) {
@@ -74,13 +70,9 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
     }
   }
   $scope.AddNewRelease = function() {
-    console.log("=========" + $scope.newReleaseDate);
     if ($scope.newReleaseDate != undefined) {
       $scope.newReleaseDate = new Date($scope.newReleaseDate);
     }
-    console.log("1------" + $scope.newReleaseName);
-    console.log("2------" + $scope.newReleaseDesc);
-    console.log("3------" + $scope.newReleaseDate);
     if ($scope.newReleaseName == undefined || $scope.newReleaseName == "") {
       $scope.warningModalName = false;
     } else {
@@ -96,7 +88,6 @@ fragileApp.controller('modalController', ['$scope', '$rootScope', '$stateParams'
     } else {
       $scope.warningModalDate = true;
     }
-    console.log("$scope.newReleaseDate -" + $scope.newReleaseDate);
     if ($scope.newReleaseName != undefined && $scope.newReleaseName != "" &&
     $scope.newReleaseDate != undefined && $scope.newReleaseDate != ""
   ) {

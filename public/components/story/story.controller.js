@@ -1,18 +1,12 @@
 fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams', 'storyService', 'modalService', 'sprintService', 'releaseService', '$uibModal', '$uibModalInstance', '$location', 'Socket', 'Upload', 'param', '$window','$sce', function($scope, $rootScope, $stateParams, storyService, modalService, sprintService, releaseService, $uibModal, $uibModalInstance, $location, Socket, Upload, param, $window,$sce) {
   var socket = Socket($scope);
 
-  console.log(socket.room);
-  console.log(socket);
   var storyContr = this;
   /***param is the value resolved from uibModal which contains both story and sprint data***/
   storyContr.complexDataObject = param;
-  console.log("----------");
-  console.log(param);
 
-  console.log($stateParams);
   $scope.projectID=$stateParams.prId;
 
-  console.log($scope.projectID);
   storyContr.storyData = storyContr.complexDataObject.story.data;
   angular.forEach(storyContr.storyData.attachmentList, function(value, key) {
     storyContr.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
@@ -50,9 +44,7 @@ fragileApp.controller('storyController', ['$scope', '$rootScope', '$stateParams'
   //   emitData["activityRoom"] = 'activity:' + $stateParams.prId;
   // }
 
-console.log(sprintService.currentRoom);
 if(!sprintService.currentRoom.room){
-console.log("joining room"+emitData);
   socket.emit('join:room', emitData);
 
 }
@@ -94,7 +86,6 @@ console.log("joining room"+emitData);
   //TODO:check how to make the member list dynamic: memaning check if u want to add a listener
   $scope.addMember = function() {
     modalService.open('sm', 'components/story/operations/addMember.view.html', 'storyOperationsController', storyContr.complexDataObject);
-    console.log("complexDataObject --->",storyContr.complexDataObject);
   };
 
   //for toggling the selection of member while creating new task
@@ -150,11 +141,8 @@ $scope.storyData.checklist.filter(function(checkList)
   $scope.memberArray.push(obj);
 });
 });
-console.log("memberarray after item added",$scope.memberArray);
-console.log("memberarrayindex after item added",$scope.memberArrayIndex);
 }
 
-console.log("newly created array",JSON.stringify($scope.memberArray));
 
   // $scope.addMemberObj=function(itemId)
   // {
@@ -177,12 +165,10 @@ console.log("newly created array",JSON.stringify($scope.memberArray));
 
   $scope.addMemberToChecklist = function(listItem) {
     //socket.emit("join:room",{"room":"checklist:"+lis})
-    console.log(listItem,"in add mem: ",listItem.assignedMember);
 
 
     listItem.assignedMember=$scope.memberArray[$scope.memberArrayIndex.indexOf(listItem._id)]["arrayOfMembers"];
 
-    console.log("assignedMember list: ",listItem.assignedMember);
     var checkListId;
 $scope.storyData.checklist.filter(function(checkList)
 {
@@ -192,8 +178,6 @@ if(item._id==listItem._id)
     checkListId=checkList._id;
 });
 });
-console.log("checklist id --->",checkListId);
-console.log("memberList --->",$scope.storyData.memberList);
     data = {
 
       listItem:listItem,
@@ -270,8 +254,6 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   }
 
   socket.on('story:attachmentAdded', function(data) {
-    console.log(data._id);
-    console.log($scope.storyData._id);
     if (data._id == $scope.storyData._id) {
       // data.attachmentList.timeStamp = moment()
       $scope.storyData.attachmentList = data.attachmentList;
@@ -280,14 +262,11 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
         $scope.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
       });
 
-      console.log('On socket: ', $scope.storyData.attachmentList);
     }
 
   });
 
   socket.on('story:attachmentRemoved', function(data) {
-    console.log(data._id);
-    console.log($scope.storyData._id);
     if (data._id == $scope.storyData._id) {
       // data.attachmentList.timeStamp = moment()
       $scope.storyData.attachmentList = data.attachmentList;
@@ -296,7 +275,6 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
         $scope.storyData.attachmentList[key].timeStamp = moment(value.timeStamp).fromNow();
       });
 
-      console.log('On socket: ', $scope.storyData.attachmentList);
     }
 
   })
@@ -318,7 +296,7 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   };
 
   //==================
- 
+
   //==================
   /***
   author:Shrinivas
@@ -335,19 +313,15 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
           storyId: storyContr.storyData._id
         }
       }).then(function(resp) {
-        console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
         resp.data.room = $scope.roomName;
         resp.data.projectID = $scope.projectID;
         resp.data.type = resp.config.data.file.name;
         resp.data.user = $rootScope.userProfile
 
         socket.emit('story:addAttachment', resp.data);
-        console.log(resp.data, ">>>dismiss");
       }, function(resp) {
-        console.log('Error status: ' + resp.status);
       }, function(evt) {
         var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-        console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
       });
     }
   };
@@ -382,7 +356,6 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
           //Below for loop is required because duplicates were displayed in list dropdown if display directly
           for (var sprIndex = 0; sprIndex < response.data.release.selectedSprints.list.length; sprIndex++) {
             if (response.data.release.selectedSprints.list[sprIndex]._id == storyContr.complexDataObject.currentPosition.listId) {
-              console.log("enter");
               response.data.release.selectedList = response.data.release.selectedSprints.list[sprIndex];
               storyContr.complexDataObject.currentPosition.sprintId = response.data.release.selectedSprints._id;
               break;
@@ -493,10 +466,7 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   description:this fuction is used to add a new item to the checklist group.
   ***/
   $scope.removeTodoItem = function(listItem, checklistGrp, text) {
-    console.log(checklistGrp)
-    console.log(listItem);
     //todo.items.push({"text":todo.todoText,"done":false})
-    console.log("inside the remove method--->");
     socket.emit('story:removeChecklistItem', {
 
       'room': $scope.roomName,
@@ -520,7 +490,6 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   //TODO:Not working because of nth level
    //to update list item
   $scope.updateListItem=function(listItem,checklistGrp){
-  console.log("Modified item: ",listItem);
   // $scope.updateTodoItem(listItem,checklistGrp);
 
   }
@@ -528,8 +497,6 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   $scope.updateTodoItem = function(listItem, checkListId,operation) {
 
     //todo.items.push({"text":todo.todoText,"done":false})
-console.log("new data",listItem.text,listItem.dueDate);
-console.log("in controller",listItem.checked);
     socket.emit('story:updateChecklistItem', {
        'room': $scope.roomName,
        'storyid': $scope.storyData._id,
@@ -620,9 +587,8 @@ console.log("in controller",listItem.checked);
       socket.emit("story:findStory",{"storyId":$scope.storyData._id,"roomName":$scope.roomName});
 
 
-      console.log("im here to modify");
-        // this is to set memberArray after item added/deleted.
       ///
+      // this is to set memberArray after item added/deleted.
 
     })
 

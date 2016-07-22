@@ -29,7 +29,6 @@ module.exports = function(socket, io) {
     Project.addMember(data.projectId, data.memberList, function(err, doc) {
       if (!err && doc.nModified != 0) {
         Group.addMemberToGroup(data.projectId,data.memberList,function(err,docGroup){
-console.log("docGroup",docGroup);
 })
         data.memberList.forEach(function(memberId) { // Intimating the user, project has been added
           User.find({

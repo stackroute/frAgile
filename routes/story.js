@@ -46,8 +46,6 @@ router.post('/getMembersData',function(req,res,next){
     if(err){
       res.send(err);
     }else{
-      console.log(data);
-      console.log("---------------------in story model to check---------");
       res.send(data.memberList);
     }
   })
@@ -58,7 +56,6 @@ router.post('/getLabelsData',function(req,res,next){
     if(err){
       res.send(err);
     }else{
-      console.log(data);
       res.send(data.labelList);
     }
   })
@@ -89,7 +86,6 @@ router.post('/addattachments', function(req, res, next) {
     newfile_name=files.file.name.substring(0, (files.file.name.lastIndexOf('.'))),
     folder_path=path.join(process.env.PWD+ '/public/uploadfile/'+storyId),
     new_path = path.join(process.env.PWD+ '/public/uploadfile/'+storyId +"/"+ file_name + '.' + file_ext);
-                   console.log("In uploadfile --->Step-6");
 
 
     attachmentObj={
@@ -102,25 +98,19 @@ router.post('/addattachments', function(req, res, next) {
     };
     if(!fs.existsSync(folder_path)){
       fs.mkdir(folder_path, function(err){
-                           console.log("In uploadfile --->Step-5");
 
         fs.readFile(old_path, function(err, data) {
-                             console.log("In uploadfile --->Step-4");
 
           fs.writeFile(new_path, data, function(err) {
-                               console.log("In uploadfile --->Step-3");
 
             fs.unlink(old_path, function(err) {
-                                 console.log("In uploadfile --->Step-2");
 
               if (err) {
                 res.status(500);
                 res.json({'success': false});
               } else {
                 story.addAttachments(storyId,attachmentObj,function(err,data){
-                   console.log("In uploadfile --->Step1");
                 uploadfileService(storyId, file_name + '.' + file_ext, function(err, url) {
-                    console.log("In uploadfile --->step2");
                     if(err) { res.send(500).json(err); }
                     res.send(data);
                   });
@@ -133,19 +123,15 @@ router.post('/addattachments', function(req, res, next) {
     }else{
       fs.readFile(old_path, function(err, data) {
         fs.writeFile(new_path, data, function(err) {
-           console.log("In uploadfile --->step4");
 
           fs.unlink(old_path, function(err) {
             if (err) {
               res.status(500);
               res.json({'success': false});
             } else {
-          console.log("In uploadfile --->step5");
 
               story.addAttachments(storyId,attachmentObj,function(err,data){
-            console.log("In uploadfile --->step6");
                   uploadfileService(storyId, file_name + '.' + file_ext, function(err, url) {
-                    console.log("In uploadfile --->step2");
                     if(err) { res.send(500).json(err); }
                     res.send(data);
                   });
@@ -166,7 +152,6 @@ router.post('/removeattachement', function(req, res, next) {
   attachmentId=req.query.attachmentId,
   npath="public"+req.query.file_name;
   // npath="/public/uploadfile/5711f523be7cf90d2b5a138c/upload_da97b709ce281af6771ed7ea0b2c120d.jpg";
-  console.log(npath);
   fs.unlink(npath, function(err) {
     story.removeAttachment(storyId,attachmentId,function(err,data){
       res.send(data);
@@ -192,7 +177,6 @@ router.get('/addMemberToChecklist',function(req,res,next)
 {
 story.addMemberToChecklist(req,function(err,data)
 {
-  console.log("im in stor");
 });
 });
 
@@ -242,11 +226,9 @@ res.send(data);
 
 //ends
 router.get('/', function(req, res, next) {
-  console.log("route story get received");
   var storyId= req.query.id;
   //var storyId = "56ea47bd28c0f3dd0446b660";
 
-  console.log("inside story get");
   story.findStory(storyId, function(err, doc) {
     if(err){
       return(err);
@@ -261,10 +243,8 @@ router.post('/saveStoryDescription', function(req, res, next) {
   var storyId= req.query.id;
   var desc=req.query.desc;
   var github_profile=req.body;
-  console.log(github_profile);
 
   story.findIssue(storyId,function(err,storyData){
-    console.log("story",storyData);
     if(!err){
     GithubRepo.getRepo(storyData.projectId,function(err,repoData){
       if(!err && repoData){
@@ -276,7 +256,6 @@ router.post('/saveStoryDescription', function(req, res, next) {
           issue.repo_details=repoData;
           issue.github_profile=github_profile;
           issue.issueNumber=storyData.issueNumber;
-          console.log("issue",issue);
           queue.editStory.add(issue);
     }
   }
@@ -365,7 +344,6 @@ router.post('/', function(req, res, next){
          projectId = "56ea78ea15eac2a96fedb5ee";//TODO: pass dynamicaly
          sprintId = "56ea89de1d4b0a2572f25b9c";
          listId = "56ea89de1d4b0a2572f25b9f";
-         console.log("--------------------------------Adding Story ----" + doc["_id"]);
          //res.send(loadToBuglist(projectId, doc));
          res.send(loadToSprint(sprintId, listId, doc));
        }
@@ -377,7 +355,6 @@ function loadToBacklog(projectId, doc) {
       return(err);
     }
     else {
-      console.log("----------------------Story Added");
       return(doc);
     }
   });
@@ -388,7 +365,6 @@ function deleteFromBacklog(projectId, storyId) {
       return(err);
     }
     else {
-      console.log("----------------------Story Deleted from Backog");
       return(doc);
     }
   });
@@ -399,7 +375,6 @@ function loadToBuglist(projectId, doc) {
       return(err);
     }
     else {
-      console.log("----------------------Story Added");
       return(doc);
     }
   });
@@ -410,7 +385,6 @@ function deleteFromBuglist(projectId, storyId) {
       return(err);
     }
     else {
-      console.log("----------------------Story Added");
       return(doc);
     }
   });
@@ -421,7 +395,6 @@ function loadToSprint(sprintId, listId, doc) {
       return(err);
     }
     else {
-      console.log("----------------------Story Added");
       return(doc);
     }
   });
@@ -432,18 +405,15 @@ function deleteFromSprint(sprintId, listId, storyId) {
       return(err);
     }
     else {
-      console.log("----------------------Story Deleted From Sprint");
       return(doc);
     }
   });
 }
 
 router.get('/getStories',function(req,res,next){
-console.log(req.query.id);
   if (req.query.id) {
 
     story.getStories(req.query.id, function(err,data) {
-console.log(data);
       res.send(data);
     })
   } else {

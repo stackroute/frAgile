@@ -11,8 +11,6 @@ var githubCall=require('../githubIntegration/githubCall.js');
 var databaseCall=require('../githubIntegration/databaseCall.js');
 module.exports = function(socket, io) {
   socket.on('story:removeLabel', function(data) {
-    console.log("Received here remove label");
-    console.log(data);
     Story.removeLabel(data.storyid, data.labelid, function(err, storyData) {
       if (!err) {
         io.to(data.room).emit('story:dataModified', storyData);
@@ -34,15 +32,12 @@ module.exports = function(socket, io) {
           }
         }
         Activity.addEvent(actData, function(data) {
-console.log(data);
           io.to(actData.room).emit('activityAdded', data);
         });
       }
     });
   })
   socket.on('story:addLabel', function(data) {
-    console.log("Received here add label");
-    console.log(data);
     Story.addLabel(data.storyid, data.labelid, function(err, storyData) {
       if (!err) {
         io.to(data.room).emit('story:dataModified', storyData);
@@ -71,8 +66,6 @@ console.log(data);
     });
   })
   socket.on('story:addNewLabel', function(data) {
-    console.log("Received create label");
-    console.log(data);
     Template.addNewLabel(data.labelid, data.labelObj, function(err, doc) {
       if (!err) {
         data.labelObj._id = data.storyID
@@ -86,7 +79,6 @@ console.log(data);
   ****/
   socket.on('story:addMembers', function(data) {
     var atTheTimeOfIntegration=data.atTheTimeOfIntegration;
-    console.log("----------------------------------------redirecting to git-----------------------------------------");
     githubCall.editStory(data);
 
   databaseCall.addMember(data);
@@ -97,23 +89,18 @@ console.log(data);
   ****/
   socket.on('story:removeMembers', function(data) {
 
-    console.log("Data recieved by socket",data);
     Story.findIssue(data.storyid,function(err,storyData){
-      console.log("story",storyData);
 
       if(!err){
         var assignees=[];
         var issue={};
       GithubRepo.getRepo(storyData.projectId,function(err,repoData){
         if(!err && repoData){
-          console.log("Repo data",repoData);
           if(storyData.issueNumber){
             User.getUserMember(data.memberid,function(error,memberData){
-              console.log("Member Data",memberData);
               if(!error){
                   if(memberData.github){
                 storyData.memberList.forEach(function(member){
-                  console.log(member);
                   if(member.github){
                     assignees.push(member.github.name)
                   }
@@ -128,14 +115,12 @@ console.log(data);
                 if(index>-1){
                   assignees.splice(index,1);
 
-                console.log("assignees",assignees);
               issue.message={
                 'assignees':assignees
               }
               issue.repo_details=repoData;
               issue.github_profile=data.github_profile;
               issue.issueNumber=storyData.issueNumber;
-              console.log("issue",issue);
               queue.editStory.add(issue);
             }
           }
@@ -153,7 +138,6 @@ console.log(data);
 
           if (!err) {
             io.to(data.room).emit('story:dataModified', storyData);
-            console.log("Im in remove");
             var members = {
               _id: storyData._id,
               memberList: storyData.memberList
@@ -256,10 +240,6 @@ io.to(data.memberid).emit('story:memberRemoved',doc);
             }
             Activity.addEvent(actData, function(data) {
 
-console.log(data+"activity checklist todo");
-
-              console.log("emitting activity");
-              console.log(actData);
 
               io.to(actData.room).emit('activityAdded', data);
             });
@@ -390,8 +370,6 @@ console.log(data+"activity checklist todo");
 
     //start new
     socket.on('story:addRemoveMembersListItem',function(data){
-      console.log("i received something----->",data.assignedMember);
-    console.log("assignedMember array --->",data.assignedMember);
     io.to(data.roomName).emit('memberAdded',data);
      Story.addMemberToChecklist(data,function(err,doc)
    {
@@ -499,13 +477,11 @@ console.log(data+"activity checklist todo");
   socket.on('story:addComment', function(data) {
 
     Story.findIssue(data.storyId,function(err,storyData){
-      console.log("story",storyData);
 
       if(!err){
         var issue={};
       GithubRepo.getRepo(data.projectID,function(err,repoData){
         if(!err && repoData){
-          console.log("Repo data",repoData);
           if(storyData.issueNumber){
             issue.message={
               'body':data.text
@@ -513,7 +489,6 @@ console.log(data+"activity checklist todo");
             issue.repo_details=repoData;
             issue.github_profile=data.github_profile;
             issue.issueNumber=storyData.issueNumber;
-            console.log("issue",issue);
             queue.commentPost.add(issue);
           }
         }
@@ -527,7 +502,6 @@ console.log(data+"activity checklist todo");
     commentsObj['userName'] = data.user.fullName;
 
     commentsObj['commentedDate'] = Date.now();
-    console.log("in comment adding database",commentsObj);
     Story.addComment(data.storyId, commentsObj, function(err, storyData) {
       if (!err) {
         io.to(data.room).emit('story:dataModified', storyData);

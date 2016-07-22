@@ -22,20 +22,16 @@ exports = module.exports = function(socket,io) {
 
   self.setUser = function(user,io) {
     self.io=io;
-    console.log(io);
     self.user = user;
     var subscriber = require('redis').createClient(6379, '172.23.238.253');
     var publisher = require('redis').createClient(6379, '172.23.238.253');
-    console.log('Creating publisher');
 
     publisher.on('publish', function() {
-      console.log('Created publisher');
     });
 
     //subscribing all  channels
     socket.on('sub',function(data){
       subscriber.subscribe(data);
-      console.log("subscribed to :---",data);
     })
 
     //generating uuid
@@ -63,12 +59,9 @@ exports = module.exports = function(socket,io) {
       // console.log("subscribed to :",channel);
       var message1=JSON.parse(message);
 
-      console.log("Response uuid ",message);
 
-      console.log("command",message1.command);
       if(message1.command==='generateUUID'){
         //save to db
-        console.log(message1.details.projectId);
         if(message1.details.userId!==undefined)
         {
           var members=[message1.details.userId,message1.details.member];
@@ -80,10 +73,11 @@ exports = module.exports = function(socket,io) {
             projectId:message1.details.projectId
           }, function(err, data) {
             if(err){
-              console.log(err);
 
             }
-            else{console.log(data);}
+            else{
+
+            }
           });
         }
         else if(message1.details.projectId){
@@ -100,7 +94,6 @@ exports = module.exports = function(socket,io) {
 
                   group.save(function(err,groupDoc){
                     if(!err){
-                      console.log("GroupDoc",groupDoc);
 
                     }
                   })
@@ -115,11 +108,10 @@ exports = module.exports = function(socket,io) {
       }
 
       if(message1.command==='sendMessage'){
-        console.log(message1);
 
         if(message1.details && message1.details.prj){
           Personal.getChannelMembers(message1.content,function(err,doc){
-            if(!err) {console.log("on  middleware channel object",doc);
+            if(!err) {
             var sentToId;
             for(i=0;i<doc.subject;i++)
             {

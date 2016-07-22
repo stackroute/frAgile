@@ -100,7 +100,7 @@ var StorySchema = new Schema({
           uploadedBy:{type: Schema.Types.ObjectId, ref: 'User'},
           timeStamp:Date,
           description:String,
-          fileStatus:String          
+          fileStatus:String
         }],
     labelList: [String],
     githubSync: {type: Schema.Types.ObjectId,ref: 'GithubRepo'},
@@ -130,7 +130,6 @@ var StorySchema = new Schema({
       } else {
         //console.log("doc"+doc);
         //console.log(JSON.stringify(doc));
-        console.log("inside story model ----->",doc);
         callback(null, doc);
       }
     });
@@ -146,7 +145,6 @@ var StorySchema = new Schema({
   /*** addMembers function is used to assign the members to
   the story from the project members list.**/
   StorySchema.statics.addMembers = function(storyId, membersId, callback) {
-    console.log("im inside story model addMembers");
 
     //Find was written only for reference
     //  this.findOne({"_id":storyId}).exec(function(err,doc){ console.log(doc);});
@@ -319,7 +317,6 @@ StorySchema.statics.removeLabel = function(storyId,labelId, callback) {
         callback(err, null);
       }
       else {
-        console.log(doc);
         callback(null, doc);
       }
     });
@@ -570,7 +567,6 @@ StorySchema.statics.addMemberToChecklist=function(data,callback)
 {
 //console.log("im in story model -->",data);
 
-console.log("----------printig story-------------");
 
 this.findOne({
  "_id": data.storyId
@@ -714,7 +710,6 @@ Need to relook into this based on future implementation.
 ***/
 
 StorySchema.statics.deleteStory = function(storyId, callback) {
-  console.log("-------------------------------deleting Story: " + storyId);
   this.remove({
     "_id": storyId
   })
@@ -722,7 +717,6 @@ StorySchema.statics.deleteStory = function(storyId, callback) {
     if (err) {
       callback(err, null);
     } else {
-      console.log("-------------------------Deleted Story");
       callback(null, doc);
     }
   });
@@ -753,8 +747,6 @@ addComment function is to add new comments to the story.
 ***/
 
 StorySchema.statics.addComment = function(storyId, commentsObj, callback) {
-  console.log("add comments" + storyId);
-  console.log(commentsObj);
   this.findOneAndUpdate({
     "_id": storyId
   }, {

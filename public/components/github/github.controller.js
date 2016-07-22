@@ -7,7 +7,6 @@ fragileApp.controller('githubController',['$rootScope','$scope','$stateParams','
   $scope.selected=githubCntrl.selected;
   $scope.selectedIssues=[];
   $scope.selectedRepo={};
-  console.log(param);
   //   $scope.linkRepository=function(){
   //
   //     var repo=JSON.parse($scope.selectedRepo);
@@ -38,14 +37,11 @@ fragileApp.controller('githubController',['$rootScope','$scope','$stateParams','
       githubProfile: $rootScope.githubProfile,
       userId:$rootScope.userProfile._id
     }
-console.log("inside linke repo........");
     socket.emit("github:addRepo",repoDetails)
     $uibModalInstance.close();
   }
   $scope.getGithubIssues=function(){
     //console.log($stateParams);
-    console.log(param);
-    console.log(param.issues);
 
     //githubService.get
   }
@@ -64,10 +60,8 @@ console.log("inside linke repo........");
     }
 
 
-    console.log($scope.selectedIssues);
   }
   $scope.createStory=function(){
-    console.log("Issues",$scope.selectedIssues);
     socket.emit("github:convertToStory",{'issues':$scope.selectedIssues,'projectId':githubCntrl.GithubComplexObj.projectId,'userProfile':$rootScope.userProfile});
     $uibModalInstance.close();
 

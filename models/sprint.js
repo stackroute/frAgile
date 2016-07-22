@@ -131,8 +131,6 @@ sprintSchema.statics.deleteStory = function(sprintId, listId, storyId, callback)
       upsert: true
     })
     .exec(function(err, doc) {
-      console.log("error",err);
-      console.log("doc after updating",doc);
       if (err) {
         callback(err, null);
       } else {
@@ -186,8 +184,6 @@ sprintSchema.statics.findCurrentSprint = function(sprintIds, callback) {
   })
 
     .exec(function(err, doc) {
-      console.log("error in sprint",err);
-      console.log("doc",doc);
       if (err) {
         callback(err, null);
       } else {

@@ -54,8 +54,6 @@ module.exports = function(socket, io) {
     Project.updateProject(data.prId, newProject, function (err, doc) {
       if (!err) {
         newProject._id = data.prId;
-        console.log("--------------Project Edited now inside IO.js");
-        console.log(doc.memberList);
         doc.memberList.forEach(function(userID){
           var room = "user:"+ userID;
           io.to(room).emit('project:projectEdited', newProject);

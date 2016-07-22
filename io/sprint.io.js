@@ -12,13 +12,11 @@ module.exports = function(socket, io) {
 
   socket.on('sprint:moveStory', function(data) {
     Story.findIssue(data.storyId,function(err,storyData){
-      console.log("story",storyData);
 
       if(!err){
         var issue={};
         GithubRepo.getRepo(data.projectID,function(err,repoData){
           if(!err && repoData){
-            console.log("Repo data",repoData);
             if(storyData.issueNumber){
               if(data.newListName==="Releasable"){
                 issue.message={
@@ -43,7 +41,6 @@ module.exports = function(socket, io) {
               issue.repo_details=repoData;
               issue.github_profile=data.github_profile;
               issue.issueNumber=storyData.issueNumber;
-              console.log("issue",issue);
               queue.editStory.add(issue);
             }
           }
@@ -75,11 +72,9 @@ module.exports = function(socket, io) {
               socket.emit('sprint:storyActivity', data)
             });
           } else { //reverting changes
-            console.log("Couldn't delete story", socket.id);
             Sprint.deleteStory(data.sprintId, data.newListId, data.storyId, function(err, delStoryData) {
               if (err) console.log("Duplicate story created ", data.storyId);
               else {
-                console.log("Deleted previously added story", socket.id);
               }
 
             });
@@ -95,15 +90,12 @@ module.exports = function(socket, io) {
 
   socket.on('sprint:moveToBackbugStory', function(data) {
     //Adding story in new list, then deleting from old list
-    console.log("Moving To backlogBuglist",data);
     Story.findIssue(data.storyId,function(err,storyData){
-      console.log("story",storyData);
 
       if(!err){
         var issue={};
         GithubRepo.getRepo(data.projectID,function(err,repoData){
           if(!err && repoData){
-            console.log("Repo data",repoData);
             if(storyData.issueNumber){
               if(data.newListName==="Releasable"){
                 issue.message={
@@ -128,7 +120,6 @@ module.exports = function(socket, io) {
               issue.repo_details=repoData;
               issue.github_profile=data.github_profile;
               issue.issueNumber=storyData.issueNumber;
-              console.log("issue",issue);
               queue.editStory.add(issue);
             }
           }
@@ -153,7 +144,6 @@ module.exports = function(socket, io) {
 
               });
             } else { //reverting changes
-              console.log("Couldn't delete story", socket.id);
               BackLogsBugList.deleteStoryBacklog(data.projectID, data.storyId, function(err, delStoryData) {
                 if (err) console.log("Duplicate story created ", data.storyId);
                 else {
@@ -168,7 +158,6 @@ module.exports = function(socket, io) {
 
 
     } else if (data.newListId == "buglists") {
-      console.log(data);
       BackLogsBugList.addStoryBuglist(data.projectID, data.storyId, function(err, addStoryData) {
         if (addStoryData.nModified == 1) { //If add is succesful
           Sprint.deleteStory(data.sprintId, data.oldListId, data.storyId, function(err, delStoryData) {
@@ -185,7 +174,6 @@ module.exports = function(socket, io) {
 
               });
             } else { //reverting changes
-              console.log("Couldn't delete story", socket.id);
               BackLogsBugList.deleteStoryBuglist(data.projectID, data.storyId, function(err, delStoryData) {
                 if (err) console.log("Duplicate story created ", data.storyId);
                 else {
@@ -202,15 +190,12 @@ module.exports = function(socket, io) {
   });
 
   socket.on('sprint:moveFromBackbugStory', function(data) {
-    console.log("Moving From Backlog",data);
     Story.findIssue(data.storyId,function(err,storyData){
-      console.log("story",storyData);
 
       if(!err){
         var issue={};
         GithubRepo.getRepo(data.projectID,function(err,repoData){
           if(!err && repoData){
-            console.log("Repo data",repoData);
             if(storyData.issueNumber){
               if(data.newListName==="Releasable"){
                 issue.message={
@@ -235,7 +220,6 @@ module.exports = function(socket, io) {
               issue.repo_details=repoData;
               issue.github_profile=data.github_profile;
               issue.issueNumber=storyData.issueNumber;
-              console.log("issue",issue);
               queue.editStory.add(issue);
             }
           }
@@ -260,7 +244,6 @@ module.exports = function(socket, io) {
 
               });
             } else { //reverting changes
-              console.log("Couldn't delete story", socket.id);
               Sprint.deleteStory(data.sprintId, data.newListId, data.storyId, function(err, delStoryData) {
                 if (err) console.log("Duplicate story created ", data.storyId);
                 else {
@@ -289,7 +272,6 @@ module.exports = function(socket, io) {
 
               });
             } else { //reverting changes
-              console.log("Couldn't delete story", socket.id);
               Sprint.deleteStory(data.sprintId, data.newListId, data.storyId, function(err, delStoryData) {
                 if (err) console.log("Duplicate story created ", data.storyId);
                 else {
@@ -369,12 +351,9 @@ module.exports = function(socket, io) {
       storyCreatorId:data.user,
       projectId:data.projectId
     }
-    console.log(data.github_profile);
     GithubRepo.getRepo(data.projectId,function(err,repoData){
       if(!err && repoData){
         story.githubSync=repoData._id;
-        console.log("new story");
-        console.log(story);
         if(data.github_profile.id){
           var issue={}
           issue.message={
@@ -383,7 +362,6 @@ module.exports = function(socket, io) {
           }
           issue.github_profile=data.github_profile;
           issue.repo_details=repoData;
-          console.log(issue);
           var options={
             url:"https://api.github.com/repos/"+repoData.owner+"/"+repoData.name+"/issues?access_token="+data.github_profile.token,
             headers:{
@@ -394,7 +372,6 @@ module.exports = function(socket, io) {
           };
           api_calls.postIssue(options,function(error,response,body){
             if(response.statusCode===201 && !error){
-              console.log(body);
               story.issueNumber=body.number;
               saveStory(data,story);
             }
@@ -438,7 +415,6 @@ module.exports = function(socket, io) {
             if (!err) {
               io.to(data.room).emit('sprint:storyAdded', storyData);
               actData.object._id = storyData._id;
-              console.log("Activity added",actData);
               Activity.addEvent(actData, function(data) {
                 io.to(data.activityRoom).emit('activityAdded', data);
               });

@@ -35,7 +35,6 @@ function mycardCtrl ($scope) {
      $scope.date = newDate;
 }
   var ctrl=this;
-  console.log("hello",this.task.dueDate);
    $scope.myDate = new Date(this.task.dueDate);
   $scope.minDate = new Date(
       $scope.myDate.getFullYear(),

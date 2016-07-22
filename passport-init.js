@@ -12,7 +12,7 @@ var mongoose = require('mongoose'),
 
 	// Passport needs to be able to serialize and deserialize users to support persistent login sessions
 	passport.serializeUser(function(user, done) {
-		
+
 		done(null, user._id);
 	});
 
@@ -35,18 +35,15 @@ var mongoose = require('mongoose'),
 			// check in mongo if a user with email exists or not
 			User.findOne({ 'email' :  email },
 				function(err, user) {
-					console.log(err);
 					// In case of any error, return using the done method
 					if (err)
 						return done(err);
 					// Email does not exist, log the error and redirect back
 					if (!user){
-						console.log('User Not Found with email '+email);
 						return done(null, false);
 					}
 					// User exists but wrong password, log the error
 					if (user.password !== password){
-						console.log('Invalid Password');
 						return done(null, false); // redirect back to login page
 					}
 					else {
@@ -70,7 +67,6 @@ var mongoose = require('mongoose'),
 			User.findOne({ 'email' :  email }, function(err, user) {
 				// In case of any error, return using the done method
 				if (err){
-					console.log('Error in register: '+err);
 					return done(err);
 				}
 				// already exists
@@ -100,7 +96,6 @@ var mongoose = require('mongoose'),
 					// save the user
 					newUser.save(function(err) {
 						if (err){
-							console.log('Error in Saving user: '+err);
 							throw err;
 						}
 						return done(null, newUser);
@@ -154,7 +149,7 @@ var mongoose = require('mongoose'),
 		  },
 		  function(accessToken, refreshToken, profile, done) {
 		    	process.nextTick(function(){
-					
+
 		    		User.findOne({'google.id': profile.id}, function(err, user){
 		    			if(err)
 		    				return done(err);
@@ -193,23 +188,16 @@ var mongoose = require('mongoose'),
 			    callbackURL: configAuth.dropboxAuth.callbackURL
 			  },
 			  function(accessToken, refreshToken, profile, done) {
-			  	console.log(accessToken)
-			  	console.log(profile)
 			   Project.findOne({ 'dropbox.id': profile.id }, function (err, project) {
 			      	if(err){
-			      		console.log("Inside dropbox err.");
 			      		return done(err);
 			      	}else {
-			      	console.log("In refreshToken");
-			      console.log(" accessToken : ",accessToken);
-			      console.log("refreshToken: ",refreshToken);
-			      console.log("profile ",profile);
 
 			     return done(null, project);}
 			     });
 			  }
 			));
-			    
+
 			//================Dropbox ends
 		passport.use(new GitHubStrategy({
 			apiVersion: '2',
@@ -219,15 +207,11 @@ var mongoose = require('mongoose'),
 			passReqToCallback: true
 		  },
 		  function(req,accessToken, refreshToken, profile, done) {
-				console.log("entering in github");
-				console.log(accessToken);
-				console.log(refreshToken);
 
 		    // asynchronous verification, for effect...
 		    process.nextTick(function () {
 					User.findOne({'github.id': profile.id}, function(err, user){
 						if(err){
-							console.log(err);
 							return done(err);}
 						if(user){
 

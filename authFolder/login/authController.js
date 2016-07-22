@@ -54,9 +54,7 @@ if (nv) {
       sendStatus:false
     };
     $scope.passportLogin = function(){
-      console.log("In passportLogin");
       $http.post('/auth/login',$scope.user).success(function(data){
-        console.log("user details",data);
         if(data.error) {
           $scope.logInErrorMsg = data.error;
           //$window.location.href = '/index.html';
@@ -97,13 +95,13 @@ if (nv) {
     }
     //verifyCode ends
     $scope.forgotPassword=function()
-    { 
+    {
       var code=Math.floor(Math.random()*90000) + 10000;
       $rootScope.newUser.code=code;
 
 
       $http.post('/auth/forgotpass',$rootScope.newUser).success(function(data)
-      {         
+      {
           if(data.error){
               $scope.passwordErrorMsg=data.error;
             $timeout(function() {$scope.passwordErrorMsg='';}, 2000);
@@ -142,7 +140,6 @@ if (nv) {
                     $timeout(function() {$scope.passwordUpdateMsg='';}, 2000);
 
                 } else{
-                    console.log("I am in reset password");
                      $scope.passwordUpdateMsg="Password changed! Login again."
                       $timeout(function() {$scope.passwordUpdateMsg=''; $window.location.href = '/index.html';}, 2000);
 

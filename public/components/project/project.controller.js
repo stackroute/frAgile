@@ -11,7 +11,6 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,$http,$window,cards
   var socket = Socket($scope);
   //Temporary fix, make a better logic
   if ($scope.refreshProjects) {
-    console.log("Refreshing project");
     homeService.getUserProjects().success(function(response) {
       $rootScope.projects = response.projects
       // if($rootScope.githubProfile.length!==0){
@@ -28,7 +27,6 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,$http,$window,cards
   socket.on("startSync",function(projectId)
   {
     syncArray.push(projectId);
-    console.log("------------",syncArray,syncArray.length);
   });
   $scope.syncValue=function(projectId)
   {
@@ -108,14 +106,10 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,$http,$window,cards
     $uibModalInstance.dismiss('cancel');
   }
   $scope.linkDropbox=function (projectId){
-    console.log(" the pid ------------->",projectId);
     localStorage.projectToLinkWithDropbox=projectId;
     $window.location.href="/auth/dropbox";
   }
   $scope.editProject = function(newProjectName, newProjectDetails, prId) {
-    console.log(newProjectName);
-    console.log(newProjectDetails);
-    console.log(prId);
     if (newProjectName != "") {
       socket.emit('project:editProject', {
         'room': 'projectRoom',
@@ -171,7 +165,6 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,$http,$window,cards
 
   };
   $scope.starFun = function(rel) {
-    console.log("starFun" + rel);
   };
 
   $scope.setProject = function(projectId, projectName, releaseId, releaseName, releaseDesc) {
@@ -182,13 +175,10 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,$http,$window,cards
   }
 
   socket.on('project:releaseEdited', function(releaseData) {
-    console.log(releaseData);
-    console.log("--------------");
     $rootScope.projects.forEach(function(item, itmIndex) {
       if (item._id == releaseData.prId) {
         item.release.forEach(function(rel, relIndex) {
           if (rel._id == releaseData._id) {
-            console.log($rootScope.projects[itmIndex].release[relIndex]);
             $rootScope.projects[itmIndex].release[relIndex].name = releaseData.name;
             $rootScope.projects[itmIndex].release[relIndex].description = releaseData.description;
             $rootScope.projects[itmIndex].release[relIndex].releaseDate = releaseData.releaseDate;
@@ -214,8 +204,6 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,$http,$window,cards
   });
 
   socket.on('project:projectEdited', function(newProject) {
-    console.log("----projectEdited----");
-    console.log(newProject);
     $rootScope.projects.forEach(function(project, projectIndex) {
       if (project._id == newProject._id) {
         $rootScope.projects[projectIndex].name = newProject.name;
@@ -225,8 +213,6 @@ function($scope, $state, $rootScope, $stateParams, $uibModal,$http,$window,cards
   });
 
   socket.on('github:changeGithubStatus', function(githubRepo) {
-    console.log("----GithubEdited----");
-    console.log(githubRepo);
     $rootScope.projects.forEach(function(project, projectIndex) {
       if (project._id == githubRepo.projectId) {
         $rootScope.projects[projectIndex].githubStatus = githubRepo.githubStatus;
@@ -246,13 +232,10 @@ $scope.syncAgain=function(projectId)
 }
 
     socket.on('project:releaseEdited', function(releaseData) {
-      console.log(releaseData);
-      console.log("--------------");
       $rootScope.projects.forEach(function(item, itmIndex) {
         if (item._id == releaseData.prId) {
           item.release.forEach(function(rel, relIndex) {
             if (rel._id == releaseData._id) {
-              console.log($rootScope.projects[itmIndex].release[relIndex]);
               $rootScope.projects[itmIndex].release[relIndex].name = releaseData.name;
               $rootScope.projects[itmIndex].release[relIndex].description = releaseData.description;
               $rootScope.projects[itmIndex].release[relIndex].releaseDate = releaseData.releaseDate;
@@ -323,10 +306,8 @@ $scope.syncAgain=function(projectId)
       alert(data);
     });
     $scope.getRepo= function(prId){
-      console.log(prId);
       githubService.getAllRepos().success(function(response){
 
-        console.log(response);
         modalInstance=$uibModal.open({
           animation: true,
           templateUrl: "/components/github/github.modal.view.html",
@@ -344,20 +325,16 @@ $scope.syncAgain=function(projectId)
           }
         });
         modalInstance.result.then(function (){
-          console.log("in first closing");
           $state.go('project');
         },function(){
-          console.log("closing");
         })
 
       })
     }
 
     $scope.getIssues=function(prId){
-      console.log(prId);
       githubService.getIssues(prId).success(function(response){
 
-        console.log(response);
         modalInstance=$uibModal.open({
           animation: true,
           templateUrl: "/components/github/github.issues.view.html",
@@ -378,7 +355,6 @@ $scope.syncAgain=function(projectId)
           console.log("in first closing");
           //$state.go('project');
         },function(){
-          console.log("closing");
         })
 
       })

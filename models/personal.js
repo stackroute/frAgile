@@ -9,7 +9,6 @@ projectId:String
 });
 
 personalSchema.statics.findMatchedSubject = function(projectId,memberList, callback) {
-console.log("MemberList",memberList);
   this.findOne({
       "projectId": projectId,
       "subject": {"$size":2,"$all":memberList}
@@ -18,7 +17,6 @@ console.log("MemberList",memberList);
       if (err) {
         callback(err, null);
       } else {
-  console.log("in personal doc",doc);
         callback(null, doc);
       }
     });
@@ -32,7 +30,6 @@ personalSchema.statics.getChannelMembers = function(channelId, callback) {
       if (err) {
         callback(err, null);
       } else {
-  console.log("channel obj",doc);
         callback(null, doc);
       }
     });

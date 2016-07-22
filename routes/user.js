@@ -51,8 +51,6 @@ router.post('/updateUser', function(req, res, next) {
   newUserDetails.firstName= req.body.firstName;
   newUserDetails.lastName= req.body.lastName;
   newUserDetails.email= req.body.email;
-  console.log("----------updateUser");
-  console.log(newUserDetails);
   User.updateUser(req.user._id, newUserDetails, function(err, data) {
     if (err)
       res.send("false");
@@ -74,8 +72,6 @@ router.get('/getUserDetails', function(req, res, next) {
   res.send(userDetails);
 });
 router.get('/githubAccount', function(req, res, next) {
-console.log("github account");
-  console.log(req.user.github.id);
   if(req.user.github.id){
   accountDetails = {
     id: req.user.github.id,
@@ -104,17 +100,13 @@ router.get('/getUserId', function(req, res, next) {
 router.get('/getUsers', function(req, res, next){
   if(req.query.email){
     User.getUserEmail(req.query.email, function(err, data){
-console.log(err);
       if(!err){
-console.log("-----in getting cards from user model------");
-console.log(data);
         res.send(data);}
     })
   }
 })
 
 router.get('/cards',function(req,res,next){  if (req.user._id) {
-console.log(req.user._id+"  user id in user routes");
     User.getCards(req.user._id, function(data) {
       res.send(data);
     })

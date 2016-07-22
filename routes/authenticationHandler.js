@@ -31,7 +31,6 @@ module.exports = function(passport){
 
 	//sign up
   router.use('/register',function(req,res,next) {
-    console.log("Request Body.",req.body);
     next();
   });
 
@@ -45,7 +44,6 @@ module.exports = function(passport){
     res.redirect('/index.html');
   });
 router.get('/home',function(req,res) {
-    console.log("blah");
   });
 
 // var projectId="";
@@ -58,15 +56,12 @@ router.get('/home',function(req,res) {
 router.get('/dropbox',passport.authorize('dropbox-oauth2'));
   router.get('/dropbox/callback',passport.authorize('dropbox-oauth2', { successRedirect: '/home.html',failureRedirect: '/home.html' }),
     function(req,res){
-      console.log(req);
-      console.log("account for Dbox is",req.account);
       res.redirect('/home.html');
     });
   router.get('/github',passport.authorize('github', { scope: ['repo','user','read:org']}));
   router.get('/github/callback',passport.authorize('github', { successRedirect: '/home.html',failureRedirect: '/home.html' }),
     function(req,res){
       //console.log(req);
-      console.log("account is",req.account);
       res.redirect('/home.html');
     });
 
@@ -83,14 +78,13 @@ router.get('/facebook/callback',
     router.get('/google/callback',
      passport.authenticate('google', { successRedirect: '/home.html',
        failureRedirect: '/index.html'}));
-    
+
     router.post('/register', passport.authenticate('sign-up', {
       successRedirect: '/auth/success',
       failureRedirect: '/auth/regfailure'
     }));
       // this is for resetting the password
       router.post('/resetPassword',function(req,res,next){
-        console.log("The new password is ",req.body);
         User.findOne({
           'email':req.body.email
         }).exec(function(err,user)
@@ -99,14 +93,11 @@ router.get('/facebook/callback',
             {    console.log("In data base error " , err);
         }
         else if (!user){
-          console.log('User Not Found with email '+email);
-          
+
         } else{
 
-          console.log("User is found: old password ",user.password)
 
           user.password=req.body.password;
-          console.log("User is found: new password ",user.password);
           user.save();
           next();
         }
@@ -121,10 +112,8 @@ router.get('/facebook/callback',
         var code=Math.floor(Math.random()*90000) + 10000;
         User.findOne({'email':req.body.email}).exec(function(err,user){
           if(err){
-            console.log(err);
             res.send({error:"Something went wrong. Please try again."});
           }else if(user){
-            console.log("user is server ", user.password);
 
          res.send({error:"EMAIL_ERR"})
           } else{
@@ -136,8 +125,7 @@ router.get('/facebook/callback',
                 pass: 'mylimber@123'
               }
             });
-             
-             console.log("code is in server ",code);
+
              var mailOption={
               from:'Limber <mylimberapp@gmail.com>',
               to:email,
@@ -148,13 +136,10 @@ router.get('/facebook/callback',
             transporter.sendMail(mailOption,function(error,info){
               if(error){
 
-                console.log(error);
                 res.redirect('/index.html')
               }
               else{
-                console.log("All done!");
                         //res.send(code);
-                        console.log("new code, ",code)
                     res.send({code:code});
                     //res.redirect('/index.html')
                   }
@@ -163,15 +148,13 @@ router.get('/facebook/callback',
           }//main else
 
         });
-       
-        console.log("new email",email);
+
 
       });
       //verify new user ends
       //this is for forgot password
       router.post('/forgotpass',function(req,res,next)
         { var email=req.body.email;
-          console.log(" in server email",req.body);
           User.findOne({
             'email': req.body.email
           }).exec(function(err,user){
@@ -190,7 +173,6 @@ router.get('/facebook/callback',
               }
             });
              var code=req.body.code;
-             console.log("code is in server ",code);
              var mailOption={
               from:'Limber <mylimberapp@gmail.com>',
               to:email,
@@ -201,11 +183,9 @@ router.get('/facebook/callback',
             transporter.sendMail(mailOption,function(error,info){
               if(error){
 
-                console.log(error);
                 res.redirect('/forgot.html')
               }
               else{
-                console.log("All done!");
                         //res.send(code);
                         res.redirect('/forgot.html')
                       }

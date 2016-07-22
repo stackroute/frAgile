@@ -6,7 +6,6 @@ fragileApp.factory('storyService',['$http','$filter',function($http,$filter) {
       this.saveStoryDescription = function(storyId,desc,githubProfile) {
     //    console.log("inside story factory");
     var encodedDesc=this.encodedString = $filter('bcEncode')(desc);
-     console.log(encodedDesc);
 
         return  $http.post('/story/saveStoryDescription?id='+storyId+'&desc='+encodedDesc,githubProfile);
       };
@@ -30,7 +29,6 @@ parameters:projectId
 description: This function is used to get the whole set of data particular to a project to copy\move the story across the releases\sprints of  project
 ***/
       this.getStoryCopyMovementData = function(projectId){
-        console.log("projectId"+projectId);
         return $http.post('/project/getstorymovedata?id='+projectId);
       }
 
@@ -61,8 +59,6 @@ fragileApp.factory('modalService', function($uibModal) {
           size: size,
           resolve: {
             param: function() {
-              console.log("params in modal factory :::::  ");
-              console.log(subController);
               return params;
             }
           }

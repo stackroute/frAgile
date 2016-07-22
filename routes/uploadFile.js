@@ -4,7 +4,6 @@ var fs=require("fs");
 var uploadFileDir = __dirname + "/../public/uploadfile/";
 
 exports = module.exports = function(storyId, fileName, callback) {
-                      console.log("In uploadfile --->step3");
 
 var options = {
   url: 'https://content.dropboxapi.com/2/files/upload',
@@ -22,10 +21,8 @@ var options = {
 });*/
 
 var source = fs.createReadStream(uploadFileDir + storyId + '/' + fileName);
-                    console.log("In uploadfile --->step4");
 source.pipe(request.post(options, function(error, response, body) {
   if (error) return callback(error);
-  console.log(body);
   callback(null);
 }));
 }

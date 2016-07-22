@@ -8,8 +8,6 @@ var request=require('request');
 var github_api = require("./github-api.js");
 
 router.post('/repos',function(req,res, next){
-  console.log("in routes");
-  console.log(req.body);
   var githubRepo= new GithubRepo();
   githubRepo.name=req.body.name;
   githubRepo.owner=req.body.owner;
@@ -42,9 +40,7 @@ router.post('/repos',function(req,res, next){
 
 router.get('/repos',function(req,res){
 
-  console.log("user repos",req.user);
   var access_token=req.user.github.token;
-  console.log(req.user.github.token);
 
   var options={
     url:'https://api.github.com/user/repos',
@@ -57,10 +53,8 @@ router.get('/repos',function(req,res){
   //github_api.getRepos(options)
   github_api.getRepos(options, function(error,response,body){
     if(error) {
-      console.log("Error in git api request: ", error);
       res.send(error);
     } else {
-      console.log("repos",body);
       res.send(JSON.parse(body));
     }
   });
@@ -70,7 +64,6 @@ router.get('/issues',function(req,res){
   GithubRepo.getRepo(req.query.projectId,function(err,doc){
     var projectId=req.query.projectId;
 
-    console.log("Repo:",doc);
     var options={
       url:'https://api.github.com/repos/'+doc.owner+"/"+doc.name+"/issues",
       headers:{
@@ -79,17 +72,14 @@ router.get('/issues',function(req,res){
     };
     github_api.getIssues(options,function(error,response,body){
       if(error) {
-        console.log("Error in issue: ", error);
         res.send(error);
       } else {
-        console.log("got response");
         var filteredBody=[];
         var issueNumbers=[];
         Story.findConvertedIssues(projectId,function(err,docs){
           docs.forEach(function(story){
             issueNumbers.push(story.issueNumber);
           })
-          console.log({"allIssues":JSON.parse(body),"syncedIssueNumbers":issueNumbers,"githubRepo":doc.owner+"/"+doc.name});
           // JSON.parse(body).forEach(function(item){
           //   if(issueNumbers.indexOf(item.number.toString())==-1)
           //   filteredBody.push(item);
@@ -122,10 +112,8 @@ router.post('/issues',function(req,res){
         },
         json:message
       };
-      console.log(options.url);
 
       request.post(options,function(err,response,body){
-        console.log(response);
         if(!err && response.statusCode==201){
           console.log(body);
           res.send(body)

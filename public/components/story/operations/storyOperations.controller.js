@@ -1,7 +1,6 @@
 fragileApp.controller('storyOperationsController',['$scope','$rootScope','$stateParams','storyService','modalService','$uibModal','$uibModalInstance','$location','param','Socket',function($scope,$rootScope,$stateParams,storyService,modalService,$uibModal,$uibModalInstance,$location,param,Socket){
 
 var socket = Socket($scope);
-console.log(" story controler param:",param);
 
   //TODO:need to check whether we need to get the "$scope.memberDetails" data directly from rootscope without resolving it in story Modal.   ---->Check
 
@@ -11,7 +10,6 @@ console.log(" story controler param:",param);
 
   //TODO:Add dismisal for all sub modal --->Added cancel, call it from modals
 
-  console.log($stateParams);
   /***Received the data from resolve functionality of uibModal***/
   $scope.storyDetails= param.story.data;
   $scope.roomName = "sprint:" + param.sprint._id;
@@ -35,9 +33,7 @@ console.log(" story controler param:",param);
     $scope.checked = true;
     $scope.membersData = [];
     /** XHR request to fetch latest members details***/
-    console.log($scope.storyDetails._id);
     storyService.getMembersData($scope.storyDetails._id).then(function(response) {
-      console.log(response);
       $scope.membersData=response.data;
     });
 
@@ -52,7 +48,6 @@ console.log(" story controler param:",param);
     $scope.checked = true;
     $scope.membersData = [];
     /** XHR request to fetch latest members details***/
-    console.log($scope.storyDetails._id);
     // $scope.membersData=$scope.assMember;
 
     // storyService.getMembersData($scope.storyDetails._id).then(function(response) {
@@ -70,14 +65,11 @@ console.log(" story controler param:",param);
   ***/
   $scope.initLabels = function(){
     $scope.sprintDetails= param.sprint; //required in labels
-    console.log($rootScope.projects);
     var respObj= $rootScope.projects.filter(function(item) { return item._id === $stateParams.prId; });
     $scope.labelsData = respObj[0].labelId.labelList;
     $scope.labeltemplateId = respObj[0].labelId._id;
-    console.log($scope.labelsData);
 
     $scope.labelTemplateData= param.labelTemplateData;
-    console.log($scope.labelTemplate);
 
     $scope.labelTemplate={};
     /*** Declaring variables required for addMembers,addLabels***/
@@ -87,9 +79,7 @@ console.log(" story controler param:",param);
     $scope.storylabelsData = [];
     $scope.selectedLabel=[];
     /** XHR request to fetch latest members details***/
-    console.log($scope.storyDetails._id);
     storyService.getLabelsData($scope.storyDetails._id).then(function(response) {
-      console.log(response);
       $scope.storylabelsData=response.data;
     });
   }
@@ -102,7 +92,6 @@ console.log(" story controler param:",param);
   ***/
   $scope.initCopyMoveStory=function(isMove){
     $scope.sprintDetails= param.sprint;
-    console.log($scope.sprintDetails);
     if(isMove){
       $scope.moveCopyButtonDisabled=true;
     }else{
@@ -365,8 +354,6 @@ console.log(" story controler param:",param);
     // var labelCheck = $scope.storyDetails.labelList.filter(function ( obj ) {
     //   return obj._id === labelObj._id;
     // })[0];
-    console.log("dsrfdsdsfdsdsdsffds");
-    console.log(labelObj);
     if ($scope.storylabelsData.indexOf(labelObj._id)!=-1) {
       //remove members working, tested
       socket.emit('story:removeLabel', {
@@ -457,15 +444,12 @@ console.log(" story controler param:",param);
 
   socket.on('story:membersModified', function(data) {
     //Not Receiving any data
-    console.log(data.memberList);
     if(data._id == $scope.storyDetails._id){ //If the updated card is same as current opened card
       $scope.membersData = data.memberList;
-      console.log("meberlist------------------------",data.memberList);
     }
   })
   socket.on('story:labelsModified', function(data) {
     //Not Receiving any data
-    console.log(data);
     if(data._id == $scope.storyDetails._id){ //If the updated card is same as current opened card
       $scope.labelsData.push(data.labelList);
     }

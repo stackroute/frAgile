@@ -5,16 +5,12 @@ fragileApp.config(function($stateProvider,$urlRouterProvider){
     url : ':sprintID/:storyID',
     params:{prId:null},
     onEnter: function($stateParams, $state, $uibModal,sprintService,$rootScope) {
-console.log("param:");
-console.log($stateParams);
       sprintService.getSprints($stateParams.sprintID).then(function(sprintObj){
         sprintService.getStory($stateParams.storyID).then(function(storyObj){
 
 
           sprintObj.data.list.forEach(function(list){
-            console.log(list);
             list.stories.forEach(function(story){
-              console.log(story);
               if(story._id===storyObj.data._id){
                 currentPosition.listId=list._id;
                 currentPosition.listItemName=list.listName;

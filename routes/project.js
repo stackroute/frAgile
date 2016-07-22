@@ -51,8 +51,6 @@ router.get('/', function(req, res, next) {
       if (err) {
         res.send(err);
       } else {
-        // console.log(doc);
-        // console.log("--------------------------");
         res.send(doc);
       }
     });
@@ -61,7 +59,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-  console.log(req.body);
   Project.create({
     name: req.body.name,
     description: req.body.desc,
@@ -70,7 +67,6 @@ router.post('/', function(req, res, next) {
     memberList :[req.user._id]
   }, function(err, data) {
     if(err){
-      console.log(err);
       res.send(err);
     }
 
@@ -133,9 +129,6 @@ router.post('/updateProject', function(req, res, next) {
   newProject = {};
   newProject.name = req.body.name;
   newProject.description = req.body.description;
-  console.log("-------------------Inside update project");
-  console.log(newProject);
-  console.log("Project id - " + req.body.projectId);
   Project.updateProject(req.body.projectId, newProject, function(err, doc) {
     if (err) {
       res.send(err);
@@ -198,7 +191,6 @@ router.post('/updateRelease', function(req, res, next) {
 });
 
 router.post('/getstorymovedata',function(req,res,next){
-  console.log("received inside route----->"+req.query.id);
   var projectId = req.query.id;
   Project.getStoryMoveData(projectId,function(err,doc){
     if (err) {
@@ -210,11 +202,9 @@ router.post('/getstorymovedata',function(req,res,next){
 });
 
 router.get('/channelId',function(req,res,next){
-  console.log("Query",req.query);
 
   Personal.findMatchedSubject(req.query.projectId,req.query.member,function(err,doc){
     if(!err){
-      console.log("Response from db",doc);
       res.send(doc);
     }
     else {console.log(error);}
@@ -223,12 +213,10 @@ router.get('/channelId',function(req,res,next){
 });
 
 router.get('/allChannels',function(req,res,next){
-  console.log(req.query);
   Personal.find(
     {"projectId":req.query.projectId
   } ,function(err,doc){
     if(!err){
-      console.log(doc);
       res.send(doc);
     }
     else {console.log(error);}
@@ -237,10 +225,8 @@ router.get('/allChannels',function(req,res,next){
 });
 
 router.get('/groupDetails',function(req,res,next){
-  console.log("group params from servcice",req.query);
   Group.getGroupDetails(req.query.channelIds,function(err,doc){
     if(!err){
-      console.log("group details from collection",doc);
       res.send(doc);
     }
   })

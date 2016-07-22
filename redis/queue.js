@@ -23,13 +23,10 @@ storyPost.process(function(job,done){
    },
    json:job.data.message
  };
- console.log("insdie story queue------------");
- console.log(options.url);
- console.log(job.data);
+
  request.post(options,function(err,res,body){
    //console.log(res);
    if(!err && res.statusCode==201){
-  console.log(body);
      Story.findOne({_id: job.data.message.storyId}, function (err, story) {
          story.issueNumber = body.number;
          story.save(function (err) {
@@ -59,7 +56,6 @@ else{
 });
 
 commentPost.process(function(job,done){
-  console.log(job);
   var options={
     url:"https://api.github.com/repos/"+job.data.repo_details.owner+"/"+job.data.repo_details.name+"/issues/"+job.data.issueNumber+"/comments?access_token="+job.data.github_profile.token,
     headers:{
@@ -70,7 +66,6 @@ commentPost.process(function(job,done){
 
   };
  request.post(options,function(err,res,body){
-   console.log("Comment post",body);
 if(!err && res.statusCode==="201") done(null,body);
 done(res,null);
 
@@ -90,10 +85,7 @@ editStory.process(function(job,done){
     method: "PATCH"
   };
 
-  console.log(options.url);
-  console.log(job.data);
   request.post(options,function(err,res,body){
-    console.log("error----------------",err);
     //console.log(res);
     //console.log(body);
     //console.log(res.statusCode);
@@ -107,17 +99,14 @@ editStory.process(function(job,done){
 //adding collaborator to git starts here
 collaboratorPost.process(function(job,done)
 {
- console.log("---------------jod data=----",JSON.stringify(job.data));
  request.put(job.data.urlOptions,function(error,response,body)
 {
  if(!error)
  {
    Project.updateCollaborators({projectId:job.data.projectId,collaboratorId:job.data.userId},function(err,projectData)
    {
-     console.log("adding as collaborator---------------------- ----------------------------------",projectData.collaboratorsList);
      if(!err)
        {
-       console.log("in queue--- calling pushStories function ---------");
        if(job.data.addingOneMember)
        {
          githubCall.pushStories({atTheTimeOfIntegration:true,projectId:job.data.projectId,userId:job.data.userId,collaboratorsList:projectData.collaboratorsList});
@@ -138,23 +127,16 @@ else {
 //adding collaborator to git ends here
 
 addGitIssues.process(function(job,done){
-  console.log("inside addGitIssues");
   var owner=job.data.repository.owner.login;
   var name=job.data.repository.name;
   var number=job.data.issue.number;
 
-  console.log(job.data);
   if(job.data.action==="opened"){
-    console.log("in opened",owner,name);
   GithubRepo.getGitRepo(owner,name,function(err,doc){
-    console.log(doc);
     if(!err && doc){
-      console.log(doc);
 
       Story.findbyGithubId(doc._id,number,function(error,storyData){
-        console.log(storyData);
         if(!error && !storyData){
-          console.log("inside creating story");
           var story=new Story();
           User.findOne({'github.id': job.data.sender.id}, function(err, user){
             if(user){
@@ -164,7 +146,6 @@ addGitIssues.process(function(job,done){
               story.storyCreatorId=null;
               story.issueCreatorId=job.data.sender.id;
             }
-            console.log("user",user);
           story.listId="Backlogs";
           story.heading=job.data.issue.title;
           story.projectId=doc.projectId;
@@ -177,11 +158,8 @@ addGitIssues.process(function(job,done){
 
           Story.addStory(story,function(err,storyData){
             if(!err){
-              console.log("Github Issues Added",storyData);
               BackLogsBugList.addStoryBacklog(doc.projectId, storyData._id, function(err, subDoc) {
                 if(!err){
-                  console.log("Updated Backlog bUg list",subDoc);
-                  console.log("BacklogBuglist:"+doc.projectId);
                   io.to("BacklogBuglist:"+doc.projectId).emit("sprint:storyAdded",storyData);
                   done(null,null);
                 }
@@ -201,16 +179,12 @@ addGitIssues.process(function(job,done){
 
   }
   else if(job.data.action==="assigned" || job.data.action==="unassigned"){
-    console.log("in Assigned");
     GithubRepo.getGitRepo(owner,name,function(err,doc){
       if(!err && doc){
-        console.log(doc);
 
         Story.findbyGithubId(doc._id,number,function(error,storyData){
           if(!error && storyData){
-            console.log("Story ",storyData);
             User.findOne({'github.id': job.data.assignee.id}, function(err, user){
-              console.log(user);
               if(!err && user){
                 Project.findOneProject(doc.projectId,function(err,project){
                   if(project.memberList.indexOf(user._id)!=-1){
@@ -231,10 +205,8 @@ addGitIssues.process(function(job,done){
                   if(storyData.listId==="inProgress" || storyData.listId==="Releasable"){
                   Sprint.findSprintForStory(storyData._id,function(err,sprint){
                     if(!err){
-                      console.log("Sprints",sprint);
                       data.room="sprint:"+sprint._id;
 
-                      console.log("Data in ",data);
                       databaseCall.addMember(data);
                       //storyData.memberList.push(user._id);
                     }
@@ -263,10 +235,8 @@ addGitIssues.process(function(job,done){
                     if(storyData.listId==="inProgress" || storyData.listId==="Releasable"){
                     Sprint.findSprintForStory(storyData._id,function(err,sprint){
                       if(!err){
-                        console.log("Sprints",sprint);
                         data.room="sprint:"+sprint._id;
 
-                        console.log("Data in ",data);
                         databaseCall.removeMember(data);
                         //storyData.memberList.push(user._id);
                       }
@@ -313,13 +283,10 @@ addGitIssues.process(function(job,done){
   else if(job.data.action==="closed"){
     GithubRepo.getGitRepo(owner,name,function(err,doc){
       if(!err && doc){
-        console.log(doc);
 
         Story.findbyGithubId(doc._id,number,function(error,storyData){
           if(!error && storyData){
-            console.log("Story ",storyData);
             User.findOne({'github.id': job.data.sender.id}, function(err, user){
-              console.log(user);
               if(user){
               user.fullName=user.firstName + " " + user.lastName;
             }
@@ -330,11 +297,9 @@ addGitIssues.process(function(job,done){
               if(!err){
                  if(storyData.listId==="inProgress"){
                 Sprint.findSprintForStory(storyData._id,function(err,sprint){
-                  console.log("sprint",sprint);
                   if(!err && sprint){
                     var group="Releasable";
                     Sprint.findReleasableListId(sprint._id,group,function(error,releasableListId){
-                      console.log(releasableListId);
                       if(!error){
                         var data={
                         'room': "sprint:"+sprint._id,
@@ -360,15 +325,12 @@ addGitIssues.process(function(job,done){
     }
         else if(storyData.listId==="Backlogs"){
           Project.getRelease(storyData.projectId,function(err,release){
-            console.log("Release",release[0].release.sprints);
             if(!err && release){
             Sprint.findCurrentSprint(release[0].release.sprints,function(error,sprint){
-              console.log("current Sprint",sprint[0]);
               if(!error && sprint){
                 var group="Releasable";
                 Sprint.findReleasableListId(sprint[0]._id,group,function(error,releasableListId){
 
-                    console.log(releasableListId);
                     if(!error){
                       var data={
                       'room': "sprint:"+sprint[0]._id,
@@ -381,7 +343,6 @@ addGitIssues.process(function(job,done){
                       'storyId': storyData._id,
                       'user':user
                     }
-                    console.log("data",data);
                     databaseCall.moveFromBackbug(data)
                       //'github_profile':$rootScope.githubProfile
 
@@ -398,15 +359,12 @@ addGitIssues.process(function(job,done){
         }
         else if(storyData.listId==="BugLists"){
           Project.getRelease(storyData.projectId,function(err,release){
-            console.log("Release",release);
             if(!err && release){
             Sprint.findCurrentSprint(release[0].release.sprints,function(error,sprint){
-              console.log("current Sprint",sprint[0]);
               if(!error && sprint[0]){
                 var group="Releasable";
                 Sprint.findReleasableListId(sprint[0]._id,group,function(error,releasableListId){
 
-                    console.log(releasableListId);
                     if(!error){
                       var data={
                       'room': "sprint:"+sprint[0]._id,
@@ -446,13 +404,10 @@ addGitIssues.process(function(job,done){
       else if(job.data.action==="reopened"){
         GithubRepo.getGitRepo(owner,name,function(err,doc){
           if(!err && doc){
-            console.log(doc);
 
             Story.findbyGithubId(doc._id,number,function(error,storyData){
               if(!error && storyData){
-                console.log("Story ",storyData);
                 User.findOne({'github.id': job.data.sender.id}, function(err, user){
-                  console.log(user);
                   if(user){
                   user.fullName=user.firstName + " " + user.lastName;
                 }
@@ -463,11 +418,9 @@ addGitIssues.process(function(job,done){
                   if(!err){
                     if(storyData.listId==="Releasable"){
                       Sprint.findSprintForStory(storyData._id,function(err,sprint){
-                        console.log("sprint",sprint);
                         if(!err && sprint){
                           var group="Releasable";
                           Sprint.findReleasableListId(sprint._id,group,function(error,releasableListId){
-                            console.log(releasableListId);
                             if(!error){
                               var data={
                               'room': "sprint:"+sprint._id,

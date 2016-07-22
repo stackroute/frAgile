@@ -17,11 +17,8 @@ addMember:function(data)
   Story.addMembers(data.storyid, data.memberid, function(err, doc) {
 
     //edited for cards page
-    console.log(data.memberid+ "new member added");
-    console.log(doc);
 
     if (!err) {
-      console.log(data.memberid);
 
       Story.findById(data.storyid).exec(function(err, storyData) {
         if (!err) {
@@ -29,9 +26,7 @@ addMember:function(data)
             _id: storyData._id,
             memberList: doc.memberList
           }
-          console.log("Im in add");
 
-          console.log(members);
           io.to(data.room).emit('story:membersModified',members);
           io.to(data.room).emit('story:membersModifiedOnItem',{"storyId":storyData._id,"memberList":storyData.memberList});
 
@@ -55,8 +50,6 @@ addMember:function(data)
             }
           }
           Activity.addEvent(actData, function(data) {
-console.log("on add members in activity"+actData.room);
-console.log(data);
             io.to(actData.room).emit('activityAdded', data);
           });
         }
@@ -65,8 +58,6 @@ console.log(data);
   })
 
   User.addAssignedStories(data, function(err, doc) {
-  console.log("------doc after adding members------");
-  console.log(doc[0].assignedStories);
     io.to(data.memberid).emit('story:memberAssigned',doc);
    })
 
@@ -76,7 +67,6 @@ removeMember: function(data){
 
         if (!err) {
           io.to(data.room).emit('story:dataModified', storyData);
-          console.log("Im in remove");
           var members = {
             _id: storyData._id,
             memberList: storyData.memberList
