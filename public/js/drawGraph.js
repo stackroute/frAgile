@@ -240,13 +240,10 @@ var createVelocityChart=function(subObject,stackedChart,graphJSONData){
 //Chart type can be VELOCITY , CFD and RELEASE
 function drawGraph(subObject,condition,ctype){
   $.getJSON( "/graph", function( data ) {
-  console.log("output data::::::::::::::::::::::::"+JSON.stringify(data));
   if(ctype==="VELOCITY"){
     createVelocityChart(subObject,condition,data);
-    console.log("inside velocity chart");
   }else if(ctype==="CFD"){
     createCfdChart(subObject,condition,data);
-    console.log("inside CFD chart");
   }
   // else if(ctype==="RELEASE"){
   //   createReleaseChart(subObject,condition,data);

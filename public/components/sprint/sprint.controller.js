@@ -64,7 +64,6 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
     $scope.roomName = "sprint:" + $stateParams.sprintID
 
     socket.on('sprint:storyAdded', function(data) {
-      console.log("Story Recieved",data);
       var listName = ""
       if (data.listId == "BugLists") {
         $scope.backBug.buglist.stories.push(data);
@@ -86,29 +85,21 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
     socket.on('sprint:storyDeleted', function(data) {
       if (data.deleteFrom == "Backlog") {
         $scope.backBug.backlogs.stories.forEach(function(story, storyIndex) {
-          console.log("--------------Inside For Each");
           if (story._id == data.storyId) {
-            console.log("---------------- Found to delete");
             $scope.backBug.backlogs.stories.splice(storyIndex, 1);
           }
         });
       } else if (data.deleteFrom == "Buglist") {
         $scope.backBug.buglist.stories.forEach(function(story, storyIndex) {
-          console.log("--------------Inside For Each");
           if (story._id == data.storyId) {
-            console.log("---------------- Found to delete");
             $scope.backBug.buglist.stories.splice(storyIndex, 1);
           }
         });
       } else {
-        console.log("Inside Else");
         angular.forEach($scope.sprint.list, function(value, key) {
           if (value._id == data.Listid) {
-            console.log("--------Found List");
             $scope.sprint.list[key].stories.forEach(function(story, storyIndex) {
-              console.log("--------------Inside For Each");
               if (story._id == data.storyId) {
-                console.log("---------------- Found to delete");
                 $scope.sprint.list[key].stories.splice(storyIndex, 1);
               }
             });
@@ -130,17 +121,6 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
     $scope.addStory = function(listId, storyDetails, id, listName) {
       // $scope.listIdAdded = id;
       if (storyDetails != undefined && storyDetails != "") {
-        // if($rootScope.githubProfile){
-        //   var issue={}
-        //   issue.message={
-        //     'title': storyDetails,
-        //     'labels':[listId]
-        //   }
-        //   issue.github_profile=$rootScope.githubProfile;
-        //   issue.projectId=$stateParams.prId;
-        //
-        //   githubService.addIssue(issue).then(function(response){
-        //     console.log(response);
 
         var emitData = {
           'room': $scope.roomName,
@@ -375,9 +355,6 @@ sprintService.currentRoom.room="sprint:"+$stateParams.sprintID;
     ***/
     $scope.showModal = function(storyID, storyGrp, listItemId, listItemName) {
         var currentPosition = {}
-  console.log(storyGrp+"storygroup");
-  console.log(listItemId+"listItemId");
-console.log(listItemName+"listItemName");
         currentPosition.listId = listItemId;
         currentPosition.listItemName = listItemName;
 
@@ -407,7 +384,6 @@ console.log(listItemName+"listItemName");
 
           modalInstance.result.then(function(selectedItem) {
             $scope.selected = selectedItem;
-console.log($scope.selected);
           }, function() {
           });
 

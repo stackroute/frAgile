@@ -157,7 +157,7 @@ $scope.storyData.checklist.filter(function(checkList)
   //   obj["itemId"]=itemId;
   //   obj["arrayOfMembers"]=[];
   //   $scope.memberArray.push(obj);
-  //   console.log("memberArray ",$scope.memberArray);
+
   //
   //   }
   //
@@ -235,7 +235,7 @@ modalService.open('sm', 'components/story/operations/addMemberToChecklist.view.h
   })
   })
   if(numberOfTasks>0)
-  message=fullName.toUpperCase()+' '+"has been assigned to"+' '+numberOfTasks+' '+"tasks"+'\n'+"Do you want remove?";
+  message=fullName.toUpperCase()+' '+"has been assigned to"+' '+numberOfTasks+' '+"task(s)"+'\n'+"Do you want remove?";
   else
   message="Do you want to remove "+fullName;
 

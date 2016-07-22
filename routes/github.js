@@ -78,6 +78,7 @@ router.get('/issues',function(req,res){
         var issueNumbers=[];
         Story.findConvertedIssues(projectId,function(err,docs){
           docs.forEach(function(story){
+            if(story.issueNumber)
             issueNumbers.push(story.issueNumber);
           })
           // JSON.parse(body).forEach(function(item){

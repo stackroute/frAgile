@@ -371,7 +371,8 @@ module.exports = function(socket, io) {
             json:issue.message
           };
           api_calls.postIssue(options,function(error,response,body){
-            if(response.statusCode===201 && !error){
+            if(!error && response.statusCode===201 ){
+              console.log(body);
               story.issueNumber=body.number;
               saveStory(data,story);
             }

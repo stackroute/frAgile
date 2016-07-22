@@ -322,7 +322,6 @@ var socket = Socket($scope);
       $scope.selectedLabel=[];
 
     }else {
-      console.log(labelData);
       $scope.selectedLabel=[];
       $scope.selectedLabel.push(labelData.colorName);
       $scope.labelTemplate.colorName=labelData.colorName;

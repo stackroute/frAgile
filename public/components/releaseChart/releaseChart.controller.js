@@ -121,7 +121,6 @@ function($scope, $uibModal,$http,$timeout,releaseGraphService,graphModalFactory,
       $scope.noReleaseData = false;
       var len = graphDetails.release.length;
       if(graphDetails === null || len <= 0){
-        console.log("no data recieved");
         $scope.noReleaseData = true;
         return;
       }

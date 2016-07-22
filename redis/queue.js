@@ -29,22 +29,24 @@ storyPost.process(function(job,done){
    if(!err && res.statusCode==201){
      Story.findOne({_id: job.data.message.storyId}, function (err, story) {
          story.issueNumber = body.number;
-         story.save(function (err) {
+         story.save(function (err,storyData) {
              if(err) {
 
                  console.error('ERROR!');
              }
 else{
-  Sprint.findSprintForStory(story._id,function(err,sprintData)
+  console.log("inside Sprint ",storyData);
+  Sprint.findSprintForStory(storyData._id,function(err,sprintData)
   {
-    if(!err)
+    if(!err && sprintData)
       {
-        io.to("sprint:"+sprintData._id).emit("story:dataModified",story);
+        console.log("Sprint",sprintData);
+        io.to("sprint:"+sprintData._id).emit("story:dataModified",storyData);
       }
   })
 //emit socket with story Socket.emit
 }
-             done(null,body);
+
 
          });
      });

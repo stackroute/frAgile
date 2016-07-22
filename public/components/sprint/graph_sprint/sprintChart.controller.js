@@ -6,7 +6,6 @@ function($scope,$stateParams, $uibModal,sprFactory,$http,$timeout,sprService,gra
 
       // console.log("sprintID = "+sprintID + "-----"+graphDetails);
       if(graphDetails === null){
-        console.log("no data recieved");
         return;
       }
 
