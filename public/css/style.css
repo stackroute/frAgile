@@ -519,6 +519,7 @@ label {
   margin-left: 257px;
 }
 .divToggle{
+
   position: fixed;
   right: 5px;
   top:80px;
@@ -543,7 +544,7 @@ label {
     width: 60px;
     padding: 0px;
     padding-top: 3px;
-    margin-right: 0px;
+    margin-right: 120px;
 }
 h3.pull-left.ng-binding {
   position: fixed;
@@ -1073,6 +1074,10 @@ h4.sprintPage {
     position: fixed;
     border-top: 1px solid #DDEDE8;
 }
+.arrows{
+  padding-right: 100px;
+}
+
 h4 small {
     color: grey;
     margin-left: 10px;
@@ -1926,3 +1931,8 @@ background-color: rgba(162, 222, 208, 0.12)
      .chatNav {padding-top: 15px;}
      .chatNav a {font-size: 18px;}
    }
+
+.set-modal-width
+{
+  width:1480px;
+}
