@@ -1,0 +1,27 @@
+FROM mhart/alpine-node:6.2.0
+
+WORKDIR /usr/src/service
+
+COPY package.json /usr/src/service
+RUN npm install --production
+
+COPY bin /usr/src/service/bin/
+COPY authFolder /usr/src/service/authFolder/
+COPY bower_components /usr/service/bower_components/
+COPY config /usr/service/config/
+COPY githubIntegration /usr/service/githubIntegration/
+COPY io /usr/service/io/
+COPY models /usr/service/models/
+COPY public /usr/service/public/
+COPY redis /usr/service/redis/
+COPY routes /usr/service/routes/
+COPY seed /usr/service/seed/
+COPY views /usr/service/views/
+COPY app.js /usr/service/
+COPY passport-init.js /usr/service/
+COPY resfilter.js /usr/service/
+COPY seed.js /usr/service/
+
+
+# Use --production flag for production. To enable CORS during development, ensure that the --production flag is removed, and make sure to set the NODE_ENV environment variable to 'dev' in the docker-compose.yml file.
+CMD ["npm","start"]
