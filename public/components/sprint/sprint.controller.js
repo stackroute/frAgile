@@ -389,6 +389,7 @@ console.log(listItemName+"listItemName");
           //  url : '/sprint/:prId/:releaseID/:sprintID/:storyID',
             controller: 'storyController',
             controllerAs: 'storyContr',
+            windowClass:'set-modal-width',
             size: 'lg',
             resolve: {
               param: function() {
