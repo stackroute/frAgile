@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 var RedisStore = require('connect-redis')(session);
 var app = express();
 var queue= require('./redis/queue.js')
-mongoose.connect('mongodb://localhost/fragileDB');
+mongoose.connect(process.env.MONGODB_URL||'mongodb://localhost/fragileDB');
 var routes = require('./routes/index');
 //var users = require('./routes/users');
 var user = require('./routes/user');
@@ -27,12 +27,12 @@ var github=require('./routes/github.js');
 var authenticationHandler = require('./routes/authenticationHandler')(passport);
 app.use(session({
   store: new RedisStore({
-    host: '127.0.0.1',
-    port: 6379,
+    host: process.env.REDIS_HOST||'127.0.0.1',
+    port: process.env.REDIS_PORT||6379,
     db: 7
   }),
 
-  secret:'fragile'
+  secret:process.env.REDIS_SECRET||'fragile'
 }));
 
 
@@ -63,10 +63,10 @@ app.use(express.static(path.join(__dirname, 'authFolder')));
 app.use('/', routes);
 app.use('/auth',authenticationHandler);
 
-
+/* Listening for Github Webhook events*/
 app.post('/issueEvents',function(req,res){
   setTimeout(function(){
-    
+
     if(req.headers['x-github-event']==="issues"){
       queue.addGitIssues.add(req.body);
     }

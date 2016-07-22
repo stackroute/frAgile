@@ -87,6 +87,7 @@ router.get('/issues',function(req,res){
         var issueNumbers=[];
         Story.findConvertedIssues(projectId,function(err,docs){
           docs.forEach(function(story){
+            if(story.issueNumber)
             issueNumbers.push(story.issueNumber);
           })
           console.log({"allIssues":JSON.parse(body),"syncedIssueNumbers":issueNumbers,"githubRepo":doc.owner+"/"+doc.name});
