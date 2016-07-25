@@ -3,6 +3,7 @@ services:
   limber:
     build: .
     image: limber
+    restart: always
     expose:
       - 8080
     ports:
@@ -20,18 +21,22 @@ services:
       MONGODB_URL: mongodb://db/limber
   db:
     image: mvertes/alpine-mongo
+    restart: always
     expose:
       - 27017
   redis:
     image: smebberson/alpine-redis
+    restart: always
     expose:
       - 6379
   chatservice:
       container_name: chatservice-container
       build: chatservice
-      image: boilerplate/chatservice
+      image: chatservice
       network_mode: host
       restart: always
+      depends_on:
+        - redis
       environment:
-        REDIS_HOST: localhost
+        REDIS_HOST: redis
         REDIS_PORT: 6379

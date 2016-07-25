@@ -23,6 +23,7 @@ socket.emit('authenticate',{'user':$rootScope.userProfile._id});
         $rootScope.projects.forEach(function (project){
           if(project.githubStatus ){
       socket.emit("github:integrateGit",{projectId:project._id,userId:$rootScope.userProfile._id,githubProfile:$rootScope.githubProfile,atTheTimeOfIntegration:true});
+}
 })
       }
     });

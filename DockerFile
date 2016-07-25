@@ -14,6 +14,7 @@ COPY io /usr/src/service/io/
 COPY models /usr/src/service/models/
 COPY public /usr/src/service/public/
 COPY redis /usr/src/service/redis/
+COPY chatservice /usr/src/service/chatservice/
 COPY routes /usr/src/service/routes/
 COPY seed /usr/src/service/seed/
 COPY views /usr/src/service/views/
