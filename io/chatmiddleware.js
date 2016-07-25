@@ -23,8 +23,8 @@ exports = module.exports = function(socket,io) {
   self.setUser = function(user,io) {
     self.io=io;
     self.user = user;
-    var subscriber = require('redis').createClient(6379, '172.23.238.253');
-    var publisher = require('redis').createClient(6379, '172.23.238.253');
+    var subscriber = require('redis').createClient(process.env.REDIS_PORT || 6379, process.env.REDIS_HOST || '127.0.0.1');
+    var publisher = require('redis').createClient(process.env.REDIS_PORT || 6379, process.env.REDIS_HOST || '127.0.0.1');
 
     publisher.on('publish', function() {
     });

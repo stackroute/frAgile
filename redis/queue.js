@@ -1,5 +1,5 @@
 var redisHost = process.env.REDIS_HOST || '127.0.0.1';
-var redisPort = process.env.REDIS_PORT || redisPort;
+var redisPort = process.env.REDIS_PORT || 6379;
 var Queue = require('bull');
 var request= require('request');
 var storyPost=Queue("Server1",redisPort,redisHost);

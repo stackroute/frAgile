@@ -22,7 +22,7 @@ module.exports = function(socket, io) {
         "member"
       ],
       "config": {
-        "url": "http://gamersdemokrasy.com:8000/issueEvents",
+        "url": "http://limber.stackroute.in:8080/issueEvents",
         "content_type": "json"
       }
     }
