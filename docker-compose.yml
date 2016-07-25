@@ -1,0 +1,28 @@
+version: '2'
+services:
+  limber:
+    build: .
+    image: limber
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+      - redis
+    links:
+      - db
+      - redis
+    environment:
+      PORT: 8080
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      MONGODB_URL: mongodb://db/limber
+  db:
+    image: mvertes/alpine-mongo
+    expose:
+      - 27017
+  redis:
+    image: smebberson/alpine-redis
+    expose:
+      - 6379
