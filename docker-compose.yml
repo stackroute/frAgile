@@ -26,3 +26,12 @@ services:
     image: smebberson/alpine-redis
     expose:
       - 6379
+  chatservice:
+      container_name: chatservice-container
+      build: chatservice
+      image: boilerplate/chatservice
+      network_mode: host
+      restart: always
+      environment:
+        REDIS_HOST: localhost
+        REDIS_PORT: 6379
